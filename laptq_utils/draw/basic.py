@@ -1,6 +1,3 @@
-import cv2
-
-
 COLORS = [
     # RED, YELLO, BLUE, GREEN, PUPLE
     (83, 50, 250), (55, 250, 250), (255, 221, 21), (102, 255, 102), (240, 120, 240),
@@ -14,6 +11,7 @@ def cv2_imshow(
         img,
         **kwargs
 ):
+    import cv2
     window_name = kwargs.get('window_name', 'show')
     flag = kwargs.get('flag', cv2.WINDOW_AUTOSIZE)
     wait = kwargs.get('wait', 0)
@@ -30,6 +28,7 @@ def cv2_putText(
         org,
         **kwargs
 ):
+    import cv2
     fontFace = kwargs.get('fontFace', cv2.FONT_HERSHEY_SIMPLEX)
     fontScale = kwargs.get('fontScale', 1)
     color = kwargs.get('color', (255, 255, 255))
@@ -51,6 +50,7 @@ def cv2_rectangle(
         pt2,
         **kwargs
 ):
+    import cv2
     color = kwargs.get('color', (255, 255, 255))
     thickness = kwargs.get('thickness', 1)
     lineType = kwargs.get('lineType', cv2.LINE_AA)
