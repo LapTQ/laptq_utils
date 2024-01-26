@@ -62,3 +62,20 @@ def cv2_rectangle(
     cv2.rectangle(img, (x1 + 1, y1 + 1), (x2 + 1, y2 + 1), (b//2, g//2, r//2), thickness, lineType)
     cv2.rectangle(img, pt1, pt2, color, thickness, lineType)
 
+
+def cv2_circle(
+        img,
+        center,
+        radius,
+        **kwargs
+):
+    import cv2
+    color = kwargs.get('color', (255, 255, 255))
+    thickness = kwargs.get('thickness', 1)
+    lineType = kwargs.get('lineType', cv2.LINE_AA)
+
+    x1, y1 = center
+    b, g, r = color
+    cv2.circle(img, (x1 + 2, y1 + 2), radius, (0, 0, 0), thickness, lineType)
+    cv2.circle(img, (x1 + 1, y1 + 1), radius, (b//2, g//2, r//2), thickness, lineType)
+    cv2.circle(img, center, radius, color, thickness, lineType)
