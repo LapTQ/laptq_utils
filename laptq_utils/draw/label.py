@@ -66,6 +66,8 @@ def visualize_frame(
             for i, (xn, yn) in enumerate(kpt_xyn):
                 x = int(xn * W)
                 y = int(yn * H)
+                if x == 0 and y == 0:
+                    continue
                 cv2_circle(frame_img, (x, y), 3, color=COLORS[i], thickness=-1)
                 # cv2_putText(frame_img, '{:.2f}'.format(kpt_conf[i]), (x, y), color=COLORS[i % len(COLORS)], fontScale=self.fontScale, thickness=self.thickness)
 
