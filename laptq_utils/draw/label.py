@@ -51,11 +51,11 @@ def visualize_frame(
             rh = int(rhn * H)
             cv2_rectangle(frame_img, (rx1, ry1), (rx1 + rw, ry1 + rh), color=COLORS[track_id % len(COLORS)], thickness=thickness)
 
-        label = '{}{}{}{:.2f}{}{}{}'.format(
+        label = '{}{}{}{}{}{}{}'.format(
             '*' if (draw_confirmed_status and not is_confirmed) and is_confirmed is not None else '',
             track_id if draw_track_id else '',
             '(' if draw_conf or draw_class_id else '',
-            box_conf if draw_conf else '',
+            '{:.2f}'.format(box_conf) if draw_conf else '',
             '-' if draw_conf and draw_class_id else '',
             class_id if draw_class_id else '',
             ')' if draw_conf or draw_class_id else '',
