@@ -22,8 +22,8 @@ def visualize_frame(
     track_ids = data['track_ids']
     boxes_conf = data.get('boxes_conf', [-1] * len(boxes_x1y1whn))
     class_ids = data['class_ids']
-    kpts_xyn = data['kpts_xyn']
-    kpts_conf = data['kpts_conf']
+    kpts_xyn = data.get('kpts_xyn', [None] * len(boxes_x1y1whn))
+    kpts_conf = data.get('kpts_conf', [-1] * len(kpts_xyn))
     refined_boxes_x1y1whn = data.get('refined_boxes_x1y1whn', [None] * len(boxes_x1y1whn))
     confirmed_statuses = data.get('confirmed_statuses', [None] * len(boxes_x1y1whn))
 
@@ -67,7 +67,6 @@ def visualize_frame(
                 x = int(xn * W)
                 y = int(yn * H)
                 cv2_circle(frame_img, (x, y), 3, color=COLORS[i], thickness=-1)
-                # if kpt_conf is not None:
-                #     cv2_putText(frame_img, '{:.2f}'.format(kpt_conf[i]), (x, y), color=COLORS[i % len(COLORS)], fontScale=self.fontScale, thickness=self.thickness)
+                # cv2_putText(frame_img, '{:.2f}'.format(kpt_conf[i]), (x, y), color=COLORS[i % len(COLORS)], fontScale=self.fontScale, thickness=self.thickness)
 
     return frame_img
