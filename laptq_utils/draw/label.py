@@ -10,6 +10,7 @@ def visualize_frame(
     draw_conf = kwargs.get('draw_conf', False)
     draw_track_id = kwargs['draw_track_id']
     draw_class_id = kwargs['draw_class_id']
+    draw_action_id = kwargs.get('draw_action_id', False)
     draw_refined_box = kwargs.get('draw_refined_box', False)
     draw_confirmed_status = kwargs.get('draw_confirmed_status', False)
     draw_pose = kwargs['draw_pose']
@@ -22,6 +23,7 @@ def visualize_frame(
     track_ids = data['track_ids']
     boxes_conf = data.get('boxes_conf', [-1] * len(boxes_x1y1whn))
     class_ids = data['class_ids']
+    action_ids = data.get('action_ids', [-1] * len(boxes_x1y1whn))
     kpts_xyn = data.get('kpts_xyn', [None] * len(boxes_x1y1whn))
     kpts_conf = data.get('kpts_conf', [-1] * len(kpts_xyn))
     refined_boxes_x1y1whn = data.get('refined_boxes_x1y1whn', [None] * len(boxes_x1y1whn))
@@ -32,8 +34,8 @@ def visualize_frame(
     if draw_frame_id:
         cv2_putText(frame_img, str(frame_id), (10, 30))
 
-    for box_x1y1whn, track_id, box_conf, class_id, refined_box_x1y1whn, is_confirmed, kpt_xyn, kpt_conf \
-            in zip(boxes_x1y1whn, track_ids, boxes_conf, class_ids, refined_boxes_x1y1whn, confirmed_statuses, kpts_xyn, kpts_conf):
+    for box_x1y1whn, track_id, box_conf, class_id, action_id, refined_box_x1y1whn, is_confirmed, kpt_xyn, kpt_conf \
+            in zip(boxes_x1y1whn, track_ids, boxes_conf, class_ids, action_ids, refined_boxes_x1y1whn, confirmed_statuses, kpts_xyn, kpts_conf):
         x1n, y1n, wn, hn = box_x1y1whn
         x1 = int(x1n * W)
         y1 = int(y1n * H)
@@ -51,14 +53,20 @@ def visualize_frame(
             rh = int(rhn * H)
             cv2_rectangle(frame_img, (rx1, ry1), (rx1 + rw, ry1 + rh), color=COLORS[track_id % len(COLORS)], thickness=thickness)
 
-        label = '{}{}{}{}{}{}{}'.format(
+        action_id
+        _has_parenthesis = draw_conf or draw_class_id
+        _has_dash = draw_conf and draw_class_id
+        _has_vert = draw_action_id
+        label = '{}{}{}{}{}{}{}{}{}'.format(
             '*' if (draw_confirmed_status and not is_confirmed) and is_confirmed is not None else '',
             track_id if draw_track_id else '',
-            '(' if draw_conf or draw_class_id else '',
+            '|' if _has_vert else '',
+            action_id if draw_action_id else '',
+            '(' if _has_parenthesis else '',
             '{:.2f}'.format(box_conf) if draw_conf else '',
-            '-' if draw_conf and draw_class_id else '',
+            '-' if _has_dash else '',
             class_id if draw_class_id else '',
-            ')' if draw_conf or draw_class_id else '',
+            ')' if _has_parenthesis else '',
         )
         cv2_putText(frame_img, label, (x1, y1 - 10), color=COLORS[track_id % len(COLORS)], fontScale=fontScale, thickness=thickness)
 
