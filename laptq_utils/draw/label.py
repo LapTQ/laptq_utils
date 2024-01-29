@@ -14,6 +14,7 @@ def visualize_frame(
     draw_refined_box = kwargs.get('draw_refined_box', False)
     draw_confirmed_status = kwargs.get('draw_confirmed_status', False)
     draw_pose = kwargs['draw_pose']
+    draw_pose_index = kwargs.get('draw_pose_index', False)
     fontScale = kwargs['fontScale']
     thickness = kwargs['thickness']
 
@@ -85,6 +86,7 @@ def visualize_frame(
                 if x == 0 and y == 0:
                     continue
                 cv2_circle(frame_img, (x, y), 3, color=COLORS[i], thickness=-1)
-                # cv2_putText(frame_img, '{:.2f}'.format(kpt_conf[i]), (x, y), color=COLORS[i % len(COLORS)], fontScale=self.fontScale, thickness=self.thickness)
+                if draw_pose_index:
+                    cv2_putText(frame_img, str(i), (x, y - 3), color=COLORS[i % len(COLORS)], fontScale=fontScale, thickness=thickness)
 
     return frame_img
