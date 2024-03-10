@@ -17,6 +17,7 @@ def visualize_frame(
     draw_pose_index = kwargs.get('draw_pose_index', False)
     fontScale = kwargs['fontScale']
     thickness = kwargs['thickness']
+    action_id_to_label = kwargs.get('action_id_to_label', {})
 
     frame_img = data['frame_img'].copy()
     frame_id = data['frame_id']
@@ -76,7 +77,8 @@ def visualize_frame(
                 if status is True:
                     action_counter += 1
                     org = (x1 + 3, y1 + 20 * action_counter)
-                    cv2_putText(frame_img, str(action_id), org, color=COLORS[track_id % len(COLORS)], fontScale=fontScale, thickness=thickness)
+                    msg = str(action_id) if action_id not in action_id_to_label else '"{}"'.format(action_id_to_label[action_id])
+                    cv2_putText(frame_img, msg, org, color=COLORS[track_id % len(COLORS)], fontScale=fontScale, thickness=thickness)
 
 
         if draw_pose and kpt_xyn is not None:
