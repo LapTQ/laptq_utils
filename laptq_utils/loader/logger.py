@@ -10,6 +10,8 @@ def load_logger(
     format = kwargs.get('format', '%(asctime)s\t|%(funcName)20s |%(lineno)d\t|%(levelname)8s |%(message)s')
     directory = kwargs.get('directory', None)
     handlers = kwargs.get('handlers', 'stdout')
+    maxBytes = kwargs.get('maxBytes', 1073741824)
+    backupCount = kwargs.get('backupCount', 1)
 
     if level == 'DEBUG':
         level = logging.DEBUG
@@ -30,11 +32,13 @@ def load_logger(
     for handler in handlers:
         if handler == 'stdout':
             handlers_.append(logging.StreamHandler(sys.stdout))
+        elif handler == 'stderr':
+            handlers_.append(logging.StreamHandler(sys.stderr))
         elif isinstance(handler, str):
             assert directory is not None, 'Logging directory must be specified when using file handler.'
             assert os.path.isdir(directory), 'Logging directory must be a directory.'
             log_fpath = os.path.join(directory, handler)
-            handlers_.append(logging.FileHandler(log_fpath))
+            handlers_.append(logging.handlers.RotatingFileHandler(log_fpath, maxBytes=maxBytes, backupCount=backupCount))
         else:
             raise ValueError('Invalid logging handler: {}'.format(handler))
     handlers = handlers_
