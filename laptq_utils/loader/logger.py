@@ -1,4 +1,5 @@
 import logging
+from logging.handlers import RotatingFileHandler
 import sys
 import os
 
@@ -38,7 +39,7 @@ def load_logger(
             assert directory is not None, 'Logging directory must be specified when using file handler.'
             assert os.path.isdir(directory), 'Logging directory must be a directory.'
             log_fpath = os.path.join(directory, handler)
-            handlers_.append(logging.handlers.RotatingFileHandler(log_fpath, maxBytes=maxBytes, backupCount=backupCount))
+            handlers_.append(RotatingFileHandler(log_fpath, maxBytes=maxBytes, backupCount=backupCount))
         else:
             raise ValueError('Invalid logging handler: {}'.format(handler))
     handlers = handlers_
