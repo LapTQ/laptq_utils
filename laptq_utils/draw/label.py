@@ -9,6 +9,7 @@ def visualize_frame(
     draw_box = kwargs['draw_box']
     draw_conf = kwargs.get('draw_conf', False)
     draw_track_id = kwargs['draw_track_id']
+    draw_track_name = kwargs.get('draw_track_name', False)
     draw_class_id = kwargs['draw_class_id']
     draw_action_id = kwargs.get('draw_action_id', False)
     draw_refined_box = kwargs.get('draw_refined_box', False)
@@ -23,6 +24,7 @@ def visualize_frame(
     frame_id = data['frame_id']
     boxes_x1y1whn = data['boxes_x1y1whn']
     track_ids = data['track_ids']
+    track_names = data.get('track_names', [None] * len(track_ids))
     boxes_conf = data.get('boxes_conf', [-1] * len(boxes_x1y1whn))
     class_ids = data['class_ids']
     action_scores = data.get('action_scores', {})
@@ -37,8 +39,8 @@ def visualize_frame(
     if draw_frame_id:
         cv2_putText(frame_img, str(frame_id), (10, 30))
 
-    for det_index, (box_x1y1whn, track_id, box_conf, class_id, refined_box_x1y1whn, is_confirmed, kpt_xyn, kpt_conf) \
-            in enumerate(zip(boxes_x1y1whn, track_ids, boxes_conf, class_ids, refined_boxes_x1y1whn, confirmed_statuses, kpts_xyn, kpts_conf)):
+    for det_index, (box_x1y1whn, track_id, track_name, box_conf, class_id, refined_box_x1y1whn, is_confirmed, kpt_xyn, kpt_conf) \
+            in enumerate(zip(boxes_x1y1whn, track_ids, track_names, boxes_conf, class_ids, refined_boxes_x1y1whn, confirmed_statuses, kpts_xyn, kpts_conf)):
         x1n, y1n, wn, hn = box_x1y1whn
         x1 = int(x1n * W)
         y1 = int(y1n * H)
@@ -58,10 +60,14 @@ def visualize_frame(
 
         
         _has_parenthesis = draw_conf or draw_class_id
+        _has_brackets = draw_track_name
         _has_dash = draw_conf and draw_class_id
-        label = '{}{}{}{}{}{}{}'.format(
+        label = '{}{}{}{}{}{}{}{}{}{}'.format(
             '*' if (draw_confirmed_status and not is_confirmed) and is_confirmed is not None else '',
             track_id if draw_track_id else '',
+            '[' if _has_brackets else '',
+            (track_name if track_name else '') if draw_track_name else '',
+            ']' if _has_brackets else '',
             '(' if _has_parenthesis else '',
             '{:.2f}'.format(box_conf) if draw_conf else '',
             '-' if _has_dash else '',
