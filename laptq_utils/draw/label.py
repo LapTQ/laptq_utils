@@ -60,7 +60,7 @@ def visualize_frame(
 
         
         _has_parenthesis = draw_conf or draw_class_id
-        _has_brackets = draw_track_name
+        _has_brackets = draw_track_name and track_name is not None
         _has_dash = draw_conf and draw_class_id
         label = '{}{}{}{}{}{}{}{}{}{}'.format(
             '*' if (draw_confirmed_status and not is_confirmed) and is_confirmed is not None else '',
