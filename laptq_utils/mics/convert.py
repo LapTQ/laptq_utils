@@ -16,6 +16,15 @@ def np_to_b64(
     return img_b64
 
 
+def img_to_b64(
+       **kwargs
+):
+    path_img = kwargs["path_img"]
+
+    with open(path_img, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
+
 def b64_to_np(
         **kwargs
 ):
