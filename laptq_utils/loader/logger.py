@@ -8,7 +8,7 @@ def load_logger(
         **kwargs
 ):
     level = kwargs.get('level', logging.INFO)
-    format = kwargs.get('format', '%(asctime)s\t|%(funcName)20s |%(lineno)d\t|%(levelname)8s |%(message)s')
+    format = kwargs.get('format', '%(asctime)s\t|%(levelname)8s |%(pathname)s: line %(lineno)d\t|%(funcName)20s |%(message)s')
     directory = kwargs.get('directory', None)
     handlers = kwargs.get('handlers', 'stdout')
     maxBytes = kwargs.get('maxBytes', 1073741824)
