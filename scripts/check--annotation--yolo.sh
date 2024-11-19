@@ -1,7 +1,13 @@
 PATH__DIR__DATASETS__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
 PATH__DIR__DATASETS__PREPARED_FOR_ANNOT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241115--prepare-annotation--remove-too-small--no-synthetic--widen-10-percent    # folder containing prepared images used to upload to Label Studio
 PATH__DIR__DOWNLOADED_ANNOT_ZIP=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/20241118--annotation--downloaded--pothole-manhole-drainage    # folder containing Label Studio's downloaded .zip
+POSTFIX__DIR__IMG__RAW=--raw
+# PATH__DIR__DATASETS__SOURCE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241119--prepare-annotation--dataset-ninja--widen-10-percent
+# PATH__DIR__DATASETS__PREPARED_FOR_ANNOT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241119--prepare-annotation--dataset-ninja--widen-10-percent
+# PATH__DIR__DOWNLOADED_ANNOT_ZIP=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241119--prepare-annotation--dataset-ninja--widen-10-percent
+# POSTFIX__DIR__IMG__RAW=""
 
+POSTFIX__DIR__LABEL__TARGET=--20241119--phase-2--annotated-ver2--pothole-manhole-drainage
 
 # ----- For visualization
 # 1. select label source for visualization
@@ -17,12 +23,12 @@ PATH__DIR__VISUALIZATION__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/2
 # ----- 
 
 
-# ----- For merging after checking
+# ----- For merging after checking extracted annotation
 # 1. ...
-REPLACE__SLASH=--SLASH--
-POSTFIX__DIR__IMG__RAW=--raw
-PREFIX__DIR__STRIP=PRJ46--SLASH--
-POSTFIX__DIR__LABEL__TARGET=--20241119--phase-2--annotated-ver2--pothole-manhole-drainage
+# REPLACE__SLASH=--SLASH--
+# PREFIX__DIR__STRIP=PRJ46--SLASH--
+REPLACE__SLASH=--
+PREFIX__DIR__STRIP=PRJ46--
 # ----- 
 
 
@@ -44,6 +50,15 @@ declare -A MAP__SUBPATH_DIR__TO__NAME_ZIP=(
     # ["pothole_dataset_v8/valid"]=""
     # ["Pothole_235/train"]=""
     # ["Pothole_Maeda/first_shot_eval"]=""
+    # ["dataset-ninja/ds1_simplex-train"]=""
+    # ["dataset-ninja/ds1_simplex-test"]=""
+    # ["dataset-ninja/ds2_complex-train"]=""
+    # ["dataset-ninja/ds2_complex-test"]=""
+
+    # ["PRJ46--SLASH--dataset-ninja--SLASH--ds1_simplex-test"]=""
+    # ["PRJ46--SLASH--dataset-ninja--SLASH--ds1_simplex-train"]=""
+    # ["PRJ46--SLASH--dataset-ninja--SLASH--ds2_complex-test"]=""
+    # ["PRJ46--SLASH--dataset-ninja--SLASH--ds2_complex-train"]=""
 )
 
 
@@ -117,36 +132,36 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 
 # =========== Test: (Visual check) visualize images ===========
-# for subpath_dir in "${!MAP__SUBPATH_DIR__TO__NAME_ZIP[@]}"; do
-#     path__dir__img="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__IMG__RAW}"
-#     path__dir__annot="${PATH__DIR__DATASETS__OF_LABEL__FOR__VISUALIZATION}/${subpath_dir}/labels${POSTFIX__DIR__LABEL__FOR__VISUALIZATION}"
-#     path__dir__img_vis="${PATH__DIR__VISUALIZATION__OUTPUT}/${subpath_dir}"
+for subpath_dir in "${!MAP__SUBPATH_DIR__TO__NAME_ZIP[@]}"; do
+    path__dir__img="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__IMG__RAW}"
+    path__dir__annot="${PATH__DIR__DATASETS__OF_LABEL__FOR__VISUALIZATION}/${subpath_dir}/labels${POSTFIX__DIR__LABEL__FOR__VISUALIZATION}"
+    path__dir__img_vis="${PATH__DIR__VISUALIZATION__OUTPUT}/${subpath_dir}"
 
-#     python3 submodules/laptq_utils/main.py \
-#         helper__visualize__detection \
-#         --path__dir__img "${path__dir__img}" \
-#         --path__dir__annot "${path__dir__annot}" \
-#         --path__dir__output "${path__dir__img_vis}" \
-#         --draw_track_id False \
-#         --draw_conf False \
-#         --draw_class_id True \
-#         --fontScale 0.7 \
-#         --thickness 1 \
-#         --draw_class_name True \
-#         --box_color_by class_id \
-#         --path__file__class_id_to_label $PATH__FILE__CLASS_ID__TO__LABEL
+    python3 submodules/laptq_utils/main.py \
+        helper__visualize__detection \
+        --path__dir__img "${path__dir__img}" \
+        --path__dir__annot "${path__dir__annot}" \
+        --path__dir__output "${path__dir__img_vis}" \
+        --draw_track_id False \
+        --draw_conf False \
+        --draw_class_id True \
+        --fontScale 0.7 \
+        --thickness 1 \
+        --draw_class_name True \
+        --box_color_by class_id \
+        --path__file__class_id_to_label $PATH__FILE__CLASS_ID__TO__LABEL
     
-#     num__lbl=$(find "${path__dir__annot}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
-#     num__img_vis=$(find "${path__dir__img_vis}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
-#     if [ $num__lbl != $num__img_vis ]; then
-#         echo -e "${TAG__FAILED} Number of visualized images and annotations mismatch: ${subpath_dir}"
-#         echo "    [+] $num__lbl labels"
-#         echo "    [+] $num__img visualized images"
+    num__lbl=$(find "${path__dir__annot}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
+    num__img_vis=$(find "${path__dir__img_vis}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
+    if [ $num__lbl != $num__img_vis ]; then
+        echo -e "${TAG__FAILED} Number of visualized images and annotations mismatch: ${subpath_dir}"
+        echo "    [+] $num__lbl labels"
+        echo "    [+] $num__img visualized images"
         
-#         exit 1
-#     fi
-#     echo -e "${TAG__PASSED} ${num__lbl} labels vs ${num__img_vis} visualized images"
-# done
+        exit 1
+    fi
+    echo -e "${TAG__PASSED} ${num__lbl} labels vs ${num__img_vis} visualized images"
+done
 
 
 # # =========== Copy labels from extracted annotation to source dataset dir ===========
