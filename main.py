@@ -19,11 +19,14 @@ def parse_args():
         "action",
         choices=[
             "helper__visualize__detection",
+            "helper__remove__small__boxes",
+            "helper__remove__images__containing__classes",
+            "helper__check__duplicate__images",
         ],
     )
 
     ap.add_argument("--path__dir__img", type=str)
-    ap.add_argument("--path__dir__annot", type=str)
+    ap.add_argument("--path__dir__label", type=str)
     ap.add_argument("--path__dir__output", type=str)
     ap.add_argument("--draw_track_id", choices=["True", "False"])
     ap.add_argument("--draw_conf", choices=["True", "False"])
@@ -33,13 +36,28 @@ def parse_args():
     ap.add_argument("--fontScale", type=float)
     ap.add_argument("--thickness", type=int)
     ap.add_argument("--box_color_by", type=str)
+    ap.add_argument("--num__max__img", type=str)
+    ap.add_argument("--thresh__area__min", type=float)
+    ap.add_argument("--list__id_class", type=str)
+    ap.add_argument("--method", type=str)
+    ap.add_argument("--max_distance_threshold", type=int)
 
     args = ap.parse_args()
 
-    args.draw_track_id = eval(args.draw_track_id)
-    args.draw_conf = eval(args.draw_conf)
-    args.draw_class_id = eval(args.draw_class_id)
-    args.draw_class_name = eval(args.draw_class_name)
+    args.draw_track_id = (
+        eval(args.draw_track_id) if args.draw_track_id is not None else None
+    )
+    args.draw_conf = eval(args.draw_conf) if args.draw_conf is not None else None
+    args.draw_class_id = (
+        eval(args.draw_class_id) if args.draw_class_id is not None else None
+    )
+    args.draw_class_name = (
+        eval(args.draw_class_name) if args.draw_class_name is not None else None
+    )
+    args.num__max__img = (
+        eval(args.num__max__img) if args.num__max__img is not None else None
+    )
+    args.list__id_class = eval(args.list__id_class) if args.list__id_class is not None else None
 
     return args
 
