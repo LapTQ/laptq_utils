@@ -1,36 +1,34 @@
-PATH__DIR__DATASETS__PREPARED_FOR_ANNOT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241115--prepare-annotation--remove-too-small--no-synthetic--widen-10-percent    # folder containing prepared images used to upload to Label Studio
-PATH__DIR__ANNOT__DOWNLOADED_ZIP=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/20241121--downloaded--phase-2--annotation-ver2--pot-man-drain-difficult--remove-small--remove-difficult  # folder containing Label Studio's downloaded .zip
+PATH__DIR__DATASETS__PREPARED_FOR_ANNOT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--visual-check--downloaded--phase-2--annotation-ver2    # folder containing prepared images used to upload to Label Studio
+PATH__DIR__ANNOT__DOWNLOADED_ZIP=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/20241122--fix-visual-check--phase-2--annotation-ver2  # folder containing Label Studio's downloaded .zip
 PATH__DIR__ANNOT__EXTRACT_TO=$PATH__DIR__ANNOT__DOWNLOADED_ZIP
 
 
 # REPLACE__SLASH=--SLASH--
-# PREFIX__DIR__STRIP=PRJ46--SLASH--
 REPLACE__SLASH=--
-PREFIX__DIR__STRIP=PRJ46--
 
 
 # Mapping from subdataset dir name to Label Studio's downloaded .zip
 # but the keys in this mapping will be used again and again.
 declare -A MAP__SUBPATH_DIR__TO__NAME_ZIP=(
-    ["APTO_v2/day1_330"]="PRJ46--APTO_v2--day1_330.zip"
-    ["APTO_v2/night1_190"]="PRJ46--APTO_v2--night1_190.zip"
-    ["APTO_v2/night3_44"]="PRJ46--APTO_v2--night3_44.zip"
-    ["APTO_v2/night4_239"]="PRJ46--APTO_v2--night4_239.zip"
-    ["Pothole_235/train"]="PRJ46--Pothole_235--train.zip"
-    ["dataset-ninja/ds1_simplex-test"]="PRJ46--dataset-ninja--ds1_simplex-test.zip"
-    ["dataset-ninja/ds1_simplex-train"]="PRJ46--dataset-ninja--ds1_simplex-train.zip"
-    ["dataset-ninja/ds2_complex-test"]="PRJ46--dataset-ninja--ds2_complex-test.zip"
-    ["dataset-ninja/ds2_complex-train"]="PRJ46--dataset-ninja--ds2_complex-train.zip"
-    ["pot_det_1240"]="PRJ46--pot_det_1240.zip"
-    # ["pothole_dataset_v8/only_rainy_frames/train"]=""
-    ["pothole_dataset_v8/train"]="PRJ46--pothole_dataset_v8--train.zip"
-    ["pothole_dataset_v8/train_to_valid"]="PRJ46--pothole_dataset_v8--train_to_valid.zip"
-    ["pothole_dataset_v8/valid"]="PRJ46--pothole_dataset_v8--valid.zip"
-    ["Pothole_detection_yolo/train_original"]="PRJ46--Pothole_detection_yolo--train_original.zip"
-    ["Pothole_Maeda/first_shot"]="PRJ46--Pothole_Maeda--first_shot.zip"
-    ["Pothole_Maeda/first_shot_eval"]="PRJ46--Pothole_Maeda--first_shot_eval.zip"
-    ["Pothole_Maeda/second_shot"]="PRJ46--Pothole_Maeda--second_shot.zip"
-    ["RDD2022_JAPAN/only_pothole/train"]="PRJ46--RDD2022_JAPAN--only_pothole--train.zip"
+    ["APTO_v2/day1_330"]="CK46--APTO_v2--day1_330.zip"
+    ["APTO_v2/night1_190"]="CK46--APTO_v2--night1_190.zip"
+    ["APTO_v2/night3_44"]="CK46--APTO_v2--night3_44.zip"
+    ["APTO_v2/night4_239"]="CK46--APTO_v2--night4_239.zip"
+    ["Pothole_235/train"]="CK46--Pothole_235--train.zip"
+    # ["dataset-ninja/ds1_simplex-test"]="CK46--dataset-ninja--ds1_simplex-test.zip"
+    # ["dataset-ninja/ds1_simplex-train"]="CK46--dataset-ninja--ds1_simplex-train.zip"
+    # ["dataset-ninja/ds2_complex-test"]="CK46--dataset-ninja--ds2_complex-test.zip"
+    # ["dataset-ninja/ds2_complex-train"]="CK46--dataset-ninja--ds2_complex-train.zip"
+    ["pot_det_1240"]="CK46--pot_det_1240.zip"
+    # # ["pothole_dataset_v8/only_rainy_frames/train"]=""
+    # ["pothole_dataset_v8/train"]="CK46--pothole_dataset_v8--train.zip"
+    # ["pothole_dataset_v8/train_to_valid"]="CK46--pothole_dataset_v8--train_to_valid.zip"
+    # ["pothole_dataset_v8/valid"]="CK46--pothole_dataset_v8--valid.zip"
+    # ["Pothole_detection_yolo/train_original"]="CK46--Pothole_detection_yolo--train_original.zip"
+    ["Pothole_Maeda/first_shot"]="CK46--Pothole_Maeda--first_shot.zip"
+    ["Pothole_Maeda/first_shot_eval"]="CK46--Pothole_Maeda--first_shot_eval.zip"
+    ["Pothole_Maeda/second_shot"]="CK46--Pothole_Maeda--second_shot.zip"
+    ["RDD2022_JAPAN/only_pothole/train"]="CK46--RDD2022_JAPAN--only_pothole--train.zip"
 )
 
 
@@ -57,8 +55,13 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__NAME_ZIP[@]}"; do
     name__zip=${MAP__SUBPATH_DIR__TO__NAME_ZIP[$subpath_dir]}
     echo -e "$TAG__INFO Extracting $name__zip as $subpath_dir"
     path__dir__extracted="${PATH__DIR__ANNOT__EXTRACT_TO}/${subpath_dir}"
+    rm -r "${path__dir__extracted}"
     mkdir -p "${path__dir__extracted}"
     unzip -o -q "${PATH__DIR__ANNOT__DOWNLOADED_ZIP}/${name__zip}" -d "$path__dir__extracted"
+    
+    find "$path__dir__extracted/labels" -type f -name "classes.txt" -exec rm -f {} \;
+    find "$path__dir__extracted/labels" -type f -name ".DS_Store" -exec rm -f {} \;
+
     if [[ -d "$path__dir__extracted" ]]; then
         num__dir__extracted=$((num__dir__extracted + 1))
     fi
@@ -90,7 +93,7 @@ echo -e "${TAG__PASSED} ${num__dir__prepared} folders in the annotation preparat
 # =========== Test: Number of images in the annotation preparation and number of labels in the extraction must be equal ===========
 for subpath_dir in "${!MAP__SUBPATH_DIR__TO__NAME_ZIP[@]}"; do
     is__mismatched=0
-    path__dir__img__prepared="${PATH__DIR__DATASETS__PREPARED_FOR_ANNOT}/${PREFIX__DIR__STRIP}${map__subpath_dir__to__name_dir_unslashed[$subpath_dir]}/images"
+    path__dir__img__prepared="${PATH__DIR__DATASETS__PREPARED_FOR_ANNOT}/${MAP__SUBPATH_DIR__TO__NAME_ZIP[$subpath_dir]%.*}/images"
     path__dir__lbl__extracted="${PATH__DIR__ANNOT__EXTRACT_TO}/${subpath_dir}/labels"
     
     num__img=$(find "${path__dir__img__prepared}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l)

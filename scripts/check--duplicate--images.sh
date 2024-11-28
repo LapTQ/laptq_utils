@@ -1,28 +1,28 @@
 PATH__DIR__DATASETS__SOURCE__IMG=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG=--raw
+POSTFIX__DIR__IMG=--20241121--checked--backup
 PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--check-duplicate-images
-POSTFIX__DIR__IMG__DEDUP=--20241121--imgdedup
+POSTFIX__DIR__IMG__DEDUP=--20241121--imgdedup--ver2
 
 
 declare -A MAP__SUBPATH_DIR__TO__NEED_TO_CHECK=(
-    ["APTO_v2/day1_330"]="False"
-    ["APTO_v2/night1_190"]="False"
-    ["APTO_v2/night3_44"]="False"
-    ["APTO_v2/night4_239"]="False"
-    ["Pothole_235/train"]="True"
-    ["dataset-ninja/ds1_simplex-test"]="False"
-    ["dataset-ninja/ds1_simplex-train"]="False"
-    ["dataset-ninja/ds2_complex-test"]="False"
-    ["dataset-ninja/ds2_complex-train"]="False"
-    ["pot_det_1240"]="True"
-    ["pothole_dataset_v8/only_rainy_frames/train"]="False"
-    ["pothole_dataset_v8/train"]="False"
-    ["pothole_dataset_v8/train_to_valid"]="False"
-    ["pothole_dataset_v8/valid"]="False"
-    ["Pothole_detection_yolo/train_original"]="True"
-    ["Pothole_Maeda/first_shot"]="False"
-    ["Pothole_Maeda/first_shot_eval"]="False"
-    ["Pothole_Maeda/second_shot"]="False"
+    # ["APTO_v2/day1_330"]="False"
+    # ["APTO_v2/night1_190"]="False"
+    # ["APTO_v2/night3_44"]="False"
+    # ["APTO_v2/night4_239"]="False"
+    # ["Pothole_235/train"]="True"
+    # ["dataset-ninja/ds1_simplex-test"]="False"
+    # ["dataset-ninja/ds1_simplex-train"]="False"
+    # ["dataset-ninja/ds2_complex-test"]="False"
+    # ["dataset-ninja/ds2_complex-train"]="False"
+    # ["pot_det_1240"]="True"
+    # ["pothole_dataset_v8/only_rainy_frames/train"]="False"
+    # ["pothole_dataset_v8/train"]="True"
+    # ["pothole_dataset_v8/train_to_valid"]="False"
+    # ["pothole_dataset_v8/valid"]="False"
+    # ["Pothole_detection_yolo/train_original"]="True"
+    # ["Pothole_Maeda/first_shot"]="False"
+    # ["Pothole_Maeda/first_shot_eval"]="False"
+    # ["Pothole_Maeda/second_shot"]="False"
     ["RDD2022_JAPAN/only_pothole/train"]="True"
 )
 
@@ -53,7 +53,8 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__NEED_TO_CHECK[@]}"; do
         --path__dir__img "$path__dir__img" \
         --path__dir__output "$path__dir__output" \
         --method PHash \
-        --max_distance_threshold 5
+        --max_distance_threshold 5 \
+        --to__plot True
 done
 
 
@@ -69,7 +70,9 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__NEED_TO_CHECK[@]}"; do
 
     if [[ $is_need_to_check = "True" ]]; then
         while IFS= read -r name__file__img; do
-            name__file__img="${name__file__img%$'\r'}"
+            name__file__img="${name__file__img%$'\r'}"  # right strip
+            name__file__img="${name__file__img%\"}" # right strip
+            name__file__img="${name__file__img#\"}" # left strip
             ln -s $( realpath "${path__dir__img}/${name__file__img}" ) "${path__dir__img__dedup}"
         done < "${PATH__DIR__OUTPUT}/${subpath_dir}/originals_to_keep__no_json.txt"
     else

@@ -1,8 +1,10 @@
 PATH__DIR__DATASETS__SOURCE__IMG=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG=--raw
-PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/20241121--downloaded--phase-2--annotation-ver2--pot-man-drain-difficult
-POSTFIX__DIR__LABEL=""
+POSTFIX__DIR__IMG=--20241121--phase-2--annotated-ver2--pot-man-drain-difficult--imgdedup--rm-small--rm-difficult-checked
+PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Datasets/road-issues-detection
+POSTFIX__DIR__LABEL=--20241121--phase-2--annotated-ver2--pot-man-drain-difficult--imgdedup--rm-small--rm-difficult-checked
+
 PATH__DIR__DATASETS__LABEL__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/20241121--downloaded--phase-2--annotation-ver2--pot-man-drain-difficult--remove-small
+POSTFIX__DIR__LABEL__OUTPUT=""
 
 
 [[ -d "$PATH__DIR__DATASETS__LABEL__OUTPUT" ]] && rm -r "$PATH__DIR__DATASETS__LABEL__OUTPUT"
@@ -26,7 +28,9 @@ declare -A MAP__SUBPATH__DIR=(
     ["dataset-ninja/ds2_complex-test"]=""
     ["dataset-ninja/ds2_complex-train"]=""
     ["pot_det_1240"]=""
+
     # ["pothole_dataset_v8/only_rainy_frames/train"]=""
+
     ["pothole_dataset_v8/train"]=""
     ["pothole_dataset_v8/train_to_valid"]=""
     ["pothole_dataset_v8/valid"]=""
@@ -40,7 +44,13 @@ declare -A MAP__SUBPATH__DIR=(
 for subpath__dir in "${!MAP__SUBPATH__DIR[@]}"; do
     path__dir__img="${PATH__DIR__DATASETS__SOURCE__IMG}/${subpath__dir}/images${POSTFIX__DIR__IMG}"
     path__dir__label="${PATH__DIR__DATASETS__SOURCE__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
-    path__dir__output="${PATH__DIR__DATASETS__LABEL__OUTPUT}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
+    path__dir__output="${PATH__DIR__DATASETS__LABEL__OUTPUT}/${subpath__dir}/labels${POSTFIX__DIR__LABEL__OUTPUT}"
+
+    if [[ -d "$path__dir__output" ]]; then
+        echo -e "${TAG__FAILED} Output folder already existed: ${path__dir__output}"
+        exit 1
+    fi
+
     python3 submodules/laptq_utils/main.py \
         helper__remove__small__boxes \
         --path__dir__img "${path__dir__img}" \

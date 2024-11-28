@@ -13,6 +13,7 @@ def helper__check__duplicate__images(**kwargs):
     max_distance_threshold = kwargs[
         "max_distance_threshold"
     ]  # hamming distance, used in methods based on hashing. Should be an int between 0 and 64. Default value is 10
+    to__plot = kwargs["to__plot"]
 
     encoder = eval(method)()
 
@@ -62,15 +63,16 @@ def helper__check__duplicate__images(**kwargs):
         for name__file in originals_to_keep:
             writer.writerow([name__file])
 
-    path__dir__output__plot = os.path.join(path__dir__output, "plot_duplicates")
-    os.makedirs(path__dir__output__plot, exist_ok=True)
-    for name__img__key, list__img__duplicated in duplicates.items():
-        if len(list__img__duplicated) == 0:
-            continue
+    if to__plot:
+        path__dir__output__plot = os.path.join(path__dir__output, "plot_duplicates")
+        os.makedirs(path__dir__output__plot, exist_ok=True)
+        for name__img__key, list__img__duplicated in duplicates.items():
+            if len(list__img__duplicated) == 0:
+                continue
 
-        plot_duplicates(
-            image_dir=path__dir__img,
-            duplicate_map=duplicates,
-            filename=name__img__key,
-            outfile=os.path.join(path__dir__output__plot, name__img__key),
-        )
+            plot_duplicates(
+                image_dir=path__dir__img,
+                duplicate_map=duplicates,
+                filename=name__img__key,
+                outfile=os.path.join(path__dir__output__plot, name__img__key),
+            )

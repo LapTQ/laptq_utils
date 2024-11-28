@@ -1,9 +1,9 @@
 PATH__DIR__DATASETS__SOURCE__IMG=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG=--20241121--phase-2--annotated-ver2--pot-man-drain-difficult--imgdedup--rm-small--rm-difficult
+POSTFIX__DIR__IMG=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
 PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__LABEL=--20241121--phase-2--annotated-ver2--pot-man-drain-difficult--imgdedup--rm-small--rm-difficult
+POSTFIX__DIR__LABEL=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
 PATH__FILE__CLASS_ID__TO__LABEL=src/configs/class_id_to_label.yaml
-PATH__DIR__VISUALIZATION__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--visualization--downloaded--phase-2--annotation-ver2--pot-man-drain-difficult
+PATH__DIR__VISUALIZATION__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241122--visualize
 NUM__MAX__IMG__TO__VISUALIZE=20
 
 
@@ -18,7 +18,9 @@ declare -A MAP__SUBPATH_DIR__TO__NAME_ZIP=(
     ["dataset-ninja/ds2_complex-test"]=""
     ["dataset-ninja/ds2_complex-train"]=""
     ["pot_det_1240"]=""
+
     # ["pothole_dataset_v8/only_rainy_frames/train"]=""
+
     ["pothole_dataset_v8/train"]=""
     ["pothole_dataset_v8/train_to_valid"]=""
     ["pothole_dataset_v8/valid"]=""

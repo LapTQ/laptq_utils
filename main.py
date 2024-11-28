@@ -41,6 +41,7 @@ def parse_args():
     ap.add_argument("--list__id_class", type=str)
     ap.add_argument("--method", type=str)
     ap.add_argument("--max_distance_threshold", type=int)
+    ap.add_argument("--to__plot", choices=["True", "False"])
 
     args = ap.parse_args()
 
@@ -58,6 +59,7 @@ def parse_args():
         eval(args.num__max__img) if args.num__max__img is not None else None
     )
     args.list__id_class = eval(args.list__id_class) if args.list__id_class is not None else None
+    args.to__plot = eval(args.to__plot) if args.to__plot is not None else None
 
     return args
 

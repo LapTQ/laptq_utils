@@ -2,9 +2,9 @@ PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/20241121--do
 POSTFIX__DIR__LABEL__SOURCE=""
 
 PATH__DIR__DATASETS__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG__SOURCE=--20241121--imgdedup
+POSTFIX__DIR__IMG__SOURCE=--20241121--phase-2--annotated-ver2--pot-man-drain-difficult--imgdedup--rm-small--rm-difficult-checked
 
-POSTFIX__DIR__VERSION__TARGET=--20241121--phase-2--annotated-ver2--pot-man-drain-difficult--imgdedup--rm-small--rm-difficult
+POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
@@ -18,7 +18,9 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     ["dataset-ninja/ds2_complex-test"]=""
     ["dataset-ninja/ds2_complex-train"]=""
     ["pot_det_1240"]=""
+
     # ["pothole_dataset_v8/only_rainy_frames/train"]=""
+
     ["pothole_dataset_v8/train"]=""
     ["pothole_dataset_v8/train_to_valid"]=""
     ["pothole_dataset_v8/valid"]=""
