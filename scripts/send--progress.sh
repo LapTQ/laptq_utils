@@ -10,19 +10,19 @@ while true; do
 
     path__dir=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m--960--full
     if [[ -d $path__dir ]]; then
-        rsync $path__dir "${PATH__FILE__PROGRESS__DIR}/"
+        rsync -av $path__dir "${PATH__FILE__PROGRESS__DIR}/"
         find "$PATH__FILE__PROGRESS__DIR" -type d -name *"weights"* -exec rm -rf {} \;
     fi
 
     path__dir=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m--640--crop
     if [[ -d $path__dir ]]; then
-        rsync $path__dir "${PATH__FILE__PROGRESS__DIR}/"
+        rsync -av $path__dir "${PATH__FILE__PROGRESS__DIR}/"
         find "$PATH__FILE__PROGRESS__DIR" -type d -name *"weights"* -exec rm -rf {} \;
     fi
 
     path__dir=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11s--960--crop
     if [[ -d $path__dir ]]; then
-        rsync $path__dir "${PATH__FILE__PROGRESS__DIR}/"
+        rsync -av $path__dir "${PATH__FILE__PROGRESS__DIR}/"
         find "$PATH__FILE__PROGRESS__DIR" -type d -name *"weights"* -exec rm -rf {} \;
     fi
 
