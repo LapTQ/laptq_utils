@@ -1,10 +1,10 @@
-PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241129--phase-2--annotated-ver2--pot-man
+PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
 POSTFIX__DIR__LABEL__SOURCE=""
 
 PATH__DIR__DATASETS__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
 POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
 
-POSTFIX__DIR__VERSION__TARGET=--20241129--phase-2--annotated-ver2--pot-man
+POSTFIX__DIR__VERSION__TARGET=--20241129--phase-2--annotated-ver2--only-pot
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
