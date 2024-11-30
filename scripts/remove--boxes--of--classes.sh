@@ -1,7 +1,7 @@
 PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Datasets/road-issues-detection
 POSTFIX__DIR__LABEL=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
 
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241129--phase-2--annotated-ver2--pot-man
+PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241129--phase-2--annotated-ver2--only-pot
 POSTFIX__DIR__VERSION__TARGET=""
 
 
@@ -18,7 +18,7 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     ["pot_det_1240"]=""
 
     # ["pothole_dataset_v8/only_rainy_frames/train"]=""
-    
+
     ["pothole_dataset_v8/train"]=""
     ["pothole_dataset_v8/train_to_valid"]=""
     ["pothole_dataset_v8/valid"]=""
@@ -29,11 +29,8 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     ["RDD2022_JAPAN/only_pothole/train"]=""
 )
 
-declare -A MAP__ID_OLD__TO__ID_NEW=(
-    ["2"]="1"
-)
 
-ORDER=( "2" )
+ARGS="'\$1 != \"1\" && \$1 != \"2\" {print}'"
 
 
 IFS=$'\n'
@@ -51,13 +48,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     mkdir -p "${path__dir__lbl__output}"
 
     for name__file__lbl in $( ls $path__dir__lbl__input ); do
-        path__file__lbl__output="${path__dir__lbl__output}/${name__file__lbl}"
-        cp "${path__dir__lbl__input}/${name__file__lbl}" "${path__dir__lbl__output}/"
-
-        for id__old in "${ORDER[@]}"; do
-            id__new=${MAP__ID_OLD__TO__ID_NEW[$id__old]}
-            sed -i "s/^$id__old /$id__new /" "$path__file__lbl__output"
-        done
+        awk '$1 != "1" && $1 != "2" {print}' "${path__dir__lbl__input}/${name__file__lbl}" > "${path__dir__lbl__output}/${name__file__lbl}"
     done
 
     num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
