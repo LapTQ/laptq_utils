@@ -1,11 +1,11 @@
 PATH__DIR__DATASETS__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
+POSTFIX__DIR__IMG__SOURCE=--20241121--crop-top50-side20-botom0--only-pot
 
 PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__LABEL__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
+POSTFIX__DIR__LABEL__SOURCE=--20241121--crop-top50-side20-botom0--only-pot
 
 PATH__DIR__DATASETS__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241130--resolve--soft-link--dataset
-POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
+POSTFIX__DIR__VERSION__TARGET=--20241121--crop-top50-side20-botom0--only-pot
 
 
 # [[ -d "$PATH__DIR__DATASETS__OUTPUT" ]] && rm -r "$PATH__DIR__DATASETS__OUTPUT"

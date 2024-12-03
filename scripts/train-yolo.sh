@@ -5,38 +5,8 @@ sleep 0
 # data=only_pothole_mix--manhole-241016
 data=20241122--phase-2--annotation-ver2
 
-# bash /mnt/hdd10tb/Users/laptq/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo--crop-10.sh
-# echo "$( file /mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> /mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/progress/log.txt
-# YOLO=yolo11m
-# IMGSZ=960
-# yolo detect train \
-#     data=src/configs/$data.yaml \
-#     model=${YOLO}.pt \
-#     epochs=200 \
-#     imgsz=$IMGSZ \
-#     device=0,1,3 \
-#     batch=24 \
-#     project=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-10 \
-#     plots=True \
-#     patience=30
-
-# bash /mnt/hdd10tb/Users/laptq/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo--crop-20.sh
-# echo "$( file /mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> /mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/progress/log.txt
-# YOLO=yolo11m
-# IMGSZ=960
-# yolo detect train \
-#     data=src/configs/$data.yaml \
-#     model=${YOLO}.pt \
-#     epochs=200 \
-#     imgsz=$IMGSZ \
-#     device=0,1,3 \
-#     batch=24 \
-#     project=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20 \
-#     plots=True \
-#     patience=30
-
-bash /mnt/hdd10tb/Users/laptq/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo--crop-10.sh
-echo "$( file /mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> /mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/progress/log.txt
+bash ~/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo--crop-20.sh
+echo "$( file ~/laptq-prj-46/data/road-issues-detection/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> ~/laptq-prj-46/outputs/progress/log.txt
 YOLO=yolo11m
 IMGSZ=960
 yolo detect train \
@@ -46,26 +16,28 @@ yolo detect train \
     imgsz=$IMGSZ \
     device=0,1 \
     batch=16 \
-    project=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-10--scale-0 \
+    project=~/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20 \
     plots=True \
-    scale=0 \
     patience=30
 
-bash /mnt/hdd10tb/Users/laptq/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo--crop-20.sh
-echo "$( file /mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> /mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/progress/log.txt
+
+bash ~/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo--crop-20--only-pot.sh
+echo "$( file ~/laptq-prj-46/outputs/20241130--resolve--soft-link--dataset/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> ~/laptq-prj-46/outputs/progress/log.txt
 YOLO=yolo11m
 IMGSZ=960
 yolo detect train \
     data=src/configs/$data.yaml \
-    model=${YOLO}.pt \
-    epochs=200 \
+    model=~/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m--960--crop-20/train/weights/best.pt \
+    epochs=4 \
     imgsz=$IMGSZ \
     device=0,1 \
     batch=16 \
-    project=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20--scale-0 \
+    project=~/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20--finetune-only-pot \
     plots=True \
-    scale=0 \
+    lr0=0.007129 \
+    warmup_epochs=0 \
     patience=30
+
 
 exit
 

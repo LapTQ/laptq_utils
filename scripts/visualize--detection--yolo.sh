@@ -1,10 +1,10 @@
 PATH__DIR__DATASETS__SOURCE__IMG=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
+POSTFIX__DIR__IMG=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
 PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__LABEL=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
+POSTFIX__DIR__LABEL=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
 PATH__FILE__CLASS_ID__TO__LABEL=src/configs/class_id_to_label.yaml
 PATH__DIR__VISUALIZATION__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241122--visualize
-NUM__MAX__IMG__TO__VISUALIZE=20
+NUM__MAX__IMG__TO__VISUALIZE=None
 
 
 declare -A MAP__SUBPATH_DIR__TO__NAME_ZIP=(

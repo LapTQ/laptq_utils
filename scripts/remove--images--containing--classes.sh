@@ -1,12 +1,11 @@
 # actually, I just remove the label files. So you should create symblink to image corresponding to the accepted labels
-PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/20241121--downloaded--phase-2--annotation-ver2--pot-man-drain-difficult--remove-small
-POSTFIX__DIR__LABEL=""
-PATH__DIR__DATASETS__LABEL__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/20241121--downloaded--phase-2--annotation-ver2--pot-man-drain-difficult--remove-small--remove-difficult
-POSTFIX__DIR__LABEL__OUTPUT=""
+PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Datasets/road-issues-detection
+POSTFIX__DIR__LABEL=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
+PATH__DIR__DATASETS__LABEL__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/20241121--crop-top50-side20-botom0--only-pot
+POSTFIX__DIR__LABEL__OUTPUT=--20241121--crop-top50-side20-botom0--only-pot
 
-
-[[ -d "$PATH__DIR__DATASETS__LABEL__OUTPUT" ]] && rm -r "$PATH__DIR__DATASETS__LABEL__OUTPUT"
-
+# LIST__ID_CLASS=3,
+LIST__ID_CLASS=1,2,3
 
 IFS=$'\n'
 TAG__FAILED="\033[31m[FAILED]\033[0m"
@@ -44,16 +43,14 @@ for subpath__dir in "${!MAP__SUBPATH__DIR[@]}"; do
     path__dir__label="${PATH__DIR__DATASETS__SOURCE__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
     path__dir__output="${PATH__DIR__DATASETS__LABEL__OUTPUT}/${subpath__dir}/labels${POSTFIX__DIR__LABEL__OUTPUT}"
 
-    if [[ -d "$path__dir__output" ]]; then
-        echo -e "${TAG__FAILED} Output folder already existed: ${path__dir__output}"
-        exit 1
-    fi
+    [[ -d "${path__dir__output}" ]] && rm -r "${path__dir__output}"
+    mkdir -p "${path__dir__output}"
     
     python3 submodules/laptq_utils/main.py \
         helper__remove__images__containing__classes \
         --path__dir__label "$path__dir__label" \
         --path__dir__output "$path__dir__output" \
-        --list__id_class 3,
+        --list__id_class $LIST__ID_CLASS
     
     if [[ ! -d "$path__dir__output" ]]; then
         echo -e "$TAG__FAILED The output $path__dir__output not existed"

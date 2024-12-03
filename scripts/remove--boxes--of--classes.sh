@@ -1,9 +1,10 @@
 PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Datasets/road-issues-detection
 POSTFIX__DIR__LABEL=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
 
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241129--phase-2--annotated-ver2--only-pot
-POSTFIX__DIR__VERSION__TARGET=""
+PATH__DIR__OUTPUT=/mnt/hdd10tb/Datasets/road-issues-detection
+POSTFIX__DIR__VERSION__TARGET=--20241129--phase-2--annotated-ver2--only-pot
 
+ARGS="'\$1 != \"1\" && \$1 != \"2\" {print}'"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     ["APTO_v2/day1_330"]=""
@@ -28,9 +29,6 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     ["Pothole_Maeda/second_shot"]=""
     ["RDD2022_JAPAN/only_pothole/train"]=""
 )
-
-
-ARGS="'\$1 != \"1\" && \$1 != \"2\" {print}'"
 
 
 IFS=$'\n'
