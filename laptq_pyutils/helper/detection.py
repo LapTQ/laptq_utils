@@ -1,4 +1,4 @@
-from laptq_pyutils.convert.general import xcycwh__to__x1y1x2y2, xcycwh__to__x1y1wh
+from laptq_pyutils.convert import xcycwh__to__x1y1x2y2, xcycwh__to__x1y1wh
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import ListAligner
 from laptq_pyutils.ops import box__miniou
