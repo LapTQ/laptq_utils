@@ -1,17 +1,17 @@
 import os
-from tqdm import tqdm
-import PIL.Image
-import numpy as np
 import csv
 
 
 def helper__remove__small__boxes(**kwargs):
     import warnings
+    import numpy as np
+    from tqdm import tqdm
+    import PIL.Image
 
     warnings.filterwarnings("ignore")
 
     path__dir__img = kwargs["path__dir__img"]
-    path__dir__label = kwargs["path__dir__label"]
+    path__dir__lbl = kwargs["path__dir__lbl"]
     path__dir__output = kwargs["path__dir__output"]
     thresh__area__min = kwargs["thresh__area__min"]
 
@@ -25,7 +25,7 @@ def helper__remove__small__boxes(**kwargs):
         num__images__total += 1
         path__img = os.path.join(path__dir__img, name__img)
         name__label = os.path.splitext(name__img)[0] + ".txt"
-        path__label__in = os.path.join(path__dir__label, name__label)
+        path__label__in = os.path.join(path__dir__lbl, name__label)
         path__label__out = os.path.join(path__dir__output, name__label)
 
         if not os.path.exists(path__label__in):
@@ -66,10 +66,12 @@ def helper__remove__small__boxes(**kwargs):
 
 def helper__remove__images__containing__classes(**kwargs):
     import warnings
+    import numpy as np
+    from tqdm import tqdm
 
     warnings.filterwarnings("ignore")
 
-    path__dir__label = kwargs["path__dir__label"]
+    path__dir__lbl = kwargs["path__dir__lbl"]
     path__dir__output = kwargs["path__dir__output"]
     list__id_class = kwargs["list__id_class"]
 
@@ -77,9 +79,9 @@ def helper__remove__images__containing__classes(**kwargs):
 
     num__labels__total = 0
     num__labels__removed = 0
-    for name__label in tqdm(sorted(os.listdir(path__dir__label))):
+    for name__label in tqdm(sorted(os.listdir(path__dir__lbl))):
         num__labels__total += 1
-        path__label__in = os.path.join(path__dir__label, name__label)
+        path__label__in = os.path.join(path__dir__lbl, name__label)
         path__label__out = os.path.join(path__dir__output, name__label)
 
         label__in = np.loadtxt(

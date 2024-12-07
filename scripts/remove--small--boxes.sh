@@ -43,7 +43,7 @@ declare -A MAP__SUBPATH__DIR=(
 
 for subpath__dir in "${!MAP__SUBPATH__DIR[@]}"; do
     path__dir__img="${PATH__DIR__DATASETS__SOURCE__IMG}/${subpath__dir}/images${POSTFIX__DIR__IMG}"
-    path__dir__label="${PATH__DIR__DATASETS__SOURCE__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
+    path__dir__lbl="${PATH__DIR__DATASETS__SOURCE__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
     path__dir__output="${PATH__DIR__DATASETS__LABEL__OUTPUT}/${subpath__dir}/labels${POSTFIX__DIR__LABEL__OUTPUT}"
 
     if [[ -d "$path__dir__output" ]]; then
@@ -54,11 +54,11 @@ for subpath__dir in "${!MAP__SUBPATH__DIR[@]}"; do
     python3 submodules/laptq_utils/main.py \
         helper__remove__small__boxes \
         --path__dir__img "${path__dir__img}" \
-        --path__dir__label "${path__dir__label}" \
+        --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \
         --thresh__area__min 64
     
-    num__lbl__in=$(find "${path__dir__label}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
+    num__lbl__in=$(find "${path__dir__lbl}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
     num__lbl__out=$(find "${path__dir__output}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
     if [ $num__lbl__in != $num__lbl__out ]; then
         echo -e "${TAG__FAILED} Number of labels mismatch: ${subpath__dir}"

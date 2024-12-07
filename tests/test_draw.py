@@ -1,14 +1,4 @@
-from pathlib import Path
-import sys
-
-HERE = Path(__file__).parent
-ROOT_DIR = HERE.parent
-sys.path.append(str(ROOT_DIR))
-
-from laptq_utils import cv2_imshow, cv2_putText, cv2_rectangle
-
-# ==============================================================================
-
+from laptq_pyutils.draw import cv2_imshow, cv2_putText, cv2_rectangle
 import pytest
 import numpy as np
 

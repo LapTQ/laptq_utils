@@ -40,7 +40,7 @@ declare -A MAP__SUBPATH__DIR=(
 
 
 for subpath__dir in "${!MAP__SUBPATH__DIR[@]}"; do
-    path__dir__label="${PATH__DIR__DATASETS__SOURCE__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
+    path__dir__lbl="${PATH__DIR__DATASETS__SOURCE__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
     path__dir__output="${PATH__DIR__DATASETS__LABEL__OUTPUT}/${subpath__dir}/labels${POSTFIX__DIR__LABEL__OUTPUT}"
 
     [[ -d "${path__dir__output}" ]] && rm -r "${path__dir__output}"
@@ -48,7 +48,7 @@ for subpath__dir in "${!MAP__SUBPATH__DIR[@]}"; do
     
     python3 submodules/laptq_utils/main.py \
         helper__remove__images__containing__classes \
-        --path__dir__label "$path__dir__label" \
+        --path__dir__lbl "$path__dir__lbl" \
         --path__dir__output "$path__dir__output" \
         --list__id_class $LIST__ID_CLASS
     
