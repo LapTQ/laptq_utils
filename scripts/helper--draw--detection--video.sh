@@ -1,6 +1,6 @@
 PATH__DIR__VIDEO=/home/laptq/Downloads/videos
 
-PATH__DIR__LABEL=/home/laptq/Downloads/outputs--video--1
+PATH__DIR__LABEL=/home/laptq/Downloads/outputs--video--5
 
 PATH__DIR__OUTPUT=/home/laptq/Downloads/outputs--video--6
 

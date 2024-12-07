@@ -1,12 +1,11 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/Downloads/outputs--2
+PATH__DIR__LABEL__INPUT=/home/laptq/Downloads/outputs--video--2
 POSTFIX__DIR__LABEL__INPUT=""
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--3
+PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--video--3
 POSTFIX__DIR__LABEL__OUTPUT=""
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["set1"]=""
-    ["set2"]=""
+    ["clideo_editor_177d5d7cdb144c1598d5419573b0449c.mp4"]=""
 )
 
 IFS=$'\n'

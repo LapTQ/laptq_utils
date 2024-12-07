@@ -153,7 +153,7 @@ def helper__filter__detection__result__by__id_class(**kwargs):
 
     list__index__to_pop = []
     list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
-    for i_obj, id_class in tqdm(enumerate(list__obj__id_class)):
+    for i_obj, id_class in enumerate(list__obj__id_class):
         if (
             list__id_class__to_include is not None
             and id_class not in list__id_class__to_include
@@ -182,7 +182,7 @@ def helper__change__detection__id_class(**kwargs):
 
     list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
     list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
-    for i_obj, id_class in tqdm(enumerate(list__obj__id_class)):
+    for i_obj, id_class in enumerate(list__obj__id_class):
         if id_class in map__id_old__to__id_new:
             list__obj__id_class[i_obj] = map__id_old__to__id_new[id_class]
 
@@ -209,8 +209,8 @@ def helper__filter__detection__result__by__conf(**kwargs):
     list__index__to_pop = []
     list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
     list__obj__box_conf = list_aligner__result.get_key(key="list__obj__box_conf")
-    for i_obj, (id_class, conf) in tqdm(
-        enumerate(zip(list__obj__id_class, list__obj__box_conf))
+    for i_obj, (id_class, conf) in enumerate(
+        zip(list__obj__id_class, list__obj__box_conf)
     ):
         if conf < map__id_class__to__thresh_conf[id_class]:
             list__index__to_pop.append(i_obj)
