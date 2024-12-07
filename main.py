@@ -79,11 +79,6 @@ def parse_args():
         if args.map__id_class__to__thresh_conf is not None
         else None
     )
-    args.to__filterby__miniou = (
-        eval(args.to__filterby__miniou)
-        if args.to__filterby__miniou is not None
-        else None
-    )
     args.list__id_class__to_include = (
         eval(args.list__id_class__to_include)
         if args.list__id_class__to_include is not None

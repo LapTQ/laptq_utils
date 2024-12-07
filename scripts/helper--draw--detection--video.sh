@@ -20,7 +20,7 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     path__file__video__input="${PATH__DIR__VIDEO}/${name__video}"
-    path__dir__lbl__input="${PATH__DIR__LABEL}/${name__video}"
+    path__dir__lbl__input="${PATH__DIR__LABEL}/${name__video}/labels"
     path__file__output="${PATH__DIR__OUTPUT}/${name__video}"
 
     python3 main.py \

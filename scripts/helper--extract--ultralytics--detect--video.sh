@@ -17,7 +17,7 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     path__file__input="${PATH__DIR__VIDEO}/${name__video}"
-    path__dir__lbl__output="${PATH__DIR__LABEL__OUTPUT}/${name__video}"
+    path__dir__lbl__output="${PATH__DIR__LABEL__OUTPUT}/${name__video}/labels"
 
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
