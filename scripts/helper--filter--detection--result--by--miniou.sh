@@ -22,17 +22,11 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
 
-    for name__file__lbl in $(ls "${path__dir__lbl__input}"); do
-        path__file__lbl__input="${path__dir__lbl__input}/${name__file__lbl}"
-        path__file__lbl__output="${path__dir__lbl__output}/${name__file__lbl}"
-
-        python3 main.py \
-            helper__filter__detection__result__by__miniou \
-            --path__file__lbl__input "${path__file__lbl__input}" \
-            --path__file__lbl__output "${path__file__lbl__output}" \
-            --thresh__miniou 0.5
-
-    done
+    python3 main.py \
+        helper__filter__detection__result__by__miniou \
+        --path__dir__lbl__input "${path__dir__lbl__input}" \
+        --path__dir__lbl__output "${path__dir__lbl__output}" \
+        --thresh__miniou 0.5
 
 
     num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)

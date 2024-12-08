@@ -140,129 +140,162 @@ def helper__filter__detection__result__by__id_class(**kwargs):
 
     import json
     from tqdm import tqdm
+    import os
 
-    path__file__lbl__input = kwargs["path__file__lbl__input"]
-    path__file__lbl__output = kwargs["path__file__lbl__output"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     list__id_class__to_include: list | None = kwargs["list__id_class__to_include"]
     list__id_class__to_exclude: list = kwargs["list__id_class__to_exclude"]
 
-    with open(path__file__lbl__input, "r") as f:
-        dict__result = json.load(f)
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
 
-    list__index__to_pop = []
-    list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
-    for i_obj, id_class in enumerate(list__obj__id_class):
-        if (
-            list__id_class__to_include is not None
-            and id_class not in list__id_class__to_include
-        ) or id_class in list__id_class__to_exclude:
-            list__index__to_pop.append(i_obj)
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
 
-    list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
 
-    dict__result = list_aligner__result.item()
+        list__index__to_pop = []
+        list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
+        for i_obj, id_class in enumerate(list__obj__id_class):
+            if (
+                list__id_class__to_include is not None
+                and id_class not in list__id_class__to_include
+            ) or id_class in list__id_class__to_exclude:
+                list__index__to_pop.append(i_obj)
 
-    with open(path__file__lbl__output, "w") as f:
-        json.dump(dict__result, f, indent=4)
+        list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+
+        dict__result = list_aligner__result.item()
+
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)
 
 
 def helper__change__detection__id_class(**kwargs):
 
     import json
     from tqdm import tqdm
+    import os
 
-    path__file__lbl__input = kwargs["path__file__lbl__input"]
-    path__file__lbl__output = kwargs["path__file__lbl__output"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     map__id_old__to__id_new: dict = kwargs["map__id_old__to__id_new"]
 
-    with open(path__file__lbl__input, "r") as f:
-        dict__result = json.load(f)
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
-    list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
-    for i_obj, id_class in enumerate(list__obj__id_class):
-        if id_class in map__id_old__to__id_new:
-            list__obj__id_class[i_obj] = map__id_old__to__id_new[id_class]
+    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
 
-    dict__result = list_aligner__result.item()
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
 
-    with open(path__file__lbl__output, "w") as f:
-        json.dump(dict__result, f, indent=4)
+        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+        list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
+        for i_obj, id_class in enumerate(list__obj__id_class):
+            if id_class in map__id_old__to__id_new:
+                list__obj__id_class[i_obj] = map__id_old__to__id_new[id_class]
+
+        dict__result = list_aligner__result.item()
+
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)
 
 
 def helper__filter__detection__result__by__conf(**kwargs):
 
     import json
     from tqdm import tqdm
+    import os
 
-    path__file__lbl__input = kwargs["path__file__lbl__input"]
-    path__file__lbl__output = kwargs["path__file__lbl__output"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     map__id_class__to__thresh_conf: dict = kwargs["map__id_class__to__thresh_conf"]
 
-    with open(path__file__lbl__input, "r") as f:
-        dict__result = json.load(f)
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
 
-    list__index__to_pop = []
-    list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
-    list__obj__box_conf = list_aligner__result.get_key(key="list__obj__box_conf")
-    for i_obj, (id_class, conf) in enumerate(
-        zip(list__obj__id_class, list__obj__box_conf)
-    ):
-        if conf < map__id_class__to__thresh_conf[id_class]:
-            list__index__to_pop.append(i_obj)
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
 
-    list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
 
-    dict__result = list_aligner__result.item()
+        list__index__to_pop = []
+        list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
+        list__obj__box_conf = list_aligner__result.get_key(key="list__obj__box_conf")
+        for i_obj, (id_class, conf) in enumerate(
+            zip(list__obj__id_class, list__obj__box_conf)
+        ):
+            if conf < map__id_class__to__thresh_conf[id_class]:
+                list__index__to_pop.append(i_obj)
 
-    with open(path__file__lbl__output, "w") as f:
-        json.dump(dict__result, f, indent=4)
+        list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+
+        dict__result = list_aligner__result.item()
+
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)
 
 
 def helper__filter__detection__result__by__miniou(**kwargs):
 
     import json
     import numpy as np
+    from tqdm import tqdm
+    import os
 
-    path__file__lbl__input = kwargs["path__file__lbl__input"]
-    path__file__lbl__output = kwargs["path__file__lbl__output"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     thresh__miniou = kwargs["thresh__miniou"]
 
-    with open(path__file__lbl__input, "r") as f:
-        dict__result = json.load(f)
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
 
-    list__index__to_pop = []
-    list__obj__box_xcycwhn = list_aligner__result.get_key(key="list__obj__box_xcycwhn")
-    list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
 
-    list__obj__box_xcycwhn = np.array(list__obj__box_xcycwhn)
-    list__obj__id_class = np.array(list__obj__id_class)
+        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
 
-    list__obj__box_x1y1x2y2 = xcycwh__to__x1y1x2y2(list__obj__box_xcycwhn)
-    mat__miniou = box__miniou(list__obj__box_x1y1x2y2, list__obj__box_x1y1x2y2)
-    mask__miniou = mat__miniou > thresh__miniou
+        list__index__to_pop = []
+        list__obj__box_xcycwhn = list_aligner__result.get_key(
+            key="list__obj__box_xcycwhn"
+        )
+        list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
 
-    list__obj__box_area = list__obj__box_xcycwhn[:, 2] * list__obj__box_xcycwhn[:, 3]
-    mask__area_smaller = (
-        list__obj__box_area.reshape(-1, 1) < list__obj__box_area
-    )  # must not <=
+        list__obj__box_xcycwhn = np.array(list__obj__box_xcycwhn)
+        list__obj__id_class = np.array(list__obj__id_class)
 
-    mask__same_class = list__obj__id_class.reshape(-1, 1) == list__obj__id_class
+        list__obj__box_x1y1x2y2 = xcycwh__to__x1y1x2y2(list__obj__box_xcycwhn)
+        mat__miniou = box__miniou(list__obj__box_x1y1x2y2, list__obj__box_x1y1x2y2)
+        mask__miniou = mat__miniou > thresh__miniou
 
-    list__index__to_pop = np.where(
-        mask__miniou & mask__area_smaller & mask__same_class
-    )[0]
-    list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+        list__obj__box_area = (
+            list__obj__box_xcycwhn[:, 2] * list__obj__box_xcycwhn[:, 3]
+        )
+        mask__area_smaller = (
+            list__obj__box_area.reshape(-1, 1) < list__obj__box_area
+        )  # must not <=
 
-    dict__result = list_aligner__result.item()
-    with open(path__file__lbl__output, "w") as f:
-        json.dump(dict__result, f, indent=4)
+        mask__same_class = list__obj__id_class.reshape(-1, 1) == list__obj__id_class
+
+        list__index__to_pop = np.where(
+            mask__miniou & mask__area_smaller & mask__same_class
+        )[0]
+        list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+
+        dict__result = list_aligner__result.item()
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)
 
 
 def helper__draw__detection__imgdir(**kwargs):
@@ -409,97 +442,140 @@ def helper__draw__detection__video(**kwargs):
 def helper__convert__detection__json__to__txt(**kwargs):
 
     import json
+    from tqdm import tqdm
+    import os
 
-    path__file__lbl__input = kwargs["path__file__lbl__input"]
-    path__file__lbl__output = kwargs["path__file__lbl__output"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
 
-    with open(path__file__lbl__input, "r") as f:
-        dict__result = json.load(f)
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    list__obj__id_class = dict__result["list__obj__id_class"]
-    list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
+    for name__file__lbl__input in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+        name__file__lbl__output = os.path.splitext(name__file__lbl__input)[0] + ".txt"
 
-    with open(path__file__lbl__output, "w") as f:
-        for id_class, box_xcycwhn in zip(list__obj__id_class, list__obj__box_xcycwhn):
-            xcn, ycn, wn, hn = box_xcycwhn
-            f.write(f"{id_class} {xcn} {ycn} {wn} {hn}\n")
+        path__file__lbl__input = os.path.join(
+            path__dir__lbl__input, name__file__lbl__input
+        )
+        path__file__lbl__output = os.path.join(
+            path__dir__lbl__output, name__file__lbl__output
+        )
+
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
+
+        list__obj__id_class = dict__result["list__obj__id_class"]
+        list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
+
+        with open(path__file__lbl__output, "w") as f:
+            for id_class, box_xcycwhn in zip(
+                list__obj__id_class, list__obj__box_xcycwhn
+            ):
+                xcn, ycn, wn, hn = box_xcycwhn
+                f.write(f"{id_class} {xcn} {ycn} {wn} {hn}\n")
 
 
 def helper__convert__detection__txt__to__json(**kwargs):
 
     import json
+    from tqdm import tqdm
+    import os
 
-    path__file__lbl__input = kwargs["path__file__lbl__input"]
-    path__file__lbl__output = kwargs["path__file__lbl__output"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
 
-    list__obj__id_class = []
-    list__obj__box_xcycwhn = []
-    with open(path__file__lbl__input, "r") as f:
-        for line in f:
-            id_class, xcn, ycn, wn, hn = map(eval, line.strip().split())
-            list__obj__id_class.append(id_class)
-            list__obj__box_xcycwhn.append([xcn, ycn, wn, hn])
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    dict__result = {
-        "list__obj__id_class": list__obj__id_class,
-        "list__obj__box_xcycwhn": list__obj__box_xcycwhn,
-    }
+    for name__file__lbl__input in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+        name__file__lbl__output = os.path.splitext(name__file__lbl__input)[0] + ".json"
 
-    with open(path__file__lbl__output, "w") as f:
-        json.dump(dict__result, f, indent=4)
+        path__file__lbl__input = os.path.join(
+            path__dir__lbl__input, name__file__lbl__input
+        )
+        path__file__lbl__output = os.path.join(
+            path__dir__lbl__output, name__file__lbl__output
+        )
+
+        list__obj__id_class = []
+        list__obj__box_xcycwhn = []
+        with open(path__file__lbl__input, "r") as f:
+            for line in f:
+                id_class, xcn, ycn, wn, hn = map(eval, line.strip().split())
+                list__obj__id_class.append(id_class)
+                list__obj__box_xcycwhn.append([xcn, ycn, wn, hn])
+
+        dict__result = {
+            "list__obj__id_class": list__obj__id_class,
+            "list__obj__box_xcycwhn": list__obj__box_xcycwhn,
+        }
+
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)
 
 
 def helper__filter__detection__result__by__size(**kwargs):
 
     from PIL import Image
     import json
+    from tqdm import tqdm
+    import os
 
-    path__file__img = kwargs["path__file__img"]
-    path__file__lbl__input = kwargs["path__file__lbl__input"]
-    path__file__lbl__output = kwargs["path__file__lbl__output"]
+    path__dir__img = kwargs["path__dir__img"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     filter_by = kwargs["filter_by"]
     thresh = kwargs["thresh"]
 
     assert filter_by in ["area", "width", "height"]
 
-    W, H = Image.open(path__file__img).size
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    with open(path__file__lbl__input, "r") as f:
-        dict__result = json.load(f)
+    for name__file__img in tqdm(sorted(os.listdir(path__dir__img))):
+        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
+        path__file__img = os.path.join(path__dir__img, name__file__img)
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
 
-    list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+        if not os.path.exists(path__file__lbl__input):
+            continue
 
-    list__index__to_pop = []
-    list__obj__box_xcycwhn = list_aligner__result.get_key(key="list__obj__box_xcycwhn")
+        W, H = Image.open(path__file__img).size
 
-    num__box__popped = 0
-    for i_obj, box_xcycwhn in enumerate(list__obj__box_xcycwhn):
-        xcn, ycn, wn, hn = box_xcycwhn
-        w = wn * W
-        h = hn * H
-        tobe__popped = False
-        if (
-            (filter_by == "area" and w * h < thresh)
-            or (filter_by == "width" and w < thresh)
-            or (filter_by == "height" and h < thresh)
-        ):
-            tobe__popped = True
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
 
-        if tobe__popped:
-            list__index__to_pop.append(i_obj)
-            num__box__popped += 1
+        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
 
-    list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+        list__index__to_pop = []
+        list__obj__box_xcycwhn = list_aligner__result.get_key(key="list__obj__box_xcycwhn")
 
-    if num__box__popped > 0:
-        print(
-            f"num__box__popped: {num__box__popped}/{len(list__obj__box_xcycwhn)} ({path__file__lbl__input}: {i_obj})"
-        )
+        num__box__popped = 0
+        for i_obj, box_xcycwhn in enumerate(list__obj__box_xcycwhn):
+            xcn, ycn, wn, hn = box_xcycwhn
+            w = wn * W
+            h = hn * H
+            tobe__popped = False
+            if (
+                (filter_by == "area" and w * h < thresh)
+                or (filter_by == "width" and w < thresh)
+                or (filter_by == "height" and h < thresh)
+            ):
+                tobe__popped = True
 
-    dict__result = list_aligner__result.item()
+            if tobe__popped:
+                list__index__to_pop.append(i_obj)
+                num__box__popped += 1
 
-    with open(path__file__lbl__output, "w") as f:
-        json.dump(dict__result, f, indent=4)
+        list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+
+        if num__box__popped > 0:
+            print(
+                f"num__box__popped: {num__box__popped}/{len(list__obj__box_xcycwhn)} ({path__file__lbl__input}: {i_obj})"
+            )
+
+        dict__result = list_aligner__result.item()
+
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)
 
 
 def helper__filterout__image__by__id_class(**kwargs):
