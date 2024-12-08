@@ -9,10 +9,8 @@ while true; do
     tree /mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/ > "${PATH__FILE__PROGRESS__DIR}/tree.txt"
 
     LIST__PATH__DIR=(
-        "/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m--960--crop-10"
-        "/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m--960--crop-20"
-        "/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m--960--crop-10--scale-0"
-        "/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m--960--crop-20--scale-0"
+        "/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11s--1280--crop-20"
+        "/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m-p2--960--crop-20"
     )
     for path__dir in ${LIST__PATH__DIR[@]}; do
         if [[ -d $path__dir ]]; then
