@@ -30,7 +30,7 @@ def draw__image(**kwargs):
     list__obj__id_track = data.get("list__obj__id_track", None)
     list__obj__name_track = data.get("list__obj__name_track", None)
     list__obj__box_conf = data.get("list__obj__box_conf", None)
-    list__obj__id_class = data["list__obj__id_class"]
+    list__obj__id_class = data.get("list__obj__id_class", None)
     list__obj__action_conf = data.get("list__obj__action_conf", {})
     list__obj__action_status = data.get(
         "list__obj__action_status",
@@ -59,6 +59,8 @@ def draw__image(**kwargs):
         list__obj__name_track = [None] * len(list__obj__box_x1y1whn)
     if list__obj__box_conf is None:
         list__obj__box_conf = [None] * len(list__obj__box_x1y1whn)
+    if list__obj__id_class is None:
+        list__obj__id_class = [-1] * len(list__obj__box_x1y1whn)    # -1 to get color
 
     H, W = img__bgr.shape[:2]
 
@@ -164,7 +166,7 @@ def draw__image(**kwargs):
         cv2_putText(
             img__bgr,
             label,
-            (x1, y1 - 10),
+            (x1, y1 - thickness - 10),
             color=color_box,
             fontScale=fontScale,
             thickness=thickness,
@@ -203,7 +205,7 @@ def draw__image(**kwargs):
                     cv2_putText(
                         img__bgr,
                         str(i),
-                        (x, y - 3),
+                        (x, y - thickness - 3),
                         color=COLORS[i % len(COLORS)],
                         fontScale=fontScale,
                         thickness=thickness,
