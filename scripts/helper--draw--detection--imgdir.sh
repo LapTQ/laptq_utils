@@ -1,7 +1,7 @@
 PATH__DIR__IMAGE=/home/laptq/Downloads/Photos-001
 POSTFIX__DIR__IMAGE=""
 
-PATH__DIR__LABEL=/home/laptq/Downloads/outputs--4
+PATH__DIR__LABEL=/home/laptq/Downloads/outputs--8
 POSTFIX__DIR__LABEL=""
 
 NUM__MAX__IMG__TO__VISUALIZE=None

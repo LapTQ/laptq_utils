@@ -12,4 +12,6 @@ from .detection import (
     helper__draw__detection__imgdir,
     helper__extract__ultralytics__detect__video,
     helper__draw__detection__video,
+    helper__convert__detection__json__to__txt,
+    helper__convert__detection__txt__to__json,
 )

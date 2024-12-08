@@ -327,10 +327,8 @@ def helper__draw__detection__imgdir(**kwargs):
                 "list__obj__box_x1y1whn": xcycwh__to__x1y1wh(
                     np.array(dict__result["list__obj__box_xcycwhn"])
                 ),
-                "list__obj__id_track": [-1]
-                * len(dict__result["list__obj__box_xcycwhn"]),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
-                "list__obj__box_conf": dict__result["list__obj__box_conf"],
+                "list__obj__box_conf": dict__result.get("list__obj__box_conf", None),
             },
             map__id_class__to__name_class=map__id_class__to__name_class,
             **kwargs,
@@ -406,3 +404,46 @@ def helper__draw__detection__video(**kwargs):
 
     writer.release()
     cap.release()
+
+
+def helper__convert__detection__json__to__txt(**kwargs):
+
+    import json
+
+    path__file__lbl__input = kwargs["path__file__lbl__input"]
+    path__file__lbl__output = kwargs["path__file__lbl__output"]
+
+    with open(path__file__lbl__input, "r") as f:
+        dict__result = json.load(f)
+
+    list__obj__id_class = dict__result["list__obj__id_class"]
+    list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
+
+    with open(path__file__lbl__output, "w") as f:
+        for id_class, box_xcycwhn in zip(list__obj__id_class, list__obj__box_xcycwhn):
+            xcn, ycn, wn, hn = box_xcycwhn
+            f.write(f"{id_class} {xcn} {ycn} {wn} {hn}\n")
+
+
+def helper__convert__detection__txt__to__json(**kwargs):
+
+    import json
+
+    path__file__lbl__input = kwargs["path__file__lbl__input"]
+    path__file__lbl__output = kwargs["path__file__lbl__output"]
+
+    list__obj__id_class = []
+    list__obj__box_xcycwhn = []
+    with open(path__file__lbl__input, "r") as f:
+        for line in f:
+            id_class, xcn, ycn, wn, hn = map(eval, line.strip().split())
+            list__obj__id_class.append(id_class)
+            list__obj__box_xcycwhn.append([xcn, ycn, wn, hn])
+
+    dict__result = {
+        "list__obj__id_class": list__obj__id_class,
+        "list__obj__box_xcycwhn": list__obj__box_xcycwhn,
+    }
+
+    with open(path__file__lbl__output, "w") as f:
+        json.dump(dict__result, f, indent=4)

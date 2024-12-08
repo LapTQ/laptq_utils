@@ -27,13 +27,9 @@ def draw__image(**kwargs):
     img__bgr = data["img__bgr"].copy()
     id__frame = data.get("id__frame", None)
     list__obj__box_x1y1whn = data["list__obj__box_x1y1whn"]
-    list__obj__id_track = data["list__obj__id_track"]
-    list__obj__name_track = data.get(
-        "list__obj__name_track", [None] * len(list__obj__id_track)
-    )
-    list__obj__box_conf = data.get(
-        "list__obj__box_conf", [-1] * len(list__obj__box_x1y1whn)
-    )
+    list__obj__id_track = data.get("list__obj__id_track", None)
+    list__obj__name_track = data.get("list__obj__name_track", None)
+    list__obj__box_conf = data.get("list__obj__box_conf", None)
     list__obj__id_class = data["list__obj__id_class"]
     list__obj__action_conf = data.get("list__obj__action_conf", {})
     list__obj__action_status = data.get(
@@ -55,6 +51,14 @@ def draw__image(**kwargs):
     list__obj__confirmed_status = data.get(
         "list__obj__confirmed_status", [None] * len(list__obj__box_x1y1whn)
     )
+
+    # preprocesss arguments
+    if list__obj__id_track is None:
+        list__obj__id_track = [-1] * len(list__obj__box_x1y1whn)  # -1 to get color
+    if list__obj__name_track is None:
+        list__obj__name_track = [None] * len(list__obj__box_x1y1whn)
+    if list__obj__box_conf is None:
+        list__obj__box_conf = [None] * len(list__obj__box_x1y1whn)
 
     H, W = img__bgr.shape[:2]
 
@@ -126,7 +130,7 @@ def draw__image(**kwargs):
         _has_parenthesis = (
             to_draw__confirmed_status or to_draw__id_track or _has_brackets
         ) and (to_draw__box_conf or to_draw__id_class)
-        _has_dash = to_draw__box_conf and to_draw__id_class
+        _has_dash = (to_draw__box_conf and box__conf is not None) and to_draw__id_class
         label = "{}{}{}{}{}{}{}{}{}{}".format(
             (
                 "*"
@@ -150,7 +154,11 @@ def draw__image(**kwargs):
                 else ""
             ),
             "-" if _has_dash else "",
-            "{:.2f}".format(box__conf) if to_draw__box_conf else "",
+            (
+                "{:.2f}".format(box__conf)
+                if to_draw__box_conf and box__conf is not None
+                else ""
+            ),
             ")" if _has_parenthesis else "",
         )
         cv2_putText(
