@@ -37,8 +37,8 @@ def extract__ultralytics__detect(**kwargs):
         xcn, ycn, wn, hn = box.xywhn[0].tolist()
         conf = float(box.conf)
 
-        list_aligner__result.append(
-            dict__result={
+        list_aligner__result.extend(
+            {
                 "list__obj__id_class": [id_class],
                 "list__obj__box_xcycwhn": [[xcn, ycn, wn, hn]],
                 "list__obj__box_conf": [conf],
@@ -159,7 +159,7 @@ def helper__filter__detection__result__by__id_class(**kwargs):
         list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
 
         list__index__to_pop = []
-        list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
+        list__obj__id_class = list_aligner__result.get__key("list__obj__id_class")
         for i_obj, id_class in enumerate(list__obj__id_class):
             if (
                 list__id_class__to_include is not None
@@ -167,7 +167,7 @@ def helper__filter__detection__result__by__id_class(**kwargs):
             ) or id_class in list__id_class__to_exclude:
                 list__index__to_pop.append(i_obj)
 
-        list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+        list_aligner__result.pop__indexes(list__index__to_pop)
 
         dict__result = list_aligner__result.item()
 
@@ -195,7 +195,7 @@ def helper__change__detection__id_class(**kwargs):
             dict__result = json.load(f)
 
         list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
-        list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
+        list__obj__id_class = list_aligner__result.get__key("list__obj__id_class")
         for i_obj, id_class in enumerate(list__obj__id_class):
             if id_class in map__id_old__to__id_new:
                 list__obj__id_class[i_obj] = map__id_old__to__id_new[id_class]
@@ -228,15 +228,15 @@ def helper__filter__detection__result__by__conf(**kwargs):
         list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
 
         list__index__to_pop = []
-        list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
-        list__obj__box_conf = list_aligner__result.get_key(key="list__obj__box_conf")
+        list__obj__id_class = list_aligner__result.get__key("list__obj__id_class")
+        list__obj__box_conf = list_aligner__result.get__key("list__obj__box_conf")
         for i_obj, (id_class, conf) in enumerate(
             zip(list__obj__id_class, list__obj__box_conf)
         ):
             if conf < map__id_class__to__thresh_conf[id_class]:
                 list__index__to_pop.append(i_obj)
 
-        list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+        list_aligner__result.pop__indexes(list__index__to_pop)
 
         dict__result = list_aligner__result.item()
 
@@ -267,10 +267,8 @@ def helper__filter__detection__result__by__miniou(**kwargs):
         list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
 
         list__index__to_pop = []
-        list__obj__box_xcycwhn = list_aligner__result.get_key(
-            key="list__obj__box_xcycwhn"
-        )
-        list__obj__id_class = list_aligner__result.get_key(key="list__obj__id_class")
+        list__obj__box_xcycwhn = list_aligner__result.get__key("list__obj__box_xcycwhn")
+        list__obj__id_class = list_aligner__result.get__key("list__obj__id_class")
 
         list__obj__box_xcycwhn = np.array(list__obj__box_xcycwhn)
         list__obj__id_class = np.array(list__obj__id_class)
@@ -291,7 +289,7 @@ def helper__filter__detection__result__by__miniou(**kwargs):
         list__index__to_pop = np.where(
             mask__miniou & mask__area_smaller & mask__same_class
         )[0]
-        list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+        list_aligner__result.pop__indexes(list__index__to_pop)
 
         dict__result = list_aligner__result.item()
         with open(path__file__lbl__output, "w") as f:
@@ -546,7 +544,7 @@ def helper__filter__detection__result__by__size(**kwargs):
         list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
 
         list__index__to_pop = []
-        list__obj__box_xcycwhn = list_aligner__result.get_key(key="list__obj__box_xcycwhn")
+        list__obj__box_xcycwhn = list_aligner__result.get__key("list__obj__box_xcycwhn")
 
         num__box__popped = 0
         for i_obj, box_xcycwhn in enumerate(list__obj__box_xcycwhn):
@@ -565,7 +563,7 @@ def helper__filter__detection__result__by__size(**kwargs):
                 list__index__to_pop.append(i_obj)
                 num__box__popped += 1
 
-        list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+        list_aligner__result.pop__indexes(list__index__to_pop)
 
         if num__box__popped > 0:
             print(
