@@ -5,10 +5,12 @@ from laptq_pyutils.helper import (
     helper__filter__detection__result__by__id_class,
     helper__change__detection__id_class,
     helper__filter__detection__result__by__miniou,
+    helper__filter__detection__result__by__size,
     helper__draw__detection__imgdir,
     helper__draw__detection__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
+    helper__filterout__image__by__id_class,
 )
 import argparse
 
@@ -20,12 +22,13 @@ def parse_args():
     ap.add_argument("--path__dir__img", type=str)
     ap.add_argument("--path__dir__img__output", type=str)
     ap.add_argument("--path__dir__lbl", type=str)
+    ap.add_argument("--path__dir__output", type=str)
     ap.add_argument("--path__dir__lbl__input", type=str)
     ap.add_argument("--path__dir__lbl__output", type=str)
+    ap.add_argument("--path__file__img", type=str)
     ap.add_argument("--path__file__input", type=str)
     ap.add_argument("--path__file__video__input", type=str)
     ap.add_argument("--path__file__lbl__input", type=str)
-    ap.add_argument("--path__dir__output", type=str)
     ap.add_argument("--path__file__lbl__output", type=str)
     ap.add_argument("--path__file__output", type=str)
     ap.add_argument("--path__file__model", type=str)
@@ -50,9 +53,10 @@ def parse_args():
     ap.add_argument("--pad__id_frame", type=int)
     ap.add_argument("--fourcc", type=str)
     ap.add_argument("--path__file__map__id_class__to__name_class", type=str)
-
-    ap.add_argument("--thresh__area__min", type=float)
+    ap.add_argument("--filter_by", type=str)
+    ap.add_argument("--thresh", type=float)
     ap.add_argument("--list__id_class", type=str)
+
     ap.add_argument("--method", type=str)
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])

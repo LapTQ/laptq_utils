@@ -1,7 +1,3 @@
-from .annot import (
-    helper__remove__images__containing__classes,
-    helper__remove__small__boxes,
-)
 from .image import helper__check__duplicate__images
 from .detection import (
     helper__extract__ultralytics__detect__imgdir,
@@ -14,4 +10,6 @@ from .detection import (
     helper__draw__detection__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
+    helper__filter__detection__result__by__size,
+    helper__filterout__image__by__id_class,
 )

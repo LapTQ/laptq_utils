@@ -447,3 +447,100 @@ def helper__convert__detection__txt__to__json(**kwargs):
 
     with open(path__file__lbl__output, "w") as f:
         json.dump(dict__result, f, indent=4)
+
+
+def helper__filter__detection__result__by__size(**kwargs):
+
+    from PIL import Image
+    import json
+
+    path__file__img = kwargs["path__file__img"]
+    path__file__lbl__input = kwargs["path__file__lbl__input"]
+    path__file__lbl__output = kwargs["path__file__lbl__output"]
+    filter_by = kwargs["filter_by"]
+    thresh = kwargs["thresh"]
+
+    assert filter_by in ["area", "width", "height"]
+
+    W, H = Image.open(path__file__img).size
+
+    with open(path__file__lbl__input, "r") as f:
+        dict__result = json.load(f)
+
+    list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+
+    list__index__to_pop = []
+    list__obj__box_xcycwhn = list_aligner__result.get_key(key="list__obj__box_xcycwhn")
+
+    num__box__popped = 0
+    for i_obj, box_xcycwhn in enumerate(list__obj__box_xcycwhn):
+        xcn, ycn, wn, hn = box_xcycwhn
+        w = wn * W
+        h = hn * H
+        tobe__popped = False
+        if (
+            (filter_by == "area" and w * h < thresh)
+            or (filter_by == "width" and w < thresh)
+            or (filter_by == "height" and h < thresh)
+        ):
+            tobe__popped = True
+
+        if tobe__popped:
+            list__index__to_pop.append(i_obj)
+            num__box__popped += 1
+
+    list_aligner__result.pop__indexes(list__index__to_pop=list__index__to_pop)
+
+    if num__box__popped > 0:
+        print(
+            f"num__box__popped: {num__box__popped}/{len(list__obj__box_xcycwhn)} ({path__file__lbl__input}: {i_obj})"
+        )
+
+    dict__result = list_aligner__result.item()
+
+    with open(path__file__lbl__output, "w") as f:
+        json.dump(dict__result, f, indent=4)
+
+
+def helper__filterout__image__by__id_class(**kwargs):
+
+    import os
+    import json
+    from tqdm import tqdm
+
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    list__id_class = kwargs["list__id_class"]
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    num__img__filtered_out = 0
+    num__img__total = 0
+    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
+
+        num__img__total += 1
+
+        list__obj__id_class = dict__result["list__obj__id_class"]
+        tobe__filtered_out = False
+        for id_class in list__obj__id_class:
+            if id_class in list__id_class:
+                tobe__filtered_out = True
+                break
+
+        if tobe__filtered_out:
+            num__img__filtered_out += 1
+            continue
+
+        os.system(
+            'cp "{}" "{}"'.format(path__file__lbl__input, path__file__lbl__output)
+        )
+
+    if num__img__filtered_out > 0:
+        print(
+            f"num__img__filtered_out: {num__img__filtered_out}/{num__img__total} ({path__dir__lbl__input})"
+        )
