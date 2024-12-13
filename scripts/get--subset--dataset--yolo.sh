@@ -1,12 +1,12 @@
-PATH__DIR__DATASETS__SOURCE__IMG=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG=--20241121--checked--backup
+PATH__DIR__DATASETS__SOURCE__IMG=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241211--synthetic--copy
+POSTFIX__DIR__IMG=""
 
-PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__LABEL=--20241121--checked--backup
+PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241211--synthetic--copy
+POSTFIX__DIR__LABEL=""
 
-PATH__FILE__LIST_SUBPATH_TO_IMG=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--checklist--phase-2--annotation-ver2/list--subpath--to--img.txt
+PATH__FILE__LIST_SUBPATH_TO_IMG=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/list_paths.txt
 
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--visual-check--downloaded--phase-2--annotation-ver2
+PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--syn--selected
 POSTFIX__DIR__VERSION__TARGET=""
 CLASSES="pothole\nmanhole\ndrainage\ndifficult"
 

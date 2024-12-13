@@ -8,10 +8,14 @@ data=20241122--phase-2--annotation-ver2
 # imgsz=640
 # ver__model=yolo11s--960--crop
 # imgsz=960
-# ver__model=yolo11m--960--crop-20
-# imgsz=960
-ver__model=yolo11m--960--crop-20--finetune-only-pot
+ver__model=yolo11m--960--crop-20
 imgsz=960
+# ver__model=yolo11m--960--crop-20--finetune-only-pot
+# imgsz=960
+# ver__model=yolo11s--1280--crop-20
+# imgsz=1280
+# ver__model=yolo11m-p2--960--crop-20
+# imgsz=960
 
 ver__train=train
 conf=0.01
@@ -24,7 +28,7 @@ yolo val \
     conf=$conf \
     iou=0.5 \
     device=0 \
-    batch=8
+    batch=4
 
     # model=/mnt/hdd10tb/Users/laptq/laptq-prj-46/weights/yolov10m_only_pot_det_960x960.pt \
     # project=$path__dir__run/$data/yolov10m_only_pot_det_960x960/val--conf-$conf \

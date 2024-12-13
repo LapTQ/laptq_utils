@@ -21,6 +21,9 @@ declare -A MAP__SUBPATH_DIR__TO__POSTFIX_DIR_VERSION=(
     ["Pothole_235/train"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0"
     ["Pothole_Maeda/first_shot_eval"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0"
 
+    ["20241121--syn--selected/Pothole_Maeda/first_shot"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0"
+    ["20241121--syn--selected/Pothole_Maeda/second_shot"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0"
+
 
     # ["APTO_v2/day1_330"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked"
     # ["APTO_v2/night1_190"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked"

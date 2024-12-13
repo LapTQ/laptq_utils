@@ -9,6 +9,7 @@ while true; do
     tree /mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/ > "${PATH__FILE__PROGRESS__DIR}/tree.txt"
 
     LIST__PATH__DIR=(
+        "/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m--960--crop-20"
         "/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11s--1280--crop-20"
         "/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m-p2--960--crop-20"
     )
@@ -22,5 +23,5 @@ while true; do
     done
 
     rsync -avz "${PATH__FILE__PROGRESS__DIR}/" "${ADDRESS__REMOTE}/"
-    sleep 60
+    sleep 30
 done

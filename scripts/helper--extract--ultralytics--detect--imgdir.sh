@@ -1,14 +1,33 @@
-PATH__DIR__IMAGE=/home/laptq/Downloads/Photos-001
-POSTFIX__DIR__IMAGE=""
+PATH__DIR__IMAGE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection
+POSTFIX__DIR__IMAGE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
 
-PATH__FILE__MODEL=/home/laptq/Downloads/yolo11n.pt
+PATH__FILE__MODEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2--car-view/yolo11m--960--crop-20/train/weights/best.pt
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--1
-POSTFIX__DIR__LABEL__OUTPUT=""
+PATH__DIR__LABEL__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--model-prediction--json
+POSTFIX__DIR__LABEL__OUTPUT=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["set1"]=""
-    ["set2"]=""
+    ["APTO_v2/day1_330"]=""
+    ["APTO_v2/night1_190"]=""
+    ["APTO_v2/night3_44"]=""
+    ["APTO_v2/night4_239"]=""
+    ["Pothole_235/train"]=""
+    ["dataset-ninja/ds1_simplex-test"]=""
+    ["dataset-ninja/ds1_simplex-train"]=""
+    ["dataset-ninja/ds2_complex-test"]=""
+    ["dataset-ninja/ds2_complex-train"]=""
+    ["pot_det_1240"]=""
+
+    # ["pothole_dataset_v8/only_rainy_frames/train"]=""
+
+    ["pothole_dataset_v8/train"]=""
+    ["pothole_dataset_v8/train_to_valid"]=""
+    ["pothole_dataset_v8/valid"]=""
+    ["Pothole_detection_yolo/train_original"]=""
+    ["Pothole_Maeda/first_shot"]=""
+    ["Pothole_Maeda/first_shot_eval"]=""
+    ["Pothole_Maeda/second_shot"]=""
+    ["RDD2022_JAPAN/only_pothole/train"]=""
 )
 
 IFS=$'\n'
@@ -25,13 +44,13 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__extract__ultralytics__detect__imgdir \
         --path__dir__img "${path__dir__img__input}" \
         --path__dir__output "${path__dir__lbl__output}" \
         --path__file__model "${PATH__FILE__MODEL}" \
         --device "cuda:0" \
-        --imgsz 640 \
+        --imgsz 960 \
         --thresh__conf__min 0.01
         
 done
