@@ -618,3 +618,49 @@ def helper__filterout__image__by__id_class(**kwargs):
         print(
             f"num__img__filtered_out: {num__img__filtered_out}/{num__img__total} ({path__dir__lbl__input})"
         )
+
+
+def helper__rescale__detection__box(**kwargs):
+
+    import os
+    import json
+    from tqdm import tqdm
+
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    ratio__w = kwargs["ratio__w"]
+    ratio__h = kwargs["ratio__h"]
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
+
+        list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
+        for i_b, box in enumerate(list__obj__box_xcycwhn):
+            xcn, ycn, wn, hn = box
+            assert 0 <= xcn <= 1 and 0 <= ycn <= 1 and 0 <= wn <= 1 and 0 <= hn <= 1
+            assert wn > 0 and hn > 0
+
+            wn *= ratio__w
+            hn *= ratio__h
+            x1n = max(0, xcn - wn / 2)
+            y1n = max(0, ycn - hn / 2)
+            x2n = min(1, x1n + wn)
+            y2n = min(1, y1n + hn)
+
+            xcn = (x1n + x2n) / 2
+            ycn = (y1n + y2n) / 2
+            wn = x2n - x1n
+            hn = y2n - y1n
+
+            list__obj__box_xcycwhn[i_b] = [xcn, ycn, wn, hn]
+        
+        dict__result["list__obj__box_xcycwhn"] = list__obj__box_xcycwhn
+
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)

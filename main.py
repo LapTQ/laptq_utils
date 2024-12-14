@@ -11,6 +11,7 @@ from laptq_pyutils.helper import (
     helper__change__detection__id_class,
     helper__draw__detection__imgdir,
     helper__draw__detection__video,
+    helper__rescale__detection__box,
 )
 import argparse
 
@@ -56,6 +57,8 @@ def parse_args():
     ap.add_argument("--filter_by", type=str)
     ap.add_argument("--thresh", type=float)
     ap.add_argument("--list__id_class", type=str)
+    ap.add_argument("--ratio__w", type=float)
+    ap.add_argument("--ratio__h", type=float)
 
     ap.add_argument("--method", type=str)
     ap.add_argument("--max_distance_threshold", type=int)
