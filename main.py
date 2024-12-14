@@ -59,6 +59,10 @@ def parse_args():
     ap.add_argument("--list__id_class", type=str)
     ap.add_argument("--ratio__w", type=float)
     ap.add_argument("--ratio__h", type=float)
+    ap.add_argument("--pad__w__max", type=str)
+    ap.add_argument("--pad__h__max", type=str)
+    ap.add_argument("--cut__w__max", type=str)
+    ap.add_argument("--cut__h__max", type=str)
 
     ap.add_argument("--method", type=str)
     ap.add_argument("--max_distance_threshold", type=int)
@@ -111,6 +115,10 @@ def parse_args():
         if args.is_ok__lbl_not_exist is not None
         else None
     )
+    args.pad__w__max = eval(args.pad__w__max) if args.pad__w__max is not None else None
+    args.pad__h__max = eval(args.pad__h__max) if args.pad__h__max is not None else None
+    args.cut__w__max = eval(args.cut__w__max) if args.cut__w__max is not None else None
+    args.cut__h__max = eval(args.cut__h__max) if args.cut__h__max is not None else None
 
     return args
 

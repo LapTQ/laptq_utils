@@ -625,26 +625,69 @@ def helper__rescale__detection__box(**kwargs):
     import os
     import json
     from tqdm import tqdm
+    import PIL.Image
 
+    path__dir__img = kwargs["path__dir__img"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     ratio__w = kwargs["ratio__w"]
     ratio__h = kwargs["ratio__h"]
+    pad__w__max = kwargs["pad__w__max"]
+    pad__h__max = kwargs["pad__h__max"]
+    cut__w__max = kwargs["cut__w__max"]
+    cut__h__max = kwargs["cut__h__max"]
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+    to__get__img__size = (
+        pad__w__max is not None
+        or pad__h__max is not None
+        or cut__w__max is not None
+        or cut__h__max is not None
+    )
+    if to__get__img__size:
+        list__name__file__img = []
+        list__name__file__lbl = []
+        for name__file__img in sorted(os.listdir(path__dir__img)):
+            name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
+            path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
+
+            if not os.path.exists(path__file__lbl):
+                continue
+
+            list__name__file__img.append(name__file__img)
+            list__name__file__lbl.append(name__file__lbl)
+    else:
+        list__name__file__lbl = sorted(os.listdir(path__dir__lbl__input))
+        list__name__file__img = [None] * len(list__name__file__lbl)
+
+    for name__file__img, name__file__lbl in tqdm(
+        zip(list__name__file__img, list__name__file__lbl)
+    ):
         path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
         path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
 
         with open(path__file__lbl__input, "r") as f:
             dict__result = json.load(f)
 
+        if to__get__img__size:
+            path__file__img = os.path.join(path__dir__img__input, name__file__img)
+            W, H = PIL.Image.open(path__file__img).size
+
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
         for i_b, box in enumerate(list__obj__box_xcycwhn):
             xcn, ycn, wn, hn = box
             assert 0 <= xcn <= 1 and 0 <= ycn <= 1 and 0 <= wn <= 1 and 0 <= hn <= 1
             assert wn > 0 and hn > 0
+
+            if pad__w__max is not None:
+                ratio__w = min(ratio__w, pad__w__max / wn / W + 1)
+            if pad__h__max is not None:
+                ratio__h = min(ratio__h, pad__h__max / hn / H + 1)
+            if cut__w__max is not None:
+                ratio__w = max(ratio__w, 1 - cut__w__max / wn / W)
+            if cut__h__max is not None:
+                ratio__h = max(ratio__h, 1 - cut__h__max / hn / H)
 
             wn *= ratio__w
             hn *= ratio__h
@@ -659,7 +702,7 @@ def helper__rescale__detection__box(**kwargs):
             hn = y2n - y1n
 
             list__obj__box_xcycwhn[i_b] = [xcn, ycn, wn, hn]
-        
+
         dict__result["list__obj__box_xcycwhn"] = list__obj__box_xcycwhn
 
         with open(path__file__lbl__output, "w") as f:
