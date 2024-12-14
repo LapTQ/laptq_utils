@@ -12,4 +12,5 @@ from .detection import (
     helper__change__detection__id_class,
     helper__draw__detection__imgdir,
     helper__draw__detection__video,
+    helper__rescale__detection__box,
 )
