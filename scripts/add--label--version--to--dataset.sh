@@ -1,10 +1,11 @@
-PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__LABEL__SOURCE=""
+PATH__DIR__IMG__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
+POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
 
-PATH__DIR__DATASETS__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
+PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--true-labels--txt
+POSTFIX__DIR__LABEL__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled
 
-POSTFIX__DIR__VERSION__TARGET=--20241129--phase-2--annotated-ver2--only-pot
+PATH__DIR__OUTPUT=/mnt/hdd10tb/Datasets/road-issues-detection
+POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
@@ -29,6 +30,9 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     ["Pothole_Maeda/first_shot_eval"]=""
     ["Pothole_Maeda/second_shot"]=""
     ["RDD2022_JAPAN/only_pothole/train"]=""
+
+    ["20241121--syn--selected/Pothole_Maeda/first_shot"]=""
+    ["20241121--syn--selected/Pothole_Maeda/second_shot"]=""
 )
 
 
@@ -44,10 +48,10 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 # =========== Copy labels from extracted annotation to source dataset dir ===========
 for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
-    path__dir__img__input="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__IMG__SOURCE}"
-    path__dir__img__output="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__VERSION__TARGET}"
+    path__dir__img__input="${PATH__DIR__IMG__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__IMG__SOURCE}"
+    path__dir__img__output="${PATH__DIR__OUTPUT}/${subpath_dir}/images${POSTFIX__DIR__VERSION__TARGET}"
     path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${subpath_dir}/labels${POSTFIX__DIR__LABEL__SOURCE}"
-    path__dir__lbl__output="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/labels${POSTFIX__DIR__VERSION__TARGET}"
+    path__dir__lbl__output="${PATH__DIR__OUTPUT}/${subpath_dir}/labels${POSTFIX__DIR__VERSION__TARGET}"
 
     [[ -d "$path__dir__lbl__output" ]] && rm -r "$path__dir__lbl__output"
     mkdir -p "$path__dir__lbl__output"
@@ -76,9 +80,9 @@ done
 
 # =========== Create a soft link to images corresponding to the label version ===========
 for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
-    path__dir__lbl="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/labels${POSTFIX__DIR__VERSION__TARGET}"
-    path__dir__img__input="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__IMG__SOURCE}"
-    path__dir__img__output="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__VERSION__TARGET}"
+    path__dir__lbl="${PATH__DIR__OUTPUT}/${subpath_dir}/labels${POSTFIX__DIR__VERSION__TARGET}"
+    path__dir__img__input="${PATH__DIR__IMG__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__IMG__SOURCE}"
+    path__dir__img__output="${PATH__DIR__OUTPUT}/${subpath_dir}/images${POSTFIX__DIR__VERSION__TARGET}"
 
     [[ -d "$path__dir__img__output" ]] && rm -r "$path__dir__img__output"
     mkdir -p "$path__dir__img__output"
