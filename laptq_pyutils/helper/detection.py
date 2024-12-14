@@ -356,7 +356,7 @@ def helper__draw__detection__imgdir(**kwargs):
             data={
                 "img__bgr": img__bgr,
                 "list__obj__box_x1y1whn": xcycwh__to__x1y1wh(
-                    np.array(dict__result["list__obj__box_xcycwhn"])
+                    np.array(dict__result["list__obj__box_xcycwhn"]).reshape(-1, 4)
                 ),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result.get("list__obj__box_conf", None),
