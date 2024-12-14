@@ -671,7 +671,7 @@ def helper__rescale__detection__box(**kwargs):
             dict__result = json.load(f)
 
         if to__get__img__size:
-            path__file__img = os.path.join(path__dir__img__input, name__file__img)
+            path__file__img = os.path.join(path__dir__img, name__file__img)
             W, H = PIL.Image.open(path__file__img).size
 
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
