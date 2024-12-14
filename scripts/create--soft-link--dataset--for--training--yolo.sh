@@ -25,6 +25,31 @@ declare -A MAP__SUBPATH_DIR__TO__POSTFIX_DIR_VERSION=(
     ["20241121--syn--selected/Pothole_Maeda/second_shot"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0"
 
 
+    ["APTO_v2/day1_330"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["APTO_v2/night1_190"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["APTO_v2/night3_44"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["APTO_v2/night4_239"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["dataset-ninja/ds1_simplex-test"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["dataset-ninja/ds1_simplex-train"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["dataset-ninja/ds2_complex-test"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["dataset-ninja/ds2_complex-train"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["pot_det_1240"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    # ["pothole_dataset_v8/only_rainy_frames/train"]=""
+    ["pothole_dataset_v8/train"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["pothole_dataset_v8/train_to_valid"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["pothole_dataset_v8/valid"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["Pothole_detection_yolo/train_original"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["Pothole_Maeda/first_shot"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["Pothole_Maeda/second_shot"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["RDD2022_JAPAN/only_pothole/train"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["Pothole_235/train"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["Pothole_Maeda/first_shot_eval"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+
+    ["20241121--syn--selected/Pothole_Maeda/first_shot"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+    ["20241121--syn--selected/Pothole_Maeda/second_shot"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled"
+
+
+
     # ["APTO_v2/day1_330"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked"
     # ["APTO_v2/night1_190"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked"
     # ["APTO_v2/night3_44"]="--20241128--phase-2--annotated-ver2--pot-man-drain--checked"

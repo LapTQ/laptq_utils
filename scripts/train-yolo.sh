@@ -1,11 +1,11 @@
-sleep 1800
+sleep 0
 
 # ==================== finetune
 # data=only_pothole_mix
 # data=only_pothole_mix--manhole-241016
 data=20241122--phase-2--annotation-ver2
 
-bash ~/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo.sh
+# bash ~/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo.sh
 
 echo "$( file ~/laptq-prj-46/data/road-issues-detection/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> ~/laptq-prj-46/outputs/progress/log.txt
 

@@ -26,6 +26,9 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     ["Pothole_Maeda/first_shot_eval"]=""
     ["Pothole_Maeda/second_shot"]=""
     ["RDD2022_JAPAN/only_pothole/train"]=""
+
+    ["20241121--syn--selected/Pothole_Maeda/first_shot"]=""
+    ["20241121--syn--selected/Pothole_Maeda/second_shot"]=""
 )
 
 IFS=$'\n'

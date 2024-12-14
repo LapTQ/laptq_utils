@@ -1,16 +1,40 @@
-PATH__DIR__IMAGE=/home/laptq/Downloads/Photos-001
-POSTFIX__DIR__IMAGE=""
+PATH__DIR__IMAGE=/mnt/hdd10tb/Datasets/road-issues-detection
+POSTFIX__DIR__IMAGE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
 
-PATH__DIR__LABEL=/home/laptq/Downloads/outputs--9
-POSTFIX__DIR__LABEL=""
+PATH__DIR__LABEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--true-labels--json
+POSTFIX__DIR__LABEL=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
 
-NUM__MAX__IMG__TO__VISUALIZE=None
+NUM__MAX__IMG__TO__VISUALIZE=1
 IS_OK__LBL_NOT_FOUND=False
-PATH__DIR__OUTPUT=/home/laptq/Downloads/outputs--6
+PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--visualize
+
+# [[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["set1"]=""
-    ["set2"]=""
+    # ["APTO_v2/day1_330"]=""
+    # ["APTO_v2/night1_190"]=""
+    # ["APTO_v2/night3_44"]=""
+    # ["APTO_v2/night4_239"]=""
+    # ["Pothole_235/train"]=""
+    # ["dataset-ninja/ds1_simplex-test"]=""
+    # ["dataset-ninja/ds1_simplex-train"]=""
+    # ["dataset-ninja/ds2_complex-test"]=""
+    # ["dataset-ninja/ds2_complex-train"]=""
+    # ["pot_det_1240"]=""
+
+    # # ["pothole_dataset_v8/only_rainy_frames/train"]=""
+
+    # ["pothole_dataset_v8/train"]=""
+    # ["pothole_dataset_v8/train_to_valid"]=""
+    # ["pothole_dataset_v8/valid"]=""
+    # ["Pothole_detection_yolo/train_original"]=""
+    # ["Pothole_Maeda/first_shot"]=""
+    # ["Pothole_Maeda/first_shot_eval"]=""
+    # ["Pothole_Maeda/second_shot"]=""
+    # ["RDD2022_JAPAN/only_pothole/train"]=""
+
+    # ["20241121--syn--selected/Pothole_Maeda/first_shot"]=""
+    ["20241121--syn--selected/Pothole_Maeda/second_shot"]=""
 )
 
 IFS=$'\n'
@@ -28,7 +52,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__output}" ]] && rm -r "${path__dir__output}"
     mkdir -p "${path__dir__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__draw__detection__imgdir \
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
@@ -39,9 +63,9 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --fontScale 2 \
         --thickness 4 \
         --box_color_by id__class \
-        --path__file__map__id_class__to__name_class /home/laptq/Downloads/class_name.yaml \
+        --path__file__map__id_class__to__name_class /mnt/hdd10tb/Users/laptq/laptq-prj-46/src/configs/class_id_to_label.yaml \
         --num__max__img $NUM__MAX__IMG__TO__VISUALIZE \
-        --seed None \
+        --seed 42 \
         --is_ok__lbl_not_exist $IS_OK__LBL_NOT_FOUND
 
 
