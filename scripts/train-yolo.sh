@@ -9,31 +9,31 @@ data=20241122--phase-2--annotation-ver2
 
 echo "$( file ~/laptq-prj-46/data/road-issues-detection/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> ~/laptq-prj-46/outputs/progress/log.txt
 
-YOLO=yolo11m
-IMGSZ=960
-yolo detect train \
-    data=src/configs/$data.yaml \
-    model=${YOLO}.pt \
-    epochs=200 \
-    imgsz=$IMGSZ \
-    device=0,1 \
-    batch=16 \
-    project=~/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20 \
-    plots=True \
-    patience=30
+# YOLO=yolo11m
+# IMGSZ=960
+# yolo detect train \
+#     data=src/configs/$data.yaml \
+#     model=${YOLO}.pt \
+#     epochs=200 \
+#     imgsz=$IMGSZ \
+#     device=0,1 \
+#     batch=16 \
+#     project=~/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20 \
+#     plots=True \
+#     patience=30
 
-YOLO=yolo11s
-IMGSZ=1280
-yolo detect train \
-    data=src/configs/$data.yaml \
-    model=${YOLO}.pt \
-    epochs=200 \
-    imgsz=$IMGSZ \
-    device=0,1 \
-    batch=16 \
-    project=~/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20 \
-    plots=True \
-    patience=30
+# YOLO=yolo11s
+# IMGSZ=1280
+# yolo detect train \
+#     data=src/configs/$data.yaml \
+#     model=${YOLO}.pt \
+#     epochs=200 \
+#     imgsz=$IMGSZ \
+#     device=0,1 \
+#     batch=16 \
+#     project=~/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20 \
+#     plots=True \
+#     patience=30
 
 
 YOLO=yolo11m-p2

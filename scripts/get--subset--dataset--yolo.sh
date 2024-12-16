@@ -1,12 +1,12 @@
-PATH__DIR__DATASETS__SOURCE__IMG=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241211--synthetic--copy
-POSTFIX__DIR__IMG=""
+PATH__DIR__DATASETS__SOURCE__IMG=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection
+POSTFIX__DIR__IMG=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
 
-PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241211--synthetic--copy
-POSTFIX__DIR__LABEL=""
+PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection
+POSTFIX__DIR__LABEL=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
 
 PATH__FILE__LIST_SUBPATH_TO_IMG=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/list_paths.txt
 
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--syn--selected
+PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--get--subset--dataset
 POSTFIX__DIR__VERSION__TARGET=""
 CLASSES="pothole\nmanhole\ndrainage\ndifficult"
 

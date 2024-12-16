@@ -5,7 +5,7 @@ PATH__DIR__LABEL__INPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--
 POSTFIX__DIR__LABEL__INPUT=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
 
 PATH__DIR__LABEL__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--true-labels--json
-POSTFIX__DIR__LABEL__OUTPUT=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled
+POSTFIX__DIR__LABEL__OUTPUT=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-10
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     ["APTO_v2/day1_330"]=""
@@ -55,10 +55,10 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
-        --ratio__w 2 \
-        --ratio__h 2 \
-        --pad__w__max None \
-        --pad__h__max None \
+        --ratio__w 1.1 \
+        --ratio__h 1.1 \
+        --pad__w__max 100 \
+        --pad__h__max 100 \
         --cut__w__max None \
         --cut__h__max None
 

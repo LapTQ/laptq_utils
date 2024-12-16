@@ -2,10 +2,10 @@ PATH__DIR__IMG__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
 POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
 
 PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--true-labels--txt
-POSTFIX__DIR__LABEL__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled
+POSTFIX__DIR__LABEL__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-20
 
 PATH__DIR__OUTPUT=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled
+POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-20
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
