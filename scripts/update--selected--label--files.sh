@@ -1,34 +1,35 @@
 PATH__DIR__DATASETS__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__VERSION__OLD=--20241121--checked--backup
+POSTFIX__DIR__VERSION__OLD=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
 
-PATH__DIR__LABEL_SOURCE__NEW=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/20241122--fix-visual-check--phase-2--annotation-ver2
+PATH__DIR__LABEL_SOURCE__NEW=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--get--subset--dataset
 POSTFIX__DIR__VERSION__NEW=""
 
-POSTFIX__DIR__VERSION__TARGET=--20241121--phase-2--annotated-ver2--pot-man-drain-difficult--imgdedup--rm-small--rm-difficult-checked
+POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--ver2
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["APTO_v2/day1_330"]=""
-    ["APTO_v2/night1_190"]=""
-    ["APTO_v2/night3_44"]=""
-    ["APTO_v2/night4_239"]=""
-    ["Pothole_235/train"]=""
+    # ["APTO_v2/day1_330"]=""
+    # ["APTO_v2/night1_190"]=""
+    # ["APTO_v2/night3_44"]=""
+    # ["APTO_v2/night4_239"]=""
     # ["dataset-ninja/ds1_simplex-test"]=""
     # ["dataset-ninja/ds1_simplex-train"]=""
     # ["dataset-ninja/ds2_complex-test"]=""
     # ["dataset-ninja/ds2_complex-train"]=""
-    ["pot_det_1240"]=""
+    # ["pot_det_1240"]=""
 
-    # ["pothole_dataset_v8/only_rainy_frames/train"]=""
+    # # ["pothole_dataset_v8/only_rainy_frames/train"]=""
 
     # ["pothole_dataset_v8/train"]=""
     # ["pothole_dataset_v8/train_to_valid"]=""
     # ["pothole_dataset_v8/valid"]=""
     # ["Pothole_detection_yolo/train_original"]=""
-    ["Pothole_Maeda/first_shot"]=""
+    # ["Pothole_Maeda/first_shot"]=""
+    # ["Pothole_Maeda/second_shot"]=""
+    # ["RDD2022_JAPAN/only_pothole/train"]=""
+
+    ["Pothole_235/train"]=""
     ["Pothole_Maeda/first_shot_eval"]=""
-    ["Pothole_Maeda/second_shot"]=""
-    ["RDD2022_JAPAN/only_pothole/train"]=""
 )
 
 
@@ -44,6 +45,11 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     path__dir__lbl__old="${PATH__DIR__DATASETS__SOURCE}/${subpath__dir}/labels${POSTFIX__DIR__VERSION__OLD}"
     path__dir__lbl__new="${PATH__DIR__LABEL_SOURCE__NEW}/${subpath__dir}/labels${POSTFIX__DIR__VERSION__NEW}"
 
+    find "$path__dir__lbl__old" -type f -name ".DS_Store" -exec rm -f {} \;
+    find "$path__dir__lbl__old" -type f -name "classes.txt" -exec rm -f {} \;
+    find "$path__dir__lbl__new" -type f -name ".DS_Store" -exec rm -f {} \;
+    find "$path__dir__lbl__new" -type f -name "classes.txt" -exec rm -f {} \;
+
     path__dir__img__target="${PATH__DIR__DATASETS__SOURCE}/${subpath__dir}/images${POSTFIX__DIR__VERSION__TARGET}"
     path__dir__lbl__target="${PATH__DIR__DATASETS__SOURCE}/${subpath__dir}/labels${POSTFIX__DIR__VERSION__TARGET}"
 
@@ -57,19 +63,38 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         name__file__lbl=${name__file__img%.*}.txt
         path__file__lbl__old="${path__dir__lbl__old}/${name__file__lbl}"
         if [[ ! -f "$path__file__lbl__old" ]]; then
-            continue
+            echo -e "${TAG__FAILED} Label file not found in old version: ${path__file__lbl__old}"
+            exit 1
         fi
         ln -s $( realpath "$path__dir__img__source/$name__file__img" ) "${path__dir__img__target}"
         cp "$path__file__lbl__old" "${path__dir__lbl__target}"
     done
 
+    num__lbl__old=$(find "${path__dir__lbl__old}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
+    num__img__old=$(find "${path__dir__img__source}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l)
+    if [ $num__lbl__old -ne $num__img__old ]; then
+        echo -e "${TAG__FAILED} Number of labels and images mismatched in old version: ${subpath__dir}"
+        echo "    [+] $num__img__old images: ${path__dir__img__source}"
+        echo "    [+] $num__lbl__old labels: ${path__dir__lbl__old}"
+
+        exit 1
+    fi
+
     num__lbl__target=$(find "${path__dir__lbl__target}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
     num__img__target=$(find "${path__dir__img__target}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l)
     if [ $num__lbl__target -ne $num__img__target ]; then
-        echo -e "${TAG__FAILED} Number of labels and images mismatched (clone step): ${subpath__dir}"
-        echo "    [+] $num__lbl__target labels"
-        echo "    [+] $num__img__target images"
+        echo -e "${TAG__FAILED} Number of labels and images mismatched in new version (clone step): ${subpath__dir}"
+        echo "    [+] $num__img__target images: ${path__dir__lbl__target}"
+        echo "    [+] $num__lbl__target labels: ${path__dir__img__target}"
         
+        exit 1
+    fi
+
+    if [ $num__lbl__target -ne $num__lbl__old ]; then
+        echo -e "${TAG__FAILED} Number of labels and old labels mismatched (clone step): ${subpath__dir}"
+        echo "    [+] $num__lbl__old old labels: ${path__dir__lbl__old}"
+        echo "    [+] $num__lbl__target cloned labels: ${path__dir__lbl__target}"
+
         exit 1
     fi
 
@@ -92,8 +117,8 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     num__lbl__target=$(find "${path__dir__lbl__target}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
     if [ $num__lbl__target -ne $num__lbl__old ]; then
         echo -e "${TAG__FAILED} Number of labels mismatched (overwritting step): ${subpath__dir}"
-        echo "    [+] $num__lbl__target target labels"
-        echo "    [+] $num__lbl__old old labels"
+        echo "    [+] $num__lbl__old old labels: ${path__dir__lbl__old}"
+        echo "    [+] $num__lbl__target target labels: ${path__dir__lbl__target}"
         
         exit 1
     fi
