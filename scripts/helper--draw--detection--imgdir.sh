@@ -1,4 +1,4 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--splitted
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1
 POSTFIX__DIR__IMAGE=""
 
 PATH__DIR__LABEL=/home/laptq/laptq-prj-44/outputs/20241214--true--label--json
@@ -8,6 +8,8 @@ NUM__MAX__IMG__TO__VISUALIZE=None
 IS_OK__LBL_NOT_FOUND=True
 PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241214--visualize
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
+
+[[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     # ["beppu_sue_data/batch-1"]=""
@@ -44,6 +46,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \
+        --to_concat__original_img True \
         --to_draw__box_conf True \
         --to_draw__id_class False \
         --to_draw__name_class True \
@@ -66,7 +69,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         echo "    [+] $num__lbl labels"
         echo "    [+] $num__img_vis visualized images"
         
-        # exit 1
+        exit 1
     fi
     echo -e "${TAG__PASSED} ${num__lbl} labels == ${num__img_vis} visualized images: ${subpath__dir}"
 done

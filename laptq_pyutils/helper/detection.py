@@ -315,6 +315,7 @@ def helper__draw__detection__imgdir(**kwargs):
     path__file__map__id_class__to__name_class = kwargs[
         "path__file__map__id_class__to__name_class"
     ]
+    to_concat__original_img = kwargs["to_concat__original_img"]
 
     os.makedirs(path__dir__output, exist_ok=True)
 
@@ -367,6 +368,10 @@ def helper__draw__detection__imgdir(**kwargs):
         )
 
         path__file__output = os.path.join(path__dir__output, name__file__img)
+
+        if to_concat__original_img:
+            img__vis = np.concatenate([img__bgr, img__vis], axis=0)
+
         cv2.imwrite(path__file__output, img__vis)
 
 
@@ -387,6 +392,7 @@ def helper__draw__detection__video(**kwargs):
     path__file__map__id_class__to__name_class = kwargs[
         "path__file__map__id_class__to__name_class"
     ]
+    to_concat__original_img = kwargs["to_concat__original_img"]
 
     with open(path__file__map__id_class__to__name_class, "r") as f:
         map__id_class__to__name_class = yaml.safe_load(f)
@@ -399,7 +405,7 @@ def helper__draw__detection__video(**kwargs):
         cap.get(cv2.CAP_PROP_FPS),
         (
             int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
-            int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+            int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) * (2 if to_concat__original_img else 1),
         ),
     )
 
@@ -429,6 +435,9 @@ def helper__draw__detection__video(**kwargs):
             map__id_class__to__name_class=map__id_class__to__name_class,
             **kwargs,
         )
+
+        if to_concat__original_img:
+            img__vis = np.concatenate([img__bgr, img__vis], axis=0)
 
         writer.write(img__vis)
         id__frame += 1
