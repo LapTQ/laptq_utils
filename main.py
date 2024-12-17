@@ -42,6 +42,7 @@ def parse_args():
     ap.add_argument("--list__id_class__to_exclude", type=str)
     ap.add_argument("--map__id_old__to__id_new", type=str)
     ap.add_argument("--thresh__miniou", type=float)
+    ap.add_argument("--to_concat__original_img", type=str)
     ap.add_argument("--to_draw__id_track", choices=["True", "False"])
     ap.add_argument("--to_draw__box_conf", choices=["True", "False"])
     ap.add_argument("--to_draw__id_class", choices=["True", "False"])
@@ -120,6 +121,7 @@ def parse_args():
     args.pad__h__max = eval(args.pad__h__max) if args.pad__h__max is not None else None
     args.cut__w__max = eval(args.cut__w__max) if args.cut__w__max is not None else None
     args.cut__h__max = eval(args.cut__h__max) if args.cut__h__max is not None else None
+    args.to_concat__original_img = eval(args.to_concat__original_img) if args.to_concat__original_img is not None else None
 
     return args
 
