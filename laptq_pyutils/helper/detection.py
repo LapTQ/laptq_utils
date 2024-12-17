@@ -2,6 +2,7 @@ from laptq_pyutils.convert import xcycwh__to__x1y1x2y2, xcycwh__to__x1y1wh
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import ListAligner
 from laptq_pyutils.ops import box__miniou
+from laptq_pyutils.loader import pprint_color
 
 
 def extract__ultralytics__detect(**kwargs):
@@ -508,6 +509,74 @@ def helper__convert__detection__txt__to__json(**kwargs):
 
         with open(path__file__lbl__output, "w") as f:
             json.dump(dict__result, f, indent=4)
+
+
+def helper__convert__labelstudio_json__to__json(**kwargs):
+
+    import json
+    from tqdm import tqdm
+    import os
+    import yaml
+
+    path__file__lbl__input = kwargs['path__file__lbl__input']
+    path__dir__lbl__output = kwargs['path__dir__lbl__output']
+    path__file__map__id_class__to__name_class = kwargs['path__file__map__id_class__to__name_class']
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    with open(path__file__lbl__input, 'r') as f:
+        result__labelstudio = json.load(f)
+
+    with open(path__file__map__id_class__to__name_class, 'r') as f:
+        map__id_class__to__name_class = yaml.safe_load(f)
+    map__name_class__to__id_class = {v: k for k, v in map__id_class__to__name_class.items()}
+
+    for data__per_img in tqdm(result__labelstudio):
+        link_to__img = data__per_img['data']['image']
+        annotations = data__per_img['annotations']
+
+        assert len(annotations) == 1
+
+        name__file__img = os.path.basename(link_to__img)
+        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
+
+        boxes = annotations[0]['result']
+        list__obj__id_class = []
+        list__obj__box_xcycwhn = []
+        for box in boxes:
+            W = box['original_width']
+            H = box['original_height']
+            x1 = box['value']['x']
+            y1 = box['value']['y']
+            w = box['value']['width']
+            h = box['value']['height']
+            assert len(box['value']['rectanglelabels']) == 1, "len(box['value']['rectanglelabels']) is {}".format(box['value']['rectanglelabels'])
+            name_class = box['value']['rectanglelabels'][0]
+
+            xc = x1 + w / 2
+            yc = y1 + h / 2            
+
+            xcn = xc / 100
+            ycn = yc / 100
+            wn = w / 100
+            hn = h / 100
+            id_class = map__name_class__to__id_class[name_class]
+
+            list__obj__id_class.append(id_class)
+            list__obj__box_xcycwhn.append([xcn, ycn, wn, hn])
+
+        dict__result = {
+            "list__obj__id_class": list__obj__id_class,
+            "list__obj__box_xcycwhn": list__obj__box_xcycwhn,
+        }
+
+        path__file__lbl = os.path.join(path__dir__lbl__output, name__file__lbl)
+        with open(path__file__lbl, 'w') as f:
+            json.dump(dict__result, f, indent=4)
+
+        
+
+
 
 
 def helper__filter__detection__result__by__size(**kwargs):
