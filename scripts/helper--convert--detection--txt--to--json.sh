@@ -1,12 +1,16 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/Downloads/outputs--7
+PATH__DIR__LABEL__INPUT=/mnt/ssd8tb/shared_workspace/prj44/dataset
 POSTFIX__DIR__LABEL__INPUT=""
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--8
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241214--true--label--json
 POSTFIX__DIR__LABEL__OUTPUT=""
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["set1"]=""
-    ["set2"]=""
+    ["beppu_sue_data/batch-1"]=""
+    ["beppu_sue_data/batch-2"]=""
+    ["beppu_sue_data/batch-3"]=""
+    ["beppu_sue_data/batch-4"]=""
+    ["beppu_sue_data/batch-5"]=""
+    ["beppu_sue_data/batch-6"]=""
 )
 
 IFS=$'\n'
@@ -23,7 +27,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__convert__detection__txt__to__json \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}"
