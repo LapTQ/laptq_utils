@@ -21,7 +21,7 @@ data=20241122--phase-2--annotation-ver2
 ver__model=yolo11m-p2--960--crop-20
 imgsz=960
 
-ver__train=train2
+ver__train=train6
 conf=0.01
 
 yolo val \
