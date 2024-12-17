@@ -4,11 +4,12 @@ POSTFIX__DIR__IMAGE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked-
 PATH__DIR__LABEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--true-labels--json
 POSTFIX__DIR__LABEL=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled
 
-NUM__MAX__IMG__TO__VISUALIZE=10
-IS_OK__LBL_NOT_FOUND=False
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--visualize
+NUM__MAX__IMG__TO__VISUALIZE=None
+IS_OK__LBL_NOT_FOUND=True
+PATH__DIR__OUTPUT=//mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--visualize
+PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
-# [[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
+[[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     ["APTO_v2/day1_330"]=""
@@ -57,13 +58,14 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \
+        --to_concat__original_img True \
         --to_draw__box_conf True \
-        --to_draw__id_class True \
+        --to_draw__id_class False \
         --to_draw__name_class True \
         --fontScale 2 \
         --thickness 2 \
         --box_color_by id__class \
-        --path__file__map__id_class__to__name_class /mnt/hdd10tb/Users/laptq/laptq-prj-46/src/configs/class_id_to_label.yaml \
+        --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
         --num__max__img $NUM__MAX__IMG__TO__VISUALIZE \
         --seed 42 \
         --is_ok__lbl_not_exist $IS_OK__LBL_NOT_FOUND

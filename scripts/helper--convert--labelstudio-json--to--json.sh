@@ -3,8 +3,6 @@ PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--a
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241214--true--label--json
 POSTFIX__DIR__LABEL__OUTPUT=--raw
 
-PREFIX__HOSTNAME='http:\/\/tank7:9000\/images\/'
-
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
@@ -39,7 +37,5 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
 
     num__lbl__output=$(find "${path__dir__lbl__output}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
     echo -e "${TAG__INFO} ${num__lbl__output} target labels: ${subpath__dir}"
-
-    # break
 
 done

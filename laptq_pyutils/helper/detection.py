@@ -315,6 +315,7 @@ def helper__draw__detection__imgdir(**kwargs):
     path__file__map__id_class__to__name_class = kwargs[
         "path__file__map__id_class__to__name_class"
     ]
+    to_concat__original_img = kwargs["to_concat__original_img"]
 
     os.makedirs(path__dir__output, exist_ok=True)
 
@@ -367,6 +368,10 @@ def helper__draw__detection__imgdir(**kwargs):
         )
 
         path__file__output = os.path.join(path__dir__output, name__file__img)
+
+        if to_concat__original_img:
+            img__vis = np.concatenate([img__bgr, img__vis], axis=0)
+
         cv2.imwrite(path__file__output, img__vis)
 
 
@@ -387,6 +392,7 @@ def helper__draw__detection__video(**kwargs):
     path__file__map__id_class__to__name_class = kwargs[
         "path__file__map__id_class__to__name_class"
     ]
+    to_concat__original_img = kwargs["to_concat__original_img"]
 
     with open(path__file__map__id_class__to__name_class, "r") as f:
         map__id_class__to__name_class = yaml.safe_load(f)
@@ -399,7 +405,7 @@ def helper__draw__detection__video(**kwargs):
         cap.get(cv2.CAP_PROP_FPS),
         (
             int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
-            int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+            int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) * (2 if to_concat__original_img else 1),
         ),
     )
 
@@ -429,6 +435,9 @@ def helper__draw__detection__video(**kwargs):
             map__id_class__to__name_class=map__id_class__to__name_class,
             **kwargs,
         )
+
+        if to_concat__original_img:
+            img__vis = np.concatenate([img__bgr, img__vis], axis=0)
 
         writer.write(img__vis)
         id__frame += 1
@@ -517,6 +526,7 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
     from tqdm import tqdm
     import os
     import yaml
+    import traceback
 
     path__file__lbl__input = kwargs['path__file__lbl__input']
     path__dir__lbl__output = kwargs['path__dir__lbl__output']
@@ -544,14 +554,20 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
         list__obj__id_class = []
         list__obj__box_xcycwhn = []
         for box in boxes:
-            W = box['original_width']
-            H = box['original_height']
-            x1 = box['value']['x']
-            y1 = box['value']['y']
-            w = box['value']['width']
-            h = box['value']['height']
-            assert len(box['value']['rectanglelabels']) == 1, "len(box['value']['rectanglelabels']) is {}".format(box['value']['rectanglelabels'])
-            name_class = box['value']['rectanglelabels'][0]
+            try:
+                W = box['original_width']
+                H = box['original_height']
+                x1 = box['value']['x']
+                y1 = box['value']['y']
+                w = box['value']['width']
+                h = box['value']['height']
+                assert len(box['value']['rectanglelabels']) == 1, "len(box['value']['rectanglelabels']) is {}".format(box['value']['rectanglelabels'])
+                name_class = box['value']['rectanglelabels'][0]
+            except Exception as e:
+                pprint_color('Error in the file:')
+                pprint_color(link_to__img)
+                pprint_color(box)
+                traceback.print_exc()
 
             xc = x1 + w / 2
             yc = y1 + h / 2            
