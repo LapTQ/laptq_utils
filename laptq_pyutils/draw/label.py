@@ -131,8 +131,8 @@ def draw__image(**kwargs):
         _has_brackets = to_draw__name_track and name__track is not None
         _has_parenthesis = (
             to_draw__confirmed_status or to_draw__id_track or _has_brackets
-        ) and (to_draw__box_conf or to_draw__id_class)
-        _has_dash = (to_draw__box_conf and box__conf is not None) and to_draw__id_class
+        ) and (to_draw__box_conf or to_draw__id_class or to_draw__name_class)
+        _has_dash = (to_draw__box_conf and box__conf is not None) and (to_draw__id_class or to_draw__name_class)
         label = "{}{}{}{}{}{}{}{}{}{}".format(
             (
                 "*"
@@ -146,14 +146,13 @@ def draw__image(**kwargs):
             "]" if _has_brackets else "",
             "(" if _has_parenthesis else "",
             (
-                (
-                    id__class
-                    if not to_draw__name_class
-                    or id__class not in map__id_class__to__name_class
-                    else map__id_class__to__name_class[id__class]
-                )
-                if to_draw__id_class
-                else ""
+                id__class 
+                if to_draw__id_class 
+                else (
+                    map__id_class__to__name_class.get(id__class, "") 
+                    if to_draw__name_class else 
+                    ""
+                )    
             ),
             "-" if _has_dash else "",
             (
