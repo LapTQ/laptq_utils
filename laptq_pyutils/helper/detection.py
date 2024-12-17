@@ -517,6 +517,7 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
     from tqdm import tqdm
     import os
     import yaml
+    import traceback
 
     path__file__lbl__input = kwargs['path__file__lbl__input']
     path__dir__lbl__output = kwargs['path__dir__lbl__output']
@@ -544,14 +545,20 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
         list__obj__id_class = []
         list__obj__box_xcycwhn = []
         for box in boxes:
-            W = box['original_width']
-            H = box['original_height']
-            x1 = box['value']['x']
-            y1 = box['value']['y']
-            w = box['value']['width']
-            h = box['value']['height']
-            assert len(box['value']['rectanglelabels']) == 1, "len(box['value']['rectanglelabels']) is {}".format(box['value']['rectanglelabels'])
-            name_class = box['value']['rectanglelabels'][0]
+            try:
+                W = box['original_width']
+                H = box['original_height']
+                x1 = box['value']['x']
+                y1 = box['value']['y']
+                w = box['value']['width']
+                h = box['value']['height']
+                assert len(box['value']['rectanglelabels']) == 1, "len(box['value']['rectanglelabels']) is {}".format(box['value']['rectanglelabels'])
+                name_class = box['value']['rectanglelabels'][0]
+            except Exception as e:
+                pprint_color('Error in the file:')
+                pprint_color(link_to__img)
+                pprint_color(box)
+                traceback.print_exc()
 
             xc = x1 + w / 2
             yc = y1 + h / 2            
