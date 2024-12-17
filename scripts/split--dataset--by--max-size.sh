@@ -7,6 +7,9 @@ POSTFIX__DIR__LABEL__SOURCE=""
 PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset--splitted
 POSTFIX__DIR__VERSION__TARGET=""
 
+TO__SHUFFLE=False
+SEED=42
+
 SIZE__MAX=563
 POSTFIX__DIR__SPLITTED='-batch-'
 
@@ -62,6 +65,10 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         num__dir__splitted=$(( $num__dir__splitted + 1 ))
     fi
     list__name__file__img=($( ls "$path__dir__img__input" | sort -V ))
+
+    if [[ $TO__SHUFFLE == True ]]; then
+        list__name__file__img=($(printf "%s\n" "${list__name__file__img[@]}" | shuf -n ${#list__name__file__img[@]} --random-source=<(openssl enc -aes-256-ctr -pass pass:"$SEED" -nosalt < /dev/zero 2>/dev/null)))
+    fi
 
     sum__num__file__splitted=0
     for id__batch in $(seq 1 $num__dir__splitted); do
