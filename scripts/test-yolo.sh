@@ -10,16 +10,18 @@ data=20241122--phase-2--annotation-ver2
 # imgsz=640
 # ver__model=yolo11s--960--crop
 # imgsz=960
-ver__model=yolo11s--1280--crop-20
-imgsz=1280
+# ver__model=yolo11s--1280--crop-20
+# imgsz=1280
 # ver__model=yolo11m--960--crop-20--finetune-only-pot
+# imgsz=960
+# ver__model=yolo11m--960--crop-20
 # imgsz=960
 # ver__model=yolo11s--1280--crop-20
 # imgsz=1280
-# ver__model=yolo11m-p2--960--crop-20
-# imgsz=960
+ver__model=yolo11m-p2--960--crop-20
+imgsz=960
 
-ver__train=train4
+ver__train=train2
 conf=0.01
 
 yolo val \
