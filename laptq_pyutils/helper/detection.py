@@ -60,6 +60,7 @@ def helper__extract__ultralytics__detect__imgdir(**kwargs):
     from tqdm import tqdm
     import cv2
     import json
+    import time
 
     path__dir__img = kwargs["path__dir__img"]
     path__dir__output = kwargs["path__dir__output"]
@@ -71,22 +72,34 @@ def helper__extract__ultralytics__detect__imgdir(**kwargs):
     os.makedirs(path__dir__output, exist_ok=True)
 
     list__name__file__img = sorted(os.listdir(path__dir__img))
-    for name__file__img in tqdm(list__name__file__img):
+    log__time = {
+        'time__inference': None,
+    }
+    pbar = tqdm(list__name__file__img)
+    for name__file__img in pbar:
         path__file__img = os.path.join(path__dir__img, name__file__img)
         img__bgr = cv2.imread(path__file__img)
 
+        mtime_1 = time.time()
         _ = extract__ultralytics__detect(
             img__bgr=img__bgr,
             model=model,
             **kwargs,
         )
         dict__result = _["dict__result"]
+        mtime_2 = time.time()
 
         name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
         path__file__lbl = os.path.join(path__dir__output, name__file__lbl)
 
         with open(path__file__lbl, "w") as f:
             json.dump(dict__result, f, indent=4)
+
+        if log__time['time__inference'] is None:
+            log__time['time__inference'] = mtime_2 - mtime_1
+        else:
+            log__time['time__inference'] = 0.9 * log__time['time__inference'] + 0.1 * (mtime_2 - mtime_1)
+        pbar.set_postfix(time__inference=log__time['time__inference'])
 
 
 def helper__extract__ultralytics__detect__video(**kwargs):
@@ -96,6 +109,7 @@ def helper__extract__ultralytics__detect__video(**kwargs):
     import json
     import os
     from tqdm import tqdm
+    import time
 
     path__file__input = kwargs["path__file__input"]
     path__dir__img__output = kwargs["path__dir__img__output"]
@@ -112,17 +126,22 @@ def helper__extract__ultralytics__detect__video(**kwargs):
 
     pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
     id__frame = 0
+    log__time = {
+        'time__inference': None,
+    }
     while True:
         success, img__bgr = cap.read()
         if not success:
             break
-
+        
+        mtime_1 = time.time()
         _ = extract__ultralytics__detect(
             img__bgr=img__bgr,
             model=model,
             **kwargs,
         )
         dict__result = _["dict__result"]
+        mtime_2 = time.time()
 
         name__file__img = f"{id__frame:0{pad__id_frame}d}.jpg"
         path__file__img = os.path.join(path__dir__img__output, name__file__img)
@@ -134,6 +153,12 @@ def helper__extract__ultralytics__detect__video(**kwargs):
             json.dump(dict__result, f, indent=4)
 
         id__frame += 1
+
+        if log__time['time__inference'] is None:
+            log__time['time__inference'] = mtime_2 - mtime_1
+        else:
+            log__time['time__inference'] = 0.9 * log__time['time__inference'] + 0.1 * (mtime_2 - mtime_1)
+        pbar.set_postfix(time__inference=log__time['time__inference'])
         pbar.update(1)
 
 
