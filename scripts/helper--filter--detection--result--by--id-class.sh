@@ -1,11 +1,23 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/Downloads/outputs--video--1
+# PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json--undo-split
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored--json
 POSTFIX__DIR__LABEL__INPUT=""
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--video--2
+# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json--undo-split--erase-ignored
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored--json--erase-ignored
 POSTFIX__DIR__LABEL__OUTPUT=""
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["clideo_editor_177d5d7cdb144c1598d5419573b0449c.mp4"]=""
+    ["beppu_sue"]=""
+    # ["P44-nothing-2個持ち_cut_fit"]=""
+    # ["P44-notProducts-2個持ち_cut_fit"]=""
+    # ["P44-1products-台置き_cut_fit"]=""
+    # ["P44-nothing-台置き_cut_fit"]=""
+    # ["P44-notProducts-台置き_cut_fit"]=""
+    # ["P44-notProducts-bag20240906_1022"]=""
+    # ["P44-2products-2個持ち_cut_fit"]=""
+    # ["P44-1products-2個持ち_cut_fit"]=""
+    # ["P44-2products-台置き_cut_fit"]=""
+    # ["P44-notProducts-bag20240906_0000"]=""
 )
 
 IFS=$'\n'
@@ -22,12 +34,12 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__filter__detection__result__by__id_class \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
-        --list__id_class__to_include 0,56 \
-        --list__id_class__to_exclude "[]"
+        --list__id_class__to_include None \
+        --list__id_class__to_exclude "[1]"
 
 
     num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)

@@ -1,13 +1,13 @@
-PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset
+PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored
 POSTFIX__DIR__IMG__SOURCE=""
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored
 POSTFIX__DIR__LABEL__SOURCE=""
 
-PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset--splitted
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored--splitted
 POSTFIX__DIR__VERSION__TARGET=""
 
-TO__SHUFFLE=False
+TO__SHUFFLE=True
 SEED=42
 
 SIZE__MAX=563
@@ -15,24 +15,17 @@ POSTFIX__DIR__SPLITTED='-batch-'
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["P44-beppu-batch-1"]=""
-    # ["P44-beppu-batch-2"]=""
-    # ["P44-beppu-batch-3"]=""
-    # ["P44-beppu-batch-4"]=""
-    # ["P44-beppu-batch-5"]=""
-    # ["P44-beppu-batch-6"]=""
-    # ["P44-2products-2個持ち_cut_fit"]=""
-    # ["P44-2products-台置き_cut_fit"]=""
-    # ["P44-1products-2個持ち_cut_fit"]=""
-    # ["P44-1products-台置き_cut_fit"]=""
-    # ["P44-notProducts-2個持ち_cut_fit"]=""
-    # ["P44-notProducts-台置き_cut_fit"]=""
-    # ["P44-notProducts-bag20240906_0000"]=""
-    # ["P44-notProducts-bag20240906_1022"]=""
-    # ["P44-nothing-2個持ち_cut_fit"]=""
-    # ["P44-nothing-台置き_cut_fit"]=""
-
     ["beppu_sue"]=""
+    ["P44-nothing-2個持ち_cut_fit"]=""
+    ["P44-notProducts-2個持ち_cut_fit"]=""
+    ["P44-1products-台置き_cut_fit"]=""
+    ["P44-nothing-台置き_cut_fit"]=""
+    ["P44-notProducts-台置き_cut_fit"]=""
+    ["P44-notProducts-bag20240906_1022"]=""
+    ["P44-2products-2個持ち_cut_fit"]=""
+    ["P44-1products-2個持ち_cut_fit"]=""
+    ["P44-2products-台置き_cut_fit"]=""
+    ["P44-notProducts-bag20240906_0000"]=""
 )
 
 

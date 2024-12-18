@@ -1,12 +1,27 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/Downloads/outputs--5
+# PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json--undo-split--erase-ignored
+# PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json--undo-split
+# PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split--merge-old-new--json--erase-ignored
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored--json--erase-ignored
 POSTFIX__DIR__LABEL__INPUT=""
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--7
+# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--txt--undo-split--erase-ignored
+# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--txt--undo-split
+# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split--merge-old-new--txt--erase-ignored
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored--txt--erase-ignored
 POSTFIX__DIR__LABEL__OUTPUT=""
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["set1"]=""
-    ["set2"]=""
+    ["beppu_sue"]=""
+    # ["P44-nothing-2個持ち_cut_fit"]=""
+    # ["P44-notProducts-2個持ち_cut_fit"]=""
+    # ["P44-1products-台置き_cut_fit"]=""
+    # ["P44-nothing-台置き_cut_fit"]=""
+    # ["P44-notProducts-台置き_cut_fit"]=""
+    # ["P44-notProducts-bag20240906_1022"]=""
+    # ["P44-2products-2個持ち_cut_fit"]=""
+    # ["P44-1products-2個持ち_cut_fit"]=""
+    # ["P44-2products-台置き_cut_fit"]=""
+    # ["P44-notProducts-bag20240906_0000"]=""
 )
 
 IFS=$'\n'
@@ -23,7 +38,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__convert__detection__json__to__txt \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}"

@@ -1,38 +1,27 @@
-PATH__DIR__IMG__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
+# PATH__DIR__IMG__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1--undo-split--erase-ignored
+PATH__DIR__IMG__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split--erase-ignored
+POSTFIX__DIR__IMG__SOURCE=""
 
-PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--true-labels--txt
-POSTFIX__DIR__LABEL__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled
+# PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--txt--undo-split--erase-ignored
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split--merge-old-new--txt
+POSTFIX__DIR__LABEL__SOURCE=""
 
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored
+POSTFIX__DIR__VERSION__TARGET=""
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["APTO_v2/day1_330"]=""
-    ["APTO_v2/night1_190"]=""
-    ["APTO_v2/night3_44"]=""
-    ["APTO_v2/night4_239"]=""
-    ["Pothole_235/train"]=""
-    ["dataset-ninja/ds1_simplex-test"]=""
-    ["dataset-ninja/ds1_simplex-train"]=""
-    ["dataset-ninja/ds2_complex-test"]=""
-    ["dataset-ninja/ds2_complex-train"]=""
-    ["pot_det_1240"]=""
-
-    # ["pothole_dataset_v8/only_rainy_frames/train"]=""
-
-    ["pothole_dataset_v8/train"]=""
-    ["pothole_dataset_v8/train_to_valid"]=""
-    ["pothole_dataset_v8/valid"]=""
-    ["Pothole_detection_yolo/train_original"]=""
-    ["Pothole_Maeda/first_shot"]=""
-    ["Pothole_Maeda/first_shot_eval"]=""
-    ["Pothole_Maeda/second_shot"]=""
-    ["RDD2022_JAPAN/only_pothole/train"]=""
-
-    ["20241121--syn--selected/Pothole_Maeda/first_shot"]=""
-    ["20241121--syn--selected/Pothole_Maeda/second_shot"]=""
+    ["beppu_sue"]=""
+    # ["P44-nothing-2個持ち_cut_fit"]=""
+    # ["P44-notProducts-2個持ち_cut_fit"]=""
+    # ["P44-1products-台置き_cut_fit"]=""
+    # ["P44-nothing-台置き_cut_fit"]=""
+    # ["P44-notProducts-台置き_cut_fit"]=""
+    # ["P44-notProducts-bag20240906_1022"]=""
+    # ["P44-2products-2個持ち_cut_fit"]=""
+    # ["P44-1products-2個持ち_cut_fit"]=""
+    # ["P44-2products-台置き_cut_fit"]=""
+    # ["P44-notProducts-bag20240906_0000"]=""
 )
 
 

@@ -3,54 +3,25 @@ sleep 0
 # ==================== finetune
 # data=only_pothole_mix
 # data=only_pothole_mix--manhole-241016
-data=20241122--phase-2--annotation-ver2
+# data=20241122--phase-2--annotation-ver2
+data=general
 
 # bash ~/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo.sh
-echo "$( file ~/laptq-prj-46/data/road-issues-detection/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> ~/laptq-prj-46/outputs/progress/log.txt
-# YOLO=yolo11s
-# IMGSZ=1280
-# yolo detect train \
-#     data=src/configs/$data.yaml \
-#     model=${YOLO}.pt \
-#     epochs=200 \
-#     imgsz=$IMGSZ \
-#     device=0,1 \
-#     batch=16 \
-#     project=~/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20 \
-#     plots=True \
-#     patience=30
-
-
-YOLO=yolo11m-p2
+# echo "$( file ~/laptq-prj-46/data/road-issues-detection/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> ~/laptq-prj-46/outputs/progress/log.txt
+YOLO=yolo11m
 IMGSZ=960
 yolo detect train \
     data=src/configs/$data.yaml \
-    model=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/coco/yolo11m-p2/train/weights/best.pt \
+    model=/mnt/ssd8tb/shared_workspace/prj44/models/pytorch/yolo11m_640_product_det/weights/best.pt \
     epochs=200 \
     imgsz=$IMGSZ \
-    device=0,1 \
-    batch=8 \
-    project=~/laptq-prj-46/runs/${data}/${YOLO}--${IMGSZ}--crop-20 \
+    device=1 \
+    batch=16 \
+    project=~/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ} \
     plots=True \
-    patience=40
+    patience=30
 
-
-# bash ~/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo--crop-20--only-pot.sh
-# echo "$( file ~/laptq-prj-46/outputs/20241130--resolve--soft-link--dataset/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> ~/laptq-prj-46/outputs/progress/log.txt
-# YOLO=yolo11m
-# IMGSZ=960
-# yolo detect train \
-#     data=src/configs/$data.yaml \
-#     model=~/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m--960--crop-20/train/weights/best.pt \
-#     epochs=4 \
-#     imgsz=$IMGSZ \
-#     device=0,1 \
-#     batch=16 \
-#     project=~/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20--finetune-only-pot \
-#     plots=True \
-#     lr0=0.007129 \
-#     warmup_epochs=0 \
-#     patience=30
+    # model=${YOLO}.pt \
 
 
 exit

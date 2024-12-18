@@ -1,17 +1,24 @@
 PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241214--true--label--json
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json
 POSTFIX__DIR__LABEL__OUTPUT=--raw
 
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
+    ["beppu_sue-batch-5"]=""
+    ["beppu_sue-batch-6"]=""
     ["P44-1products-2個持ち_cut_fit-batch-1"]="" 
     ["P44-1products-2個持ち_cut_fit-batch-2"]="" 
     ["P44-1products-台置き_cut_fit"]="" 
     ["P44-2products-2個持ち_cut_fit"]="" 
     ["P44-2products-台置き_cut_fit"]="" 
     ["P44-nothing-2個持ち_cut_fit"]=""
+    ["P44-nothing-台置き_cut_fit"]=""
+    ["P44-notProducts-2個持ち_cut_fit"]=""
+    ["P44-notProducts-bag20240906_0000"]=""
+    ["P44-notProducts-bag20240906_1022"]=""
+    ["P44-notProducts-台置き_cut_fit"]=""
 )
 
 IFS=$'\n'
