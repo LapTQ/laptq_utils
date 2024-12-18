@@ -545,7 +545,12 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
         link_to__img = data__per_img['data']['image']
         annotations = data__per_img['annotations']
 
-        assert len(annotations) == 1
+        try:
+            assert len(annotations) == 1
+        except Exception as e:
+            pprint_color('Error in the file:')
+            pprint_color(link_to__img)
+            traceback.print_exc()
 
         name__file__img = os.path.basename(link_to__img)
         name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
@@ -561,13 +566,14 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
                 y1 = box['value']['y']
                 w = box['value']['width']
                 h = box['value']['height']
-                assert len(box['value']['rectanglelabels']) == 1, "len(box['value']['rectanglelabels']) is {}".format(box['value']['rectanglelabels'])
+                assert len(box['value']['rectanglelabels']) == 1, "box['value']['rectanglelabels'] is {}".format(box['value']['rectanglelabels'])
                 name_class = box['value']['rectanglelabels'][0]
             except Exception as e:
                 pprint_color('Error in the file:')
                 pprint_color(link_to__img)
                 pprint_color(box)
                 traceback.print_exc()
+                continue
 
             xc = x1 + w / 2
             yc = y1 + h / 2            
@@ -792,3 +798,57 @@ def helper__rescale__detection__box(**kwargs):
 
         with open(path__file__lbl__output, "w") as f:
             json.dump(dict__result, f, indent=4)
+
+
+def helper__erase__classes__on__images(**kwargs):
+
+    import json
+    from tqdm import tqdm
+    import cv2
+    import os
+
+    path__dir__img__input = kwargs['path__dir__img__input']
+    path__dir__lbl__input = kwargs['path__dir__lbl__input']
+    path__dir__img__output = kwargs['path__dir__img__output']
+    list__id_class = kwargs['list__id_class']
+
+    os.makedirs(path__dir__img__output, exist_ok=True)
+
+    for name__file__img in tqdm(sorted(os.listdir(path__dir__img__input))):
+        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
+        path__file__img__input = os.path.join(path__dir__img__input, name__file__img)
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__img__output = os.path.join(path__dir__img__output, name__file__img)
+
+        if not os.path.exists(path__file__lbl__input):
+            continue
+
+        img = cv2.imread(path__file__img__input)
+        H, W = img.shape[:2]
+
+        with open(path__file__lbl__input, 'r') as f:
+            dict__result = json.load(f)
+
+        list__obj__id_class = dict__result['list__obj__id_class']
+        list__obj__box_xcycwhn = dict__result['list__obj__box_xcycwhn']
+
+        for id__class, xcycwhn in zip(list__obj__id_class, list__obj__box_xcycwhn):
+            if id__class not in list__id_class:
+                continue
+
+            xcn, ycn, wn, hn = xcycwhn
+            x1n = xcn - wn / 2
+            y1n = ycn - hn / 2
+            x2n = x1n + wn
+            y2n = y1n + hn
+
+            x1 = int(x1n * W)
+            y1 = int(y1n * H)
+            x2 = int(x2n * W)
+            y2 = int(y2n * H)
+
+            img[y1:y2, x1:x2] = 0
+        
+        cv2.imwrite(path__file__img__output, img)
+
+

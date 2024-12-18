@@ -1,24 +1,33 @@
-PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset--unslashed
+# PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1
+# PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json
+PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2
 POSTFIX__DIR__IMG__SOURCE=""
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset--unslashed
+# PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1
+# PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2
 POSTFIX__DIR__LABEL__SOURCE=""
 
-PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset--undo-split
+# PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1--undo-split
+# PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json--undo-split
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split
 POSTFIX__DIR__VERSION__TARGET=""
 
 POSTFIX__DIR__SPLITTED='-batch-'
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["beppu_sue_data/batch-1"]=""
-    # ["beppu_sue_data/batch-2"]=""
-    # ["beppu_sue_data/batch-3"]=""
-    # ["beppu_sue_data/batch-4"]=""
-    # ["beppu_sue_data/batch-5"]=""
-    # ["beppu_sue_data/batch-6"]=""
-
-    ["P44-beppu_sue_data-SLS"]=""
+    ["beppu_sue"]=""
+    # ["P44-nothing-2個持ち_cut_fit"]=""
+    # ["P44-notProducts-2個持ち_cut_fit"]=""
+    # ["P44-1products-台置き_cut_fit"]=""
+    # ["P44-nothing-台置き_cut_fit"]=""
+    # ["P44-notProducts-台置き_cut_fit"]=""
+    # ["P44-notProducts-bag20240906_1022"]=""
+    # ["P44-2products-2個持ち_cut_fit"]=""
+    # ["P44-1products-2個持ち_cut_fit"]=""
+    # ["P44-2products-台置き_cut_fit"]=""
+    # ["P44-notProducts-bag20240906_0000"]=""
 )
 
 
@@ -43,21 +52,33 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
 
     sum__num__file__img=0
     sum__num__file__lbl=0
-    for subpath_dir__child in $( ls "${PATH__DIR__IMAGE__SOURCE}" | grep "${subpath_dir}${POSTFIX__DIR__SPLITTED}" ); do
-        path__dir__img__input="${PATH__DIR__IMAGE__SOURCE}/${subpath_dir__child}/images${POSTFIX__DIR__IMG__SOURCE}"
-        path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${subpath_dir__child}/labels${POSTFIX__DIR__LABEL__SOURCE}"
+
+    if [[ $( ls "${PATH__DIR__IMAGE__SOURCE}" | grep "${subpath_dir}${POSTFIX__DIR__SPLITTED}" | wc -l ) -eq 0 ]]; then
+        path__dir__img__input="${PATH__DIR__IMAGE__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__IMG__SOURCE}"
+        path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${subpath_dir}/labels${POSTFIX__DIR__LABEL__SOURCE}"
 
         cp -r "${path__dir__img__input}"/* "${path__dir__img__output}"
         cp -r "${path__dir__lbl__input}"/* "${path__dir__lbl__output}"
 
 
-        num__file__img=$(find "${path__dir__img__input}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l)
-        num__file__lbl=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
+        sum__num__file__img=$(find "${path__dir__img__input}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l)
+        sum__num__file__lbl=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
+    else
+        for subpath_dir__child in $( ls "${PATH__DIR__IMAGE__SOURCE}" | grep "${subpath_dir}${POSTFIX__DIR__SPLITTED}" ); do
+            path__dir__img__input="${PATH__DIR__IMAGE__SOURCE}/${subpath_dir__child}/images${POSTFIX__DIR__IMG__SOURCE}"
+            path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${subpath_dir__child}/labels${POSTFIX__DIR__LABEL__SOURCE}"
 
-        sum__num__file__img=$((sum__num__file__img + num__file__img))
-        sum__num__file__lbl=$((sum__num__file__lbl + num__file__lbl))
-    done
+            cp -r "${path__dir__img__input}"/* "${path__dir__img__output}"
+            cp -r "${path__dir__lbl__input}"/* "${path__dir__lbl__output}"
 
+
+            num__file__img=$(find "${path__dir__img__input}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l)
+            num__file__lbl=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
+
+            sum__num__file__img=$((sum__num__file__img + num__file__img))
+            sum__num__file__lbl=$((sum__num__file__lbl + num__file__lbl))
+        done
+    fi
 
     num__file__img=$(find "${path__dir__img__output}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l)
     num__file__lbl=$(find "${path__dir__lbl__output}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
