@@ -1,11 +1,11 @@
 PATH__DIR__IMG__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
+POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
 
 PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--true-labels--txt
-POSTFIX__DIR__LABEL__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-20
+POSTFIX__DIR__LABEL__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--only-pot
 
 PATH__DIR__OUTPUT=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-20
+POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--only-pot
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
@@ -13,7 +13,6 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["APTO_v2/night1_190"]=""
     # ["APTO_v2/night3_44"]=""
     # ["APTO_v2/night4_239"]=""
-    # ["Pothole_235/train"]=""
     # ["dataset-ninja/ds1_simplex-test"]=""
     # ["dataset-ninja/ds1_simplex-train"]=""
     # ["dataset-ninja/ds2_complex-test"]=""
@@ -27,12 +26,13 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["pothole_dataset_v8/valid"]=""
     # ["Pothole_detection_yolo/train_original"]=""
     # ["Pothole_Maeda/first_shot"]=""
-    # ["Pothole_Maeda/first_shot_eval"]=""
     # ["Pothole_Maeda/second_shot"]=""
     # ["RDD2022_JAPAN/only_pothole/train"]=""
+    ["Pothole_235/train"]=""
+    ["Pothole_Maeda/first_shot_eval"]=""
 
-    ["20241121--syn--selected/Pothole_Maeda/first_shot"]=""
-    ["20241121--syn--selected/Pothole_Maeda/second_shot"]=""
+    # ["20241121--syn--selected/Pothole_Maeda/first_shot"]=""
+    # ["20241121--syn--selected/Pothole_Maeda/second_shot"]=""
 )
 
 

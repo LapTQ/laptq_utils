@@ -14,14 +14,14 @@ data=20241122--phase-2--annotation-ver2
 # imgsz=1280
 # ver__model=yolo11m--960--crop-20--finetune-only-pot
 # imgsz=960
-# ver__model=yolo11m--960--crop-20
-# imgsz=960
+ver__model=yolo11m--960--crop-20
+imgsz=960
 # ver__model=yolo11s--1280--crop-20
 # imgsz=1280
-ver__model=yolo11m-p2--960--crop-20
-imgsz=960
+# ver__model=yolo11m-p2--960--crop-20
+# imgsz=960
 
-ver__train=train6
+ver__train=train12
 conf=0.01
 
 yolo val \
@@ -29,13 +29,14 @@ yolo val \
     model=$path__dir__run/$data/${ver__model}/$ver__train/weights/best.pt \
     project=$path__dir__run/$data/${ver__model}/val--conf-$conf \
     imgsz=$imgsz \
-    conf=$conf \
-    iou=0.5 \
     device=0 \
     batch=4
-
+    # iou=0.5 \
+    # conf=$conf \
+    
     # model=/mnt/hdd10tb/Users/laptq/laptq-prj-46/weights/yolov10m_only_pot_det_960x960.pt \
     # project=$path__dir__run/$data/yolov10m_only_pot_det_960x960/val--conf-$conf \
+
     
     # model=/mnt/ssd4tb/shared_workspace/prj46/models/pytorch/yolov11m-p2_pot_man_crop_det_960x960_new_data.pt \
     # project=$path__dir__run/$data/yolov11m-p2_pot_man_crop_det_960x960_new_data/val--conf-$conf \
