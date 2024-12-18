@@ -13,6 +13,7 @@ from laptq_pyutils.helper import (
     helper__draw__detection__imgdir,
     helper__draw__detection__video,
     helper__rescale__detection__box,
+    helper__erase__classes__on__images,
 )
 import argparse
 
@@ -22,6 +23,7 @@ def parse_args():
 
     ap.add_argument("action")
     ap.add_argument("--path__dir__img", type=str)
+    ap.add_argument("--path__dir__img__input", type=str)
     ap.add_argument("--path__dir__img__output", type=str)
     ap.add_argument("--path__dir__lbl", type=str)
     ap.add_argument("--path__dir__output", type=str)
@@ -40,6 +42,7 @@ def parse_args():
     ap.add_argument("--thresh__conf__min", type=float)
     ap.add_argument("--list__id_class__to_include", type=str)
     ap.add_argument("--list__id_class__to_exclude", type=str)
+    ap.add_argument("--list__id_class", type=str)
     ap.add_argument("--map__id_old__to__id_new", type=str)
     ap.add_argument("--thresh__miniou", type=float)
     ap.add_argument("--to_concat__original_img", type=str)
@@ -58,7 +61,6 @@ def parse_args():
     ap.add_argument("--path__file__map__id_class__to__name_class", type=str)
     ap.add_argument("--filter_by", type=str)
     ap.add_argument("--thresh", type=float)
-    ap.add_argument("--list__id_class", type=str)
     ap.add_argument("--ratio__w", type=float)
     ap.add_argument("--ratio__h", type=float)
     ap.add_argument("--pad__w__max", type=str)
