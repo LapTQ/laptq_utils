@@ -1,7 +1,12 @@
-PATH__DIR__LABEL__INPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--model-prediction--json--filterby-conf
+# ID__MODEL=yolov10m_only_pot_det_960x960
+ID__MODEL=yolo11m--960--crop-20--train8
+
+PATH__DIR__LABEL__INPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--model-prediction--json--filterby-conf/${ID__MODEL}
+# POSTFIX__DIR__LABEL__INPUT=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--only-pot
 POSTFIX__DIR__LABEL__INPUT=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-10
 
-PATH__DIR__LABEL__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--model-prediction--json--filterby-conf-miniou
+PATH__DIR__LABEL__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--model-prediction--json--filterby-conf-miniou/${ID__MODEL}
+# POSTFIX__DIR__LABEL__OUTPUT=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--only-pot
 POSTFIX__DIR__LABEL__OUTPUT=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-10
 
 declare -A MAP__SUBPATH_DIR__TO__=(

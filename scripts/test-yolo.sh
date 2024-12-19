@@ -21,7 +21,7 @@ imgsz=960
 # ver__model=yolo11m-p2--960--crop-20
 # imgsz=960
 
-ver__train=train12
+ver__train=train8
 conf=0.01
 
 yolo val \
@@ -29,14 +29,14 @@ yolo val \
     model=$path__dir__run/$data/${ver__model}/$ver__train/weights/best.pt \
     project=$path__dir__run/$data/${ver__model}/val--conf-$conf \
     imgsz=$imgsz \
+    iou=0.5 \
+    conf=$conf \
     device=0 \
     batch=4
-    # iou=0.5 \
-    # conf=$conf \
     
+
     # model=/mnt/hdd10tb/Users/laptq/laptq-prj-46/weights/yolov10m_only_pot_det_960x960.pt \
     # project=$path__dir__run/$data/yolov10m_only_pot_det_960x960/val--conf-$conf \
-
     
     # model=/mnt/ssd4tb/shared_workspace/prj46/models/pytorch/yolov11m-p2_pot_man_crop_det_960x960_new_data.pt \
     # project=$path__dir__run/$data/yolov11m-p2_pot_man_crop_det_960x960_new_data/val--conf-$conf \
