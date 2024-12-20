@@ -1,38 +1,26 @@
-PATH__DIR__IMG__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0
+PATH__DIR__IMG__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--erase-IGNORE
+POSTFIX__DIR__IMG__SOURCE="--erase-IGNORE"
 
-PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--true-labels--txt
-POSTFIX__DIR__LABEL__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--json--filterby-id_class--to-txt
+POSTFIX__DIR__LABEL__SOURCE="--erase-IGNORE"
 
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
+POSTFIX__DIR__VERSION__TARGET="--erase-IGNORE"
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["APTO_v2/day1_330"]=""
-    ["APTO_v2/night1_190"]=""
-    ["APTO_v2/night3_44"]=""
-    ["APTO_v2/night4_239"]=""
-    ["Pothole_235/train"]=""
-    ["dataset-ninja/ds1_simplex-test"]=""
-    ["dataset-ninja/ds1_simplex-train"]=""
-    ["dataset-ninja/ds2_complex-test"]=""
-    ["dataset-ninja/ds2_complex-train"]=""
-    ["pot_det_1240"]=""
-
-    # ["pothole_dataset_v8/only_rainy_frames/train"]=""
-
-    ["pothole_dataset_v8/train"]=""
-    ["pothole_dataset_v8/train_to_valid"]=""
-    ["pothole_dataset_v8/valid"]=""
-    ["Pothole_detection_yolo/train_original"]=""
-    ["Pothole_Maeda/first_shot"]=""
-    ["Pothole_Maeda/first_shot_eval"]=""
-    ["Pothole_Maeda/second_shot"]=""
-    ["RDD2022_JAPAN/only_pothole/train"]=""
-
-    ["20241121--syn--selected/Pothole_Maeda/first_shot"]=""
-    ["20241121--syn--selected/Pothole_Maeda/second_shot"]=""
+    ["PoC2--2個持ち_cut_fit-1products"]=""
+    ["PoC2--2個持ち_cut_fit-2products"]=""
+    ["PoC2--2個持ち_cut_fit-nothing"]=""
+    ["PoC2--2個持ち_cut_fit-notProducts"]=""
+    ["PoC2--bag20240906_0000-notProducts"]=""
+    ["PoC2--bag20240906_1022-notProducts"]=""
+    ["PoC1--beppu_sue"]=""
+    ["PoC2--beppu_sue"]=""
+    ["PoC2--台置き_cut_fit-1products"]=""
+    ["PoC2--台置き_cut_fit-2products"]=""
+    ["PoC2--台置き_cut_fit-nothing"]=""
+    ["PoC2--台置き_cut_fit-notProducts"]=""
 )
 
 
@@ -74,7 +62,7 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         
         exit 1
     fi
-    echo -e "${TAG__PASSED} Copied ${num__lbl__input} labels to ${num__lbl__output} labels"
+    echo -e "${TAG__PASSED} Copied ${num__lbl__input} labels to ${num__lbl__output} labels: ${subpath_dir}"
 done
 
 
@@ -94,6 +82,7 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
             continue
         fi
         ln -s $( realpath "$path__dir__img__input/$name__file__img" ) "$path__dir__img__output"
+        # cp $( realpath "$path__dir__img__input/$name__file__img" ) "$path__dir__img__output"
     done
 
     num__lbl=$(find "${path__dir__lbl}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
