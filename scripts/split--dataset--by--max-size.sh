@@ -1,38 +1,32 @@
-PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset
-POSTFIX__DIR__IMG__SOURCE=""
+PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
+POSTFIX__DIR__IMG__SOURCE="--raw"
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset
-POSTFIX__DIR__LABEL__SOURCE=""
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
+POSTFIX__DIR__LABEL__SOURCE="--raw"
 
-PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset--splitted
-POSTFIX__DIR__VERSION__TARGET=""
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--splitted
+POSTFIX__DIR__VERSION__TARGET="--raw"
 
-TO__SHUFFLE=False
+TO__SHUFFLE=True
 SEED=42
 
-SIZE__MAX=563
+SIZE__MAX=400
 POSTFIX__DIR__SPLITTED='-batch-'
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["P44-beppu-batch-1"]=""
-    # ["P44-beppu-batch-2"]=""
-    # ["P44-beppu-batch-3"]=""
-    # ["P44-beppu-batch-4"]=""
-    # ["P44-beppu-batch-5"]=""
-    # ["P44-beppu-batch-6"]=""
-    # ["P44-2products-2個持ち_cut_fit"]=""
-    # ["P44-2products-台置き_cut_fit"]=""
-    # ["P44-1products-2個持ち_cut_fit"]=""
-    # ["P44-1products-台置き_cut_fit"]=""
-    # ["P44-notProducts-2個持ち_cut_fit"]=""
-    # ["P44-notProducts-台置き_cut_fit"]=""
-    # ["P44-notProducts-bag20240906_0000"]=""
-    # ["P44-notProducts-bag20240906_1022"]=""
-    # ["P44-nothing-2個持ち_cut_fit"]=""
-    # ["P44-nothing-台置き_cut_fit"]=""
-
-    ["beppu_sue"]=""
+    ["PoC2--2個持ち_cut_fit-1products"]=""
+    ["PoC2--2個持ち_cut_fit-2products"]=""
+    ["PoC2--2個持ち_cut_fit-nothing"]=""
+    ["PoC2--2個持ち_cut_fit-notProducts"]=""
+    ["PoC2--bag20240906_0000-notProducts"]=""
+    ["PoC2--bag20240906_1022-notProducts"]=""
+    ["PoC1--beppu_sue"]=""
+    ["PoC2--beppu_sue"]=""
+    ["PoC2--台置き_cut_fit-1products"]=""
+    ["PoC2--台置き_cut_fit-2products"]=""
+    ["PoC2--台置き_cut_fit-nothing"]=""
+    ["PoC2--台置き_cut_fit-notProducts"]=""
 )
 
 
@@ -104,7 +98,7 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
             # touch "${path__dir__lbl__output}/${name__file__lbl}"
             cp "$path__file__lbl__input" "$path__dir__lbl__output"
         done
-        cp "${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/classes.txt" "${PATH__DIR__DATASETS__OUTPUT}/${subpath_dir}${postfix}/"
+        # cp "${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/classes.txt" "${PATH__DIR__DATASETS__OUTPUT}/${subpath_dir}${postfix}/"
 
         sum__num__file__splitted=$(( $sum__num__file__splitted + $(find "${path__dir__img__output}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l) ))
 
