@@ -1,11 +1,15 @@
 PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json
-POSTFIX__DIR__LABEL__OUTPUT=--raw
+POSTFIX__DIR__LABEL__OUTPUT=""
 
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
+    ["beppu_sue-batch-1"]=""
+    ["beppu_sue-batch-2"]=""
+    ["beppu_sue-batch-3"]=""
+    ["beppu_sue-batch-4"]=""
     ["beppu_sue-batch-5"]=""
     ["beppu_sue-batch-6"]=""
     ["P44-1products-2個持ち_cut_fit-batch-1"]="" 
