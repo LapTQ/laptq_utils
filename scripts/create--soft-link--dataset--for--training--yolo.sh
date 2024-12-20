@@ -146,4 +146,6 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__POSTFIX_DIR_VERSION[@]}"; do
     for name__file in $( ls "$path__dir__lbl__source" ); do
         ln -s $( realpath "$path__dir__lbl__source/$name__file" ) $path__dir__lbl__softlink/
     done
+
+    echo -e "${TAG__INFO} Done: ${subpath__dir}"
 done
