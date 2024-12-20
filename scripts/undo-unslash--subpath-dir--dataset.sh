@@ -1,10 +1,10 @@
-PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset--unslashed
+PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
 POSTFIX__DIR__IMG__SOURCE=""
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset--unslashed
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
 POSTFIX__DIR__LABEL__SOURCE=""
 
-PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241130--copy-hard--dataset--unslashed--undo-unslashed
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--undo-unslashed
 POSTFIX__DIR__VERSION__TARGET=""
 
 REPLACE__SLASH=-SLS-
@@ -14,12 +14,7 @@ PREFIX__DIR=P44-
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["beppu_sue_data/batch-1"]=""
-    ["beppu_sue_data/batch-2"]=""
-    ["beppu_sue_data/batch-3"]=""
-    ["beppu_sue_data/batch-4"]=""
-    ["beppu_sue_data/batch-5"]=""
-    ["beppu_sue_data/batch-6"]=""
+    
 )
 
 

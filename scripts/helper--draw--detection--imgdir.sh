@@ -1,8 +1,8 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored
-POSTFIX__DIR__IMAGE=""
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
+POSTFIX__DIR__IMAGE="--erase-IGNORE"
 
-PATH__DIR__LABEL=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored--json
-POSTFIX__DIR__LABEL=""
+PATH__DIR__LABEL=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--json
+POSTFIX__DIR__LABEL="--erase-IGNORE"
 
 NUM__MAX__IMG__TO__VISUALIZE=20
 IS_OK__LBL_NOT_FOUND=True
@@ -12,17 +12,18 @@ PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/c
 [[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["beppu_sue"]=""
-    ["P44-nothing-2個持ち_cut_fit"]=""
-    ["P44-notProducts-2個持ち_cut_fit"]=""
-    ["P44-1products-台置き_cut_fit"]=""
-    ["P44-nothing-台置き_cut_fit"]=""
-    ["P44-notProducts-台置き_cut_fit"]=""
-    ["P44-notProducts-bag20240906_1022"]=""
-    ["P44-2products-2個持ち_cut_fit"]=""
-    ["P44-1products-2個持ち_cut_fit"]=""
-    ["P44-2products-台置き_cut_fit"]=""
-    ["P44-notProducts-bag20240906_0000"]=""
+    ["PoC2--2個持ち_cut_fit-1products"]=""
+    ["PoC2--2個持ち_cut_fit-2products"]=""
+    ["PoC2--2個持ち_cut_fit-nothing"]=""
+    ["PoC2--2個持ち_cut_fit-notProducts"]=""
+    ["PoC2--bag20240906_0000-notProducts"]=""
+    ["PoC2--bag20240906_1022-notProducts"]=""
+    ["PoC1--beppu_sue"]=""
+    ["PoC2--beppu_sue"]=""
+    ["PoC2--台置き_cut_fit-1products"]=""
+    ["PoC2--台置き_cut_fit-2products"]=""
+    ["PoC2--台置き_cut_fit-nothing"]=""
+    ["PoC2--台置き_cut_fit-notProducts"]=""
 )
 
 IFS=$'\n'

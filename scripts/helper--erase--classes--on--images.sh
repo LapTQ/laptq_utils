@@ -1,27 +1,25 @@
-# PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1--undo-split
-PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split     # can be ignored if pad__max not set
-POSTFIX__DIR__IMAGE__INPUT=""
+PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
+POSTFIX__DIR__IMAGE__INPUT="--raw"
 
-# PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json--undo-split
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split--merge-old-new--json
-POSTFIX__DIR__LABEL__INPUT=""
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--json
+POSTFIX__DIR__LABEL__INPUT="--raw"
 
-# PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1--undo-split--erase-ignored
-PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split--erase-ignored
-POSTFIX__DIR__IMAGE__OUTPUT=""
+PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--erase-IGNORE
+POSTFIX__DIR__IMAGE__OUTPUT="--erase-IGNORE"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["beppu_sue"]=""
-    # ["P44-nothing-2個持ち_cut_fit"]=""
-    # ["P44-notProducts-2個持ち_cut_fit"]=""
-    # ["P44-1products-台置き_cut_fit"]=""
-    # ["P44-nothing-台置き_cut_fit"]=""
-    # ["P44-notProducts-台置き_cut_fit"]=""
-    # ["P44-notProducts-bag20240906_1022"]=""
-    # ["P44-2products-2個持ち_cut_fit"]=""
-    # ["P44-1products-2個持ち_cut_fit"]=""
-    # ["P44-2products-台置き_cut_fit"]=""
-    # ["P44-notProducts-bag20240906_0000"]=""
+    ["PoC2--2個持ち_cut_fit-1products"]=""
+    ["PoC2--2個持ち_cut_fit-2products"]=""
+    ["PoC2--2個持ち_cut_fit-nothing"]=""
+    ["PoC2--2個持ち_cut_fit-notProducts"]=""
+    ["PoC2--bag20240906_0000-notProducts"]=""
+    ["PoC2--bag20240906_1022-notProducts"]=""
+    ["PoC1--beppu_sue"]=""
+    ["PoC2--beppu_sue"]=""
+    ["PoC2--台置き_cut_fit-1products"]=""
+    ["PoC2--台置き_cut_fit-2products"]=""
+    ["PoC2--台置き_cut_fit-nothing"]=""
+    ["PoC2--台置き_cut_fit-notProducts"]=""
 )
 
 IFS=$'\n'

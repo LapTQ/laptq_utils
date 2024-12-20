@@ -1,31 +1,22 @@
-# PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2
-# PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split--merge-old-new--txt
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored
-POSTFIX__DIR__LABEL__INPUT=""
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
+POSTFIX__DIR__LABEL__INPUT="--erase-IGNORE"
 
-# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--beppu-sue--old--part2--label-json
-# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split--merge-old-new--json
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--merge--annotation--undo-split--erase-ignored--json
-POSTFIX__DIR__LABEL__OUTPUT=""
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--json
+POSTFIX__DIR__LABEL__OUTPUT="--erase-IGNORE"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["beppu_sue-batch-1"]=""
-    # ["beppu_sue-batch-2"]=""
-    # ["beppu_sue-batch-3"]=""
-    # ["beppu_sue-batch-4"]=""
-    # ["beppu_sue-batch-5"]=""
-    # ["beppu_sue-batch-6"]=""
-    ["beppu_sue"]=""
-    ["P44-nothing-2個持ち_cut_fit"]=""
-    ["P44-notProducts-2個持ち_cut_fit"]=""
-    ["P44-1products-台置き_cut_fit"]=""
-    ["P44-nothing-台置き_cut_fit"]=""
-    ["P44-notProducts-台置き_cut_fit"]=""
-    ["P44-notProducts-bag20240906_1022"]=""
-    ["P44-2products-2個持ち_cut_fit"]=""
-    ["P44-1products-2個持ち_cut_fit"]=""
-    ["P44-2products-台置き_cut_fit"]=""
-    ["P44-notProducts-bag20240906_0000"]=""
+    ["PoC2--2個持ち_cut_fit-1products"]=""
+    ["PoC2--2個持ち_cut_fit-2products"]=""
+    ["PoC2--2個持ち_cut_fit-nothing"]=""
+    ["PoC2--2個持ち_cut_fit-notProducts"]=""
+    ["PoC2--bag20240906_0000-notProducts"]=""
+    ["PoC2--bag20240906_1022-notProducts"]=""
+    ["PoC1--beppu_sue"]=""
+    ["PoC2--beppu_sue"]=""
+    ["PoC2--台置き_cut_fit-1products"]=""
+    ["PoC2--台置き_cut_fit-2products"]=""
+    ["PoC2--台置き_cut_fit-nothing"]=""
+    ["PoC2--台置き_cut_fit-notProducts"]=""
 )
 
 IFS=$'\n'
