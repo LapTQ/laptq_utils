@@ -6,4 +6,4 @@ source $venv_path/bin/activate
 which python3
 
 
-# pip install -r --ignore-installed requirements.txt --default-timeout=10000
+# pip install -r requirements.txt --default-timeout=10000
