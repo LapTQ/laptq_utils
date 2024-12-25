@@ -72,3 +72,11 @@ def xcycwh__to__x1y1wh(xcycwh):
     x1y1wh[:, 3] = xcycwh[:, 3]
 
     return x1y1wh
+
+
+def xcycwh__to__polygon(xcycwh):
+
+    xcycwh = xcycwh.copy()
+    tlbr = xcycwh__to__x1y1x2y2(xcycwh=xcycwh)
+
+    return tlbr[:, [0, 1, 0, 3, 2, 3, 2, 1]]

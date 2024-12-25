@@ -3,6 +3,9 @@ from laptq_pyutils.helper import (
     helper__extract__ultralytics__detect__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
+    helper__convert__detection__xcycwhn__to__polygonn,
+    helper__convert__video__to__images,
+    helper__convert__labelstudio_json__to__json,
     helper__filter__detection__result__by__conf,
     helper__filter__detection__result__by__id_class,
     helper__filter__detection__result__by__miniou,
@@ -11,6 +14,9 @@ from laptq_pyutils.helper import (
     helper__change__detection__id_class,
     helper__draw__detection__imgdir,
     helper__draw__detection__video,
+    helper__rescale__detection__box,
+    helper__erase__classes__on__images,
+    helper__check__duplicate__images,
 )
 import argparse
 
@@ -20,6 +26,7 @@ def parse_args():
 
     ap.add_argument("action")
     ap.add_argument("--path__dir__img", type=str)
+    ap.add_argument("--path__dir__img__input", type=str)
     ap.add_argument("--path__dir__img__output", type=str)
     ap.add_argument("--path__dir__lbl", type=str)
     ap.add_argument("--path__dir__output", type=str)
@@ -38,8 +45,12 @@ def parse_args():
     ap.add_argument("--thresh__conf__min", type=float)
     ap.add_argument("--list__id_class__to_include", type=str)
     ap.add_argument("--list__id_class__to_exclude", type=str)
+    ap.add_argument("--list__id_class", type=str)
     ap.add_argument("--map__id_old__to__id_new", type=str)
     ap.add_argument("--thresh__miniou", type=float)
+    ap.add_argument("--to_concat__original_img", type=str)
+    ap.add_argument("--to_draw__box_x1y1whn", type=str)
+    ap.add_argument("--to_draw__box_polygonn", type=str)
     ap.add_argument("--to_draw__id_track", choices=["True", "False"])
     ap.add_argument("--to_draw__box_conf", choices=["True", "False"])
     ap.add_argument("--to_draw__id_class", choices=["True", "False"])
@@ -55,7 +66,13 @@ def parse_args():
     ap.add_argument("--path__file__map__id_class__to__name_class", type=str)
     ap.add_argument("--filter_by", type=str)
     ap.add_argument("--thresh", type=float)
-    ap.add_argument("--list__id_class", type=str)
+    ap.add_argument("--ratio__w", type=float)
+    ap.add_argument("--ratio__h", type=float)
+    ap.add_argument("--pad__w__max", type=str)
+    ap.add_argument("--pad__h__max", type=str)
+    ap.add_argument("--cut__w__max", type=str)
+    ap.add_argument("--cut__h__max", type=str)
+    ap.add_argument("--mode__box", type=str)
 
     ap.add_argument("--method", type=str)
     ap.add_argument("--max_distance_threshold", type=int)
@@ -106,6 +123,26 @@ def parse_args():
     args.is_ok__lbl_not_exist = (
         eval(args.is_ok__lbl_not_exist)
         if args.is_ok__lbl_not_exist is not None
+        else None
+    )
+    args.pad__w__max = eval(args.pad__w__max) if args.pad__w__max is not None else None
+    args.pad__h__max = eval(args.pad__h__max) if args.pad__h__max is not None else None
+    args.cut__w__max = eval(args.cut__w__max) if args.cut__w__max is not None else None
+    args.cut__h__max = eval(args.cut__h__max) if args.cut__h__max is not None else None
+    args.to_concat__original_img = (
+        eval(args.to_concat__original_img)
+        if args.to_concat__original_img is not None
+        else None
+    )
+
+    args.to_draw__box_x1y1whn = (
+        eval(args.to_draw__box_x1y1whn)
+        if args.to_draw__box_x1y1whn is not None
+        else None
+    )
+    args.to_draw__box_polygonn = (
+        eval(args.to_draw__box_polygonn)
+        if args.to_draw__box_polygonn is not None
         else None
     )
 

@@ -146,6 +146,7 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
             continue
         fi
         ln -s $( realpath "$path__dir__img__input/$name__file__img" ) "$path__dir__img__output"
+        # cp $( realpath "$path__dir__img__input/$name__file__img" ) "$path__dir__img__output"
     done
 
     num__lbl=$(find "${path__dir__lbl}/" -mindepth 1 -maxdepth 1 -type f | wc -l)

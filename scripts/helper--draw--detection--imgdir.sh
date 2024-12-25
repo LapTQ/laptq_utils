@@ -120,7 +120,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --fontScale 1 \
         --thickness 1 \
         --box_color_by id__class \
-        --path__file__map__id_class__to__name_class /home/laptq/Downloads/class_name.yaml \
+        --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
         --num__max__img $NUM__MAX__IMG__TO__VISUALIZE \
         --seed 42 \
         --is_ok__lbl_not_exist $IS_OK__LBL_NOT_FOUND
