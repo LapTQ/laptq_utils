@@ -7,10 +7,11 @@ POSTFIX__DIR__LABEL=""
 NUM__MAX__IMG__TO__VISUALIZE=3
 IS_OK__LBL_NOT_FOUND=True
 PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/20241223--img-360--visualize
+PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/All_off"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/All_off"
-    # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/Edge_cases"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/Edge_cases"
+    # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/All_off"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/All_off"
+    ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/Edge_cases"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/Edge_cases"
     # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/High_activity"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/High_activity"
     # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/IRfilter"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/IRfilter"
     # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/IRill"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/IRill"
@@ -112,13 +113,13 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \
-        --to_draw__box_x1y1whn False \
-        --to_draw__box_polygonn True \
+        --to_draw__box_x1y1whn True \
+        --to_draw__box_polygonn False \
         --to_draw__box_conf True \
         --to_draw__id_class True \
         --to_draw__name_class False \
-        --fontScale 1 \
-        --thickness 1 \
+        --fontScale 2 \
+        --thickness 2 \
         --box_color_by id__class \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
         --num__max__img $NUM__MAX__IMG__TO__VISUALIZE \

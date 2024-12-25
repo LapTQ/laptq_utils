@@ -1,32 +1,21 @@
-PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
-POSTFIX__DIR__IMG__SOURCE="--raw"
+PATH__DIR__DATASETS__SOURCE=/mnt/ssd8tb/shared_workspace/gen_SS_20/generated_images
+POSTFIX__DIR__IMG__SOURCE=""
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
-POSTFIX__DIR__LABEL__SOURCE="--raw"
+PATH__DIR__LABEL__SOURCE=/mnt/ssd8tb/shared_workspace/gen_SS_20/generated_images
+POSTFIX__DIR__LABEL__SOURCE=""
 
-PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--splitted
-POSTFIX__DIR__VERSION__TARGET="--raw"
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-21/outputs/20241225--gen-data--batches
+POSTFIX__DIR__VERSION__TARGET=""
 
 TO__SHUFFLE=True
 SEED=42
 
-SIZE__MAX=400
+SIZE__MAX=1000
 POSTFIX__DIR__SPLITTED='-batch-'
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["PoC2--2個持ち_cut_fit-1products"]=""
-    ["PoC2--2個持ち_cut_fit-2products"]=""
-    ["PoC2--2個持ち_cut_fit-nothing"]=""
-    ["PoC2--2個持ち_cut_fit-notProducts"]=""
-    ["PoC2--bag20240906_0000-notProducts"]=""
-    ["PoC2--bag20240906_1022-notProducts"]=""
-    ["PoC1--beppu_sue"]=""
-    ["PoC2--beppu_sue"]=""
-    ["PoC2--台置き_cut_fit-1products"]=""
-    ["PoC2--台置き_cut_fit-2products"]=""
-    ["PoC2--台置き_cut_fit-nothing"]=""
-    ["PoC2--台置き_cut_fit-notProducts"]=""
+    ["gen_only_syn_25Dec"]=""
 )
 
 
@@ -50,7 +39,7 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
 
     if [[ $num__file__img -ne $num__file__lbl ]]; then
         echo -e "${TAG__FAILED} $subpath_dir: number of images and labels are not equal"
-        exit 1
+        # exit 1
     fi
 
     num__dir__splitted=$(( $num__file__img / $SIZE__MAX ))
@@ -92,7 +81,8 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
             path__file__img__input=$( realpath "$path__dir__img__input/$name__file__img" )
             path__file__lbl__input="${path__dir__lbl__input}/${name__file__lbl}"
 
-            cp "$path__file__img__input" "$path__dir__img__output"
+            # cp "$path__file__img__input" "$path__dir__img__output"
+            ln -s "$path__file__img__input" "$path__dir__img__output"
 
             # choose either
             # touch "${path__dir__lbl__output}/${name__file__lbl}"
