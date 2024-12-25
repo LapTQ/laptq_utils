@@ -4,6 +4,9 @@ POSTFIX__DIR__LABEL__INPUT=""
 PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--8
 POSTFIX__DIR__LABEL__OUTPUT=""
 
+MODE__BOX="xcycwhn"
+# MODE__BOX="polygonn"
+
 declare -A MAP__SUBPATH_DIR__TO__=(
     ["set1"]=""
     ["set2"]=""
@@ -26,7 +29,8 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     python3 main.py \
         helper__convert__detection__txt__to__json \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
-        --path__dir__lbl__output "${path__dir__lbl__output}"
+        --path__dir__lbl__output "${path__dir__lbl__output}" \
+        --mode__box "${MODE__BOX}"
 
 
     num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
