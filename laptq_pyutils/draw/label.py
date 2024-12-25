@@ -152,6 +152,11 @@ def draw__image(**kwargs):
             )
 
             x1, y1 = box__polygon[np.argmin(box__polygon[:, 1])]
+        
+        _has_box = (to_draw__box_x1y1whn and box__x1y1whn is not None) or (to_draw__box_polygonn and box__polygonn is not None)
+
+        if not _has_box:
+            continue
 
         if to_draw__box_refined and box__x1y1whn__refined is not None:
             rx1n, ry1n, rwn, rhn = box__x1y1whn__refined
