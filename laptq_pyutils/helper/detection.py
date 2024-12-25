@@ -391,8 +391,12 @@ def helper__draw__detection__imgdir(**kwargs):
         img__vis = draw__image(
             data={
                 "img__bgr": img__bgr,
-                "list__obj__box_x1y1whn": dict__result.get(
-                    "list__obj__box_x1y1whn", None
+                "list__obj__box_x1y1whn": (
+                    xcycwh__to__x1y1wh(
+                        np.array(dict__result["list__obj__box_xcycwhn"]).reshape(-1, 4)
+                    )
+                    if "list__obj__box_xcycwhn" is dict__result
+                    else None
                 ),
                 "list__obj__box_polygonn": dict__result.get(
                     "list__obj__box_polygonn", None
@@ -465,8 +469,12 @@ def helper__draw__detection__video(**kwargs):
         img__vis = draw__image(
             data={
                 "img__bgr": img__bgr,
-                "list__obj__box_x1y1whn": dict__result.get(
-                    "list__obj__box_x1y1whn", None
+                "list__obj__box_x1y1whn": (
+                    xcycwh__to__x1y1wh(
+                        np.array(dict__result["list__obj__box_xcycwhn"]).reshape(-1, 4)
+                    )
+                    if "list__obj__box_xcycwhn" is dict__result
+                    else None
                 ),
                 "list__obj__box_polygonn": dict__result.get(
                     "list__obj__box_polygonn", None
