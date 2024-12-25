@@ -395,7 +395,7 @@ def helper__draw__detection__imgdir(**kwargs):
                     xcycwh__to__x1y1wh(
                         np.array(dict__result["list__obj__box_xcycwhn"]).reshape(-1, 4)
                     )
-                    if "list__obj__box_xcycwhn" is dict__result
+                    if "list__obj__box_xcycwhn" in dict__result
                     else None
                 ),
                 "list__obj__box_polygonn": dict__result.get(
@@ -473,7 +473,7 @@ def helper__draw__detection__video(**kwargs):
                     xcycwh__to__x1y1wh(
                         np.array(dict__result["list__obj__box_xcycwhn"]).reshape(-1, 4)
                     )
-                    if "list__obj__box_xcycwhn" is dict__result
+                    if "list__obj__box_xcycwhn" in dict__result
                     else None
                 ),
                 "list__obj__box_polygonn": dict__result.get(
