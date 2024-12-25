@@ -1,34 +1,90 @@
-PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
+PATH__DIR__LABEL__SOURCE=/mnt
 POSTFIX__DIR__LABEL__SOURCE=""
 
-PATH__DIR__DATASETS__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
+PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-prj-21/outputs/20241224--img--sampled--uniform
+POSTFIX__DIR__IMG__SOURCE=""
 
-POSTFIX__DIR__VERSION__TARGET=--20241129--phase-2--annotated-ver2--only-pot
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/20241224--dataset--ready--sampled--uniform
+POSTFIX__DIR__VERSION__TARGET=""
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["APTO_v2/day1_330"]=""
-    ["APTO_v2/night1_190"]=""
-    ["APTO_v2/night3_44"]=""
-    ["APTO_v2/night4_239"]=""
-    ["Pothole_235/train"]=""
-    ["dataset-ninja/ds1_simplex-test"]=""
-    ["dataset-ninja/ds1_simplex-train"]=""
-    ["dataset-ninja/ds2_complex-test"]=""
-    ["dataset-ninja/ds2_complex-train"]=""
-    ["pot_det_1240"]=""
-
-    # ["pothole_dataset_v8/only_rainy_frames/train"]=""
-
-    ["pothole_dataset_v8/train"]=""
-    ["pothole_dataset_v8/train_to_valid"]=""
-    ["pothole_dataset_v8/valid"]=""
-    ["Pothole_detection_yolo/train_original"]=""
-    ["Pothole_Maeda/first_shot"]=""
-    ["Pothole_Maeda/first_shot_eval"]=""
-    ["Pothole_Maeda/second_shot"]=""
-    ["RDD2022_JAPAN/only_pothole/train"]=""
+    ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/All_off"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_rect/All_off"
+    ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/Edge_cases"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_rect/Edge_cases"
+    ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/High_activity"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_rect/High_activity"
+    ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/IRfilter"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_rect/IRfilter"
+    ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/IRill"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_rect/IRill"
+    ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/Lunch1"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_rect/Lunch1"
+    ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/Lunch2"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_rect/Lunch2"
+    ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/Lunch3"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_rect/Lunch3"
+    ["ssd8tb/shared_workspace/fisheye/FRIDA/images/Segment_1/Camera_1"]="ssd8tb/shared_workspace/fisheye/FRIDA/labels_rect/Segment_1/Camera_1"
+    ["ssd8tb/shared_workspace/fisheye/FRIDA/images/Segment_1/Camera_2"]="ssd8tb/shared_workspace/fisheye/FRIDA/labels_rect/Segment_1/Camera_2"
+    ["ssd8tb/shared_workspace/fisheye/FRIDA/images/Segment_1/Camera_3"]="ssd8tb/shared_workspace/fisheye/FRIDA/labels_rect/Segment_1/Camera_3"
+    ["ssd8tb/shared_workspace/fisheye/FRIDA/images/Segment_3/Camera_2"]="ssd8tb/shared_workspace/fisheye/FRIDA/labels_rect/Segment_3/Camera_2"
+    ["ssd8tb/shared_workspace/fisheye/FRIDA/images/Segment_3/Camera_3"]="ssd8tb/shared_workspace/fisheye/FRIDA/labels_rect/Segment_3/Camera_3"
+    ["ssd8tb/shared_workspace/fisheye/HABBOF/images/Lab1"]="ssd8tb/shared_workspace/fisheye/HABBOF/labels_rect/Lab1"
+    ["ssd8tb/shared_workspace/fisheye/HABBOF/images/Lab2"]="ssd8tb/shared_workspace/fisheye/HABBOF/labels_rect/Lab2"
+    ["ssd8tb/shared_workspace/fisheye/HABBOF/images/Meeting1"]="ssd8tb/shared_workspace/fisheye/HABBOF/labels_rect/Meeting1"
+    ["ssd8tb/shared_workspace/fisheye/HABBOF/images/Meeting2"]="ssd8tb/shared_workspace/fisheye/HABBOF/labels_rect/Meeting2"
+    ["ssd8tb/shared_workspace/fisheye/LOAF/images/resolution_2k/test"]="ssd8tb/shared_workspace/fisheye/LOAF/labels_rect/resolution_2k/test"
+    ["ssd8tb/shared_workspace/fisheye/LOAF/images/resolution_2k/train"]="ssd8tb/shared_workspace/fisheye/LOAF/labels_rect/resolution_2k/train"
+    ["ssd8tb/shared_workspace/fisheye/LOAF/images/resolution_2k/val"]="ssd8tb/shared_workspace/fisheye/LOAF/labels_rect/resolution_2k/val"
+    ["ssd8tb/shared_workspace/fisheye/MW-R/images"]="ssd8tb/shared_workspace/fisheye/MW-R/labels_rect"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/call_center"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/call_center"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/exhibition"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/exhibition"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/exhibition_setup"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/exhibition_setup"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/it_office"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/it_office"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/jewelry_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/jewelry_store"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/convenience_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/convenience_store"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/empty_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/empty_store"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/jewelry_store_2"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/jewelry_store_2"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/kindergarten"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/kindergarten"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/large_office"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/large_office"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/large_office_2"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/large_office_2"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/printing_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/printing_store"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/repair_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/repair_store"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/street_grocery"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/street_grocery"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/tech_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/tech_store"
+    ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/warehouse"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_rect/warehouse"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-0"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-0"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-1"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-1"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-2"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-2"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-3"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-3"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-4"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-4"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-0"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-0"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-1"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-1"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-2"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-2"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-3"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-3"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-4"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-4"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-5"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-5"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-6"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-6"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-7"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-7"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-8"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-8"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-9"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-9"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-10"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-10"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-11"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-11"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-12"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-12"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-13"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-13"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-14"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-14"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-15"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-15"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-16"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-16"
+    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-17"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-17"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_1A/omni1A_test2"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_1A/omni1A_test2"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_1A/omni1A_test3"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_1A/omni1A_test3"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_1A/omni1A_training"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_1A/omni1A_training"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_2A/omni2A_test2"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_2A/omni2A_test2"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_2A/omni2A_test3"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_2A/omni2A_test3"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_2A/omni2A_training"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_2A/omni2A_training"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_3A/omni3A_test2"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_3A/omni3A_test2"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_3A/omni3A_test3"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_3A/omni3A_test3"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_3A/omni3A_training"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_3A/omni3A_training"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_B/omni_1B/omni1B_test2"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_B/omni_1B/omni1B_test2"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_B/omni_1B/omni1B_test3"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_B/omni_1B/omni1B_test3"
+    ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_B/omni_1B/omni1B_training"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_B/omni_1B/omni1B_training"
+    ["ssd8tb/shared_workspace/fisheye/top-view-multi-person-tracking-2020/images/test"]="ssd8tb/shared_workspace/fisheye/top-view-multi-person-tracking-2020/labels/test"
+    ["ssd8tb/shared_workspace/fisheye/top-view-multi-person-tracking-2020/images/train"]="ssd8tb/shared_workspace/fisheye/top-view-multi-person-tracking-2020/labels/train"
+    ["ssd8tb/shared_workspace/manhpc/sat_34k/images/train"]="ssd8tb/shared_workspace/manhpc/sat_34k/labels/train"
+    ["ssd8tb/shared_workspace/manhpc/sat_34k/images/val"]="ssd8tb/shared_workspace/manhpc/sat_34k/labels/val"
 )
 
 
@@ -44,10 +100,10 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 # =========== Copy labels from extracted annotation to source dataset dir ===========
 for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
-    path__dir__img__input="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__IMG__SOURCE}"
-    path__dir__img__output="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__VERSION__TARGET}"
-    path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${subpath_dir}/labels${POSTFIX__DIR__LABEL__SOURCE}"
-    path__dir__lbl__output="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/labels${POSTFIX__DIR__VERSION__TARGET}"
+    path__dir__img__input="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}"
+    path__dir__img__output="${PATH__DIR__OUTPUT}/${subpath_dir}"
+    path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${MAP__SUBPATH_DIR__TO__[$subpath_dir]}"
+    path__dir__lbl__output="${PATH__DIR__OUTPUT}/${MAP__SUBPATH_DIR__TO__[$subpath_dir]/labels_rect/labels}"
 
     [[ -d "$path__dir__lbl__output" ]] && rm -r "$path__dir__lbl__output"
     mkdir -p "$path__dir__lbl__output"
@@ -70,15 +126,15 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         
         exit 1
     fi
-    echo -e "${TAG__PASSED} Copied ${num__lbl__input} labels to ${num__lbl__output} labels"
+    echo -e "${TAG__PASSED} Copied ${num__lbl__input} labels to ${num__lbl__output} labels: ${subpath_dir}"
 done
 
 
 # =========== Create a soft link to images corresponding to the label version ===========
 for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
-    path__dir__lbl="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/labels${POSTFIX__DIR__VERSION__TARGET}"
-    path__dir__img__input="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__IMG__SOURCE}"
-    path__dir__img__output="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__VERSION__TARGET}"
+    path__dir__lbl="${PATH__DIR__OUTPUT}/${MAP__SUBPATH_DIR__TO__[$subpath_dir]/labels_rect/labels}"
+    path__dir__img__input="${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}"
+    path__dir__img__output="${PATH__DIR__OUTPUT}/${subpath_dir}"
 
     [[ -d "$path__dir__img__output" ]] && rm -r "$path__dir__img__output"
     mkdir -p "$path__dir__img__output"

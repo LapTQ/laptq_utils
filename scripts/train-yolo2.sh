@@ -1,6 +1,6 @@
 sleep 0
 
-data=data
+data=data--synthetic
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
 YOLO=yolo11s
@@ -13,7 +13,7 @@ yolo detect train \
     model=${YOLO}.pt \
     epochs=200 \
     imgsz=$IMGSZ \
-    device=1 \
+    device=0 \
     batch=16 \
     project=$path__dir__run/$data/$YOLO--$IMGSZ--scale-$SCALE--multiscale-$MULTI_SCALE \
     plots=True \
