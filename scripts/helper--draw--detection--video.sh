@@ -1,14 +1,14 @@
-PATH__DIR__VIDEO=/home/laptq/Downloads/videos
+PATH__DIR__VIDEO=/mnt/ssd8tb/shared_workspace/manhpc/FS_prj21
 
-PATH__DIR__LABEL=/home/laptq/Downloads/outputs--video--5
+PATH__DIR__LABEL=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
 
-PATH__DIR__OUTPUT=/home/laptq/Downloads/outputs--video--6
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict/draw
 
 [[ -d "${PATH__DIR__OUTPUT}" ]] && rm -r "${PATH__DIR__OUTPUT}"
 mkdir -p "${PATH__DIR__OUTPUT}"
 
 declare -A MAP__NAME_VIDEO__TO__=(
-    ["clideo_editor_177d5d7cdb144c1598d5419573b0449c.mp4"]=""
+    ["1_2024-11-26_081159_0_30s.mp4"]=""
 )
 
 IFS=$'\n'
@@ -23,16 +23,18 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     path__dir__lbl__input="${PATH__DIR__LABEL}/${name__video}/labels"
     path__file__output="${PATH__DIR__OUTPUT}/${name__video}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__draw__detection__video \
         --path__file__video__input "${path__file__video__input}" \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__file__output "${path__file__output}" \
         --pad__id_frame 6 \
         --fourcc "mp4v" \
+        --to_draw__box_x1y1whn True \
+        --to_draw__box_polygonn False \
         --to_draw__box_conf True \
-        --to_draw__id_class True \
-        --to_draw__name_class True \
+        --to_draw__id_class False \
+        --to_draw__name_class False \
         --fontScale 1 \
         --thickness 2 \
         --box_color_by id__class \
