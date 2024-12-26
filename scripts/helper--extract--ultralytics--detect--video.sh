@@ -1,12 +1,12 @@
-PATH__DIR__VIDEO=/home/laptq/Downloads/videos
+PATH__DIR__VIDEO=/mnt/ssd8tb/shared_workspace/manhpc/FS_prj21
 
-PATH__FILE__MODEL=/home/laptq/Downloads/yolo11n.pt
+PATH__FILE__MODEL=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/train/weights/best.pt
 
-PATH__DIR__IMAGE__OUTPUT=/home/laptq/Downloads/outputs--video--1
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--video--1
+PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
 
 declare -A MAP__NAME_VIDEO__TO__=(
-    ["clideo_editor_177d5d7cdb144c1598d5419573b0449c.mp4"]=""
+    ["1_2024-11-26_081159_0_30s.mp4"]=""
 )
 
 IFS=$'\n'
@@ -26,15 +26,15 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     mkdir -p "${path__dir__img__output}"
     mkdir -p "${path__dir__lbl__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__extract__ultralytics__detect__video \
         --path__file__input "${path__file__input}" \
         --path__dir__img__output "${path__dir__img__output}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
         --path__file__model "${PATH__FILE__MODEL}" \
         --device "cuda:0" \
-        --imgsz 640 \
-        --thresh__conf__min 0.01 \
+        --imgsz 832 \
+        --thresh__conf__min 0.1 \
         --pad__id_frame 6
         
 done

@@ -1,28 +1,22 @@
-path__dir__run=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs
+path__dir__run=/home/laptq/laptq-prj-21/runs
 
-data=20241122--phase-2--annotation-ver2
+data=data
+data_val=data--synthetic
 
-# ver__model=yolo11m--960--full
-# imgsz=960
-# ver__model=yolo11m--640--crop
-# imgsz=640
-# ver__model=yolo11s--960--crop
-# imgsz=960
-# ver__model=yolo11m--960--crop-20
-# imgsz=960
-ver__model=yolo11m--960--crop-20--finetune-only-pot
-imgsz=960
 
-ver__train=train
+ver__model=yolo11s--832--scale-0.5--multiscale-True
+imgsz=1664
+
+ver__train=train2
 conf=0.01
 
 yolo val \
-    data=src/configs/$data.yaml \
+    data=src/configs/$data_val.yaml \
     model=$path__dir__run/$data/${ver__model}/$ver__train/weights/best.pt \
-    project=$path__dir__run/$data/${ver__model}/val--conf-$conf \
+    project=$path__dir__run/$data/${ver__model}/val--$ver__train--imgsz-$imgsz--conf-$conf \
     imgsz=$imgsz \
     conf=$conf \
-    iou=0.5 \
+    iou=0.6 \
     device=0 \
     batch=8
 

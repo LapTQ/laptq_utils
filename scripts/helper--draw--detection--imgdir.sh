@@ -1,12 +1,12 @@
-PATH__DIR__IMAGE=/mnt
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
 POSTFIX__DIR__IMAGE=""
 
-PATH__DIR__LABEL=/home/laptq/laptq-prj-21/outputs/20241225--true-labels--json--xcycwhn-to-polygonn
+PATH__DIR__LABEL=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
 POSTFIX__DIR__LABEL=""
 
-NUM__MAX__IMG__TO__VISUALIZE=3
-IS_OK__LBL_NOT_FOUND=True
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/20241223--img-360--visualize
+NUM__MAX__IMG__TO__VISUALIZE=None
+IS_OK__LBL_NOT_FOUND=False
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict/draw--images
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
@@ -48,7 +48,7 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/tech_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/tech_store"
     # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/warehouse"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/warehouse"
 
-    ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-0"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-0"
+    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-0"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-0"
     # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-1"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-1"
     # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-2"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-2"
     # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-3"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-3"
@@ -88,6 +88,8 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     
     # ["ssd8tb/shared_workspace/manhpc/sat_34k/images/train"]="ssd8tb/shared_workspace/manhpc/sat_34k/labels/train"
     # ["ssd8tb/shared_workspace/manhpc/sat_34k/images/val"]="ssd8tb/shared_workspace/manhpc/sat_34k/labels/val"
+
+    ["1_2024-11-26_081159_0_30s.mp4"]=""
 )
 
 IFS=$'\n'
@@ -98,10 +100,10 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 
 for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
-    # path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}/images${POSTFIX__DIR__IMAGE}"
-    # path__dir__lbl="${PATH__DIR__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
-    path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}"
-    path__dir__lbl="${PATH__DIR__LABEL}/${MAP__SUBPATH_DIR__TO__[$subpath__dir]}"
+    path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}/images${POSTFIX__DIR__IMAGE}"
+    path__dir__lbl="${PATH__DIR__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
+    # path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}"
+    # path__dir__lbl="${PATH__DIR__LABEL}/${MAP__SUBPATH_DIR__TO__[$subpath__dir]}"
 
     path__dir__output="${PATH__DIR__OUTPUT}/${subpath__dir}"
 
@@ -116,9 +118,9 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
         --to_draw__box_conf True \
-        --to_draw__id_class True \
+        --to_draw__id_class False \
         --to_draw__name_class False \
-        --fontScale 2 \
+        --fontScale 1 \
         --thickness 2 \
         --box_color_by id__class \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \

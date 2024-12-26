@@ -1,7 +1,8 @@
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
 # data=unknown
-data=data
+# data=data
+data=data--synthetic
 
 # ver__model=unknown
 # imgsz=832
@@ -18,11 +19,11 @@ yolo predict \
     project=$path__dir__run/$data/${ver__model}/predict--$ver__train--imgsz-$imgsz--conf-$conf \
     imgsz=$imgsz \
     conf=$conf \
-    device=2
+    device=0
 
 
-    model=/home/laptq/laptq-prj-21/weights/20221310_PersonHeadHand_yolov5s_832x832_Satudora_datasets.pt \
-    project=$path__dir__run/$data/20221310_PersonHeadHand_yolov5s_832x832_Satudora_datasets/predict--imgsz-$imgsz--conf-$conf \
+    # model=/home/laptq/laptq-prj-21/weights/20221310_PersonHeadHand_yolov5s_832x832_Satudora_datasets.pt \
+    # project=$path__dir__run/$data/20221310_PersonHeadHand_yolov5s_832x832_Satudora_datasets/predict--imgsz-$imgsz--conf-$conf \
 
     # model=/home/laptq/laptq-prj-21/weights/yolov11s_640_LOAF_top_view.pt \
     # project=$path__dir__run/$data/yolov11s_640_LOAF_top_view/predict--imgsz-$imgsz--conf-$conf \
