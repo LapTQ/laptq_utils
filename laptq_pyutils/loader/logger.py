@@ -87,3 +87,28 @@ def load_logger(**kwargs):
     logging.basicConfig(level=level, handlers=handlers)
 
     return logging.getLogger(__name__)
+
+
+class PloggerColor:
+
+    def __init__(self, **kwargs):
+        self.logger = load_logger(**kwargs)
+    
+    def info(self, obj):
+        self.logger.info(pformat_color(obj))
+
+    def debug(self, obj):
+        self.logger.debug(pformat_color(obj))
+
+    def warning(self, obj):
+        self.logger.warning(pformat_color(obj))
+
+    def error(self, obj):
+        self.logger.error(pformat_color(obj))
+    
+    def critical(self, obj):
+        self.logger.critical(pformat_color(obj))
+
+
+def get_plogger_color(**kwargs):
+    return PloggerColor(**kwargs)
