@@ -41,12 +41,16 @@ def load_logger(**kwargs):
     levelname = kwargs["levelname"]
     enable__color = kwargs.get("enable__color", True)
     enable__asctime = kwargs.get("enable__asctime", False)
+    enable__newline__start = kwargs.get("enable__newline__start", False)
+    enable__newline__end = kwargs.get("enable__newline__end", False)
     format = kwargs.get(
         "format",
-        "%(levelname)s | {}{}%(pathname)s: line %(lineno)d \t| %(funcName)-10s{}\t | %(message)s".format(
+        "%(levelname)s | {}{}%(pathname)s: line %(lineno)d \t| %(funcName)-10s{}\t | {}%(message)s{}".format(
             get_escape_code_levelname_bright("gray") if enable__color else "",
             "%(asctime)s | " if enable__asctime else "",
             "\033[0m" if enable__color else "",
+            "\n" if enable__newline__start else "",
+            "\n" if enable__newline__end else ""
         ),
     )
     directory = kwargs.get("directory", None)
