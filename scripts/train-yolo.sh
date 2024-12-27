@@ -1,6 +1,9 @@
 sleep 0
 
-data=data
+# data=data--public--satudora
+data=data--synthetic--satudora-center-box
+# data=data--RAP-change-clothes
+
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
 YOLO=yolo11s
