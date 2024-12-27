@@ -1,10 +1,22 @@
-from laptq_pyutils.draw import cv2_putText, cv2_rectangle, cv2_circle, COLORS
+from laptq_pyutils.draw import (
+    cv2_putText,
+    cv2_rectangle,
+    cv2_circle,
+    COLORS,
+    cv2_polylines,
+)
+from laptq_pyutils.common import LIST__MODE__BOX
 
 
 def draw__image(**kwargs):
+
+    import numpy as np
+    import cv2
+
     data = kwargs["data"]
     to_draw__id_frame = kwargs.get("to_draw__id_frame", False)
-    to_draw__box = kwargs.get("to_draw__box", True)
+    to_draw__box_x1y1whn = kwargs.get("to_draw__box_x1y1whn", True)
+    to_draw__box_polygonn = kwargs.get("to_draw__box_polygonn", False)
     to_draw__box_conf = kwargs.get("to_draw__box_conf", False)
     to_draw__id_track = kwargs.get("to_draw__id_track", False)
     to_draw__name_track = kwargs.get("to_draw__name_track", False)
@@ -26,7 +38,8 @@ def draw__image(**kwargs):
 
     img__bgr = data["img__bgr"].copy()
     id__frame = data.get("id__frame", None)
-    list__obj__box_x1y1whn = data["list__obj__box_x1y1whn"]
+    list__obj__box_x1y1whn = data.get("list__obj__box_x1y1whn", None)
+    list__obj__box_polygonn = data.get("list__obj__box_polygonn", None)
     list__obj__id_track = data.get("list__obj__id_track", None)
     list__obj__name_track = data.get("list__obj__name_track", None)
     list__obj__box_conf = data.get("list__obj__box_conf", None)
@@ -39,20 +52,19 @@ def draw__image(**kwargs):
             for id__action in list__obj__action_conf
         },
     )
-    list__obj__kpts_xyn = data.get(
-        "list__obj__kpts_xyn", [None] * len(list__obj__box_x1y1whn)
-    )
-    list__obj__kpts_conf = data.get(
-        "list__obj__kpts_conf", [-1] * len(list__obj__kpts_xyn)
-    )
-    list__obj__box_x1y1whn_refined = data.get(
-        "list__obj__box_x1y1whn_refined", [None] * len(list__obj__box_x1y1whn)
-    )
-    list__obj__confirmed_status = data.get(
-        "list__obj__confirmed_status", [None] * len(list__obj__box_x1y1whn)
-    )
+    list__obj__kpts_xyn = data.get("list__obj__kpts_xyn", None)
+    list__obj__kpts_conf = data.get("list__obj__kpts_conf", None)
+    list__obj__box_x1y1whn_refined = data.get("list__obj__box_x1y1whn_refined", None)
+    list__obj__confirmed_status = data.get("list__obj__confirmed_status", None)
 
     # preprocesss arguments
+    if list__obj__box_x1y1whn is None and list__obj__box_polygonn is None:
+        list__obj__box_x1y1whn = []
+        list__obj__box_polygonn = []
+    elif list__obj__box_x1y1whn is None:
+        list__obj__box_x1y1whn = [None] * len(list__obj__box_polygonn)
+    elif list__obj__box_polygonn is None:
+        list__obj__box_polygonn = [None] * len(list__obj__box_x1y1whn)
     if list__obj__id_track is None:
         list__obj__id_track = [-1] * len(list__obj__box_x1y1whn)  # -1 to get color
     if list__obj__name_track is None:
@@ -60,7 +72,15 @@ def draw__image(**kwargs):
     if list__obj__box_conf is None:
         list__obj__box_conf = [None] * len(list__obj__box_x1y1whn)
     if list__obj__id_class is None:
-        list__obj__id_class = [-1] * len(list__obj__box_x1y1whn)    # -1 to get color
+        list__obj__id_class = [-1] * len(list__obj__box_x1y1whn)  # -1 to get color
+    if list__obj__kpts_xyn is None:
+        list__obj__kpts_xyn = [None] * len(list__obj__box_x1y1whn)
+    if list__obj__kpts_conf is None:
+        list__obj__kpts_conf = [-1] * len(list__obj__kpts_xyn)
+    if list__obj__box_x1y1whn_refined is None:
+        list__obj__box_x1y1whn_refined = [None] * len(list__obj__box_x1y1whn)
+    if list__obj__confirmed_status is None:
+        list__obj__confirmed_status = [None] * len(list__obj__box_x1y1whn)
 
     H, W = img__bgr.shape[:2]
 
@@ -69,6 +89,7 @@ def draw__image(**kwargs):
 
     for i_obj, (
         box__x1y1whn,
+        box__polygonn,
         id__track,
         name__track,
         box__conf,
@@ -80,6 +101,7 @@ def draw__image(**kwargs):
     ) in enumerate(
         zip(
             list__obj__box_x1y1whn,
+            list__obj__box_polygonn,
             list__obj__id_track,
             list__obj__name_track,
             list__obj__box_conf,
@@ -90,11 +112,6 @@ def draw__image(**kwargs):
             list__obj__kpts_conf,
         )
     ):
-        x1n, y1n, wn, hn = box__x1y1whn
-        x1 = int(x1n * W)
-        y1 = int(y1n * H)
-        w = int(wn * W)
-        h = int(hn * H)
 
         if box_color_by is None:
             color_box = COLORS[i_obj % len(COLORS)]
@@ -105,7 +122,13 @@ def draw__image(**kwargs):
         else:
             raise ValueError("Invalid box_color_by: {}".format(box_color_by))
 
-        if to_draw__box:
+        if to_draw__box_x1y1whn and box__x1y1whn is not None:
+            x1n, y1n, wn, hn = box__x1y1whn
+            x1 = int(x1n * W)
+            y1 = int(y1n * H)
+            w = int(wn * W)
+            h = int(hn * H)
+
             cv2_rectangle(
                 img__bgr,
                 (x1, y1),
@@ -113,6 +136,29 @@ def draw__image(**kwargs):
                 color=color_box,
                 thickness=thickness,
             )
+
+        if to_draw__box_polygonn and box__polygonn is not None:
+            box__polygon = np.array(box__polygonn).reshape(-1, 2)
+            box__polygon[:, 0] *= W
+            box__polygon[:, 1] *= H
+            box__polygon = box__polygon.astype(np.int32)
+
+            cv2_polylines(
+                img__bgr,
+                [box__polygon],
+                isClosed=True,
+                color=color_box,
+                thickness=thickness,
+            )
+
+            x1, y1 = box__polygon[np.argmin(box__polygon[:, 1])]
+
+        _has_box = (to_draw__box_x1y1whn and box__x1y1whn is not None) or (
+            to_draw__box_polygonn and box__polygonn is not None
+        )
+
+        if not _has_box:
+            continue
 
         if to_draw__box_refined and box__x1y1whn__refined is not None:
             rx1n, ry1n, rwn, rhn = box__x1y1whn__refined
@@ -132,7 +178,9 @@ def draw__image(**kwargs):
         _has_parenthesis = (
             to_draw__confirmed_status or to_draw__id_track or _has_brackets
         ) and (to_draw__box_conf or to_draw__id_class or to_draw__name_class)
-        _has_dash = (to_draw__box_conf and box__conf is not None) and (to_draw__id_class or to_draw__name_class)
+        _has_dash = (to_draw__box_conf and box__conf is not None) and (
+            to_draw__id_class or to_draw__name_class
+        )
         label = "{}{}{}{}{}{}{}{}{}{}".format(
             (
                 "*"
@@ -146,13 +194,13 @@ def draw__image(**kwargs):
             "]" if _has_brackets else "",
             "(" if _has_parenthesis else "",
             (
-                id__class 
-                if to_draw__id_class 
+                id__class
+                if to_draw__id_class
                 else (
-                    map__id_class__to__name_class.get(id__class, "") 
-                    if to_draw__name_class else 
-                    ""
-                )    
+                    map__id_class__to__name_class.get(id__class, "")
+                    if to_draw__name_class
+                    else ""
+                )
             ),
             "-" if _has_dash else "",
             (

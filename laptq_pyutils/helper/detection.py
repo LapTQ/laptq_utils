@@ -1,8 +1,13 @@
-from laptq_pyutils.convert import xcycwh__to__x1y1x2y2, xcycwh__to__x1y1wh
+from laptq_pyutils.convert import (
+    xcycwh__to__x1y1x2y2,
+    xcycwh__to__x1y1wh,
+    xcycwh__to__polygon,
+)
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import ListAligner
 from laptq_pyutils.ops import box__miniou
 from laptq_pyutils.loader import pprint_color
+from laptq_pyutils.common import LIST__MODE__BOX
 
 
 def extract__ultralytics__detect(**kwargs):
@@ -337,6 +342,7 @@ def helper__draw__detection__imgdir(**kwargs):
     num__max__img = kwargs["num__max__img"]
     seed = kwargs["seed"]
     is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    to_draw__name_class = kwargs["to_draw__name_class"]
     path__file__map__id_class__to__name_class = kwargs[
         "path__file__map__id_class__to__name_class"
     ]
@@ -367,8 +373,11 @@ def helper__draw__detection__imgdir(**kwargs):
     else:
         list__index__sample = range(len(list__name__file__img))
 
-    with open(path__file__map__id_class__to__name_class, "r") as f:
-        map__id_class__to__name_class = yaml.safe_load(f)
+    if to_draw__name_class:
+        with open(path__file__map__id_class__to__name_class, "r") as f:
+            map__id_class__to__name_class = yaml.safe_load(f)
+    else:
+        map__id_class__to__name_class = {}
 
     for i_f in tqdm(list__index__sample):
         name__file__img = list__name__file__img[i_f]
@@ -382,8 +391,15 @@ def helper__draw__detection__imgdir(**kwargs):
         img__vis = draw__image(
             data={
                 "img__bgr": img__bgr,
-                "list__obj__box_x1y1whn": xcycwh__to__x1y1wh(
-                    np.array(dict__result["list__obj__box_xcycwhn"]).reshape(-1, 4)
+                "list__obj__box_x1y1whn": (
+                    xcycwh__to__x1y1wh(
+                        np.array(dict__result["list__obj__box_xcycwhn"]).reshape(-1, 4)
+                    )
+                    if "list__obj__box_xcycwhn" in dict__result
+                    else None
+                ),
+                "list__obj__box_polygonn": dict__result.get(
+                    "list__obj__box_polygonn", None
                 ),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result.get("list__obj__box_conf", None),
@@ -413,14 +429,18 @@ def helper__draw__detection__video(**kwargs):
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__file__output = kwargs["path__file__output"]
     pad__id_frame = kwargs["pad__id_frame"]
+    to_draw__name_class = kwargs["to_draw__name_class"]
     fourcc = kwargs["fourcc"]
     path__file__map__id_class__to__name_class = kwargs[
         "path__file__map__id_class__to__name_class"
     ]
     to_concat__original_img = kwargs["to_concat__original_img"]
 
-    with open(path__file__map__id_class__to__name_class, "r") as f:
-        map__id_class__to__name_class = yaml.safe_load(f)
+    if to_draw__name_class:
+        with open(path__file__map__id_class__to__name_class, "r") as f:
+            map__id_class__to__name_class = yaml.safe_load(f)
+    else:
+        map__id_class__to__name_class = {}
 
     cap = cv2.VideoCapture(path__file__video__input)
 
@@ -449,11 +469,16 @@ def helper__draw__detection__video(**kwargs):
         img__vis = draw__image(
             data={
                 "img__bgr": img__bgr,
-                "list__obj__box_x1y1whn": xcycwh__to__x1y1wh(
-                    np.array(dict__result["list__obj__box_xcycwhn"])
+                "list__obj__box_x1y1whn": (
+                    xcycwh__to__x1y1wh(
+                        np.array(dict__result["list__obj__box_xcycwhn"]).reshape(-1, 4)
+                    )
+                    if "list__obj__box_xcycwhn" in dict__result
+                    else None
                 ),
-                "list__obj__id_track": [-1]
-                * len(dict__result["list__obj__box_xcycwhn"]),
+                "list__obj__box_polygonn": dict__result.get(
+                    "list__obj__box_polygonn", None
+                ),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result["list__obj__box_conf"],
             },
@@ -515,6 +540,11 @@ def helper__convert__detection__txt__to__json(**kwargs):
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    mode__box = kwargs["mode__box"]
+
+    assert mode__box in LIST__MODE__BOX, "mode__box must be one of {}".format(
+        LIST__MODE__BOX
+    )
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
@@ -529,17 +559,52 @@ def helper__convert__detection__txt__to__json(**kwargs):
         )
 
         list__obj__id_class = []
-        list__obj__box_xcycwhn = []
+        list__obj__box_ANY = []
         with open(path__file__lbl__input, "r") as f:
             for line in f:
-                id_class, xcn, ycn, wn, hn = map(eval, line.strip().split())
+                id_class, *list__xy = map(eval, line.strip().split())
                 list__obj__id_class.append(id_class)
-                list__obj__box_xcycwhn.append([xcn, ycn, wn, hn])
+                list__obj__box_ANY.append([*list__xy])
 
         dict__result = {
             "list__obj__id_class": list__obj__id_class,
-            "list__obj__box_xcycwhn": list__obj__box_xcycwhn,
+            "list__obj__box_{}".format(mode__box): list__obj__box_ANY,
         }
+
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)
+
+
+def helper__convert__detection__xcycwhn__to__polygonn(**kwargs):
+
+    import json
+    from tqdm import tqdm
+    import os
+    import numpy as np
+
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    for name__file__lbl__input in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+        path__file__lbl__input = os.path.join(
+            path__dir__lbl__input, name__file__lbl__input
+        )
+        path__file__lbl__output = os.path.join(
+            path__dir__lbl__output, name__file__lbl__input
+        )
+
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
+
+        list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
+
+        list__obj__box_polygonn = xcycwh__to__polygon(
+            np.array(list__obj__box_xcycwhn).reshape(-1, 4)
+        )
+
+        dict__result["list__obj__box_polygonn"] = list__obj__box_polygonn.tolist()
 
         with open(path__file__lbl__output, "w") as f:
             json.dump(dict__result, f, indent=4)

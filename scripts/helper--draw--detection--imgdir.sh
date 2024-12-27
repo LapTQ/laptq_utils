@@ -47,9 +47,11 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \
         --to_concat__original_img True \
+        --to_draw__box_x1y1whn True \
+        --to_draw__box_polygonn False \
         --to_draw__box_conf True \
         --to_draw__id_class False \
-        --to_draw__name_class True \
+        --to_draw__name_class False \
         --fontScale 1 \
         --thickness 1 \
         --box_color_by id__class \

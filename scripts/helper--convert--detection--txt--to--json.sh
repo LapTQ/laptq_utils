@@ -4,6 +4,9 @@ POSTFIX__DIR__LABEL__INPUT="--erase-IGNORE"
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--json
 POSTFIX__DIR__LABEL__OUTPUT="--erase-IGNORE"
 
+MODE__BOX="xcycwhn"
+# MODE__BOX="polygonn"
+
 declare -A MAP__SUBPATH_DIR__TO__=(
     ["PoC2--2個持ち_cut_fit-1products"]=""
     ["PoC2--2個持ち_cut_fit-2products"]=""
@@ -36,7 +39,8 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     python3 submodules/laptq_utils/main.py \
         helper__convert__detection__txt__to__json \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
-        --path__dir__lbl__output "${path__dir__lbl__output}"
+        --path__dir__lbl__output "${path__dir__lbl__output}" \
+        --mode__box "${MODE__BOX}"
 
 
     num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
