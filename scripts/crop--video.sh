@@ -1,10 +1,13 @@
-PATH__DIR__INPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/videos
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/videos--cropped
+PATH__DIR__INPUT=/home/laptq/laptq-prj-21/data/Videos/241210_受け取り動画/mp4_5min
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/data/Videos/241210_受け取り動画/mp4_5min--cropped-10-pct
 
-pct__crop__top=0.5
-pct__crop__bottom=0
-pct__crop__left=0.2
-pct__crop__right=0.2
+pct__crop__top=0.1
+pct__crop__bottom=0.1
+pct__crop__left=0.1
+pct__crop__right=0.1
+
+[[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
+mkdir -p "$PATH__DIR__OUTPUT"
 
 
 IFS=$'\n'
@@ -25,7 +28,7 @@ for name__file in $( ls $PATH__DIR__INPUT ); do
     ffmpeg \
         -i "$path__file__input" \
         -vf "crop=$w:$h:$x1:$y1" \
-        -c:v libx264 -preset ultrafast -crf 0 -c:a copy \
+        -c:v libx264 -preset ultrafast -crf 18 -c:a copy \
         -y \
         "$path__file__output"
 done
