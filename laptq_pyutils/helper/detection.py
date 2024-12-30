@@ -6,8 +6,11 @@ from laptq_pyutils.convert import (
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import ListAligner
 from laptq_pyutils.ops import box__miniou
-from laptq_pyutils.loader import pprint_color
+from laptq_pyutils.log import load_logger
 from laptq_pyutils.common import LIST__MODE__BOX
+
+
+logger = load_logger()
 
 
 def extract__ultralytics__detect(**kwargs):
@@ -638,9 +641,7 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
         try:
             assert len(annotations) == 1
         except Exception as e:
-            pprint_color('Error in the file:')
-            pprint_color(link_to__img)
-            traceback.print_exc()
+            logger.exception('Error in the file: {}'.format(link_to__img))
 
         name__file__img = os.path.basename(link_to__img)
         name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
@@ -659,10 +660,7 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
                 assert len(box['value']['rectanglelabels']) == 1, "box['value']['rectanglelabels'] is {}".format(box['value']['rectanglelabels'])
                 name_class = box['value']['rectanglelabels'][0]
             except Exception as e:
-                pprint_color('Error in the file:')
-                pprint_color(link_to__img)
-                pprint_color(box)
-                traceback.print_exc()
+                logger.exception('Error in the file: {}\n{}'.format(link_to__img, box))
                 continue
 
             xc = x1 + w / 2
