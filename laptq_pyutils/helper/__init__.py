@@ -17,4 +17,5 @@ from .detection import (
     helper__draw__detection__video,
     helper__rescale__detection__box,
     helper__erase__classes__on__images,
+    helper__cluster__detection__bboxes,
 )

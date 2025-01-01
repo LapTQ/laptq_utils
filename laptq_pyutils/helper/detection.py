@@ -1,13 +1,17 @@
-from laptq_pyutils.convert import (
-    xcycwh__to__x1y1x2y2,
-    xcycwh__to__x1y1wh,
-    xcycwh__to__polygon,
-)
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import ListAligner
-from laptq_pyutils.ops import box__miniou
 from laptq_pyutils.log import load_logger
 from laptq_pyutils.common import LIST__MODE__BOX
+from laptq_pyutils.ops import (
+    box__miniou,
+    xcycwh__to__x1y1wh,
+    xcycwh__to__x1y1x2y2,
+    xcycwh__to__polygon,
+    box_normalized__to__box_pixels,
+    box_pixels__to__box_normalized,
+    cluster__detection__boxes,
+)
+from laptq_pyutils.algo import KMeans
 
 
 LOGGER = load_logger()
@@ -1014,3 +1018,98 @@ def helper__erase__classes__on__images(**kwargs):
             img[y1:y2, x1:x2] = 0
 
         cv2.imwrite(path__file__img__output, img)
+
+
+def helper__cluster__detection__bboxes(**kwargs):
+
+    import os
+    import json
+    import yaml
+    from tqdm import tqdm
+    import numpy as np
+    from PIL import Image
+    import random
+    import cv2
+
+    path__dir__img__input = kwargs["path__dir__img__input"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    imgsz = kwargs["imgsz"]
+    n_clusters = kwargs["n_clusters"]
+    num__max__box = kwargs["num__max__box"]
+    seed = kwargs["seed"]
+    path__dir__output = kwargs["path__dir__output"]
+
+    list__wh = []
+    for name__file__img in tqdm(sorted(os.listdir(path__dir__img__input))):
+        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
+        path__file__img = os.path.join(path__dir__img__input, name__file__img)
+        path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
+
+        if not os.path.exists(path__file__lbl):
+            if is_ok__lbl_not_exist:
+                continue
+            else:
+                raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
+
+        W, H = Image.open(path__file__img).size
+
+        with open(path__file__lbl, "r") as f:
+            dict__result = json.load(f)
+
+        list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
+        list__obj__box_xcycwhn = np.array(list__obj__box_xcycwhn).reshape(-1, 4)
+
+        rx = imgsz / W
+        ry = imgsz / H
+        r = min(rx, ry)
+
+        list__obj__box_xcycwh = box_normalized__to__box_pixels(
+            list__obj__box_xcycwhn, WH=(W, H)
+        )
+
+        # rescale to imgsz
+        list__obj__box_xcycwh = list__obj__box_xcycwh * r
+
+        list__wh.extend(list__obj__box_xcycwh[:, [2, 3]].tolist())
+
+    if num__max__box is not None:
+        num__max__box = min(num__max__box, len(list__wh))
+        if seed is not None:
+            random.seed(seed)
+        list__wh = random.sample(list__wh, num__max__box)
+
+    list__wh = np.array(list__wh).reshape(-1, 2)
+
+    list__anchor_box__wh = cluster__detection__boxes(
+        list__wh=list__wh, n_clusters=n_clusters
+    )
+    list__anchor_box__wh = sorted(list__anchor_box__wh, key=lambda x: x[0] * x[1])
+
+    # plot
+    img__plot = np.zeros((imgsz, imgsz, 3), dtype=np.uint8)
+    list__box_xcycwh = np.concatenate(
+        [
+            np.full_like(list__anchor_box__wh, imgsz // 2),
+            list__anchor_box__wh,
+        ],
+        axis=1,
+    )
+    img__plot = draw__image(
+        data={
+            "img__bgr": img__plot,
+            "list__obj__box_x1y1whn": xcycwh__to__x1y1wh(
+                box_pixels__to__box_normalized(list__box_xcycwh, WH=(imgsz, imgsz))
+            ),
+        },
+    )
+
+    path__file__output__anchor_boxes = os.path.join(
+        path__dir__output, "anchor-boxes.yaml"
+    )
+    path__file__output__plot = os.path.join(path__dir__output, "anchor-boxes.png")
+
+    with open(path__file__output__anchor_boxes, "w") as f:
+        yaml.dump(list__anchor_box__wh, f)
+
+    cv2.imwrite(path__file__output__plot, img__plot)

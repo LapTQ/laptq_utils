@@ -29,8 +29,8 @@ def draw__image(**kwargs):
     to_draw__pose = kwargs.get("to_draw__pose", False)
     to_draw__index_pose = kwargs.get("to_draw__index_pose", False)
     box_color_by = kwargs.get("box_color_by", None)
-    fontScale = kwargs["fontScale"]
-    thickness = kwargs["thickness"]
+    fontScale = kwargs.get("fontScale", 1)
+    thickness = kwargs.get("thickness", 1)
     map__id_class__to__name_class = kwargs.get("map__id_class__to__name_class", {})
     map__id_action__to__name_action = kwargs.get("map__id_action__to__name_action", {})
 

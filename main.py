@@ -18,6 +18,7 @@ from laptq_pyutils.helper import (
     helper__rescale__detection__box,
     helper__erase__classes__on__images,
     helper__check__duplicate__images,
+    helper__cluster__detection__bboxes,
 )
 import argparse
 
@@ -60,6 +61,7 @@ def parse_args():
     ap.add_argument("--thickness", type=int)
     ap.add_argument("--box_color_by", type=str)
     ap.add_argument("--num__max__img", type=str)
+    ap.add_argument("--num__max__box", type=str)
     ap.add_argument("--seed", type=str)
     ap.add_argument("--is_ok__lbl_not_exist", type=str)
     ap.add_argument("--pad__id_frame", type=int)
@@ -75,6 +77,7 @@ def parse_args():
     ap.add_argument("--cut__h__max", type=str)
     ap.add_argument("--mode__box", type=str)
     ap.add_argument("--offset__id_class", type=int)
+    ap.add_argument("--n_clusters", type=int)
 
     ap.add_argument("--method", type=str)
     ap.add_argument("--max_distance_threshold", type=int)
@@ -146,6 +149,9 @@ def parse_args():
         eval(args.to_draw__box_polygonn)
         if args.to_draw__box_polygonn is not None
         else None
+    )
+    args.num__max__box = (
+        eval(args.num__max__box) if args.num__max__box is not None else None
     )
 
     return args
