@@ -4,6 +4,7 @@ from .detection import (
     helper__extract__ultralytics__detect__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
+    helper__convert__detection__coco__to__json,
     helper__convert__labelstudio_json__to__json,
     helper__convert__detection__xcycwhn__to__polygonn,
     helper__filter__detection__result__by__conf,

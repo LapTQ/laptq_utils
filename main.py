@@ -3,6 +3,7 @@ from laptq_pyutils.helper import (
     helper__extract__ultralytics__detect__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
+    helper__convert__detection__coco__to__json,
     helper__convert__detection__xcycwhn__to__polygonn,
     helper__convert__video__to__images,
     helper__convert__labelstudio_json__to__json,
@@ -73,6 +74,7 @@ def parse_args():
     ap.add_argument("--cut__w__max", type=str)
     ap.add_argument("--cut__h__max", type=str)
     ap.add_argument("--mode__box", type=str)
+    ap.add_argument("--offset__id_class", type=int)
 
     ap.add_argument("--method", type=str)
     ap.add_argument("--max_distance_threshold", type=int)

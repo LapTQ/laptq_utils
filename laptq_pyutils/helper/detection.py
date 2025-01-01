@@ -10,7 +10,7 @@ from laptq_pyutils.log import load_logger
 from laptq_pyutils.common import LIST__MODE__BOX
 
 
-logger = load_logger()
+LOGGER = load_logger()
 
 
 def extract__ultralytics__detect(**kwargs):
@@ -81,7 +81,7 @@ def helper__extract__ultralytics__detect__imgdir(**kwargs):
 
     list__name__file__img = sorted(os.listdir(path__dir__img))
     log__time = {
-        'time__inference': None,
+        "time__inference": None,
     }
     pbar = tqdm(list__name__file__img)
     for name__file__img in pbar:
@@ -103,11 +103,13 @@ def helper__extract__ultralytics__detect__imgdir(**kwargs):
         with open(path__file__lbl, "w") as f:
             json.dump(dict__result, f, indent=4)
 
-        if log__time['time__inference'] is None:
-            log__time['time__inference'] = mtime_2 - mtime_1
+        if log__time["time__inference"] is None:
+            log__time["time__inference"] = mtime_2 - mtime_1
         else:
-            log__time['time__inference'] = 0.9 * log__time['time__inference'] + 0.1 * (mtime_2 - mtime_1)
-        pbar.set_postfix(time__inference=log__time['time__inference'])
+            log__time["time__inference"] = 0.9 * log__time["time__inference"] + 0.1 * (
+                mtime_2 - mtime_1
+            )
+        pbar.set_postfix(time__inference=log__time["time__inference"])
 
 
 def helper__extract__ultralytics__detect__video(**kwargs):
@@ -135,13 +137,13 @@ def helper__extract__ultralytics__detect__video(**kwargs):
     pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
     id__frame = 0
     log__time = {
-        'time__inference': None,
+        "time__inference": None,
     }
     while True:
         success, img__bgr = cap.read()
         if not success:
             break
-        
+
         mtime_1 = time.time()
         _ = extract__ultralytics__detect(
             img__bgr=img__bgr,
@@ -162,11 +164,13 @@ def helper__extract__ultralytics__detect__video(**kwargs):
 
         id__frame += 1
 
-        if log__time['time__inference'] is None:
-            log__time['time__inference'] = mtime_2 - mtime_1
+        if log__time["time__inference"] is None:
+            log__time["time__inference"] = mtime_2 - mtime_1
         else:
-            log__time['time__inference'] = 0.9 * log__time['time__inference'] + 0.1 * (mtime_2 - mtime_1)
-        pbar.set_postfix(time__inference=log__time['time__inference'])
+            log__time["time__inference"] = 0.9 * log__time["time__inference"] + 0.1 * (
+                mtime_2 - mtime_1
+            )
+        pbar.set_postfix(time__inference=log__time["time__inference"])
         pbar.update(1)
 
 
@@ -453,7 +457,8 @@ def helper__draw__detection__video(**kwargs):
         cap.get(cv2.CAP_PROP_FPS),
         (
             int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
-            int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) * (2 if to_concat__original_img else 1),
+            int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            * (2 if to_concat__original_img else 1),
         ),
     )
 
@@ -621,50 +626,58 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
     import yaml
     import traceback
 
-    path__file__lbl__input = kwargs['path__file__lbl__input']
-    path__dir__lbl__output = kwargs['path__dir__lbl__output']
-    path__file__map__id_class__to__name_class = kwargs['path__file__map__id_class__to__name_class']
+    path__file__lbl__input = kwargs["path__file__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    path__file__map__id_class__to__name_class = kwargs[
+        "path__file__map__id_class__to__name_class"
+    ]
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    with open(path__file__lbl__input, 'r') as f:
+    with open(path__file__lbl__input, "r") as f:
         result__labelstudio = json.load(f)
 
-    with open(path__file__map__id_class__to__name_class, 'r') as f:
+    with open(path__file__map__id_class__to__name_class, "r") as f:
         map__id_class__to__name_class = yaml.safe_load(f)
-    map__name_class__to__id_class = {v: k for k, v in map__id_class__to__name_class.items()}
+    map__name_class__to__id_class = {
+        v: k for k, v in map__id_class__to__name_class.items()
+    }
 
     for data__per_img in tqdm(result__labelstudio):
-        link_to__img = data__per_img['data']['image']
-        annotations = data__per_img['annotations']
+        link_to__img = data__per_img["data"]["image"]
+        annotations = data__per_img["annotations"]
 
         try:
             assert len(annotations) == 1
         except Exception as e:
-            logger.exception('Error in the file: {}'.format(link_to__img))
+            LOGGER.exception("Error in the file: {}".format(link_to__img))
 
         name__file__img = os.path.basename(link_to__img)
         name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
 
-        boxes = annotations[0]['result']
+        boxes = annotations[0]["result"]
         list__obj__id_class = []
         list__obj__box_xcycwhn = []
         for box in boxes:
             try:
-                W = box['original_width']
-                H = box['original_height']
-                x1 = box['value']['x']
-                y1 = box['value']['y']
-                w = box['value']['width']
-                h = box['value']['height']
-                assert len(box['value']['rectanglelabels']) == 1, "box['value']['rectanglelabels'] is {}".format(box['value']['rectanglelabels'])
-                name_class = box['value']['rectanglelabels'][0]
+                W = box["original_width"]
+                H = box["original_height"]
+                x1 = box["value"]["x"]
+                y1 = box["value"]["y"]
+                w = box["value"]["width"]
+                h = box["value"]["height"]
+                assert (
+                    len(box["value"]["rectanglelabels"]) == 1
+                ), "box['value']['rectanglelabels'] is {}".format(
+                    box["value"]["rectanglelabels"]
+                )
+                name_class = box["value"]["rectanglelabels"][0]
             except Exception as e:
-                logger.exception('Error in the file: {}\n{}'.format(link_to__img, box))
+                LOGGER.exception("Error in the file: {}\n{}".format(link_to__img, box))
                 continue
 
             xc = x1 + w / 2
-            yc = y1 + h / 2            
+            yc = y1 + h / 2
 
             xcn = xc / 100
             ycn = yc / 100
@@ -681,12 +694,75 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
         }
 
         path__file__lbl = os.path.join(path__dir__lbl__output, name__file__lbl)
-        with open(path__file__lbl, 'w') as f:
+        with open(path__file__lbl, "w") as f:
             json.dump(dict__result, f, indent=4)
 
-        
 
+def helper__convert__detection__coco__to__json(**kwargs):
 
+    import json
+    from tqdm import tqdm
+    import os
+    import yaml
+
+    path__file__lbl__input = kwargs["path__file__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    offset__id_class = kwargs["offset__id_class"]
+    path__file__map__id_class__to__name_class = kwargs[
+        "path__file__map__id_class__to__name_class"
+    ]
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    with open(path__file__lbl__input, "r") as f:
+        dict__annot__coco = json.load(f)
+
+    list__class = dict__annot__coco["categories"]
+    list__class = sorted(list__class, key=lambda x: x["id"])
+    map__id_class__to__name_class = {
+        (obj["id"] + offset__id_class): obj["name"] for obj in list__class
+    }
+
+    with open(path__file__map__id_class__to__name_class, "w") as f:
+        yaml.dump(map__id_class__to__name_class, f)
+
+    map__id_img__to__info_img = {_["id"]: _ for _ in dict__annot__coco["images"]}
+
+    map__id_img__to__labels = {}
+    for annot in tqdm(dict__annot__coco["annotations"]):
+        id_img = annot["image_id"]
+        id_class = annot["category_id"] + offset__id_class
+        x1, y1, w, h = annot["bbox"]
+
+        H = map__id_img__to__info_img[id_img]["height"]
+        W = map__id_img__to__info_img[id_img]["width"]
+
+        x1n = x1 / W
+        y1n = y1 / H
+        wn = w / W
+        hn = h / H
+        xc = x1n + wn / 2
+        yc = y1n + hn / 2
+
+        if id_img not in map__id_img__to__labels:
+            map__id_img__to__labels[id_img] = {
+                "list__obj__id_class": [],
+                "list__obj__box_xcycwhn": [],
+            }
+
+        map__id_img__to__labels[id_img]["list__obj__id_class"].append(id_class)
+        map__id_img__to__labels[id_img]["list__obj__box_xcycwhn"].append(
+            [xc, yc, wn, hn]
+        )
+
+    for id_img, dict__result in tqdm(map__id_img__to__labels.items()):
+        name__file__img = map__id_img__to__info_img[id_img]["file_name"]
+
+        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
+        path__file__lbl = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+        with open(path__file__lbl, "w") as f:
+            json.dump(dict__result, f, indent=4)
 
 
 def helper__filter__detection__result__by__size(**kwargs):
@@ -895,10 +971,10 @@ def helper__erase__classes__on__images(**kwargs):
     import cv2
     import os
 
-    path__dir__img__input = kwargs['path__dir__img__input']
-    path__dir__lbl__input = kwargs['path__dir__lbl__input']
-    path__dir__img__output = kwargs['path__dir__img__output']
-    list__id_class = kwargs['list__id_class']
+    path__dir__img__input = kwargs["path__dir__img__input"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__img__output = kwargs["path__dir__img__output"]
+    list__id_class = kwargs["list__id_class"]
 
     os.makedirs(path__dir__img__output, exist_ok=True)
 
@@ -914,11 +990,11 @@ def helper__erase__classes__on__images(**kwargs):
         img = cv2.imread(path__file__img__input)
         H, W = img.shape[:2]
 
-        with open(path__file__lbl__input, 'r') as f:
+        with open(path__file__lbl__input, "r") as f:
             dict__result = json.load(f)
 
-        list__obj__id_class = dict__result['list__obj__id_class']
-        list__obj__box_xcycwhn = dict__result['list__obj__box_xcycwhn']
+        list__obj__id_class = dict__result["list__obj__id_class"]
+        list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
 
         for id__class, xcycwhn in zip(list__obj__id_class, list__obj__box_xcycwhn):
             if id__class not in list__id_class:
@@ -936,7 +1012,5 @@ def helper__erase__classes__on__images(**kwargs):
             y2 = int(y2n * H)
 
             img[y1:y2, x1:x2] = 0
-        
+
         cv2.imwrite(path__file__img__output, img)
-
-

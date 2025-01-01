@@ -1,29 +1,19 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1
+PATH__DIR__IMAGE=/home/laptq/datasets/COCO--reformated
 POSTFIX__DIR__IMAGE=""
 
-PATH__DIR__LABEL=/home/laptq/laptq-prj-44/outputs/20241214--true--label--json
-POSTFIX__DIR__LABEL=--raw
+PATH__DIR__LABEL=/home/laptq/datasets/COCO--reformated
+POSTFIX__DIR__LABEL=""
 
-NUM__MAX__IMG__TO__VISUALIZE=None
+NUM__MAX__IMG__TO__VISUALIZE=10
 IS_OK__LBL_NOT_FOUND=True
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241214--visualize
-PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
+PATH__DIR__OUTPUT=/media/laptq/data/workspace/yolov3/outputs
+PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/datasets/COCO--reformated/train2017/map__id_class__to__name_class.yaml
 
 [[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["beppu_sue_data/batch-1"]=""
-    # ["beppu_sue_data/batch-2"]=""
-    # ["beppu_sue_data/batch-3"]=""
-    # ["beppu_sue_data/batch-4"]=""
-    # ["beppu_sue_data/batch-5"]=""
-    # ["beppu_sue_data/batch-6"]=""
-    ["P44-1products-2個持ち_cut_fit-batch-1"]="" 
-    ["P44-1products-2個持ち_cut_fit-batch-2"]="" 
-    ["P44-1products-台置き_cut_fit"]="" 
-    ["P44-2products-2個持ち_cut_fit"]="" 
-    ["P44-2products-台置き_cut_fit"]="" 
-    ["P44-nothing-2個持ち_cut_fit"]=""
+    ["train2017"]=""
+    ["val2017"]=""
 )
 
 IFS=$'\n'
@@ -41,7 +31,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__output}" ]] && rm -r "${path__dir__output}"
     mkdir -p "${path__dir__output}"
 
-    python3 submodules/laptq_utils/main.py \
+    python3 main.py \
         helper__draw__detection__imgdir \
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
@@ -51,7 +41,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__box_polygonn False \
         --to_draw__box_conf True \
         --to_draw__id_class False \
-        --to_draw__name_class False \
+        --to_draw__name_class True \
         --fontScale 1 \
         --thickness 1 \
         --box_color_by id__class \
