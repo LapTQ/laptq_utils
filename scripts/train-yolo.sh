@@ -1,11 +1,12 @@
 sleep 0
 
 # data=data--public--satudora
-data=data--synthetic--satudora-center-box
+# data=data--synthetic--satudora-center-box
 # data=data--RAP-change-clothes
 
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
+data=data--synthetic--satudora-center-box
 YOLO=yolo11s
 IMGSZ=832
 SCALE=0.5
@@ -13,10 +14,10 @@ MULTI_SCALE=True
 
 yolo detect train \
     data=src/configs/$data.yaml \
-    model=${YOLO}.pt \
+    model=/home/laptq/laptq-prj-21/runs/data--public--satudora/yolo11s--832--scale-0.5--multiscale-True/train2/weights/best--epoch-141.pt \
     epochs=200 \
     imgsz=$IMGSZ \
-    device=1 \
+    device=2 \
     batch=16 \
     project=$path__dir__run/$data/$YOLO--$IMGSZ--scale-$SCALE--multiscale-$MULTI_SCALE \
     plots=True \
@@ -24,6 +25,7 @@ yolo detect train \
     scale=$SCALE \
     multi_scale=$MULTI_SCALE
 
+    # model=${YOLO}.pt \
 
 exit
 

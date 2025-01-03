@@ -1,14 +1,14 @@
-PATH__DIR__DATASETS__SOURCE__IMG=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG=--20241121--checked--backup
+PATH__DIR__DATASETS__SOURCE__IMG=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
+POSTFIX__DIR__IMG=""
 
-PATH__DIR__DATASETS__SOURCE__LABEL=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__LABEL=--20241121--checked--backup
+PATH__DIR__DATASETS__SOURCE__LABEL=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
+POSTFIX__DIR__LABEL="--txt"
 
-PATH__FILE__LIST_SUBPATH_TO_IMG=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--checklist--phase-2--annotation-ver2/list--subpath--to--img.txt
+PATH__FILE__LIST_SUBPATH_TO_IMG=/home/laptq/laptq-prj-21/outputs/list--subpath--to--img.txt
 
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--visual-check--downloaded--phase-2--annotation-ver2
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/20241231--get--subset--dataset--yolo--test-set
 POSTFIX__DIR__VERSION__TARGET=""
-CLASSES="pothole\nmanhole\ndrainage\ndifficult"
+CLASSES="person"
 
 [[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
 

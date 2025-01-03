@@ -1,95 +1,19 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
-POSTFIX__DIR__IMAGE=""
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/outputs/20250102--testset--4cam-factory--erase-ignored
+POSTFIX__DIR__IMAGE="--erase-ignored"
 
-PATH__DIR__LABEL=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
-POSTFIX__DIR__LABEL=""
+PATH__DIR__LABEL=/home/laptq/laptq-prj-21/outputs/20241231--get--subset--dataset--yolo--test-set--annotated--to-json
+POSTFIX__DIR__LABEL="--erase-ignored"
 
 NUM__MAX__IMG__TO__VISUALIZE=None
 IS_OK__LBL_NOT_FOUND=False
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict/draw--images
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/20241231--visualize
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/All_off"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/All_off"
-    # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/Edge_cases"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/Edge_cases"
-    # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/High_activity"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/High_activity"
-    # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/IRfilter"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/IRfilter"
-    # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/IRill"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/IRill"
-    # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/Lunch1"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/Lunch1"
-    # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/Lunch2"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/Lunch2"
-    # ["ssd8tb/shared_workspace/fisheye/CEPDOF/images/Lunch3"]="ssd8tb/shared_workspace/fisheye/CEPDOF/labels_poly/Lunch3"
-    # ["ssd8tb/shared_workspace/fisheye/FRIDA/images/Segment_1/Camera_1"]="ssd8tb/shared_workspace/fisheye/FRIDA/labels_poly/Segment_1/Camera_1"
-    # ["ssd8tb/shared_workspace/fisheye/FRIDA/images/Segment_1/Camera_2"]="ssd8tb/shared_workspace/fisheye/FRIDA/labels_poly/Segment_1/Camera_2"
-    # ["ssd8tb/shared_workspace/fisheye/FRIDA/images/Segment_1/Camera_3"]="ssd8tb/shared_workspace/fisheye/FRIDA/labels_poly/Segment_1/Camera_3"
-    # ["ssd8tb/shared_workspace/fisheye/FRIDA/images/Segment_3/Camera_2"]="ssd8tb/shared_workspace/fisheye/FRIDA/labels_poly/Segment_3/Camera_2"
-    # ["ssd8tb/shared_workspace/fisheye/FRIDA/images/Segment_3/Camera_3"]="ssd8tb/shared_workspace/fisheye/FRIDA/labels_poly/Segment_3/Camera_3"
-    # ["ssd8tb/shared_workspace/fisheye/HABBOF/images/Lab1"]="ssd8tb/shared_workspace/fisheye/HABBOF/labels_poly/Lab1"
-    # ["ssd8tb/shared_workspace/fisheye/HABBOF/images/Lab2"]="ssd8tb/shared_workspace/fisheye/HABBOF/labels_poly/Lab2"
-    # ["ssd8tb/shared_workspace/fisheye/HABBOF/images/Meeting1"]="ssd8tb/shared_workspace/fisheye/HABBOF/labels_poly/Meeting1"
-    # ["ssd8tb/shared_workspace/fisheye/HABBOF/images/Meeting2"]="ssd8tb/shared_workspace/fisheye/HABBOF/labels_poly/Meeting2"
-    # ["ssd8tb/shared_workspace/fisheye/LOAF/images/resolution_2k/test"]="ssd8tb/shared_workspace/fisheye/LOAF/labels_poly/resolution_2k/test"
-    # ["ssd8tb/shared_workspace/fisheye/LOAF/images/resolution_2k/train"]="ssd8tb/shared_workspace/fisheye/LOAF/labels_poly/resolution_2k/train"
-    # ["ssd8tb/shared_workspace/fisheye/LOAF/images/resolution_2k/val"]="ssd8tb/shared_workspace/fisheye/LOAF/labels_poly/resolution_2k/val"
-    # ["ssd8tb/shared_workspace/fisheye/MW-R/images"]="ssd8tb/shared_workspace/fisheye/MW-R/labels_poly"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/call_center"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/call_center"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/exhibition"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/exhibition"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/exhibition_setup"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/exhibition_setup"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/it_office"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/it_office"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/jewelry_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/jewelry_store"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/convenience_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/convenience_store"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/empty_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/empty_store"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/jewelry_store_2"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/jewelry_store_2"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/kindergarten"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/kindergarten"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/large_office"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/large_office"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/large_office_2"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/large_office_2"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/printing_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/printing_store"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/repair_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/repair_store"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/street_grocery"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/street_grocery"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/tech_store"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/tech_store"
-    # ["ssd8tb/shared_workspace/fisheye/WEPDTOF/images/warehouse"]="ssd8tb/shared_workspace/fisheye/WEPDTOF/labels_poly/warehouse"
-
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-0"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-0"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-1"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-1"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-2"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-2"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-3"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-3"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario1/top-4"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario1/top-4"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-0"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-0"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-1"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-1"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-2"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-2"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-3"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-3"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-4"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-4"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-5"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-5"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-6"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-6"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-7"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-7"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-8"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-8"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-9"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-9"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-10"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-10"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-11"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-11"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-12"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-12"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-13"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-13"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-14"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-14"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-15"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-15"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-16"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-16"
-    # ["ssd8tb/shared_workspace/fisheye/BOMNI/images/scenario2/top-17"]="ssd8tb/shared_workspace/fisheye/BOMNI/labels/scenario2/top-17"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_1A/omni1A_test2"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_1A/omni1A_test2"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_1A/omni1A_test3"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_1A/omni1A_test3"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_1A/omni1A_training"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_1A/omni1A_training"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_2A/omni2A_test2"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_2A/omni2A_test2"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_2A/omni2A_test3"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_2A/omni2A_test3"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_2A/omni2A_training"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_2A/omni2A_training"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_3A/omni3A_test2"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_3A/omni3A_test2"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_3A/omni3A_test3"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_3A/omni3A_test3"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_A/omni_3A/omni3A_training"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_A/omni_3A/omni3A_training"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_B/omni_1B/omni1B_test2"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_B/omni_1B/omni1B_test2"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_B/omni_1B/omni1B_test3"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_B/omni_1B/omni1B_test3"
-    # ["ssd8tb/shared_workspace/fisheye/PIROPO/images/Room_B/omni_1B/omni1B_training"]="ssd8tb/shared_workspace/fisheye/PIROPO/labels/Room_B/omni_1B/omni1B_training"
-    # ["ssd8tb/shared_workspace/fisheye/top-view-multi-person-tracking-2020/images/test"]="ssd8tb/shared_workspace/fisheye/top-view-multi-person-tracking-2020/labels/test"
-    # ["ssd8tb/shared_workspace/fisheye/top-view-multi-person-tracking-2020/images/train"]="ssd8tb/shared_workspace/fisheye/top-view-multi-person-tracking-2020/labels/train"
-    
-    # ["ssd8tb/shared_workspace/manhpc/sat_34k/images/train"]="ssd8tb/shared_workspace/manhpc/sat_34k/labels/train"
-    # ["ssd8tb/shared_workspace/manhpc/sat_34k/images/val"]="ssd8tb/shared_workspace/manhpc/sat_34k/labels/val"
-
-    ["1_2024-11-26_081159_0_30s.mp4"]=""
+    ["1_2024-11-26_081159_0.mp4"]=""
+    ["1_2024-11-26_081159_1.mp4"]=""
+    ["1_2024-11-26_081159_2.mp4"]=""
+    ["1_2024-11-26_081159_3.mp4"]=""
 )
 
 IFS=$'\n'
@@ -102,8 +26,6 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}/images${POSTFIX__DIR__IMAGE}"
     path__dir__lbl="${PATH__DIR__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
-    # path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}"
-    # path__dir__lbl="${PATH__DIR__LABEL}/${MAP__SUBPATH_DIR__TO__[$subpath__dir]}"
 
     path__dir__output="${PATH__DIR__OUTPUT}/${subpath__dir}"
 
@@ -120,7 +42,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__box_conf True \
         --to_draw__id_class False \
         --to_draw__name_class False \
-        --fontScale 1 \
+        --fontScale 1.5 \
         --thickness 2 \
         --box_color_by id__class \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
@@ -139,7 +61,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         echo "    [+] $num__lbl labels"
         echo "    [+] $num__img_vis visualized images"
         
-        exit 1
+        # exit 1
     fi
     echo -e "${TAG__PASSED} ${num__lbl} labels == ${num__img_vis} visualized images: ${subpath__dir}"
 done

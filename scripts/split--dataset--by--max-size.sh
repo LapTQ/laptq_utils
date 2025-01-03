@@ -4,18 +4,21 @@ POSTFIX__DIR__IMG__SOURCE=""
 PATH__DIR__LABEL__SOURCE=/mnt/ssd8tb/shared_workspace/gen_SS_20/generated_images
 POSTFIX__DIR__LABEL__SOURCE=""
 
-PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-21/outputs/20241225--gen-data--batches
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-21/data/20241225--gen-data--batches
 POSTFIX__DIR__VERSION__TARGET=""
 
 TO__SHUFFLE=True
 SEED=42
 
-SIZE__MAX=1000
+SIZE__MAX=2000
 POSTFIX__DIR__SPLITTED='-batch-'
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["gen_only_syn_25Dec"]=""
+    # ["gen_only_syn_25Dec"]=""
+    # ["gen_person_center_satudora_31Dec"]=""
+    # ["gen_person_center_uniformly_public_31Dec"]=""
+    ["crop_person_texttopimage_diffusion_02Jan25"]=""
 )
 
 
