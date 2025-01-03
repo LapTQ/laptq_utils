@@ -480,6 +480,7 @@ def helper__draw__detection__video(**kwargs):
 
         img__vis = draw__image(
             data={
+                "id__frame": id__frame,
                 "img__bgr": img__bgr,
                 "list__obj__box_x1y1whn": (
                     xcycwh__to__x1y1wh(

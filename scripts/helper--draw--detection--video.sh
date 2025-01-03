@@ -8,7 +8,15 @@ PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--sc
 mkdir -p "${PATH__DIR__OUTPUT}"
 
 declare -A MAP__NAME_VIDEO__TO__=(
-    ["1_2024-11-26_081159_0_30s.mp4"]=""
+    # ["1_2024-11-26_081159_0_5min.mp4"]=""
+    # ["1_2024-11-26_081159_1_5min.mp4"]=""
+    # ["1_2024-11-26_081159_2_5min.mp4"]=""
+    # ["1_2024-11-26_081159_3_5min.mp4"]=""
+
+    ["1_2024-11-26_081159_0.mp4"]=""
+    ["1_2024-11-26_081159_1.mp4"]=""
+    ["1_2024-11-26_081159_2.mp4"]=""
+    ["1_2024-11-26_081159_3.mp4"]=""
 )
 
 IFS=$'\n'
@@ -30,6 +38,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --path__file__output "${path__file__output}" \
         --pad__id_frame 6 \
         --fourcc "mp4v" \
+        --to_draw__id_frame True \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
         --to_draw__box_conf True \
@@ -40,4 +49,5 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --box_color_by id__class \
         --path__file__map__id_class__to__name_class /home/laptq/Downloads/class_name.yaml
 
+    echo -e "${TAG__INFO} Done: ${name__video}"
 done

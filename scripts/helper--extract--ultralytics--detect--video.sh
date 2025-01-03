@@ -6,7 +6,15 @@ PATH__DIR__IMAGE__OUTPUT=/home/laptq/Downloads/outputs--video--1
 PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--video--1
 
 declare -A MAP__NAME_VIDEO__TO__=(
-    ["clideo_editor_177d5d7cdb144c1598d5419573b0449c.mp4"]=""
+    # ["1_2024-11-26_081159_0_5min.mp4"]=""
+    # ["1_2024-11-26_081159_1_5min.mp4"]=""
+    # ["1_2024-11-26_081159_2_5min.mp4"]=""
+    # ["1_2024-11-26_081159_3_5min.mp4"]=""
+
+    ["1_2024-11-26_081159_0.mp4"]=""
+    ["1_2024-11-26_081159_1.mp4"]=""
+    ["1_2024-11-26_081159_2.mp4"]=""
+    ["1_2024-11-26_081159_3.mp4"]=""
 )
 
 IFS=$'\n'
@@ -36,5 +44,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --imgsz 640 \
         --thresh__conf__min 0.01 \
         --pad__id_frame 6
+
+    echo -e "${TAG__INFO} Done: ${name__video}"
         
 done

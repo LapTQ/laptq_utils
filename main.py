@@ -51,6 +51,7 @@ def parse_args():
     ap.add_argument("--map__id_old__to__id_new", type=str)
     ap.add_argument("--thresh__miniou", type=float)
     ap.add_argument("--to_concat__original_img", type=str)
+    ap.add_argument("--to_draw__id_frame", type=str)
     ap.add_argument("--to_draw__box_x1y1whn", type=str)
     ap.add_argument("--to_draw__box_polygonn", type=str)
     ap.add_argument("--to_draw__id_track", choices=["True", "False"])
@@ -152,6 +153,9 @@ def parse_args():
     )
     args.num__max__box = (
         eval(args.num__max__box) if args.num__max__box is not None else None
+    )
+    args.to_draw__id_frame = (
+        eval(args.to_draw__id_frame) if args.to_draw__id_frame is not None else None
     )
 
     return args
