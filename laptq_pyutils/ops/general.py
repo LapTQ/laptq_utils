@@ -80,6 +80,26 @@ def xcycwh__to__x1y1wh(xcycwh):
     return x1y1wh
 
 
+def x1y1wh__to__xcycwh(x1y1wh):
+
+    xcycwh = x1y1wh.copy()
+    xcycwh[:, 0] = x1y1wh[:, 0] + x1y1wh[:, 2] / 2
+    xcycwh[:, 1] = x1y1wh[:, 1] + x1y1wh[:, 3] / 2
+    xcycwh[:, 2] = x1y1wh[:, 2]
+    xcycwh[:, 3] = x1y1wh[:, 3]
+
+    return xcycwh
+
+
+def x1y1wh__to__x1y1x2y2(x1y1wh):
+
+    x1y1x2y2 = x1y1wh.copy()
+    x1y1x2y2[:, 2] = x1y1wh[:, 0] + x1y1wh[:, 2]
+    x1y1x2y2[:, 3] = x1y1wh[:, 1] + x1y1wh[:, 3]
+
+    return x1y1x2y2
+
+
 def xcycwh__to__polygon(xcycwh):
 
     xcycwh = xcycwh.copy()
