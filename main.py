@@ -51,6 +51,7 @@ def parse_args():
     ap.add_argument("--map__id_old__to__id_new", type=str)
     ap.add_argument("--thresh__miniou", type=float)
     ap.add_argument("--to_concat__original_img", type=str)
+    ap.add_argument("--concat__axis", type=int)
     ap.add_argument("--to_draw__id_frame", type=str)
     ap.add_argument("--to_draw__box_x1y1whn", type=str)
     ap.add_argument("--to_draw__box_polygonn", type=str)
