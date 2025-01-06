@@ -358,6 +358,7 @@ def helper__draw__detection__imgdir(**kwargs):
         "path__file__map__id_class__to__name_class"
     ]
     to_concat__original_img = kwargs["to_concat__original_img"]
+    concat__axis = kwargs["concat__axis"]
 
     os.makedirs(path__dir__output, exist_ok=True)
 
@@ -422,7 +423,7 @@ def helper__draw__detection__imgdir(**kwargs):
         path__file__output = os.path.join(path__dir__output, name__file__img)
 
         if to_concat__original_img:
-            img__vis = np.concatenate([img__bgr, img__vis], axis=0)
+            img__vis = np.concatenate([img__bgr, img__vis], axis=concat__axis)
 
         cv2.imwrite(path__file__output, img__vis)
 

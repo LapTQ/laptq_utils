@@ -30,6 +30,31 @@ def box__iou(boxes1, boxes2):
     return iou
 
 
+def box__iou__left(boxes1, boxes2):
+
+    import numpy as np
+
+    area1 = (boxes1[:, 2] - boxes1[:, 0]) * (boxes1[:, 3] - boxes1[:, 1])
+
+    boxes1 = boxes1.reshape(-1, 1, 4)
+    boxes2 = boxes2.reshape(1, -1, 4)
+
+    x1 = np.maximum(boxes1[..., 0], boxes2[..., 0])
+    y1 = np.maximum(boxes1[..., 1], boxes2[..., 1])
+    x2 = np.minimum(boxes1[..., 2], boxes2[..., 2])
+    y2 = np.minimum(boxes1[..., 3], boxes2[..., 3])
+
+    w = np.maximum(0, x2 - x1)
+    h = np.maximum(0, y2 - y1)
+    inter = w * h
+
+    area1 = area1.reshape(-1, 1)
+
+    iou = inter / area1
+
+    return iou
+
+
 def box__miniou(boxes1, boxes2):
 
     import numpy as np
@@ -78,6 +103,26 @@ def xcycwh__to__x1y1wh(xcycwh):
     x1y1wh[:, 3] = xcycwh[:, 3]
 
     return x1y1wh
+
+
+def x1y1wh__to__xcycwh(x1y1wh):
+
+    xcycwh = x1y1wh.copy()
+    xcycwh[:, 0] = x1y1wh[:, 0] + x1y1wh[:, 2] / 2
+    xcycwh[:, 1] = x1y1wh[:, 1] + x1y1wh[:, 3] / 2
+    xcycwh[:, 2] = x1y1wh[:, 2]
+    xcycwh[:, 3] = x1y1wh[:, 3]
+
+    return xcycwh
+
+
+def x1y1wh__to__x1y1x2y2(x1y1wh):
+
+    x1y1x2y2 = x1y1wh.copy()
+    x1y1x2y2[:, 2] = x1y1wh[:, 0] + x1y1wh[:, 2]
+    x1y1x2y2[:, 3] = x1y1wh[:, 1] + x1y1wh[:, 3]
+
+    return x1y1x2y2
 
 
 def xcycwh__to__polygon(xcycwh):
