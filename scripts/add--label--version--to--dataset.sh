@@ -1,26 +1,48 @@
-PATH__DIR__IMG__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--erase-IGNORE
+PATH__DIR__IMG__SOURCE=/home/laptq/laptq-prj-44/data/prj44/dataset
 POSTFIX__DIR__IMG__SOURCE="--erase-IGNORE"
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--json--filterby-id_class--to-txt
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/data/prj44/dataset
 POSTFIX__DIR__LABEL__SOURCE="--erase-IGNORE"
 
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
-POSTFIX__DIR__VERSION__TARGET="--erase-IGNORE"
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/data/prj44/dataset
+POSTFIX__DIR__VERSION__TARGET="--erase-IGNORE-productPerson"
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["PoC2--2個持ち_cut_fit-1products"]=""
-    ["PoC2--2個持ち_cut_fit-2products"]=""
+    # ["PoC2--2個持ち_cut_fit-1products"]=""
+    # ["PoC2--2個持ち_cut_fit-2products"]=""
+    # ["PoC2--2個持ち_cut_fit-nothing"]=""
+    # ["PoC2--2個持ち_cut_fit-notProducts"]=""
+    # ["PoC2--bag20240906_0000-notProducts"]=""
+    # ["PoC2--bag20240906_1022-notProducts"]=""
+    # ["PoC1--beppu_sue"]=""
+    # ["PoC2--beppu_sue"]=""
+    # ["PoC2--台置き_cut_fit-1products"]=""
+    # ["PoC2--台置き_cut_fit-2products"]=""
+    # ["PoC2--台置き_cut_fit-nothing"]=""
+    # ["PoC2--台置き_cut_fit-notProducts"]=""
+
+
+    ["PoC2--beppu_sue-batch-1"]=""
+    ["PoC2--beppu_sue-batch-3"]=""
+    ["PoC2--beppu_sue-batch-4"]=""
+    ["PoC2--beppu_sue-batch-5"]=""
+    ["PoC2--2個持ち_cut_fit-1products-batch-1"]=""
+    ["PoC2--2個持ち_cut_fit-1products-batch-2"]=""
+    ["PoC2--2個持ち_cut_fit-1products-batch-3"]=""
+    ["PoC2--2個持ち_cut_fit-2products-batch-1"]=""
     ["PoC2--2個持ち_cut_fit-nothing"]=""
     ["PoC2--2個持ち_cut_fit-notProducts"]=""
     ["PoC2--bag20240906_0000-notProducts"]=""
-    ["PoC2--bag20240906_1022-notProducts"]=""
-    ["PoC1--beppu_sue"]=""
-    ["PoC2--beppu_sue"]=""
+    ["PoC2--bag20240906_1022-notProducts-batch-1"]=""
     ["PoC2--台置き_cut_fit-1products"]=""
-    ["PoC2--台置き_cut_fit-2products"]=""
-    ["PoC2--台置き_cut_fit-nothing"]=""
+    ["PoC2--台置き_cut_fit-2products-batch-1"]=""
     ["PoC2--台置き_cut_fit-notProducts"]=""
+    ["PoC2--beppu_sue-batch-2"]=""
+    ["PoC2--2個持ち_cut_fit-2products-batch-2"]=""
+    ["PoC2--台置き_cut_fit-2products-batch-2"]=""
+    ["PoC2--bag20240906_1022-notProducts-batch-2"]=""
+    ["PoC2--台置き_cut_fit-nothing"]=""
 )
 
 

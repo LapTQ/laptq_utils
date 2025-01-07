@@ -4,25 +4,23 @@ sleep 0
 # data=only_pothole_mix
 # data=only_pothole_mix--manhole-241016
 # data=20241122--phase-2--annotation-ver2
-data=general
+data=product-person
 
-# bash ~/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo.sh
-# echo "$( file ~/laptq-prj-46/data/road-issues-detection/APTO_v2/day1_330/images/IMG_488600001.jpg )" >> ~/laptq-prj-46/outputs/progress/log.txt
-YOLO=yolo11m
-IMGSZ=960
+path__dir__run=~/laptq-prj-44/runs
+
+YOLO=yolo11s
+IMGSZ=640
 yolo detect train \
     data=src/configs/$data.yaml \
-    model=/mnt/ssd8tb/shared_workspace/prj44/models/pytorch/yolo11m_640_product_det/weights/best.pt \
+    model=${YOLO}.pt \
     epochs=200 \
     imgsz=$IMGSZ \
     device=1 \
     batch=16 \
-    project=~/laptq-prj-44/runs/$data/${YOLO}--${IMGSZ}--weighted-fitness \
+    project=$path__dir__run/$data/$YOLO--$IMGSZ--weighted-fitness \
     plots=True \
     patience=30 \
     to__use__weighted__fitness=True
-
-    # model=${YOLO}.pt \
 
 
 exit
