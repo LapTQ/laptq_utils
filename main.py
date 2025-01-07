@@ -3,6 +3,7 @@ from laptq_pyutils.helper import (
     helper__extract__ultralytics__detect__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
+    helper__convert__detection__coco__to__json,
     helper__convert__detection__xcycwhn__to__polygonn,
     helper__convert__video__to__images,
     helper__convert__labelstudio_json__to__json,
@@ -17,6 +18,7 @@ from laptq_pyutils.helper import (
     helper__rescale__detection__box,
     helper__erase__classes__on__images,
     helper__check__duplicate__images,
+    helper__cluster__detection__bboxes,
 )
 import argparse
 
@@ -49,6 +51,8 @@ def parse_args():
     ap.add_argument("--map__id_old__to__id_new", type=str)
     ap.add_argument("--thresh__miniou", type=float)
     ap.add_argument("--to_concat__original_img", type=str)
+    ap.add_argument("--concat__axis", type=int)
+    ap.add_argument("--to_draw__id_frame", type=str)
     ap.add_argument("--to_draw__box_x1y1whn", type=str)
     ap.add_argument("--to_draw__box_polygonn", type=str)
     ap.add_argument("--to_draw__id_track", choices=["True", "False"])
@@ -59,6 +63,7 @@ def parse_args():
     ap.add_argument("--thickness", type=int)
     ap.add_argument("--box_color_by", type=str)
     ap.add_argument("--num__max__img", type=str)
+    ap.add_argument("--num__max__box", type=str)
     ap.add_argument("--seed", type=str)
     ap.add_argument("--is_ok__lbl_not_exist", type=str)
     ap.add_argument("--pad__id_frame", type=int)
@@ -73,6 +78,8 @@ def parse_args():
     ap.add_argument("--cut__w__max", type=str)
     ap.add_argument("--cut__h__max", type=str)
     ap.add_argument("--mode__box", type=str)
+    ap.add_argument("--offset__id_class", type=int)
+    ap.add_argument("--n_clusters", type=int)
 
     ap.add_argument("--method", type=str)
     ap.add_argument("--max_distance_threshold", type=int)
@@ -144,6 +151,12 @@ def parse_args():
         eval(args.to_draw__box_polygonn)
         if args.to_draw__box_polygonn is not None
         else None
+    )
+    args.num__max__box = (
+        eval(args.num__max__box) if args.num__max__box is not None else None
+    )
+    args.to_draw__id_frame = (
+        eval(args.to_draw__id_frame) if args.to_draw__id_frame is not None else None
     )
 
     return args
