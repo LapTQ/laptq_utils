@@ -50,25 +50,3 @@ def pklstr_to_obj(**kwargs):
     pkl_str = kwargs["pkl_str"]
     obj = pickle.loads(pkl_str.encode("latin1"))
     return obj
-
-
-def xcycwh__to__x1y1x2y2(xcycwh):
-
-    x1y1x2y2 = xcycwh.copy()
-    x1y1x2y2[:, 0] = xcycwh[:, 0] - xcycwh[:, 2] / 2
-    x1y1x2y2[:, 1] = xcycwh[:, 1] - xcycwh[:, 3] / 2
-    x1y1x2y2[:, 2] = xcycwh[:, 0] + xcycwh[:, 2] / 2
-    x1y1x2y2[:, 3] = xcycwh[:, 1] + xcycwh[:, 3] / 2
-
-    return x1y1x2y2
-
-
-def xcycwh__to__x1y1wh(xcycwh):
-
-    x1y1wh = xcycwh.copy()
-    x1y1wh[:, 0] = xcycwh[:, 0] - xcycwh[:, 2] / 2
-    x1y1wh[:, 1] = xcycwh[:, 1] - xcycwh[:, 3] / 2
-    x1y1wh[:, 2] = xcycwh[:, 2]
-    x1y1wh[:, 3] = xcycwh[:, 3]
-
-    return x1y1wh

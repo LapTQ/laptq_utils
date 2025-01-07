@@ -4,6 +4,9 @@ POSTFIX__DIR__LABEL__INPUT=--20241128--phase-2--annotated-ver2--pot-man-drain--c
 PATH__DIR__LABEL__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--true-labels--json
 POSTFIX__DIR__LABEL__OUTPUT=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-10
 
+MODE__BOX="xcycwhn"
+# MODE__BOX="polygonn"
+
 declare -A MAP__SUBPATH_DIR__TO__=(
     # ["APTO_v2/day1_330"]=""
     # ["APTO_v2/night1_190"]=""
@@ -49,7 +52,8 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     python3 submodules/laptq_utils/main.py \
         helper__convert__detection__txt__to__json \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
-        --path__dir__lbl__output "${path__dir__lbl__output}"
+        --path__dir__lbl__output "${path__dir__lbl__output}" \
+        --mode__box "${MODE__BOX}"
 
 
     num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)

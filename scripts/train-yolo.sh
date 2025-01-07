@@ -1,5 +1,7 @@
 sleep 0
 
+path__dir__run=~/laptq-prj-46/runs
+
 # ==================== finetune
 # data=only_pothole_mix
 # data=only_pothole_mix--manhole-241016
@@ -18,37 +20,11 @@ yolo detect train \
     imgsz=$IMGSZ \
     device=0,1 \
     batch=16 \
-    project=~/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20 \
+    project=$path__dir__run/$data/${YOLO}--${IMGSZ}--crop-20 \
     plots=True \
     patience=30 \
     to__use__weighted__fitness=True
 
-# YOLO=yolo11s
-# IMGSZ=1280
-# yolo detect train \
-#     data=src/configs/$data.yaml \
-#     model=${YOLO}.pt \
-#     epochs=200 \
-#     imgsz=$IMGSZ \
-#     device=0,1 \
-#     batch=16 \
-#     project=~/laptq-prj-46/runs/$data/${YOLO}--${IMGSZ}--crop-20 \
-#     plots=True \
-#     patience=30
-
-
-# YOLO=yolo11m-p2
-# IMGSZ=960
-# yolo detect train \
-#     data=src/configs/$data.yaml \
-#     model=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/coco/yolo11m-p2/train/weights/best.pt \
-#     epochs=200 \
-#     imgsz=$IMGSZ \
-#     device=0,1 \
-#     batch=8 \
-#     project=~/laptq-prj-46/runs/${data}/${YOLO}--${IMGSZ}--crop-20 \
-#     plots=True \
-#     patience=40
 
 
 # bash ~/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo--crop-20--only-pot.sh

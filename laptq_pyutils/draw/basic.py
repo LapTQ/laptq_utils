@@ -121,3 +121,30 @@ def cv2_circle(img, center, radius, **kwargs):
         img, (x1 + 1, y1 + 1), radius, (b // 2, g // 2, r // 2), thickness, lineType
     )
     cv2.circle(img, center, radius, color, thickness, lineType)
+
+
+def cv2_polylines(img, pts, isClosed, **kwargs):
+    import cv2
+
+    color = kwargs.get("color", (255, 255, 255))
+    thickness = kwargs.get("thickness", 1)
+    lineType = kwargs.get("lineType", cv2.LINE_AA)
+
+    b, g, r = color
+    cv2.polylines(
+        img,
+        pts,
+        isClosed,
+        (0, 0, 0),
+        thickness,
+        lineType,
+    )
+    cv2.polylines(
+        img,
+        pts,
+        isClosed,
+        (b // 2, g // 2, r // 2),
+        thickness // 2,
+        lineType,
+    )
+    cv2.polylines(img, pts, isClosed, color, thickness, lineType)

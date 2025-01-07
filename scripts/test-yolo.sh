@@ -25,9 +25,9 @@ ver__train=train8
 conf=0.01
 
 yolo val \
-    data=src/configs/$data.yaml \
+    data=src/configs/$data_val.yaml \
     model=$path__dir__run/$data/${ver__model}/$ver__train/weights/best.pt \
-    project=$path__dir__run/$data/${ver__model}/val--conf-$conf \
+    project=$path__dir__run/$data/${ver__model}/val--$ver__train--imgsz-$imgsz--conf-$conf \
     imgsz=$imgsz \
     iou=0.5 \
     conf=$conf \

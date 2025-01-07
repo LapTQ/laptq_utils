@@ -4,7 +4,7 @@ POSTFIX__DIR__IMAGE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked-
 PATH__DIR__LABEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--true-labels--json
 POSTFIX__DIR__LABEL=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled
 
-NUM__MAX__IMG__TO__VISUALIZE=None
+NUM__MAX__IMG__TO__VISUALIZE=10
 IS_OK__LBL_NOT_FOUND=True
 PATH__DIR__OUTPUT=//mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--visualize
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
@@ -53,12 +53,15 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__output}" ]] && rm -r "${path__dir__output}"
     mkdir -p "${path__dir__output}"
 
-    python3 submodules/laptq_utils/main.py \
+    python3 main.py \
         helper__draw__detection__imgdir \
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \
         --to_concat__original_img True \
+        --concat__axis 1 \
+        --to_draw__box_x1y1whn True \
+        --to_draw__box_polygonn False \
         --to_draw__box_conf True \
         --to_draw__id_class False \
         --to_draw__name_class True \

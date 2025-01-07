@@ -36,5 +36,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --imgsz 960 \
         --thresh__conf__min 0.01 \
         --pad__id_frame 6
+
+    echo -e "${TAG__INFO} Done: ${name__video}"
         
 done

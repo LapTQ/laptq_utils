@@ -1,14 +1,11 @@
-# PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1--undo-split
-PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split     # can be ignored if pad__max not set
-POSTFIX__DIR__IMAGE__INPUT=""
+PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-21/data/20250102--testset--4cam-factory     # can be ignored if pad__max not set
+POSTFIX__DIR__IMAGE__INPUT="--raw"
 
-# PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json--undo-split
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split--merge-old-new--json
-POSTFIX__DIR__LABEL__INPUT=""
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/20241231--get--subset--dataset--yolo--test-set--annotated--to-json
+POSTFIX__DIR__LABEL__INPUT="--raw"
 
-# PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1--undo-split--erase-ignored
-PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split--erase-ignored
-POSTFIX__DIR__IMAGE__OUTPUT=""
+PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250102--testset--4cam-factory--erase-ignored
+POSTFIX__DIR__IMAGE__OUTPUT="--erase-ignored"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     ["beppu_sue"]=""
