@@ -704,12 +704,13 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
-def helper__convert__detection__coco__to__json(**kwargs):
+def helper__convert__result__coco__to__json(**kwargs):
 
     import json
     from tqdm import tqdm
     import os
     import yaml
+    import numpy as np
 
     path__file__lbl__input = kwargs["path__file__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
@@ -739,6 +740,10 @@ def helper__convert__detection__coco__to__json(**kwargs):
         id_img = annot["image_id"]
         id_class = annot["category_id"] + offset__id_class
         x1, y1, w, h = annot["bbox"]
+        list__seg_part__list_xy = annot["segmentation"]
+        iscrowd = annot["iscrowd"]
+        if iscrowd:
+            continue
 
         H = map__id_img__to__info_img[id_img]["height"]
         W = map__id_img__to__info_img[id_img]["width"]
@@ -750,15 +755,27 @@ def helper__convert__detection__coco__to__json(**kwargs):
         xc = x1n + wn / 2
         yc = y1n + hn / 2
 
+        list__seg_part__list_xy = [
+            np.array(_).reshape(-1, 2) for _ in list__seg_part__list_xy
+        ]
+        list__seg_part__list_xyn = [_ / [W, H] for _ in list__seg_part__list_xy]
+        list__seg_part__list_xyn = [
+            _.reshape(-1).tolist() for _ in list__seg_part__list_xyn
+        ]
+
         if id_img not in map__id_img__to__labels:
             map__id_img__to__labels[id_img] = {
                 "list__obj__id_class": [],
                 "list__obj__box_xcycwhn": [],
+                "list__obj__seg__polygonn": [],
             }
 
         map__id_img__to__labels[id_img]["list__obj__id_class"].append(id_class)
         map__id_img__to__labels[id_img]["list__obj__box_xcycwhn"].append(
             [xc, yc, wn, hn]
+        )
+        map__id_img__to__labels[id_img]["list__obj__seg__polygonn"].append(
+            list__seg_part__list_xyn
         )
 
     for id_img, dict__result in tqdm(map__id_img__to__labels.items()):
@@ -1115,3 +1132,11 @@ def helper__cluster__detection__bboxes(**kwargs):
         yaml.dump(list__anchor_box__wh, f)
 
     cv2.imwrite(path__file__output__plot, img__plot)
+
+
+def helper__generate__detection__by__pasting__on__boxes(**kwargs):
+
+    import cv2
+    import numpy as np
+    import os
+    from tqdm import tqdm
