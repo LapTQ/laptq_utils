@@ -83,8 +83,6 @@ def helper__paste__seg_crops__over__det_boxes(**kwargs):
             if not to_paste:
                 continue
 
-            is_successful = False
-
             obj__xcn, obj__ycn, obj__wn, obj__hn = obj__box_xcycwhn
             obj__xc, obj__yc, obj__w, obj__h = (
                 int(obj__xcn * img__W),
@@ -92,6 +90,11 @@ def helper__paste__seg_crops__over__det_boxes(**kwargs):
                 int(obj__wn * img__W),
                 int(obj__hn * img__H),
             )
+            obj__x1, obj__y1 = obj__xc - obj__w // 2, obj__yc - obj__h // 2
+            obj__x2, obj__y2 = obj__x1 + obj__w, obj__y1 + obj__h
+            
+            # center = (obj__xc, obj__yc)
+            center = random.choice([(obj__x1, obj__y1), (obj__x1, obj__y2), (obj__x2, obj__y2), (obj__x2, obj__y1)])
 
             idx__crop = random.randint(0, len(list__crop__img) - 1)
             crop__img = list__crop__img[idx__crop]
@@ -107,7 +110,7 @@ def helper__paste__seg_crops__over__det_boxes(**kwargs):
                     img=img,
                     crop=crop__img,
                     mask=crop__mask,
-                    center=(obj__xc, obj__yc),
+                    center=center,
                 )
             elif method == "PASTE__CV2_SEAMLESS_CLONE":
                 flags = eval(kwargs["flags"])
@@ -115,11 +118,9 @@ def helper__paste__seg_crops__over__det_boxes(**kwargs):
                     img=img,
                     crop=crop__img,
                     mask=crop__mask,
-                    center=(obj__xc, obj__yc),
+                    center=center,
                     flags=flags,
                 )
-
-            is_successful = True
 
         path__file__img__output = os.path.join(path__dir__img__output, name__file__img)
         cv2.imwrite(path__file__img__output, img)
