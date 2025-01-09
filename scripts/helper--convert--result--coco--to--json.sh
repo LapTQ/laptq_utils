@@ -29,7 +29,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         helper__convert__result__coco__to__json \
         --path__file__lbl__input "${path__file__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
-        --offset__id_class -1 \
+        --offset__id_class 0 \
         --path__file__map__id_class__to__name_class "${PATH__DIR__LABEL__OUTPUT}/${subpath__dir}/map__id_class__to__name_class.yaml"
 
     echo -e "${TAG__INFO} Done: ${subpath__dir}"
