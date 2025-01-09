@@ -20,6 +20,7 @@ from laptq_pyutils.helper import (
     helper__check__duplicate__images,
     helper__cluster__detection__bboxes,
     helper__extract__crops__with__mask__from__segmentation,
+    helper__paste__seg_crops__over__det_boxes,
 )
 import argparse
 
@@ -35,8 +36,12 @@ def parse_args():
     ap.add_argument("--path__dir__output", type=str)
     ap.add_argument("--path__dir__lbl__input", type=str)
     ap.add_argument("--path__dir__lbl__output", type=str)
-    ap.add_argument("--path__dir__crop__output", type=str)
-    ap.add_argument("--path__dir__mask__output", type=str)
+    ap.add_argument("--path__dir__crop__img__input", type=str)
+    ap.add_argument("--path__dir__crop__img__output", type=str)
+    ap.add_argument("--path__dir__crop__mask__input", type=str)
+    ap.add_argument("--path__dir__crop__mask__output", type=str)
+    ap.add_argument("--path__dir__crop__lbl__input", type=str)
+    ap.add_argument("--path__dir__crop__lbl__output", type=str)
     ap.add_argument("--path__file__img", type=str)
     ap.add_argument("--path__file__input", type=str)
     ap.add_argument("--path__file__video__input", type=str)
@@ -83,8 +88,10 @@ def parse_args():
     ap.add_argument("--mode__box", type=str)
     ap.add_argument("--offset__id_class", type=int)
     ap.add_argument("--n_clusters", type=int)
-
+    ap.add_argument("--prob", type=float)
     ap.add_argument("--method", type=str)
+    ap.add_argument("--flags", type=str)
+
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
 

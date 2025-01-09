@@ -20,3 +20,6 @@ from .detection import (
     helper__cluster__detection__bboxes,
 )
 from .segmentation import helper__extract__crops__with__mask__from__segmentation
+from .generation import (
+    helper__paste__seg_crops__over__det_boxes,
+)
