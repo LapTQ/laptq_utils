@@ -1,9 +1,9 @@
 # PATH__DIR__VIDEO=/home/laptq/laptq-prj-21/data/Videos/241210_受け取り動画/mp4_5min
 PATH__DIR__VIDEO=/home/laptq/laptq-prj-21/data/Videos/241210_受け取り動画/mp4
 
-PATH__DIR__LABEL=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
+PATH__DIR__LABEL=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolov8m--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
 
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict/draw--video2
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolov8m--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict/draw--video
 
 [[ -d "${PATH__DIR__OUTPUT}" ]] && rm -r "${PATH__DIR__OUTPUT}"
 mkdir -p "${PATH__DIR__OUTPUT}"
@@ -45,7 +45,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --to_draw__box_conf True \
         --to_draw__id_class False \
         --to_draw__name_class False \
-        --fontScale 1.5 \
+        --fontScale 2 \
         --thickness 2 \
         --box_color_by id__class \
         --path__file__map__id_class__to__name_class /home/laptq/Downloads/class_name.yaml

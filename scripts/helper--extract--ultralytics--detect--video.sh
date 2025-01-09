@@ -1,22 +1,12 @@
 # PATH__DIR__VIDEO=/home/laptq/laptq-prj-21/data/Videos/241210_受け取り動画/mp4_5min
 PATH__DIR__VIDEO=/home/laptq/laptq-prj-21/data/Videos/241210_受け取り動画/mp4
 
-# PATH__FILE__MODEL=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/train/weights/best.pt
-# PATH__FILE__MODEL=/home/laptq/laptq-prj-21/runs/data--public--satudora/yolo11s--832--scale-0.5--multiscale-True/train2/weights/best.pt
-# PATH__FILE__MODEL=/mnt/ssd8tb/shared_workspace/manhpc/FS_prj21/runs/train_RAF_val_RAF/weights/best.pt
-PATH__FILE__MODEL=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolo11s--832--scale-0.5--multiscale-True/train/weights/best.pt
-# PATH__FILE__MODEL=/home/laptq/laptq-prj-21/runs/data--RAP-change-clothes/yolo11s--832--scale-0.5--multiscale-True/train/weights/best.pt
+PATH__FILE__MODEL=/home/laptq/laptq-prj-21/runs/data--syn-text2image-satudora-center--satudora-center-box/yolov5s--832--scale-0.5--multiscale-True/exp/weights/best.pt
 
-# PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
-# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
-# PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/runs/data--public--satudora/yolo11s--832--scale-0.5--multiscale-True/predict--train2--imgsz-1664--conf-0.05/predict
-# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/runs/data--public--satudora/yolo11s--832--scale-0.5--multiscale-True/predict--train2--imgsz-1664--conf-0.05/predict
-# PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/runs/RAF/train_RAF_val_RAF/predict--train_RAF_val_RAF--imgsz-832--conf-0.1/predict
-# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/runs/RAF/train_RAF_val_RAF/predict--train_RAF_val_RAF--imgsz-832--conf-0.1/predict
-PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
-# PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/runs/data--RAP-change-clothes/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
-# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/runs/data--RAP-change-clothes/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
+PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/runs/data--syn-text2image-satudora-center--satudora-center-box/yolov5s--832--scale-0.5--multiscale-True/predict--exp--imgsz-832--conf-0.1/predict
+POSTFIX__DIR__IMAGE__OUTPUT=""
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/runs/data--syn-text2image-satudora-center--satudora-center-box/yolov5s--832--scale-0.5--multiscale-True/predict--exp--imgsz-832--conf-0.1/predict
+POSTFIX__DIR__LABEL__OUTPUT="--conf-0.001"
 
 
 declare -A MAP__NAME_VIDEO__TO__=(
@@ -40,8 +30,8 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     path__file__input="${PATH__DIR__VIDEO}/${name__video}"
-    path__dir__img__output="${PATH__DIR__IMAGE__OUTPUT}/${name__video}/images"
-    path__dir__lbl__output="${PATH__DIR__LABEL__OUTPUT}/${name__video}/labels"
+    path__dir__img__output="${PATH__DIR__IMAGE__OUTPUT}/${name__video}/images${POSTFIX__DIR__IMAGE__OUTPUT}"
+    path__dir__lbl__output="${PATH__DIR__LABEL__OUTPUT}/${name__video}/labels${POSTFIX__DIR__LABEL__OUTPUT}"
 
     [[ -d "${path__dir__img__output}" ]] && rm -r "${path__dir__img__output}"
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
@@ -54,9 +44,9 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --path__dir__img__output "${path__dir__img__output}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
         --path__file__model "${PATH__FILE__MODEL}" \
-        --device "cuda:1" \
+        --device "cuda:2" \
         --imgsz 832 \
-        --thresh__conf__min 0.1 \
+        --thresh__conf__min 0.001 \
         --pad__id_frame 6
 
     echo -e "${TAG__INFO} Done: ${name__video}"

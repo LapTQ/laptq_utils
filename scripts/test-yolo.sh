@@ -1,14 +1,14 @@
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
-data=data--public--satudora
+data=data--synthetic--satudora-center-box
 data_val=data--testset-4cam-factory
 
 
 ver__model=yolo11s--832--scale-0.5--multiscale-True
 imgsz=832
 
-ver__train=train2
-conf=0.05
+ver__train=train5
+conf=0.1
 
 yolo val \
     data=src/configs/$data_val.yaml \

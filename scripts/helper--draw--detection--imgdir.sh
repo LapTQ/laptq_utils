@@ -1,12 +1,12 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/outputs/20250102--testset--4cam-factory--erase-ignored
-POSTFIX__DIR__IMAGE="--erase-ignored"
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolov8s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
+POSTFIX__DIR__IMAGE=""
 
-PATH__DIR__LABEL=/home/laptq/laptq-prj-21/outputs/20241231--get--subset--dataset--yolo--test-set--annotated--to-json
-POSTFIX__DIR__LABEL="--erase-ignored"
+PATH__DIR__LABEL=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolov8s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
+POSTFIX__DIR__LABEL="--conf-0.1"
 
 NUM__MAX__IMG__TO__VISUALIZE=None
 IS_OK__LBL_NOT_FOUND=False
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/20241231--visualize
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolov8s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict/draw--imgdir
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
@@ -32,19 +32,19 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__output}" ]] && rm -r "${path__dir__output}"
     mkdir -p "${path__dir__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__draw__detection__imgdir \
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \
-        --to_concat__original_img True \
+        --to_concat__original_img False \
         --concat__axis 1 \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
         --to_draw__box_conf True \
         --to_draw__id_class False \
         --to_draw__name_class False \
-        --fontScale 1.5 \
+        --fontScale 2 \
         --thickness 2 \
         --box_color_by id__class \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \

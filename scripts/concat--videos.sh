@@ -1,7 +1,7 @@
-PATH__DIR__INPUT__1=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict/draw--video
-PATH__DIR__INPUT__2=/home/laptq/laptq-prj-21/runs/data--synthetic/yolo11s--832--scale-0.5--multiscale-True/predict--train2--imgsz-832--conf-0.1/predict/draw--video
+PATH__DIR__INPUT__1=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolov5s--832--scale-0.5--multiscale-True/predict--exp--imgsz-832--conf-0.1/exp
+PATH__DIR__INPUT__2=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolov8s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict/draw--imgdir--to--video
 
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/trivial
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/trivial/concat
 
 [[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
 mkdir -p "$PATH__DIR__OUTPUT"
