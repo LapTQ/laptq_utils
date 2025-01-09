@@ -130,7 +130,7 @@ def helper__extract__ultralytics__detect__video(**kwargs):
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     path__file__model = kwargs["path__file__model"]
     device = kwargs["device"]
-    pad__id_frame = kwargs["pad__id_frame"]
+    num__pad__0 = kwargs["num__pad__0"]
 
     model = YOLO(path__file__model).to(device)
 
@@ -157,9 +157,9 @@ def helper__extract__ultralytics__detect__video(**kwargs):
         dict__result = _["dict__result"]
         mtime_2 = time.time()
 
-        name__file__img = f"{id__frame:0{pad__id_frame}d}.jpg"
+        name__file__img = f"{id__frame:0{num__pad__0}d}.jpg"
         path__file__img = os.path.join(path__dir__img__output, name__file__img)
-        name__file__lbl = f"{id__frame:0{pad__id_frame}d}.json"
+        name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
         path__file__lbl = os.path.join(path__dir__lbl__output, name__file__lbl)
 
         cv2.imwrite(path__file__img, img__bgr)
@@ -440,7 +440,7 @@ def helper__draw__detection__video(**kwargs):
     path__file__video__input = kwargs["path__file__video__input"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__file__output = kwargs["path__file__output"]
-    pad__id_frame = kwargs["pad__id_frame"]
+    num__pad__0 = kwargs["num__pad__0"]
     to_draw__name_class = kwargs["to_draw__name_class"]
     fourcc = kwargs["fourcc"]
     path__file__map__id_class__to__name_class = kwargs[
@@ -474,7 +474,7 @@ def helper__draw__detection__video(**kwargs):
         if not success:
             break
 
-        name__file__lbl = f"{id__frame:0{pad__id_frame}d}.json"
+        name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
         path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
         with open(path__file__lbl, "r") as f:
             dict__result = json.load(f)

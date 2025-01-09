@@ -19,3 +19,4 @@ from .detection import (
     helper__erase__classes__on__images,
     helper__cluster__detection__bboxes,
 )
+from .segmentation import helper__extract__crops__with__mask__from__segmentation

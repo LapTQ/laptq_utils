@@ -1,15 +1,15 @@
-PATH__DIR__IMAGE=/home/laptq/datasets/COCO--reformated
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/data/COCO--reformated--splitted
 POSTFIX__DIR__IMAGE=""
 
-PATH__DIR__LABEL=/home/laptq/datasets/COCO--reformated
+PATH__DIR__LABEL=/home/laptq/laptq-prj-21/data/COCO--reformated--splitted
 POSTFIX__DIR__LABEL=""
 
-PATH__DIR__OUTPUT=/home/laptq/Downloads/outputs--crops
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/test-sample--crops
 POSTFIX__DIR__OUTPUT=""
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["val2017"]=""
-    ["test"]=""
+    # ["val2017"]=""
+    ["test-sample"]=""
 )
 
 IFS=$'\n'
@@ -40,6 +40,8 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__crop__output "${path__dir__crop__output}" \
         --path__dir__mask__output "${path__dir__mask__output}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
+        --is_ok__lbl_not_exist False \
+        --num__pad__0 6
     
     echo -e "${TAG__INFO} Done: ${subpath__dir}"
 done

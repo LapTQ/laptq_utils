@@ -78,16 +78,15 @@ def helper__check__duplicate__images(**kwargs):
             )
 
 
-
 def helper__convert__video__to__images(**kwargs):
-    
+
     import cv2
     import os
     from tqdm import tqdm
 
-    path__file__input = kwargs['path__file__input']
-    path__dir__img__output = kwargs['path__dir__img__output']
-    pad__id_frame = kwargs['pad__id_frame']
+    path__file__input = kwargs["path__file__input"]
+    path__dir__img__output = kwargs["path__dir__img__output"]
+    num__pad__0 = kwargs["num__pad__0"]
 
     cap = cv2.VideoCapture(path__file__input)
     os.makedirs(path__dir__img__output, exist_ok=True)
@@ -99,7 +98,7 @@ def helper__convert__video__to__images(**kwargs):
         if not success:
             break
 
-        name__file__img = f"{id__frame:0{pad__id_frame}d}.jpg"
+        name__file__img = f"{id__frame:0{num__pad__0}d}.jpg"
         path__file__img = os.path.join(path__dir__img__output, name__file__img)
 
         cv2.imwrite(path__file__img, img__bgr)
