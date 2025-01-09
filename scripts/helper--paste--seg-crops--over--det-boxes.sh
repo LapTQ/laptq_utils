@@ -57,7 +57,7 @@ for subpath__dir__image in "${!MAP__SUBPATH_DIR_IMAGE_TO__[@]}"; do
             --path__dir__img__output "${path__dir__img__output}" \
             --path__dir__lbl__output "${path__dir__lbl__output}" \
             --is_ok__lbl_not_exist False \
-            --prob 0.25 \
+            --prob 0.5 \
             --seed 42 \
             --method PASTE__SIMPLE \
             # --method PASTE__CV2_SEAMLESS_CLONE \
