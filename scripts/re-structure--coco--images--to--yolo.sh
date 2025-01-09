@@ -5,8 +5,9 @@ POSTFIX__DIR__IMAGE__OUTPUT=""
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["train2017"]=""
-    ["val2017"]=""
+    # ["train2017"]=""
+    # ["val2017"]=""
+    ["test"]=""
 )
 
 IFS=$'\n'
