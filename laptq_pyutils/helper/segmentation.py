@@ -8,15 +8,15 @@ def helper__extract__crops__with__mask__from__segmentation(**kwargs):
 
     path__dir__img__input = kwargs["path__dir__img__input"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
-    path__dir__crop__output = kwargs["path__dir__crop__output"]
-    path__dir__mask__output = kwargs["path__dir__mask__output"]
-    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    path__dir__crop__img__output = kwargs["path__dir__crop__img__output"]
+    path__dir__crop__mask__output = kwargs["path__dir__crop__mask__output"]
+    path__dir__crop__lbl__output = kwargs["path__dir__crop__lbl__output"]
     is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
     num__pad__0 = kwargs["num__pad__0"]
 
-    os.makedirs(path__dir__crop__output, exist_ok=True)
-    os.makedirs(path__dir__mask__output, exist_ok=True)
-    os.makedirs(path__dir__lbl__output, exist_ok=True)
+    os.makedirs(path__dir__crop__img__output, exist_ok=True)
+    os.makedirs(path__dir__crop__mask__output, exist_ok=True)
+    os.makedirs(path__dir__crop__lbl__output, exist_ok=True)
 
     for name__file__img in tqdm(sorted(os.listdir(path__dir__img__input))):
         path__file__img = os.path.join(path__dir__img__input, name__file__img)
@@ -25,7 +25,7 @@ def helper__extract__crops__with__mask__from__segmentation(**kwargs):
 
         if not os.path.isfile(path__file__lbl__input):
             if not is_ok__lbl_not_exist:
-                raise Exception("File not found: {}".format(path__file__lbl__input))
+                raise FileNotFoundError("File not found: {}".format(path__file__lbl__input))
             else:
                 continue
 
@@ -70,18 +70,18 @@ def helper__extract__crops__with__mask__from__segmentation(**kwargs):
             name__file__img__output = "{}--crop-{}.jpg".format(
                 os.path.splitext(name__file__img)[0], f"{i_o:0{num__pad__0}d}"
             )
-            path__file__crop__output = os.path.join(
-                path__dir__crop__output, name__file__img__output
+            path__file__crop__img__output = os.path.join(
+                path__dir__crop__img__output, name__file__img__output
             )
-            path__file__mask__output = os.path.join(
-                path__dir__mask__output, name__file__img__output
+            path__file__crop__mask__output = os.path.join(
+                path__dir__crop__mask__output, name__file__img__output
             )
-            path__file__lbl__output = os.path.join(
-                path__dir__lbl__output,
+            path__file__crop__lbl__output = os.path.join(
+                path__dir__crop__lbl__output,
                 os.path.splitext(name__file__img__output)[0] + ".json",
             )
 
-            cv2.imwrite(path__file__crop__output, crop)
-            cv2.imwrite(path__file__mask__output, mask)
-            with open(path__file__lbl__output, "w") as f:
+            cv2.imwrite(path__file__crop__img__output, crop)
+            cv2.imwrite(path__file__crop__mask__output, mask)
+            with open(path__file__crop__lbl__output, "w") as f:
                 json.dump(dict__result__out, f, indent=4)
