@@ -45,6 +45,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --device "cuda:0" \
         --imgsz 640 \
         --thresh__conf__min 0.01 \
+        --to_save__img False \
         --num__pad__0 6
 
     echo -e "${TAG__INFO} Done: ${name__video}"

@@ -61,8 +61,8 @@ def parse_args():
     ap.add_argument("--thresh__conf__min", type=float)
     ap.add_argument("--thresh__leftiou__min", type=float)
     ap.add_argument("--thresh__leftiou__max", type=float)
-    ap.add_argument("--to_concat__original_img", type=str)
     ap.add_argument("--concat__axis", type=int)
+    ap.add_argument("--to_concat__original_img", type=str)
     ap.add_argument("--to_draw__id_frame", type=str)
     ap.add_argument("--to_draw__box_x1y1whn", type=str)
     ap.add_argument("--to_draw__box_polygonn", type=str)
@@ -70,6 +70,7 @@ def parse_args():
     ap.add_argument("--to_draw__box_conf", choices=["True", "False"])
     ap.add_argument("--to_draw__id_class", choices=["True", "False"])
     ap.add_argument("--to_draw__name_class", choices=["True", "False"])
+    ap.add_argument("--to_save__img", type=str)
     ap.add_argument("--fontScale", type=float)
     ap.add_argument("--thickness", type=int)
     ap.add_argument("--box_color_by", type=str)
@@ -170,6 +171,7 @@ def parse_args():
     args.to_draw__id_frame = (
         eval(args.to_draw__id_frame) if args.to_draw__id_frame is not None else None
     )
+    args.to_save__img = eval(args.to_save__img) if args.to_save__img is not None else None
 
     return args
 
