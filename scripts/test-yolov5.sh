@@ -1,14 +1,14 @@
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
-data=data--synthetic--satudora-center-box--synthetic-cutoff
+data=data--synthetic--syn-text2image-satudora-center--satudora-center-box
 data_val=data--testset-4cam-factory
 
 
 ver__model=yolov5s--832--scale-0.5--multiscale-True
 imgsz=832
 
-ver__train=exp
-conf=0.1
+ver__train=exp2
+conf=0.5
 
 cd submodules/yolov5
 python3 val.py \
@@ -19,4 +19,4 @@ python3 val.py \
     --conf $conf \
     --iou 0.6 \
     --device 1 \
-    --batch 8
+    --batch 16
