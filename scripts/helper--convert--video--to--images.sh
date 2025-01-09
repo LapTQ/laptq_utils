@@ -24,6 +24,6 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         helper__convert__video__to__images \
         --path__file__input "${path__file__input}" \
         --path__dir__img__output "${path__dir__img__output}" \
-        --pad__id_frame 6
+        --num__pad__0 6
         
 done

@@ -19,6 +19,7 @@ from laptq_pyutils.helper import (
     helper__erase__classes__on__images,
     helper__check__duplicate__images,
     helper__cluster__detection__bboxes,
+    helper__extract__crops__with__mask__from__segmentation,
 )
 import argparse
 
@@ -34,6 +35,8 @@ def parse_args():
     ap.add_argument("--path__dir__output", type=str)
     ap.add_argument("--path__dir__lbl__input", type=str)
     ap.add_argument("--path__dir__lbl__output", type=str)
+    ap.add_argument("--path__dir__crop__output", type=str)
+    ap.add_argument("--path__dir__mask__output", type=str)
     ap.add_argument("--path__file__img", type=str)
     ap.add_argument("--path__file__input", type=str)
     ap.add_argument("--path__file__video__input", type=str)
@@ -66,7 +69,7 @@ def parse_args():
     ap.add_argument("--num__max__box", type=str)
     ap.add_argument("--seed", type=str)
     ap.add_argument("--is_ok__lbl_not_exist", type=str)
-    ap.add_argument("--pad__id_frame", type=int)
+    ap.add_argument("--num__pad__0", type=int)
     ap.add_argument("--fourcc", type=str)
     ap.add_argument("--path__file__map__id_class__to__name_class", type=str)
     ap.add_argument("--filter_by", type=str)
