@@ -1,7 +1,7 @@
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
 # data=unknown
-data=data--synthetic--satudora-center-box
+data=data--synthetic--syn-text2image-satudora-center--satudora-center-box
 
 # ver__model=unknown
 ver__model=yolov5s--832--scale-0.5--multiscale-True

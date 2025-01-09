@@ -1,9 +1,12 @@
-PATH__DIR__VIDEO=/home/laptq/laptq-prj-21/data/Videos/241210_受け取り動画/mp4_5min
+PATH__DIR__VIDEO=/home/laptq/laptq-prj-21/data/Videos/241210_受け取り動画/mp4
 
-PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/data/Videos--to--frames/241210_受け取り動画/mp4_5min
+PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/data/Videos--to--frames/241210_受け取り動画/mp4
 
 declare -A MAP__NAME_VIDEO__TO__=(
-    ["1_2024-11-26_081159_0_5min.mp4"]=""
+    ["1_2024-11-26_081159_0.mp4"]=""
+    ["1_2024-11-26_081159_1.mp4"]=""
+    ["1_2024-11-26_081159_2.mp4"]=""
+    ["1_2024-11-26_081159_3.mp4"]=""
 )
 
 IFS=$'\n'
