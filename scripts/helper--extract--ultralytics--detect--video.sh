@@ -3,7 +3,9 @@ PATH__DIR__VIDEO=/home/laptq/Downloads/videos
 PATH__FILE__MODEL=/home/laptq/Downloads/yolo11n.pt
 
 PATH__DIR__IMAGE__OUTPUT=/home/laptq/Downloads/outputs--video--1
+POSTFIX__DIR__IMAGE__OUTPUT=""
 PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--video--1
+POSTFIX__DIR__LABEL__OUTPUT=""
 
 declare -A MAP__NAME_VIDEO__TO__=(
     # ["1_2024-11-26_081159_0_5min.mp4"]=""
@@ -26,8 +28,8 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     path__file__input="${PATH__DIR__VIDEO}/${name__video}"
-    path__dir__img__output="${PATH__DIR__IMAGE__OUTPUT}/${name__video}/images"
-    path__dir__lbl__output="${PATH__DIR__LABEL__OUTPUT}/${name__video}/labels"
+    path__dir__img__output="${PATH__DIR__IMAGE__OUTPUT}/${name__video}/images${POSTFIX__DIR__IMAGE__OUTPUT}"
+    path__dir__lbl__output="${PATH__DIR__LABEL__OUTPUT}/${name__video}/labels${POSTFIX__DIR__LABEL__OUTPUT}"
 
     [[ -d "${path__dir__img__output}" ]] && rm -r "${path__dir__img__output}"
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
