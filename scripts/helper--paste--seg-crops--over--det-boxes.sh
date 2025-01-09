@@ -60,6 +60,8 @@ for subpath__dir__image in "${!MAP__SUBPATH_DIR_IMAGE_TO__[@]}"; do
             --prob 0.5 \
             --seed 42 \
             --method PASTE__SIMPLE \
+            --thresh__leftiou__min 0.2 \
+            --thresh__leftiou__max 0.4
             # --method PASTE__CV2_SEAMLESS_CLONE \
             # --flags cv2.MONOCHROME_TRANSFER
             # --flags cv2.NORMAL_CLONE \
