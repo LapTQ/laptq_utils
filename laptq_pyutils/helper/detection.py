@@ -130,6 +130,7 @@ def helper__extract__ultralytics__detect__video(**kwargs):
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     path__file__model = kwargs["path__file__model"]
     device = kwargs["device"]
+    to_save__img = kwargs["to_save__img"]
     num__pad__0 = kwargs["num__pad__0"]
 
     model = YOLO(path__file__model).to(device)
@@ -162,7 +163,8 @@ def helper__extract__ultralytics__detect__video(**kwargs):
         name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
         path__file__lbl = os.path.join(path__dir__lbl__output, name__file__lbl)
 
-        cv2.imwrite(path__file__img, img__bgr)
+        if to_save__img:
+            cv2.imwrite(path__file__img, img__bgr)
         with open(path__file__lbl, "w") as f:
             json.dump(dict__result, f, indent=4)
 
