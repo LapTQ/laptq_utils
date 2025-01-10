@@ -5,7 +5,7 @@ from laptq_pyutils.ops import (
     box__leftiou,
     box_normalized__to__box_pixels,
     xcycwh__to__x1y1x2y2,
-    xcycwh__to__polygon,
+    x1y1x2y2__to__polygon,
 )
 
 
@@ -152,6 +152,7 @@ def helper__paste__seg_crops__over__det_boxes(**kwargs):
             [True, False], weights=[prob, 1 - prob], k=len(list__img__obj__box_xcycwhn)
         )
 
+        img__out = img.copy()
         for i__obj, to_paste in enumerate(list__to_paste):
             if i__obj not in _dict__idx:
                 continue
@@ -168,7 +169,7 @@ def helper__paste__seg_crops__over__det_boxes(**kwargs):
 
             img__out = handler__paste(
                 method=method,
-                img=img,
+                img=img__out,
                 crop=crop__img,
                 mask=crop__mask,
                 center=center,
@@ -202,8 +203,8 @@ def helper__paste__seg_crops__over__background(**kwargs):
     is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
     num = kwargs["num"]
     roi__polygonn = kwargs["roi__polygonn"]
-    ratio__w = kwargs["ratio__w"]
-    ratio__h = kwargs["ratio__h"]
+    margin__xn = kwargs["margin__xn"]
+    margin__yn = kwargs["margin__yn"]
     seed = kwargs["seed"]
     method = kwargs["method"]
     flags = kwargs["flags"]
@@ -219,6 +220,7 @@ def helper__paste__seg_crops__over__background(**kwargs):
     # get crop list
     list__crop__img = []
     list__crop__mask = []
+    list__crop__wh = []
     for name__file__crop__img in tqdm(sorted(os.listdir(path__dir__crop__img__input))):
         path__file__crop__img = os.path.join(
             path__dir__crop__img__input, name__file__crop__img
@@ -233,6 +235,8 @@ def helper__paste__seg_crops__over__background(**kwargs):
             _, crop__mask = cv2.threshold(crop__mask, 127, 255, cv2.THRESH_BINARY)
         list__crop__img.append(crop__img)
         list__crop__mask.append(crop__mask)
+        list__crop__wh.append((crop__img.shape[1], crop__img.shape[0]))
+    list__crop__wh = np.array(list__crop__wh).reshape(-1, 2)
 
     # iterate through images
     for name__file__img in tqdm(sorted(os.listdir(path__dir__img__input))):
@@ -260,12 +264,30 @@ def helper__paste__seg_crops__over__background(**kwargs):
         list__img__obj__box_xcycwh = box_normalized__to__box_pixels(
             list__img__obj__box_xcycwhn, (img__W, img__H)
         )
+        list__img__obj__box_x1y1x2y2 = xcycwh__to__x1y1x2y2(list__img__obj__box_xcycwh)
 
-        # center of pasted object will not be placed in the avoided regions
-        list__to_avoid__box_xcycwh = (
-            list__img__obj__box_xcycwh * [1, 1, ratio__w, ratio__h]
-        ).astype(int)
-        list__to_avoid__box_polygon = xcycwh__to__polygon(list__to_avoid__box_xcycwh)
+        margin__x = int(margin__xn * img__W)
+        margin__y = int(margin__yn * img__H)
+
+        # top-left of pasted object will not be placed in the avoided regions
+        list__to_avoid__box_x1y1x2y2 = (
+            list__img__obj__box_x1y1x2y2
+            + [-margin__x, -margin__y, margin__x, margin__y]
+        ).reshape(-1, 1, 4) + np.concatenate(
+            [-list__crop__wh, np.zeros_like(list__crop__wh)], axis=1
+        )
+        list__to_avoid__box_x1y1x2y2 = np.stack(
+            [
+                list__to_avoid__box_x1y1x2y2[:, :, 0].min(axis=1),
+                list__to_avoid__box_x1y1x2y2[:, :, 1].min(axis=1),
+                list__to_avoid__box_x1y1x2y2[:, :, 2].min(axis=1),
+                list__to_avoid__box_x1y1x2y2[:, :, 3].min(axis=1),
+            ],
+            axis=1,
+        )
+        list__to_avoid__box_polygon = x1y1x2y2__to__polygon(
+            list__to_avoid__box_x1y1x2y2
+        )
 
         roi__polygon = (roi__polygonn * [img__W, img__H]).astype(int)
 
@@ -275,22 +297,21 @@ def helper__paste__seg_crops__over__background(**kwargs):
             polygon = polygon.reshape(-1, 1, 2)
             cv2.fillPoly(mask__img, [polygon], 0)
 
-        list__paste_center = random.choices(np.argwhere(mask__img == 255), k=num)
+        list__paste_y1x1 = random.choices(np.argwhere(mask__img == 255), k=num)
         list__idx__crop = random.choices(range(len(list__crop__img)), k=num)
 
-        for center, idx__crop in zip(list__paste_center, list__idx__crop):
+        img__out = img.copy()
+        for (py1, px1), idx__crop in zip(list__paste_y1x1, list__idx__crop):
             crop__img = list__crop__img[idx__crop]
             crop__mask = list__crop__mask[idx__crop]
-            yc, xc = center
-            xc = max(xc, crop__img.shape[1] // 2 + 1)
-            xc = min(xc, img__W - crop__img.shape[1] // 2 - 1)
-            yc = max(yc, crop__img.shape[0] // 2 + 1)
-            yc = min(yc, img__H - crop__img.shape[0] // 2 - 1)
+
+            xc = px1 + crop__img.shape[1] // 2
+            yc = py1 + crop__img.shape[0] // 2
             center = (xc, yc)
 
             img__out = handler__paste(
                 method=method,
-                img=img,
+                img=img__out,
                 crop=crop__img,
                 mask=crop__mask,
                 center=center,

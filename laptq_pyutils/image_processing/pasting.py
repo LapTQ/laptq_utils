@@ -17,9 +17,22 @@ def paste__simple(**kwargs):
 
     roi__x1, roi__y1 = roi__xc - crop__W // 2, roi__yc - crop__H // 2
 
-    roi__img = img[roi__y1 : roi__y1 + crop__H, roi__x1 : roi__x1 + crop__W]
+    roi__x1 = max(0, roi__xc - crop__W // 2)
+    roi__y1 = max(0, roi__yc - crop__H // 2)
+    roi__x2 = min(img.shape[1], roi__xc + crop__W // 2)
+    roi__y2 = min(img.shape[0], roi__yc + crop__H // 2)
+
+    crop__x1 = max(0, crop__W // 2 - roi__xc)
+    crop__y1 = max(0, crop__H // 2 - roi__yc)
+    crop__x2 = crop__x1 + roi__x2 - roi__x1
+    crop__y2 = crop__y1 + roi__y2 - roi__y1
+
+    roi__img = img[roi__y1:roi__y2, roi__x1:roi__x2]
+    mask = mask[crop__y1:crop__y2, crop__x1:crop__x2]
+    crop = crop[crop__y1:crop__y2, crop__x1:crop__x2]
+
     roi__img[np.where(mask)] = crop[np.where(mask)]
-    img[roi__y1 : roi__y1 + crop__H, roi__x1 : roi__x1 + crop__W] = roi__img
+    img[roi__y1:roi__y2, roi__x1:roi__x2] = roi__img
 
     return img
 
