@@ -1,9 +1,5 @@
 from laptq_pyutils.log import load_logger
-from laptq_pyutils.image_processing import (
-    LIST__METHOD__PASTING,
-    paste__simple,
-    paste__cv2_seamlessClone,
-)
+from laptq_pyutils.image_processing import handler__paste
 from laptq_pyutils.ops import (
     x1y1wh__to__x1y1x2y2,
     box__leftiou,
@@ -170,31 +166,18 @@ def helper__paste__seg_crops__over__det_boxes(**kwargs):
             ]
             center = (paste__x1 + paste__w // 2, paste__y1 + paste__h // 2)
 
-            assert (
-                method in LIST__METHOD__PASTING
-            ), "Invalid method: {}. Supported methods: {}".format(
-                method, LIST__METHOD__PASTING
+            img__out = handler__paste(
+                method=method,
+                img=img,
+                crop=crop__img,
+                mask=crop__mask,
+                center=center,
+                flags=flags,
             )
-            if method == "PASTE__SIMPLE":
-                img = paste__simple(
-                    img=img,
-                    crop=crop__img,
-                    mask=crop__mask,
-                    center=center,
-                )
-            elif method == "PASTE__CV2_SEAMLESS_CLONE":
-                flags = eval(kwargs["flags"])
-                img = paste__cv2_seamlessClone(
-                    img=img,
-                    crop=crop__img,
-                    mask=crop__mask,
-                    center=center,
-                    flags=flags,
-                )
 
         path__file__img__output = os.path.join(path__dir__img__output, name__file__img)
         path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
-        cv2.imwrite(path__file__img__output, img)
+        cv2.imwrite(path__file__img__output, img__out)
         os.system(
             "cp '{}' '{}'".format(path__file__lbl__input, path__file__lbl__output)
         )
@@ -304,31 +287,19 @@ def helper__paste__seg_crops__over__background(**kwargs):
             yc = max(yc, crop__img.shape[0] // 2 + 1)
             yc = min(yc, img__H - crop__img.shape[0] // 2 - 1)
             center = (xc, yc)
-            assert (
-                method in LIST__METHOD__PASTING
-            ), "Invalid method: {}. Supported methods: {}".format(
-                method, LIST__METHOD__PASTING
+
+            img__out = handler__paste(
+                method=method,
+                img=img,
+                crop=crop__img,
+                mask=crop__mask,
+                center=center,
+                flags=flags,
             )
-            if method == "PASTE__SIMPLE":
-                img = paste__simple(
-                    img=img,
-                    crop=crop__img,
-                    mask=crop__mask,
-                    center=center,
-                )
-            elif method == "PASTE__CV2_SEAMLESS_CLONE":
-                flags = eval(kwargs["flags"])
-                img = paste__cv2_seamlessClone(
-                    img=img,
-                    crop=crop__img,
-                    mask=crop__mask,
-                    center=center,
-                    flags=flags,
-                )
 
         path__file__img__output = os.path.join(path__dir__img__output, name__file__img)
         path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
-        cv2.imwrite(path__file__img__output, img)
+        cv2.imwrite(path__file__img__output, img__out)
         os.system(
             "cp '{}' '{}'".format(path__file__lbl__input, path__file__lbl__output)
         )
