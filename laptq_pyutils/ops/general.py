@@ -30,7 +30,7 @@ def box__iou(boxes1, boxes2):
     return iou
 
 
-def box__iou__left(boxes1, boxes2):
+def box__leftiou(boxes1, boxes2):
 
     import numpy as np
 
