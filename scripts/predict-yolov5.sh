@@ -1,14 +1,14 @@
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
 # data=unknown
-data=data--synthetic--syn-text2image-satudora-center--satudora-center-box
+data=data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person
 
 # ver__model=unknown
 ver__model=yolov5s--832--scale-0.5--multiscale-True
 imgsz=832
 
 # ver__train=train
-ver__train=exp2
+ver__train=exp
 conf=0.1
 
 
