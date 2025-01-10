@@ -14,6 +14,7 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["1_2024-11-26_081159_3.mp4"]=""
 
     ["gen_only_syn_25Dec-batch-1"]=""
+    ["gen_only_syn_25Dec-batch-2"]=""
 )
 
 IFS=$'\n'
