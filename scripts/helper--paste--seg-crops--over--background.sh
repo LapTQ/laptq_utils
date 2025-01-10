@@ -59,9 +59,9 @@ for subpath__dir__image in "${!MAP__SUBPATH_DIR_IMAGE_TO__[@]}"; do
             --path__dir__lbl__output "${path__dir__lbl__output}" \
             --is_ok__lbl_not_exist False \
             --num 10 \
-            --roi__polygonn "(0.15, 0.2, 0.15, 0.85, 0.85, 0.75, 0.85, 0.2)" \
-            --ratio__w 4 \
-            --ratio__h 4 \
+            --roi__polygonn "(0.15, 0.2, 0.15, 0.75, 0.85, 0.75, 0.85, 0.2)" \
+            --margin__xn 0.02 \
+            --margin__yn 0.02 \
             --seed 42 \
             --method PASTE__SIMPLE
             # --method PASTE__CV2_SEAMLESS_CLONE \
