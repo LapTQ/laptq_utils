@@ -51,3 +51,35 @@ def paste__cv2_seamlessClone(**kwargs):
     )
 
     return img
+
+
+def handler__paste(**kwargs):
+
+    method = kwargs["method"]
+    img = kwargs["img"]
+    crop = kwargs["crop"]
+    mask = kwargs["mask"]
+    center = kwargs["center"]
+    flags = kwargs["flags"]
+
+    assert (
+        method in LIST__METHOD__PASTING
+    ), "Invalid method: {}. Supported methods: {}".format(method, LIST__METHOD__PASTING)
+    if method == "PASTE__SIMPLE":
+        img = paste__simple(
+            img=img,
+            crop=crop,
+            mask=mask,
+            center=center,
+        )
+    elif method == "PASTE__CV2_SEAMLESS_CLONE":
+        flags = eval(kwargs["flags"])
+        img = paste__cv2_seamlessClone(
+            img=img,
+            crop=crop,
+            mask=mask,
+            center=center,
+            flags=flags,
+        )
+
+    return img
