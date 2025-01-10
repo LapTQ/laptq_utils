@@ -22,4 +22,5 @@ from .detection import (
 from .segmentation import helper__extract__crops__with__mask__from__segmentation
 from .generation import (
     helper__paste__seg_crops__over__det_boxes,
+    helper__paste__seg_crops__over__background,
 )
