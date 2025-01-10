@@ -4,7 +4,12 @@ from laptq_pyutils.image_processing import (
     paste__simple,
     paste__cv2_seamlessClone,
 )
-from laptq_pyutils.ops import x1y1wh__to__x1y1x2y2, box__iou__left
+from laptq_pyutils.ops import (
+    x1y1wh__to__x1y1x2y2,
+    box__leftiou,
+    box_normalized__to__box_pixels,
+    xcycwh__to__x1y1x2y2,
+)
 
 
 LOGGER = load_logger()
@@ -33,6 +38,7 @@ def helper__paste__seg_crops__over__det_boxes(**kwargs):
     flags = kwargs["flags"]
     thresh__leftiou__min = kwargs["thresh__leftiou__min"]
     thresh__leftiou__max = kwargs["thresh__leftiou__max"]
+    num__steps = kwargs["num__steps"]
 
     if seed is not None:
         random.seed(seed)
@@ -77,61 +83,84 @@ def helper__paste__seg_crops__over__det_boxes(**kwargs):
         with open(path__file__lbl__input, "r") as f:
             dict__result__img = json.load(f)
 
-        list__img__obj__box_xcycwhn = dict__result__img["list__obj__box_xcycwhn"]
+        # get bounding boxes
+        list__img__obj__box_xcycwhn = np.array(
+            dict__result__img["list__obj__box_xcycwhn"]
+        ).reshape(-1, 4)
+        list__img__obj__box_xcycwh = box_normalized__to__box_pixels(
+            list__img__obj__box_xcycwhn, (img__W, img__H)
+        )
+        list__img__obj__box_x1y1x2y2 = xcycwh__to__x1y1x2y2(list__img__obj__box_xcycwh)
+
+        # calculate candidate positions to paste crops
+        list__roi_candidate__x1y1wh = []
+        list__roi_candidate__idx_crop = []
+        list__roi_candidate__idx_obj = []
+        for i_obj, img__obj__box_x1y1x2y2 in enumerate(list__img__obj__box_x1y1x2y2):
+            img__obj__x1, img__obj__y1, img__obj__x2, img__obj__y2 = (
+                img__obj__box_x1y1x2y2
+            )
+            for i_crop, crop__img in enumerate(list__crop__img):
+                crop__H, crop__W = crop__img.shape[:2]
+                _list__roi__x1 = np.linspace(
+                    img__obj__x1 - crop__W + 1,
+                    img__obj__x2,
+                    num__steps,
+                    dtype=np.int32,
+                )
+                _list__roi__y1 = np.linspace(
+                    img__obj__y1 - crop__H + 1,
+                    img__obj__y2,
+                    num__steps,
+                    dtype=np.int32,
+                )
+                _x, _y = np.meshgrid(_list__roi__x1, _list__roi__y1)
+                _list__roi__x1y1 = np.vstack([_x.ravel(), _y.ravel()]).T
+                _list__roi__x1y1wh = np.concatenate(
+                    [
+                        _list__roi__x1y1,
+                        np.ones((_list__roi__x1y1.shape[0], 1), dtype=np.int32)
+                        * crop__W,
+                        np.ones((_list__roi__x1y1.shape[0], 1), dtype=np.int32)
+                        * crop__H,
+                    ],
+                    axis=1,
+                )
+                list__roi_candidate__x1y1wh.extend(_list__roi__x1y1wh.tolist())
+                list__roi_candidate__idx_crop.extend([i_crop] * len(_list__roi__x1y1wh))
+                list__roi_candidate__idx_obj.extend([i_obj] * len(_list__roi__x1y1wh))
+        list__roi_candidate__x1y1x2y2 = x1y1wh__to__x1y1x2y2(
+            np.array(list__roi_candidate__x1y1wh).reshape(-1, 4)
+        )
+
+        # calculate ratio of source label being occluded, using leftiou
+        mat__leftiou = box__leftiou(
+            list__img__obj__box_x1y1x2y2,
+            list__roi_candidate__x1y1x2y2,
+        )
+        list__idx_roi = np.where(
+            np.any(mat__leftiou >= thresh__leftiou__min, axis=0)
+            & np.all(mat__leftiou <= thresh__leftiou__max, axis=0)
+        )[0]
+
+        _dict__idx = {}
+        for idx__roi in list__idx_roi:
+            i__obj = list__roi_candidate__idx_obj[idx__roi]
+            _dict__idx.setdefault(i__obj, []).append(idx__roi)
         list__to_paste = random.choices(
             [True, False], weights=[prob, 1 - prob], k=len(list__img__obj__box_xcycwhn)
         )
 
-        # consider each box
-        for i_obj, (obj__box_xcycwhn, to_paste) in enumerate(
-            zip(list__img__obj__box_xcycwhn, list__to_paste)
-        ):
+        for i__obj, to_paste in enumerate(list__to_paste):
+            if i__obj not in _dict__idx:
+                continue
             if not to_paste:
                 continue
-
-            obj__xcn, obj__ycn, obj__wn, obj__hn = obj__box_xcycwhn
-            obj__xc, obj__yc, obj__w, obj__h = (
-                int(obj__xcn * img__W),
-                int(obj__ycn * img__H),
-                int(obj__wn * img__W),
-                int(obj__hn * img__H),
-            )
-            obj__x1, obj__y1 = obj__xc - obj__w // 2, obj__yc - obj__h // 2
-            obj__x2, obj__y2 = obj__x1 + obj__w, obj__y1 + obj__h
-
-            # select a crop to paste
-            idx__crop = random.randint(0, len(list__crop__img) - 1)
-            crop__img = list__crop__img[idx__crop]
-            crop__mask = list__crop__mask[idx__crop]
-
-            # calculate a good position to paste
-            crop__H, crop__W = crop__img.shape[:2]
-            _list__x1 = np.arange(-crop__W + 1, img__W)
-            _list__y1 = np.arange(-crop__H + 1, img__H)
-            _list__x1, _list__y1 = np.meshgrid(_list__x1, _list__y1)
-            _list__x1y1 = np.vstack([_list__x1.ravel(), _list__y1.ravel()]).T
-            list__roi_candidate__x1y1wh = np.concatenate(
-                [
-                    _list__x1y1,
-                    np.ones((_list__x1y1.shape[0], 1), dtype=np.int32) * crop__W,
-                    np.ones((_list__x1y1.shape[0], 1), dtype=np.int32) * crop__H,
-                ],
-                axis=1,
-            ).reshape(-1, 4)
-            list__roi_candidate__x1y1x2y2 = x1y1wh__to__x1y1x2y2(
-                list__roi_candidate__x1y1wh
-            )
-            mat__iou = box__iou__left(
-                np.array([[obj__x1, obj__y1, obj__x2, obj__y2]]),
-                list__roi_candidate__x1y1x2y2,
-            )
-            list__idx = np.where(
-                (mat__iou >= thresh__leftiou__min) & (mat__iou <= thresh__leftiou__max)
-            )[1]
-            if len(list__idx) == 0:
-                continue
-            idx_center = random.choice(list__idx)
-            roi__x1, roi__y1, roi__w, roi__h = list__roi_candidate__x1y1wh[idx_center]
+            idx__roi = random.choice(_dict__idx[i__obj])
+            i__crop = list__roi_candidate__idx_crop[idx__roi]
+            crop__img = list__crop__img[i__crop]
+            crop__mask = list__crop__mask[i__crop]
+            roi__x1, roi__y1, roi__w, roi__h = list__roi_candidate__x1y1wh[idx__roi]
             center = (roi__x1 + roi__w // 2, roi__y1 + roi__h // 2)
 
             assert (
