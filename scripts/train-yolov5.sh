@@ -6,8 +6,8 @@ sleep 0
 
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
-data=data--synthetic--syn-text2image-satudora-center--satudora-center-box
-YOLO=yolov5m
+data=data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person
+YOLO=yolov5s
 IMGSZ=832
 SCALE=0.5
 MULTI_SCALE=True
@@ -20,7 +20,7 @@ python3 train.py \
     --weights $YOLO.pt \
     --cfg $YOLO.yaml \
     --batch-size 16 \
-    --device 2 \
+    --device 1 \
     --imgsz $IMGSZ \
     --project $path__dir__run/$data/$YOLO--$IMGSZ--scale-$SCALE--multiscale-$MULTI_SCALE \
     --multi-scale \
