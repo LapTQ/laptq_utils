@@ -1,6 +1,6 @@
-PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-21/data/20241225--gen-data--batches
+PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-21/outputs/20250109--paste--seg-crops--over--det-boxes
 POSTFIX__DIR__IMAGE__INPUT=""
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/data/20241225--gen-data--batches--to-json
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/20250109--paste--seg-crops--over--det-boxes
 POSTFIX__DIR__LABEL__INPUT=""
 
 PATH__DIR__CROP__IMAGE__INPUT=/home/laptq/laptq-prj-21/outputs/test-sample--crops
@@ -11,12 +11,12 @@ PATH__DIR__CROP__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/test-sample--crop
 POSTFIX__DIR__CROP__LABEL__INPUT=""
 
 
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250109--paste--seg-crops--over--det-boxes
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250109--paste--seg-crops--over--background
 POSTFIX__DIR__OUTPUT=""
 
 declare -A MAP__SUBPATH_DIR_IMAGE_TO__=(
-    ["gen_only_syn_25Dec-batch-1"]=""
-    ["gen_only_syn_25Dec-batch-2"]=""
+    ["gen_only_syn_25Dec-batch-1/test-sample"]=""
+    ["gen_only_syn_25Dec-batch-2/test-sample"]=""
 )
 
 declare -A MAP__SUBPATH_DIR_CROP_TO__=(
@@ -49,7 +49,7 @@ for subpath__dir__image in "${!MAP__SUBPATH_DIR_IMAGE_TO__[@]}"; do
         mkdir -p "${path__dir__lbl__output}"
 
         python3 submodules/laptq_utils/main.py \
-            helper__paste__seg_crops__over__det_boxes \
+            helper__paste__seg_crops__over__background \
             --path__dir__img__input "${path__dir__img__input}" \
             --path__dir__lbl__input "${path__dir__lbl__input}" \
             --path__dir__crop__img__input "${path__dir__crop__img__input}" \
@@ -58,12 +58,12 @@ for subpath__dir__image in "${!MAP__SUBPATH_DIR_IMAGE_TO__[@]}"; do
             --path__dir__img__output "${path__dir__img__output}" \
             --path__dir__lbl__output "${path__dir__lbl__output}" \
             --is_ok__lbl_not_exist False \
-            --prob 0.5 \
-            --seed None \
-            --method PASTE__SIMPLE \
-            --thresh__leftiou__min 0.2 \
-            --thresh__leftiou__max 0.4 \
-            --num__steps 7
+            --num 10 \
+            --roi__polygonn "(0.15, 0.2, 0.15, 0.85, 0.85, 0.75, 0.85, 0.2)" \
+            --ratio__w 4 \
+            --ratio__h 4 \
+            --seed 42 \
+            --method PASTE__SIMPLE
             # --method PASTE__CV2_SEAMLESS_CLONE \
             # --flags cv2.MONOCHROME_TRANSFER
             # --flags cv2.NORMAL_CLONE \

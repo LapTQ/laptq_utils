@@ -21,6 +21,7 @@ from laptq_pyutils.helper import (
     helper__cluster__detection__bboxes,
     helper__extract__crops__with__mask__from__segmentation,
     helper__paste__seg_crops__over__det_boxes,
+    helper__paste__seg_crops__over__background,
 )
 import argparse
 
@@ -74,6 +75,7 @@ def parse_args():
     ap.add_argument("--fontScale", type=float)
     ap.add_argument("--thickness", type=int)
     ap.add_argument("--box_color_by", type=str)
+    ap.add_argument("--num", type=int)
     ap.add_argument("--num__max__img", type=str)
     ap.add_argument("--num__max__box", type=str)
     ap.add_argument("--num__pad__0", type=int)
@@ -95,6 +97,7 @@ def parse_args():
     ap.add_argument("--prob", type=float)
     ap.add_argument("--method", type=str)
     ap.add_argument("--flags", type=str)
+    ap.add_argument("--roi__polygonn", type=str)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -172,7 +175,12 @@ def parse_args():
     args.to_draw__id_frame = (
         eval(args.to_draw__id_frame) if args.to_draw__id_frame is not None else None
     )
-    args.to_save__img = eval(args.to_save__img) if args.to_save__img is not None else None
+    args.to_save__img = (
+        eval(args.to_save__img) if args.to_save__img is not None else None
+    )
+    args.roi__polygonn = (
+        eval(args.roi__polygonn) if args.roi__polygonn is not None else None
+    )
 
     return args
 
