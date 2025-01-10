@@ -21,6 +21,9 @@ def helper__paste__seg_crops__over__det_boxes(**kwargs):
     import json
     import random
 
+    LOGGER.warning("""This function is not completed. Some features to be considered in the future:
+                - An option to add labels of pasted objects to .json.""")
+
     path__dir__img__input = kwargs["path__dir__img__input"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__crop__img__input = kwargs["path__dir__crop__img__input"]
@@ -193,6 +196,11 @@ def helper__paste__seg_crops__over__background(**kwargs):
     import json
     import random
 
+    LOGGER.warning("""This function is not completed. Some features to be considered in the future:
+                   - A paremeter to control min/max IoU between pasted objects.
+                   - An option to add labels of pasted objects to .json.
+                   - Combined with the helper__paste__seg_crops__over__det_boxes function.""")
+
     path__dir__img__input = kwargs["path__dir__img__input"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__crop__img__input = kwargs["path__dir__crop__img__input"]
@@ -268,42 +276,35 @@ def helper__paste__seg_crops__over__background(**kwargs):
 
         margin__x = int(margin__xn * img__W)
         margin__y = int(margin__yn * img__H)
-
-        # top-left of pasted object will not be placed in the avoided regions
-        list__to_avoid__box_x1y1x2y2 = (
-            list__img__obj__box_x1y1x2y2
-            + [-margin__x, -margin__y, margin__x, margin__y]
-        ).reshape(-1, 1, 4) + np.concatenate(
-            [-list__crop__wh, np.zeros_like(list__crop__wh)], axis=1
-        )
-        list__to_avoid__box_x1y1x2y2 = np.stack(
-            [
-                list__to_avoid__box_x1y1x2y2[:, :, 0].min(axis=1),
-                list__to_avoid__box_x1y1x2y2[:, :, 1].min(axis=1),
-                list__to_avoid__box_x1y1x2y2[:, :, 2].min(axis=1),
-                list__to_avoid__box_x1y1x2y2[:, :, 3].min(axis=1),
-            ],
-            axis=1,
-        )
-        list__to_avoid__box_polygon = x1y1x2y2__to__polygon(
-            list__to_avoid__box_x1y1x2y2
-        )
-
         roi__polygon = (roi__polygonn * [img__W, img__H]).astype(int)
 
-        mask__img = np.zeros((img__H, img__W), dtype=np.uint8)
-        mask__img = cv2.fillPoly(mask__img, [roi__polygon], 255)
-        for polygon in list__to_avoid__box_polygon:
-            polygon = polygon.reshape(-1, 1, 2)
-            cv2.fillPoly(mask__img, [polygon], 0)
-
-        list__paste_y1x1 = random.choices(np.argwhere(mask__img == 255), k=num)
         list__idx__crop = random.choices(range(len(list__crop__img)), k=num)
 
         img__out = img.copy()
-        for (py1, px1), idx__crop in zip(list__paste_y1x1, list__idx__crop):
+        mask__img__base = np.zeros((img__H, img__W), dtype=np.uint8)
+        mask__img__base = cv2.fillPoly(mask__img__base, [roi__polygon], 255)
+        for idx__crop in list__idx__crop:
             crop__img = list__crop__img[idx__crop]
             crop__mask = list__crop__mask[idx__crop]
+
+            crop__H, crop__W = crop__img.shape[:2]
+
+            # top-left of pasted object will not be placed in the avoided regions
+            list__to_avoid__box_x1y1x2y2 = (
+                list__img__obj__box_x1y1x2y2
+                + [-margin__x, -margin__y, margin__x, margin__y]
+                + [[-crop__W, -crop__H, 0, 0]]
+            )
+            list__to_avoid__box_polygon = x1y1x2y2__to__polygon(
+                list__to_avoid__box_x1y1x2y2
+            )
+
+            mask__img = mask__img__base.copy()
+            for polygon in list__to_avoid__box_polygon:
+                polygon = polygon.reshape(-1, 1, 2)
+                cv2.fillPoly(mask__img, [polygon], 0)
+
+            py1, px1 = random.choice(np.argwhere(mask__img == 255))
 
             xc = px1 + crop__img.shape[1] // 2
             yc = py1 + crop__img.shape[0] // 2
