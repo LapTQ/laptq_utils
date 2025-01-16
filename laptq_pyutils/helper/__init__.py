@@ -4,7 +4,7 @@ from .detection import (
     helper__extract__ultralytics__detect__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
-    helper__convert__detection__coco__to__json,
+    helper__convert__result__coco__to__json,
     helper__convert__labelstudio_json__to__json,
     helper__convert__detection__xcycwhn__to__polygonn,
     helper__filter__detection__result__by__conf,
@@ -18,4 +18,9 @@ from .detection import (
     helper__rescale__detection__box,
     helper__erase__classes__on__images,
     helper__cluster__detection__bboxes,
+)
+from .segmentation import helper__extract__crops__with__mask__from__segmentation
+from .generation import (
+    helper__paste__seg_crops__over__det_boxes,
+    helper__paste__seg_crops__over__background,
 )

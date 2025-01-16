@@ -36,7 +36,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --path__file__video__input "${path__file__video__input}" \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__file__output "${path__file__output}" \
-        --pad__id_frame 6 \
+        --num__pad__0 6 \
         --fourcc "mp4v" \
         --to_draw__id_frame True \
         --to_draw__box_x1y1whn True \

@@ -6,8 +6,9 @@ POSTFIX__DIR__LABEL__OUTPUT=""
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["train2017"]=""
+    # ["train2017"]=""
     ["val2017"]=""
+    ["test"]=""
 )
 
 IFS=$'\n'
@@ -25,7 +26,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     mkdir -p "${path__dir__lbl__output}"
 
     python3 main.py \
-        helper__convert__detection__coco__to__json \
+        helper__convert__result__coco__to__json \
         --path__file__lbl__input "${path__file__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
         --offset__id_class -1 \
