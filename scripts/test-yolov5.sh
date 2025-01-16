@@ -1,6 +1,6 @@
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
-data=data--synthetic--satudora-center-box--synthetic-cutoff
+data=data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person
 data_val=data--testset-4cam-factory
 
 
