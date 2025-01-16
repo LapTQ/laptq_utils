@@ -1,33 +1,20 @@
-PATH__DIR__DATASETS__SOURCE__IMG=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG=--20241121--checked--backup
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241121--check-duplicate-images
-POSTFIX__DIR__IMG__DEDUP=--20241121--imgdedup--ver2
+PATH__DIR__IMG__INPUT=/home/laptq/laptq-prj-44/outputs/20250116--downloaded--beer-meat--dedup
+POSTFIX__DIR__IMG=""
 
+PATH__DIR__OUTPUT__META=/home/laptq/laptq-prj-44/outputs/20250116--check-duplicate-images--ver2
+
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/outputs/20250116--downloaded--beer-meat--dedup--ver2
+POSTFIX__DIR__IMG__TARGET=""
+
+TO_USE__SOFTLINK="True"
 
 declare -A MAP__SUBPATH_DIR__TO__NEED_TO_CHECK=(
-    # ["APTO_v2/day1_330"]="False"
-    # ["APTO_v2/night1_190"]="False"
-    # ["APTO_v2/night3_44"]="False"
-    # ["APTO_v2/night4_239"]="False"
-    # ["Pothole_235/train"]="True"
-    # ["dataset-ninja/ds1_simplex-test"]="False"
-    # ["dataset-ninja/ds1_simplex-train"]="False"
-    # ["dataset-ninja/ds2_complex-test"]="False"
-    # ["dataset-ninja/ds2_complex-train"]="False"
-    # ["pot_det_1240"]="True"
-    # ["pothole_dataset_v8/only_rainy_frames/train"]="False"
-    # ["pothole_dataset_v8/train"]="True"
-    # ["pothole_dataset_v8/train_to_valid"]="False"
-    # ["pothole_dataset_v8/valid"]="False"
-    # ["Pothole_detection_yolo/train_original"]="True"
-    # ["Pothole_Maeda/first_shot"]="False"
-    # ["Pothole_Maeda/first_shot_eval"]="False"
-    # ["Pothole_Maeda/second_shot"]="False"
-    ["RDD2022_JAPAN/only_pothole/train"]="True"
+    ["beer"]="True"
+    ["meat"]="True"
 )
 
 
-[[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
+[[ -d "$PATH__DIR__OUTPUT__META" ]] && rm -r "$PATH__DIR__OUTPUT__META"
 
 
 IFS=$'\n'
@@ -45,8 +32,8 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__NEED_TO_CHECK[@]}"; do
         continue
     fi 
 
-    path__dir__img="${PATH__DIR__DATASETS__SOURCE__IMG}/${subpath_dir}/images${POSTFIX__DIR__IMG}"
-    path__dir__output="${PATH__DIR__OUTPUT}/${subpath_dir}"
+    path__dir__img="${PATH__DIR__IMG__INPUT}/${subpath_dir}/images${POSTFIX__DIR__IMG}"
+    path__dir__output="${PATH__DIR__OUTPUT__META}/${subpath_dir}"
 
     python3 submodules/laptq_utils/main.py \
         helper__check__duplicate__images \
@@ -62,26 +49,34 @@ done
 for subpath_dir in "${!MAP__SUBPATH_DIR__TO__NEED_TO_CHECK[@]}"; do
     is_need_to_check="${MAP__SUBPATH_DIR__TO__NEED_TO_CHECK[$subpath_dir]}"
     
-    path__dir__img="${PATH__DIR__DATASETS__SOURCE__IMG}/${subpath_dir}/images${POSTFIX__DIR__IMG}"
-    path__dir__img__dedup="${PATH__DIR__DATASETS__SOURCE__IMG}/${subpath_dir}/images${POSTFIX__DIR__IMG__DEDUP}"
+    path__dir__img__input="${PATH__DIR__IMG__INPUT}/${subpath_dir}/images${POSTFIX__DIR__IMG}"
+    path__dir__img__output="${PATH__DIR__OUTPUT}/${subpath_dir}/images${POSTFIX__DIR__IMG__TARGET}"
 
-    [[ -d "$path__dir__img__dedup" ]] && rm -r "$path__dir__img__dedup"
-    mkdir -p "$path__dir__img__dedup"
+    [[ -d "$path__dir__img__output" ]] && rm -r "$path__dir__img__output"
+    mkdir -p "$path__dir__img__output"
 
     if [[ $is_need_to_check = "True" ]]; then
         while IFS= read -r name__file__img; do
             name__file__img="${name__file__img%$'\r'}"  # right strip
             name__file__img="${name__file__img%\"}" # right strip
             name__file__img="${name__file__img#\"}" # left strip
-            ln -s $( realpath "${path__dir__img}/${name__file__img}" ) "${path__dir__img__dedup}"
-        done < "${PATH__DIR__OUTPUT}/${subpath_dir}/originals_to_keep__no_json.txt"
+            if [[ $TO_USE__SOFTLINK = "True" ]]; then
+                ln -s $( realpath "${path__dir__img__input}/${name__file__img}" ) "${path__dir__img__output}"
+            else
+                cp $( realpath "${path__dir__img__input}/${name__file__img}" ) "${path__dir__img__output}"
+            fi
+        done < "${PATH__DIR__OUTPUT__META}/${subpath_dir}/originals_to_keep__no_json.txt"
     else
         IFS=$'\n'
-        for name__file__img in $( ls "${path__dir__img}" ); do
-            ln -s $( realpath "${path__dir__img}/${name__file__img}" ) "${path__dir__img__dedup}"
+        for name__file__img in $( ls "${path__dir__img__input}" ); do
+            if [[ $TO_USE__SOFTLINK = "True" ]]; then
+                ln -s $( realpath "${path__dir__img__input}/${name__file__img}" ) "${path__dir__img__output}"
+            else
+                cp $( realpath "${path__dir__img__input}/${name__file__img}" ) "${path__dir__img__output}"
+            fi
         done
     fi 
 
-    echo -e "${TAG__INFO} $( ls ${path__dir__img__dedup} | wc -l )/$( ls ${path__dir__img} | wc -l ) original images in ${subpath_dir}"
+    echo -e "${TAG__INFO} $( ls ${path__dir__img__output} | wc -l )/$( ls ${path__dir__img__input} | wc -l ) original images in ${subpath_dir}"
 done
 
