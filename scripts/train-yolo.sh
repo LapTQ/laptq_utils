@@ -4,24 +4,26 @@ sleep 0
 # data=only_pothole_mix
 # data=only_pothole_mix--manhole-241016
 # data=20241122--phase-2--annotation-ver2
-data=product-person
+# data=product-person
+data=20250107--finetune
 
 path__dir__run=~/laptq-prj-44/runs
 
-YOLO=yolo11s
+YOLO=yolo11m
 IMGSZ=640
 yolo detect train \
     data=src/configs/$data.yaml \
-    model=${YOLO}.pt \
-    epochs=200 \
+    model=/mnt/ssd8tb/shared_workspace/laptq/laptq-prj-44/runs/product-person/yolo11m--640--weighted-fitness/train/weights/best.pt \
+    epochs=20 \
     imgsz=$IMGSZ \
-    device=1 \
+    device=0 \
     batch=16 \
     project=$path__dir__run/$data/$YOLO--$IMGSZ--weighted-fitness \
     plots=True \
     patience=30 \
     to__use__weighted__fitness=True
 
+    # model=${YOLO}.pt \
 
 exit
 
