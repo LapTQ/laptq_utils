@@ -3,7 +3,7 @@ from laptq_pyutils.helper import (
     helper__extract__ultralytics__detect__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
-    helper__convert__detection__coco__to__json,
+    helper__convert__result__coco__to__json,
     helper__convert__detection__xcycwhn__to__polygonn,
     helper__convert__video__to__images,
     helper__convert__labelstudio_json__to__json,
@@ -19,6 +19,9 @@ from laptq_pyutils.helper import (
     helper__erase__classes__on__images,
     helper__check__duplicate__images,
     helper__cluster__detection__bboxes,
+    helper__extract__crops__with__mask__from__segmentation,
+    helper__paste__seg_crops__over__det_boxes,
+    helper__paste__seg_crops__over__background,
 )
 import argparse
 
@@ -34,6 +37,12 @@ def parse_args():
     ap.add_argument("--path__dir__output", type=str)
     ap.add_argument("--path__dir__lbl__input", type=str)
     ap.add_argument("--path__dir__lbl__output", type=str)
+    ap.add_argument("--path__dir__crop__img__input", type=str)
+    ap.add_argument("--path__dir__crop__img__output", type=str)
+    ap.add_argument("--path__dir__crop__mask__input", type=str)
+    ap.add_argument("--path__dir__crop__mask__output", type=str)
+    ap.add_argument("--path__dir__crop__lbl__input", type=str)
+    ap.add_argument("--path__dir__crop__lbl__output", type=str)
     ap.add_argument("--path__file__img", type=str)
     ap.add_argument("--path__file__input", type=str)
     ap.add_argument("--path__file__video__input", type=str)
@@ -44,14 +53,17 @@ def parse_args():
     ap.add_argument("--device", type=str)
     ap.add_argument("--imgsz", type=int)
     ap.add_argument("--map__id_class__to__thresh_conf", type=str)
-    ap.add_argument("--thresh__conf__min", type=float)
     ap.add_argument("--list__id_class__to_include", type=str)
     ap.add_argument("--list__id_class__to_exclude", type=str)
     ap.add_argument("--list__id_class", type=str)
     ap.add_argument("--map__id_old__to__id_new", type=str)
+    ap.add_argument("--thresh", type=float)
     ap.add_argument("--thresh__miniou", type=float)
-    ap.add_argument("--to_concat__original_img", type=str)
+    ap.add_argument("--thresh__conf__min", type=float)
+    ap.add_argument("--thresh__leftiou__min", type=float)
+    ap.add_argument("--thresh__leftiou__max", type=float)
     ap.add_argument("--concat__axis", type=int)
+    ap.add_argument("--to_concat__original_img", type=str)
     ap.add_argument("--to_draw__id_frame", type=str)
     ap.add_argument("--to_draw__box_x1y1whn", type=str)
     ap.add_argument("--to_draw__box_polygonn", type=str)
@@ -59,20 +71,24 @@ def parse_args():
     ap.add_argument("--to_draw__box_conf", choices=["True", "False"])
     ap.add_argument("--to_draw__id_class", choices=["True", "False"])
     ap.add_argument("--to_draw__name_class", choices=["True", "False"])
+    ap.add_argument("--to_save__img", type=str)
     ap.add_argument("--fontScale", type=float)
     ap.add_argument("--thickness", type=int)
     ap.add_argument("--box_color_by", type=str)
+    ap.add_argument("--num", type=int)
     ap.add_argument("--num__max__img", type=str)
     ap.add_argument("--num__max__box", type=str)
+    ap.add_argument("--num__pad__0", type=int)
+    ap.add_argument("--num__steps", type=int)
     ap.add_argument("--seed", type=str)
     ap.add_argument("--is_ok__lbl_not_exist", type=str)
-    ap.add_argument("--pad__id_frame", type=int)
     ap.add_argument("--fourcc", type=str)
     ap.add_argument("--path__file__map__id_class__to__name_class", type=str)
     ap.add_argument("--filter_by", type=str)
-    ap.add_argument("--thresh", type=float)
     ap.add_argument("--ratio__w", type=float)
     ap.add_argument("--ratio__h", type=float)
+    ap.add_argument("--margin__xn", type=float)
+    ap.add_argument("--margin__yn", type=float)
     ap.add_argument("--pad__w__max", type=str)
     ap.add_argument("--pad__h__max", type=str)
     ap.add_argument("--cut__w__max", type=str)
@@ -80,8 +96,11 @@ def parse_args():
     ap.add_argument("--mode__box", type=str)
     ap.add_argument("--offset__id_class", type=int)
     ap.add_argument("--n_clusters", type=int)
-
+    ap.add_argument("--prob", type=float)
     ap.add_argument("--method", type=str)
+    ap.add_argument("--flags", type=str)
+    ap.add_argument("--roi__polygonn", type=str)
+
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
 
@@ -157,6 +176,12 @@ def parse_args():
     )
     args.to_draw__id_frame = (
         eval(args.to_draw__id_frame) if args.to_draw__id_frame is not None else None
+    )
+    args.to_save__img = (
+        eval(args.to_save__img) if args.to_save__img is not None else None
+    )
+    args.roi__polygonn = (
+        eval(args.roi__polygonn) if args.roi__polygonn is not None else None
     )
 
     return args

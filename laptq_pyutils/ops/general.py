@@ -30,7 +30,7 @@ def box__iou(boxes1, boxes2):
     return iou
 
 
-def box__iou__left(boxes1, boxes2):
+def box__leftiou(boxes1, boxes2):
 
     import numpy as np
 
@@ -125,12 +125,19 @@ def x1y1wh__to__x1y1x2y2(x1y1wh):
     return x1y1x2y2
 
 
+def x1y1x2y2__to__polygon(x1y1x2y2):
+
+    x1y1x2y2 = x1y1x2y2.copy()
+
+    return x1y1x2y2[:, [0, 1, 0, 3, 2, 3, 2, 1]]
+
+
 def xcycwh__to__polygon(xcycwh):
 
     xcycwh = xcycwh.copy()
-    tlbr = xcycwh__to__x1y1x2y2(xcycwh=xcycwh)
+    polygon = x1y1x2y2__to__polygon(xcycwh__to__x1y1x2y2(xcycwh=xcycwh))
 
-    return tlbr[:, [0, 1, 0, 3, 2, 3, 2, 1]]
+    return polygon
 
 
 def box_normalized__to__box_pixels(box, WH):

@@ -130,7 +130,8 @@ def helper__extract__ultralytics__detect__video(**kwargs):
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     path__file__model = kwargs["path__file__model"]
     device = kwargs["device"]
-    pad__id_frame = kwargs["pad__id_frame"]
+    to_save__img = kwargs["to_save__img"]
+    num__pad__0 = kwargs["num__pad__0"]
 
     model = YOLO(path__file__model).to(device)
 
@@ -157,12 +158,13 @@ def helper__extract__ultralytics__detect__video(**kwargs):
         dict__result = _["dict__result"]
         mtime_2 = time.time()
 
-        name__file__img = f"{id__frame:0{pad__id_frame}d}.jpg"
+        name__file__img = f"{id__frame:0{num__pad__0}d}.jpg"
         path__file__img = os.path.join(path__dir__img__output, name__file__img)
-        name__file__lbl = f"{id__frame:0{pad__id_frame}d}.json"
+        name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
         path__file__lbl = os.path.join(path__dir__lbl__output, name__file__lbl)
 
-        cv2.imwrite(path__file__img, img__bgr)
+        if to_save__img:
+            cv2.imwrite(path__file__img, img__bgr)
         with open(path__file__lbl, "w") as f:
             json.dump(dict__result, f, indent=4)
 
@@ -440,7 +442,7 @@ def helper__draw__detection__video(**kwargs):
     path__file__video__input = kwargs["path__file__video__input"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__file__output = kwargs["path__file__output"]
-    pad__id_frame = kwargs["pad__id_frame"]
+    num__pad__0 = kwargs["num__pad__0"]
     to_draw__name_class = kwargs["to_draw__name_class"]
     fourcc = kwargs["fourcc"]
     path__file__map__id_class__to__name_class = kwargs[
@@ -474,7 +476,7 @@ def helper__draw__detection__video(**kwargs):
         if not success:
             break
 
-        name__file__lbl = f"{id__frame:0{pad__id_frame}d}.json"
+        name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
         path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
         with open(path__file__lbl, "r") as f:
             dict__result = json.load(f)
@@ -704,12 +706,13 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
-def helper__convert__detection__coco__to__json(**kwargs):
+def helper__convert__result__coco__to__json(**kwargs):
 
     import json
     from tqdm import tqdm
     import os
     import yaml
+    import numpy as np
 
     path__file__lbl__input = kwargs["path__file__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
@@ -739,6 +742,10 @@ def helper__convert__detection__coco__to__json(**kwargs):
         id_img = annot["image_id"]
         id_class = annot["category_id"] + offset__id_class
         x1, y1, w, h = annot["bbox"]
+        list__seg_part__list_xy = annot["segmentation"]
+        iscrowd = annot["iscrowd"]
+        if iscrowd:
+            continue
 
         H = map__id_img__to__info_img[id_img]["height"]
         W = map__id_img__to__info_img[id_img]["width"]
@@ -750,15 +757,27 @@ def helper__convert__detection__coco__to__json(**kwargs):
         xc = x1n + wn / 2
         yc = y1n + hn / 2
 
+        list__seg_part__list_xy = [
+            np.array(_).reshape(-1, 2) for _ in list__seg_part__list_xy
+        ]
+        list__seg_part__list_xyn = [_ / [W, H] for _ in list__seg_part__list_xy]
+        list__seg_part__list_xyn = [
+            _.reshape(-1).tolist() for _ in list__seg_part__list_xyn
+        ]
+
         if id_img not in map__id_img__to__labels:
             map__id_img__to__labels[id_img] = {
                 "list__obj__id_class": [],
                 "list__obj__box_xcycwhn": [],
+                "list__obj__seg__polygonn": [],
             }
 
         map__id_img__to__labels[id_img]["list__obj__id_class"].append(id_class)
         map__id_img__to__labels[id_img]["list__obj__box_xcycwhn"].append(
             [xc, yc, wn, hn]
+        )
+        map__id_img__to__labels[id_img]["list__obj__seg__polygonn"].append(
+            list__seg_part__list_xyn
         )
 
     for id_img, dict__result in tqdm(map__id_img__to__labels.items()):
@@ -1115,3 +1134,11 @@ def helper__cluster__detection__bboxes(**kwargs):
         yaml.dump(list__anchor_box__wh, f)
 
     cv2.imwrite(path__file__output__plot, img__plot)
+
+
+def helper__generate__detection__by__pasting__on__boxes(**kwargs):
+
+    import cv2
+    import numpy as np
+    import os
+    from tqdm import tqdm
