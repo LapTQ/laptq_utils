@@ -1,22 +1,20 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--json--filterby-id_class
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20250120--convert-detection-txt-to-json
 POSTFIX__DIR__LABEL__INPUT="--erase-IGNORE"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--json--filterby-id_class--to-txt
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20250120--convert-detection-json-to-txt
 POSTFIX__DIR__LABEL__OUTPUT="--erase-IGNORE"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["PoC2--2個持ち_cut_fit-1products"]=""
-    ["PoC2--2個持ち_cut_fit-2products"]=""
-    ["PoC2--2個持ち_cut_fit-nothing"]=""
-    ["PoC2--2個持ち_cut_fit-notProducts"]=""
-    ["PoC2--bag20240906_0000-notProducts"]=""
-    ["PoC2--bag20240906_1022-notProducts"]=""
-    ["PoC1--beppu_sue"]=""
-    ["PoC2--beppu_sue"]=""
-    ["PoC2--台置き_cut_fit-1products"]=""
-    ["PoC2--台置き_cut_fit-2products"]=""
-    ["PoC2--台置き_cut_fit-nothing"]=""
-    ["PoC2--台置き_cut_fit-notProducts"]=""
+    ["01_regularPurchase"]=""
+    ["02_regularPurchase"]=""
+    ["03_regularPurchase"]=""
+    ["04_regularPurchase"]=""
+    ["05_cancelTea"]=""
+    ["06_pullingCart"]=""
+    ["07_holding2items"]=""
+    ["08_regularPurchase"]=""
+    ["09_holding2items"]=""
+    ["10_hideBarcode"]=""
 )
 
 IFS=$'\n'

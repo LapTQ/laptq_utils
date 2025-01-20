@@ -5,7 +5,8 @@ sleep 0
 # data=only_pothole_mix--manhole-241016
 # data=20241122--phase-2--annotation-ver2
 # data=product-person
-data=20250125--finetune
+# data=20250120--finetune
+data=product-person--public--Satudora-finetune
 
 path__dir__run=~/laptq-prj-44/runs
 
@@ -13,17 +14,17 @@ YOLO=yolo11m
 IMGSZ=640
 yolo detect train \
     data=src/configs/$data.yaml \
-    model=/mnt/ssd8tb/shared_workspace/laptq/laptq-prj-44/runs/product-person/yolo11m--640--weighted-fitness/train/weights/best.pt \
-    epochs=20 \
+    model=${YOLO}.pt \
+    epochs=300 \
     imgsz=$IMGSZ \
-    device=0 \
+    device=1 \
     batch=16 \
     project=$path__dir__run/$data/$YOLO--$IMGSZ--weighted-fitness \
     plots=True \
     patience=30 \
     to__use__weighted__fitness=True
 
-    # model=${YOLO}.pt \
+    # model=/mnt/ssd8tb/shared_workspace/laptq/laptq-prj-44/runs/product-person/yolo11m--640--weighted-fitness/train/weights/best.pt \
 
 exit
 

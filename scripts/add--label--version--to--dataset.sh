@@ -1,48 +1,45 @@
-PATH__DIR__IMG__SOURCE=/home/laptq/laptq-prj-44/data/prj44/dataset
+PATH__DIR__IMG__SOURCE=/home/laptq/laptq-prj-44/outputs/20250120--erase-classes-on-images
 POSTFIX__DIR__IMG__SOURCE="--erase-IGNORE"
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/data/prj44/dataset
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20250120--convert-detection-json-to-txt
 POSTFIX__DIR__LABEL__SOURCE="--erase-IGNORE"
 
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/data/prj44/dataset
+PATH__DIR__OUTPUT=/mnt/ssd8tb/shared_workspace/prj44/dataset/Satudora_det_20250117
 POSTFIX__DIR__VERSION__TARGET="--erase-IGNORE-productPerson"
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["PoC2--2個持ち_cut_fit-1products"]=""
-    # ["PoC2--2個持ち_cut_fit-2products"]=""
+    # ["PoC2--beppu_sue-batch-1"]=""
+    # ["PoC2--beppu_sue-batch-3"]=""
+    # ["PoC2--beppu_sue-batch-4"]=""
+    # ["PoC2--beppu_sue-batch-5"]=""
+    # ["PoC2--2個持ち_cut_fit-1products-batch-1"]=""
+    # ["PoC2--2個持ち_cut_fit-1products-batch-2"]=""
+    # ["PoC2--2個持ち_cut_fit-1products-batch-3"]=""
+    # ["PoC2--2個持ち_cut_fit-2products-batch-1"]=""
     # ["PoC2--2個持ち_cut_fit-nothing"]=""
     # ["PoC2--2個持ち_cut_fit-notProducts"]=""
     # ["PoC2--bag20240906_0000-notProducts"]=""
-    # ["PoC2--bag20240906_1022-notProducts"]=""
-    # ["PoC1--beppu_sue"]=""
-    # ["PoC2--beppu_sue"]=""
+    # ["PoC2--bag20240906_1022-notProducts-batch-1"]=""
     # ["PoC2--台置き_cut_fit-1products"]=""
-    # ["PoC2--台置き_cut_fit-2products"]=""
-    # ["PoC2--台置き_cut_fit-nothing"]=""
+    # ["PoC2--台置き_cut_fit-2products-batch-1"]=""
     # ["PoC2--台置き_cut_fit-notProducts"]=""
+    # ["PoC2--beppu_sue-batch-2"]=""
+    # ["PoC2--2個持ち_cut_fit-2products-batch-2"]=""
+    # ["PoC2--台置き_cut_fit-2products-batch-2"]=""
+    # ["PoC2--bag20240906_1022-notProducts-batch-2"]=""
+    # ["PoC2--台置き_cut_fit-nothing"]=""
 
-
-    ["PoC2--beppu_sue-batch-1"]=""
-    ["PoC2--beppu_sue-batch-3"]=""
-    ["PoC2--beppu_sue-batch-4"]=""
-    ["PoC2--beppu_sue-batch-5"]=""
-    ["PoC2--2個持ち_cut_fit-1products-batch-1"]=""
-    ["PoC2--2個持ち_cut_fit-1products-batch-2"]=""
-    ["PoC2--2個持ち_cut_fit-1products-batch-3"]=""
-    ["PoC2--2個持ち_cut_fit-2products-batch-1"]=""
-    ["PoC2--2個持ち_cut_fit-nothing"]=""
-    ["PoC2--2個持ち_cut_fit-notProducts"]=""
-    ["PoC2--bag20240906_0000-notProducts"]=""
-    ["PoC2--bag20240906_1022-notProducts-batch-1"]=""
-    ["PoC2--台置き_cut_fit-1products"]=""
-    ["PoC2--台置き_cut_fit-2products-batch-1"]=""
-    ["PoC2--台置き_cut_fit-notProducts"]=""
-    ["PoC2--beppu_sue-batch-2"]=""
-    ["PoC2--2個持ち_cut_fit-2products-batch-2"]=""
-    ["PoC2--台置き_cut_fit-2products-batch-2"]=""
-    ["PoC2--bag20240906_1022-notProducts-batch-2"]=""
-    ["PoC2--台置き_cut_fit-nothing"]=""
+    ["01_regularPurchase"]=""
+    ["02_regularPurchase"]=""
+    ["03_regularPurchase"]=""
+    ["04_regularPurchase"]=""
+    ["05_cancelTea"]=""
+    ["06_pullingCart"]=""
+    ["07_holding2items"]=""
+    ["08_regularPurchase"]=""
+    ["09_holding2items"]=""
+    ["10_hideBarcode"]=""
 )
 
 
