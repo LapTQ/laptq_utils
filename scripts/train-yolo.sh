@@ -5,7 +5,7 @@ sleep 0
 # data=only_pothole_mix--manhole-241016
 # data=20241122--phase-2--annotation-ver2
 # data=product-person
-data=20250107--finetune
+data=20250125--finetune
 
 path__dir__run=~/laptq-prj-44/runs
 
