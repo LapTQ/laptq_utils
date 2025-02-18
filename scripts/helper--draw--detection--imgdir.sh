@@ -1,51 +1,25 @@
-PATH__DIR__IMAGE=/mnt/ssd8tb/shared_workspace/prj44/dataset
-POSTFIX__DIR__IMAGE=""
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/20250211--finetune--ver3--merged--subset-10k--splitted
+POSTFIX__DIR__IMAGE="--erase-IGNORE"
 
-PATH__DIR__LABEL=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--json
-POSTFIX__DIR__LABEL=""
+PATH__DIR__LABEL=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
+POSTFIX__DIR__LABEL="--erase-IGNORE--json"
 
-NUM__MAX__IMG__TO__VISUALIZE=20
+NUM__MAX__IMG__TO__VISUALIZE=5
 IS_OK__LBL_NOT_FOUND=False
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241214--visualize
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/outputs/20250218--visualize
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 [[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["PoC2--2個持ち_cut_fit-1products"]=""
-    # ["PoC2--2個持ち_cut_fit-2products"]=""
-    # ["PoC2--2個持ち_cut_fit-nothing"]=""
-    # ["PoC2--2個持ち_cut_fit-notProducts"]=""
-    # ["PoC2--bag20240906_0000-notProducts"]=""
-    # ["PoC2--bag20240906_1022-notProducts"]=""
-    # ["PoC1--beppu_sue"]=""
-    # ["PoC2--beppu_sue"]=""
-    # ["PoC2--台置き_cut_fit-1products"]=""
-    # ["PoC2--台置き_cut_fit-2products"]=""
-    # ["PoC2--台置き_cut_fit-nothing"]=""
-    # ["PoC2--台置き_cut_fit-notProducts"]=""
-
-
-    ["PoC2--beppu_sue-batch-1"]=""
-    ["PoC2--beppu_sue-batch-3"]=""
-    ["PoC2--beppu_sue-batch-4"]=""
-    ["PoC2--beppu_sue-batch-5"]=""
-    ["PoC2--2個持ち_cut_fit-1products-batch-1"]=""
-    ["PoC2--2個持ち_cut_fit-1products-batch-2"]=""
-    ["PoC2--2個持ち_cut_fit-1products-batch-3"]=""
-    ["PoC2--2個持ち_cut_fit-2products-batch-1"]=""
-    ["PoC2--2個持ち_cut_fit-nothing"]=""
-    ["PoC2--2個持ち_cut_fit-notProducts"]=""
-    ["PoC2--bag20240906_0000-notProducts"]=""
-    ["PoC2--bag20240906_1022-notProducts-batch-1"]=""
-    ["PoC2--台置き_cut_fit-1products"]=""
-    ["PoC2--台置き_cut_fit-2products-batch-1"]=""
-    ["PoC2--台置き_cut_fit-notProducts"]=""
-    ["PoC2--beppu_sue-batch-2"]=""
-    ["PoC2--2個持ち_cut_fit-2products-batch-2"]=""
-    ["PoC2--台置き_cut_fit-2products-batch-2"]=""
-    ["PoC2--bag20240906_1022-notProducts-batch-2"]=""
-    ["PoC2--台置き_cut_fit-nothing"]=""
+    ["P44-20250211-batch-41"]=""
+    ["P44-20250211-batch-42"]=""
+    ["P44-20250211-batch-43"]=""
+    ["P44-20250211-batch-44"]=""
+    ["P44-20250211-batch-45"]=""
+    ["P44-20250211-batch-46"]=""
+    ["P44-20250211-batch-47"]=""
+    ["P44-20250211-batch-48"]=""
 )
 
 IFS=$'\n'
@@ -63,20 +37,20 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__output}" ]] && rm -r "${path__dir__output}"
     mkdir -p "${path__dir__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__draw__detection__imgdir \
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \
         --to_concat__original_img True \
-        --concat__axis 1 \
+        --concat__axis 0 \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
         --to_draw__box_conf True \
         --to_draw__id_class True \
-        --to_draw__name_class False \
-        --fontScale 1 \
-        --thickness 1 \
+        --to_draw__name_class True \
+        --fontScale 1.5 \
+        --thickness 2 \
         --box_color_by id__class \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
         --num__max__img $NUM__MAX__IMG__TO__VISUALIZE \

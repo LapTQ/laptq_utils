@@ -1,45 +1,22 @@
-PATH__DIR__IMG__SOURCE=/home/laptq/laptq-prj-44/outputs/20250120--erase-classes-on-images
-POSTFIX__DIR__IMG__SOURCE="--erase-IGNORE"
+PATH__DIR__IMG__SOURCE=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/20250211--finetune--ver3--merged--subset-10k--splitted
+POSTFIX__DIR__IMG__SOURCE="--raw"
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20250120--convert-detection-json-to-txt
-POSTFIX__DIR__LABEL__SOURCE="--erase-IGNORE"
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
+POSTFIX__DIR__LABEL__SOURCE="--raw"
 
-PATH__DIR__OUTPUT=/mnt/ssd8tb/shared_workspace/prj44/dataset/Satudora_det_20250117
-POSTFIX__DIR__VERSION__TARGET="--erase-IGNORE-productPerson"
+PATH__DIR__OUTPUT=/mnt/ssd8tb/shared_workspace/prj44/dataset/?????????????????
+POSTFIX__DIR__VERSION__TARGET="--raw"
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["PoC2--beppu_sue-batch-1"]=""
-    # ["PoC2--beppu_sue-batch-3"]=""
-    # ["PoC2--beppu_sue-batch-4"]=""
-    # ["PoC2--beppu_sue-batch-5"]=""
-    # ["PoC2--2個持ち_cut_fit-1products-batch-1"]=""
-    # ["PoC2--2個持ち_cut_fit-1products-batch-2"]=""
-    # ["PoC2--2個持ち_cut_fit-1products-batch-3"]=""
-    # ["PoC2--2個持ち_cut_fit-2products-batch-1"]=""
-    # ["PoC2--2個持ち_cut_fit-nothing"]=""
-    # ["PoC2--2個持ち_cut_fit-notProducts"]=""
-    # ["PoC2--bag20240906_0000-notProducts"]=""
-    # ["PoC2--bag20240906_1022-notProducts-batch-1"]=""
-    # ["PoC2--台置き_cut_fit-1products"]=""
-    # ["PoC2--台置き_cut_fit-2products-batch-1"]=""
-    # ["PoC2--台置き_cut_fit-notProducts"]=""
-    # ["PoC2--beppu_sue-batch-2"]=""
-    # ["PoC2--2個持ち_cut_fit-2products-batch-2"]=""
-    # ["PoC2--台置き_cut_fit-2products-batch-2"]=""
-    # ["PoC2--bag20240906_1022-notProducts-batch-2"]=""
-    # ["PoC2--台置き_cut_fit-nothing"]=""
-
-    ["01_regularPurchase"]=""
-    ["02_regularPurchase"]=""
-    ["03_regularPurchase"]=""
-    ["04_regularPurchase"]=""
-    ["05_cancelTea"]=""
-    ["06_pullingCart"]=""
-    ["07_holding2items"]=""
-    ["08_regularPurchase"]=""
-    ["09_holding2items"]=""
-    ["10_hideBarcode"]=""
+    ["P44-20250211-batch-41"]=""
+    ["P44-20250211-batch-42"]=""
+    ["P44-20250211-batch-43"]=""
+    ["P44-20250211-batch-44"]=""
+    ["P44-20250211-batch-45"]=""
+    ["P44-20250211-batch-46"]=""
+    ["P44-20250211-batch-47"]=""
+    ["P44-20250211-batch-48"]=""
 )
 
 

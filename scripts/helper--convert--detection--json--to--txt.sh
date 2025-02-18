@@ -1,20 +1,18 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20250120--convert-detection-txt-to-json
-POSTFIX__DIR__LABEL__INPUT="--erase-IGNORE"
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
+POSTFIX__DIR__LABEL__INPUT="--erase-IGNORE--json"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20250120--convert-detection-json-to-txt
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
 POSTFIX__DIR__LABEL__OUTPUT="--erase-IGNORE"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["01_regularPurchase"]=""
-    ["02_regularPurchase"]=""
-    ["03_regularPurchase"]=""
-    ["04_regularPurchase"]=""
-    ["05_cancelTea"]=""
-    ["06_pullingCart"]=""
-    ["07_holding2items"]=""
-    ["08_regularPurchase"]=""
-    ["09_holding2items"]=""
-    ["10_hideBarcode"]=""
+    ["P44-20250211-batch-41"]=""
+    ["P44-20250211-batch-42"]=""
+    ["P44-20250211-batch-43"]=""
+    ["P44-20250211-batch-44"]=""
+    ["P44-20250211-batch-45"]=""
+    ["P44-20250211-batch-46"]=""
+    ["P44-20250211-batch-47"]=""
+    ["P44-20250211-batch-48"]=""
 )
 
 IFS=$'\n'
