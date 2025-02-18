@@ -1,7 +1,7 @@
 PATH__DIR__ANNOT__DOWNLOADED_ZIP="/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations"
 
 PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
-POSTFIX__DIR__LABEL__OUTPUT=""
+POSTFIX__DIR__LABEL__OUTPUT="--raw"
 
 SUBPATH_TEMP=temp
 PATH__DIR__OUTPUT__TEMP="${PATH__DIR__OUTPUT}-${SUBPATH_TEMP}"
@@ -14,6 +14,8 @@ mkdir -p $PATH__DIR__OUTPUT__TEMP
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
+    ["P44-20250211-batch-41"]=""
+    ["P44-20250211-batch-42"]=""
     ["P44-20250211-batch-43"]=""
     ["P44-20250211-batch-44"]=""
     ["P44-20250211-batch-45"]=""
@@ -52,14 +54,15 @@ for name__file__zip in $( ls $PATH__DIR__ANNOT__DOWNLOADED_ZIP | grep .zip ); do
         exit 1
     fi
     name__dir__output=$( ls $path__dir__extracted/$SUBPATH_STRIP )
+
+    path__dir__input="$path__dir__extracted/$SUBPATH_STRIP/$name__dir__output"
     
     # skip if name__dir__output is not a "key" in MAP__SUBPATH_DIR__TO__ (a key might be mapped to an empty string)
     if [[ -z "${MAP__SUBPATH_DIR__TO__[$name__dir__output]}" && ! ${MAP__SUBPATH_DIR__TO__[$name__dir__output]+_} ]]; then
-        echo -e "${TAG__WARNING} Skipping the extracted ${path__dir__extracted}: not contains a key in MAP__SUBPATH_DIR__TO__"
+        echo -e "${TAG__WARNING} Skipping the extracted ${path__dir__input}: not contains a key in MAP__SUBPATH_DIR__TO__"
         continue
     fi
 
-    path__dir__input="$path__dir__extracted/$SUBPATH_STRIP/$name__dir__output"
     path__dir__output="$PATH__DIR__OUTPUT/$name__dir__output/labels${POSTFIX__DIR__LABEL__OUTPUT}"
     
     [[ -d $path__dir__output ]] && rm -r $path__dir__output
