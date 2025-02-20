@@ -228,15 +228,12 @@ def helper__extract__ultralytics__detect__video(**kwargs):
     import time
 
     path__file__input = kwargs["path__file__input"]
-    path__dir__img__output = kwargs["path__dir__img__output"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
-    to_save__img = kwargs["to_save__img"]
     num__pad__0 = kwargs["num__pad__0"]
 
     model = parse__ultralytics_model(**kwargs)
 
     cap = cv2.VideoCapture(path__file__input)
-    os.makedirs(path__dir__img__output, exist_ok=True)
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
     pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
@@ -257,13 +254,9 @@ def helper__extract__ultralytics__detect__video(**kwargs):
         dict__result = _["dict__result"]
         mtime_2 = time.time()
 
-        name__file__img = f"{id__frame:0{num__pad__0}d}.jpg"
-        path__file__img = os.path.join(path__dir__img__output, name__file__img)
         name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
         path__file__lbl = os.path.join(path__dir__lbl__output, name__file__lbl)
 
-        if to_save__img:
-            cv2.imwrite(path__file__img, img__bgr)
         with open(path__file__lbl, "w") as f:
             json.dump(dict__result, f, indent=4)
 
