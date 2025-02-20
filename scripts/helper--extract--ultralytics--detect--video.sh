@@ -46,7 +46,8 @@ for subpath__video in "${!MAP__SUBPATH_VIDEO__TO__[@]}"; do
         --imgsz 640 \
         --thresh__conf__min 0.01 \
         --to_save__img False \
-        --num__pad__0 6
+        --num__pad__0 6 \
+        --to_use__yolov5_compat True
 
     echo -e "${TAG__INFO} Done: ${subpath__video}"
         

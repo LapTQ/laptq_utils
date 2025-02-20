@@ -1,19 +1,18 @@
-PATH__DIR__IMAGE=/home/laptq/datasets/COCO--reformated
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/data/Videos--to--frames/241210_受け取り動画/mp4_5min
 POSTFIX__DIR__IMAGE=""
 
-PATH__DIR__LABEL=/home/laptq/datasets/COCO--reformated
-POSTFIX__DIR__LABEL=""
+PATH__DIR__LABEL=/home/laptq/laptq-prj-21/outputs/trivial/yolov5s--832--scale-0.5--multiscale-True--exp
+POSTFIX__DIR__LABEL="--pred--json"
 
 NUM__MAX__IMG__TO__VISUALIZE=10
 IS_OK__LBL_NOT_FOUND=True
-PATH__DIR__OUTPUT=/media/laptq/data/workspace/yolov3/outputs
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/trivial/visualize
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/datasets/COCO--reformated/train2017/map__id_class__to__name_class.yaml
 
 [[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["train2017"]=""
-    ["val2017"]=""
+    ["1_2024-11-26_081159_0_5min.mp4"]=""
 )
 
 IFS=$'\n'
@@ -31,18 +30,18 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__output}" ]] && rm -r "${path__dir__output}"
     mkdir -p "${path__dir__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__draw__detection__imgdir \
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \
         --to_concat__original_img True \
-        --concat__axis 1 \
+        --concat__axis 0 \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
         --to_draw__box_conf True \
         --to_draw__id_class False \
-        --to_draw__name_class True \
+        --to_draw__name_class False \
         --fontScale 1 \
         --thickness 1 \
         --box_color_by id__class \

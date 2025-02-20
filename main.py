@@ -100,6 +100,7 @@ def parse_args():
     ap.add_argument("--method", type=str)
     ap.add_argument("--flags", type=str)
     ap.add_argument("--roi__polygonn", type=str)
+    ap.add_argument("--to_use__yolov5_compat", type=str)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -182,6 +183,11 @@ def parse_args():
     )
     args.roi__polygonn = (
         eval(args.roi__polygonn) if args.roi__polygonn is not None else None
+    )
+    args.to_use__yolov5_compat = (
+        eval(args.to_use__yolov5_compat)
+        if args.to_use__yolov5_compat is not None
+        else None
     )
 
     return args
