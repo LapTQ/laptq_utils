@@ -1,14 +1,24 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/data/Videos--to--frames/241210_受け取り動画/mp4_5min
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/outputs/20250220--videos-to-frames
 POSTFIX__DIR__IMAGE=""
 
+TO_USE__YOLOv5_COMPAT=True
 PATH__FILE__MODEL=/home/laptq/laptq-prj-21/runs/data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person/yolov5s--832--scale-0.5--multiscale-True/exp/weights/best.pt
+ID__DATA=data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person
 ID__MODEL=yolov5s--832--scale-0.5--multiscale-True--exp
+ID__TRAIN=exp
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/trivial/${ID__MODEL}
-POSTFIX__DIR__LABEL__OUTPUT="--pred--json"
+IMGSZ=832
+THRESH__CONF__MIN=0.01
+ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN
+
+DEVICE="cuda:0"
+
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250220--labels
+POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--EXP--${ID__TRAIN}--PREDICT--${ID__PREDICT}--json"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["1_2024-11-26_081159_0_5min.mp4"]=""
+    ["Camera_４８/Camera_48_1_2025-01-30_000000.3gp"]=""
+    ["Camera_４８/Camera_48_1_2025-01-31_000000.3gp"]=""
 )
 
 IFS=$'\n'
@@ -30,10 +40,10 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__img "${path__dir__img__input}" \
         --path__dir__output "${path__dir__lbl__output}" \
         --path__file__model "${PATH__FILE__MODEL}" \
-        --device "cuda:0" \
-        --imgsz 832 \
-        --thresh__conf__min 0.01 \
-        --to_use__yolov5_compat True
+        --device $DEVICE \
+        --imgsz $IMGSZ \
+        --thresh__conf__min $THRESH__CONF__MIN \
+        --to_use__yolov5_compat $TO_USE__YOLOv5_COMPAT
     
     echo -e "${TAG__INFO} Done: ${subpath__dir}"
 done
