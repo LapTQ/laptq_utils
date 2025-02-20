@@ -4,7 +4,7 @@ POSTFIX__DIR__IMAGE=""
 TO_USE__YOLOv5_COMPAT=True
 PATH__FILE__MODEL=/home/laptq/laptq-prj-21/runs/data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person/yolov5s--832--scale-0.5--multiscale-True/exp/weights/best.pt
 ID__DATA=data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person
-ID__MODEL=yolov5s--832--scale-0.5--multiscale-True--exp
+ID__MODEL=yolov5s--832--scale-0.5--multiscale-True
 ID__TRAIN=exp
 
 IMGSZ=832
@@ -14,7 +14,7 @@ ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN
 DEVICE="cuda:0"
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250220--labels
-POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--EXP--${ID__TRAIN}--PREDICT--${ID__PREDICT}--json"
+POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--JSON"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     ["Camera_４８/Camera_48_1_2025-01-30_000000.3gp"]=""
