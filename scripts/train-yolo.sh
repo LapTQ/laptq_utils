@@ -6,27 +6,27 @@ sleep 0
 
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
-data=data--synthetic--satudora-center-box
-YOLO=yolo11s
+data=data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person
+YOLO=yolov5s
 IMGSZ=832
 SCALE=0.5
 MULTI_SCALE=True
-LR0=0.005
+# LR0=0.005
 
 yolo detect train \
     data=src/configs/$data.yaml \
     model=${YOLO}.pt \
-    epochs=200 \
+    epochs=100 \
     imgsz=$IMGSZ \
-    device=0 \
-    batch=8 \
+    device=2 \
+    batch=16 \
     project=$path__dir__run/$data/$YOLO--$IMGSZ--scale-$SCALE--multiscale-$MULTI_SCALE \
     plots=True \
     patience=40 \
     scale=$SCALE \
-    optimizer=SGD \
-    lr0=$LR0 \
     multi_scale=$MULTI_SCALE
+    # optimizer=SGD \
+    # lr0=$LR0 \
 
     # model=/home/laptq/laptq-prj-21/runs/data--public--satudora/yolo11s--832--scale-0.5--multiscale-True/train2/weights/best--epoch-141.pt \
 
