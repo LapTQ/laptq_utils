@@ -1,18 +1,17 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/data/Videos--to--frames/241210_受け取り動画/mp4_5min
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/outputs/20250220--videos-to-frames
 POSTFIX__DIR__IMAGE=""
 
-PATH__DIR__LABEL=/home/laptq/laptq-prj-21/outputs/trivial/yolov5s--832--scale-0.5--multiscale-True--exp
-POSTFIX__DIR__LABEL="--pred--json"
+PATH__DIR__LABEL=/home/laptq/laptq-prj-21/outputs/20250220--labels
+POSTFIX__DIR__LABEL="--PRED--DATA--data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person--MODEL--yolov5s--832--scale-0.5--multiscale-True--TRAIN--exp--PREDICT--imgsz-832--conf-0.01--JSON"
 
-NUM__MAX__IMG__TO__VISUALIZE=10
-IS_OK__LBL_NOT_FOUND=True
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/trivial/visualize
-PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/datasets/COCO--reformated/train2017/map__id_class__to__name_class.yaml
-
-[[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
+NUM__MAX__IMG__TO__VISUALIZE=20
+IS_OK__LBL_NOT_FOUND=False
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250220--visualized
+PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["1_2024-11-26_081159_0_5min.mp4"]=""
+    # ["Camera_４８/Camera_48_1_2025-01-30_000000.3gp"]=""
+    ["Camera_４８/Camera_48_1_2025-01-31_000000.3gp"]=""
 )
 
 IFS=$'\n'
@@ -25,7 +24,8 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}/images${POSTFIX__DIR__IMAGE}"
     path__dir__lbl="${PATH__DIR__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
-    path__dir__output="${PATH__DIR__OUTPUT}/${subpath__dir}"
+
+    path__dir__output="${PATH__DIR__OUTPUT}/${subpath__dir}/vis${POSTFIX__DIR__LABEL}"
 
     [[ -d "${path__dir__output}" ]] && rm -r "${path__dir__output}"
     mkdir -p "${path__dir__output}"
@@ -35,19 +35,19 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \
-        --to_concat__original_img True \
-        --concat__axis 0 \
+        --to_concat__original_img False \
+        --concat__axis 1 \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
         --to_draw__box_conf True \
         --to_draw__id_class False \
         --to_draw__name_class False \
-        --fontScale 1 \
-        --thickness 1 \
+        --fontScale 2 \
+        --thickness 2 \
         --box_color_by id__class \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
         --num__max__img $NUM__MAX__IMG__TO__VISUALIZE \
-        --seed None \
+        --seed 42 \
         --is_ok__lbl_not_exist $IS_OK__LBL_NOT_FOUND
 
 
@@ -61,7 +61,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         echo "    [+] $num__lbl labels"
         echo "    [+] $num__img_vis visualized images"
         
-        exit 1
+        # exit 1
     fi
     echo -e "${TAG__PASSED} ${num__lbl} labels == ${num__img_vis} visualized images: ${subpath__dir}"
 done
