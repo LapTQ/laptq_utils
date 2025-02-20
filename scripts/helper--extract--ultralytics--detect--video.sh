@@ -54,18 +54,14 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 for subpath__video in "${!MAP__SUBPATH_VIDEO__TO__[@]}"; do
     path__file__input="${PATH__DIR__VIDEO}/${subpath__video}"
-    path__dir__img__output="${PATH__DIR__IMAGE__OUTPUT}/${subpath__video}/images${POSTFIX__DIR__IMAGE__OUTPUT}"
     path__dir__lbl__output="${PATH__DIR__LABEL__OUTPUT}/${subpath__video}/labels${POSTFIX__DIR__LABEL__OUTPUT}"
 
-    [[ -d "${path__dir__img__output}" ]] && rm -r "${path__dir__img__output}"
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
-    mkdir -p "${path__dir__img__output}"
     mkdir -p "${path__dir__lbl__output}"
 
     python3 submodules/laptq_utils/main.py \
         helper__extract__ultralytics__detect__video \
         --path__file__input "${path__file__input}" \
-        --path__dir__img__output "${path__dir__img__output}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
         --path__file__model "${PATH__FILE__MODEL}" \
         --device $DEVICE \
