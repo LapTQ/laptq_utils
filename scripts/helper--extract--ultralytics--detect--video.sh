@@ -7,7 +7,7 @@ POSTFIX__DIR__IMAGE__OUTPUT=""
 PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--video--1
 POSTFIX__DIR__LABEL__OUTPUT=""
 
-declare -A MAP__NAME_VIDEO__TO__=(
+declare -A MAP__SUBPATH_VIDEO__TO__=(
     # ["1_2024-11-26_081159_0_5min.mp4"]=""
     # ["1_2024-11-26_081159_1_5min.mp4"]=""
     # ["1_2024-11-26_081159_2_5min.mp4"]=""
@@ -26,10 +26,10 @@ TAG__INFO="\033[94m[INFO]\033[0m"
 TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 
-for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
-    path__file__input="${PATH__DIR__VIDEO}/${name__video}"
-    path__dir__img__output="${PATH__DIR__IMAGE__OUTPUT}/${name__video}/images${POSTFIX__DIR__IMAGE__OUTPUT}"
-    path__dir__lbl__output="${PATH__DIR__LABEL__OUTPUT}/${name__video}/labels${POSTFIX__DIR__LABEL__OUTPUT}"
+for subpath__video in "${!MAP__SUBPATH_VIDEO__TO__[@]}"; do
+    path__file__input="${PATH__DIR__VIDEO}/${subpath__video}"
+    path__dir__img__output="${PATH__DIR__IMAGE__OUTPUT}/${subpath__video}/images${POSTFIX__DIR__IMAGE__OUTPUT}"
+    path__dir__lbl__output="${PATH__DIR__LABEL__OUTPUT}/${subpath__video}/labels${POSTFIX__DIR__LABEL__OUTPUT}"
 
     [[ -d "${path__dir__img__output}" ]] && rm -r "${path__dir__img__output}"
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
@@ -48,6 +48,6 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --to_save__img False \
         --num__pad__0 6
 
-    echo -e "${TAG__INFO} Done: ${name__video}"
+    echo -e "${TAG__INFO} Done: ${subpath__video}"
         
 done
