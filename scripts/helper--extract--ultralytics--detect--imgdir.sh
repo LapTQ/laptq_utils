@@ -1,4 +1,4 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/outputs/20250220--videos-to-frames
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/data/Videos--to--frames/241210_受け取り動画/mp4
 POSTFIX__DIR__IMAGE=""
 
 TO_USE__YOLOv5_COMPAT=True
@@ -8,17 +8,19 @@ ID__MODEL=yolov5s--832--scale-0.5--multiscale-True
 ID__TRAIN=exp
 
 IMGSZ=832
-THRESH__CONF__MIN=0.01
+THRESH__CONF__MIN=0.1
 ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN
 
-DEVICE="cuda:0"
+DEVICE="cuda:2"
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250220--labels
 POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--JSON"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["Camera_４８/Camera_48_1_2025-01-30_000000.3gp"]=""
-    ["Camera_４８/Camera_48_1_2025-01-31_000000.3gp"]=""
+    ["1_2024-11-26_081159_0.mp4"]=""
+    ["1_2024-11-26_081159_1.mp4"]=""
+    ["1_2024-11-26_081159_2.mp4"]=""
+    ["1_2024-11-26_081159_3.mp4"]=""
 )
 
 IFS=$'\n'

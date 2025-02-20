@@ -1,5 +1,5 @@
-PATH__DIR__INPUT__1=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolov5s--832--scale-0.5--multiscale-True/predict--exp--imgsz-832--conf-0.1/exp
-PATH__DIR__INPUT__2=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolov8s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict/draw--imgdir--to--video
+PATH__DIR__INPUT__1=/home/laptq/laptq-prj-21/outputs/20250220--frames-to-video-2
+PATH__DIR__INPUT__2=/home/laptq/laptq-prj-21/outputs/20250220--frames-to-video
 
 PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/trivial/concat
 
