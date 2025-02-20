@@ -1,8 +1,8 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/outputs/20250109--gen-data--batches--pasted--seg-crop/gen_only_syn_25Dec-batch-1
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/data/Videos--to--frames/241210_受け取り動画/mp4_5min
 POSTFIX__DIR__IMAGE=""
 
-PATH__DIR__LABEL=/home/laptq/laptq-prj-21/outputs/20250109--gen-data--batches--pasted--seg-crop/gen_only_syn_25Dec-batch-1
-POSTFIX__DIR__LABEL=""
+PATH__DIR__LABEL=/home/laptq/laptq-prj-21/outputs/trivial/yolov5s--832--scale-0.5--multiscale-True--exp
+POSTFIX__DIR__LABEL="--pred--json"
 
 NUM__MAX__IMG__TO__VISUALIZE=None
 IS_OK__LBL_NOT_FOUND=False
@@ -10,12 +10,7 @@ PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/trivial
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["1_2024-11-26_081159_0.mp4"]=""
-    # ["1_2024-11-26_081159_1.mp4"]=""
-    # ["1_2024-11-26_081159_2.mp4"]=""
-    # ["1_2024-11-26_081159_3.mp4"]=""
-
-    ["test-sample"]=""
+    ["1_2024-11-26_081159_0_5min.mp4"]=""
 )
 
 IFS=$'\n'
