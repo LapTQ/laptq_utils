@@ -3,8 +3,25 @@ PATH__DIR__VIDEO=/home/laptq/laptq-prj-21/data/video-20250220
 PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250220--videos-to-frames
 
 declare -A MAP__NAME_VIDEO__TO__=(
-    ["Camera_４８/Camera_48_1_2025-01-30_000000.3gp"]=""
+    ["Camera_４８/Camera_48_1_2025-01-28_000000.3gp"]=""
     ["Camera_４８/Camera_48_1_2025-01-31_000000.3gp"]=""
+    ["Camera_４８/Camera_48_1_2025-01-30_000000.3gp"]=""
+    ["Camera_４８/Camera_48_1_2025-01-27_000000.3gp"]=""
+    ["Camera_４８/Camera_48_1_2025-01-29_000000.3gp"]=""
+    ["Camera_４７/Camera_47_1_2025-01-29_000000.3gp"]=""
+    ["Camera_４７/Camera_47_1_2025-01-31_000000.3gp"]=""
+    ["Camera_４７/Camera_47_1_2025-01-30_000000.3gp"]=""
+    ["Camera_４７/Camera_47_1_2025-01-28_000000.3gp"]=""
+    ["Camera_５０/Camera_50_1_2025-01-30_000000.3gp"]=""
+    ["Camera_５０/Camera_50_1_2025-01-31_000000.3gp"]=""
+    ["Camera_５０/Camera_50_1_2025-01-28_000000.3gp"]=""
+    ["Camera_５０/Camera_50_1_2025-01-29_000000.3gp"]=""
+    ["Camera_５０/Camera_50_1_2025-01-27_000000.3gp"]=""
+    ["Camera_４９/Camera_49_1_2025-01-28_000001.3gp"]=""
+    ["Camera_４９/Camera_49_1_2025-01-29_000000.3gp"]=""
+    ["Camera_４９/Camera_49_1_2025-01-30_000000.3gp"]=""
+    ["Camera_４９/Camera_49_1_2025-01-31_000000.3gp"]=""
+    ["Camera_４９/Camera_49_1_2025-01-27_000000.3gp"]=""
 )
 
 IFS=$'\n'
