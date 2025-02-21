@@ -92,16 +92,16 @@ def helper__convert__video__to__images(**kwargs):
     os.makedirs(path__dir__img__output, exist_ok=True)
 
     pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
-    id__frame = 0
+    id__frame = -1
     while True:
         success, img__bgr = cap.read()
         if not success:
             break
+        id__frame += 1
 
         name__file__img = f"{id__frame:0{num__pad__0}d}.jpg"
         path__file__img = os.path.join(path__dir__img__output, name__file__img)
 
         cv2.imwrite(path__file__img, img__bgr)
-        id__frame += 1
 
         pbar.update(1)
