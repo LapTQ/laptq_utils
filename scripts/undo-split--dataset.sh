@@ -1,17 +1,11 @@
-# PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1
-# PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2
-PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json
-POSTFIX__DIR__IMG__SOURCE=""
+PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/20250211--finetune--ver3--merged--subset-10k--splitted
+POSTFIX__DIR__IMG__SOURCE="--raw"
 
-# PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1
-# PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json
-POSTFIX__DIR__LABEL__SOURCE=""
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
+POSTFIX__DIR__LABEL__SOURCE="--raw"
 
-# PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1--undo-split
-# PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split
-PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json--undo-split
-POSTFIX__DIR__VERSION__TARGET=""
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/20250211--finetune--ver3--merged--subset-10k--splitted--undo-split
+POSTFIX__DIR__VERSION__TARGET="--raw"
 
 POSTFIX__DIR__SPLITTED='-batch-'
 

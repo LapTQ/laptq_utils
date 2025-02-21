@@ -8,6 +8,15 @@ PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-44/outputs/images-with-central-hu
 POSTFIX__DIR__IMAGE__OUTPUT="--erase-IGNORE"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
+    ["P44-20250211-batch-32"]=""
+    ["P44-20250211-batch-33"]=""
+    ["P44-20250211-batch-34"]=""
+    ["P44-20250211-batch-35"]=""
+    ["P44-20250211-batch-36"]=""
+    ["P44-20250211-batch-37"]=""
+    ["P44-20250211-batch-38"]=""
+    ["P44-20250211-batch-39"]=""
+    ["P44-20250211-batch-40"]=""
     ["P44-20250211-batch-41"]=""
     ["P44-20250211-batch-42"]=""
     ["P44-20250211-batch-43"]=""

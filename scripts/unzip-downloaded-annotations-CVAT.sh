@@ -7,13 +7,22 @@ SUBPATH_TEMP=temp
 PATH__DIR__OUTPUT__TEMP="${PATH__DIR__OUTPUT}-${SUBPATH_TEMP}"
 SUBPATH_STRIP=obj_train_data/P44-20250211
 
-[[ -d $PATH__DIR__OUTPUT ]] && rm -r $PATH__DIR__OUTPUT
+# [[ -d $PATH__DIR__OUTPUT ]] && rm -r $PATH__DIR__OUTPUT
 mkdir -p $PATH__DIR__OUTPUT
-[[ -d $PATH__DIR__OUTPUT__TEMP ]] && rm -r $PATH__DIR__OUTPUT__TEMP
+# [[ -d $PATH__DIR__OUTPUT__TEMP ]] && rm -r $PATH__DIR__OUTPUT__TEMP
 mkdir -p $PATH__DIR__OUTPUT__TEMP
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
+    ["P44-20250211-batch-32"]=""
+    ["P44-20250211-batch-33"]=""
+    ["P44-20250211-batch-34"]=""
+    ["P44-20250211-batch-35"]=""
+    ["P44-20250211-batch-36"]=""
+    ["P44-20250211-batch-37"]=""
+    ["P44-20250211-batch-38"]=""
+    ["P44-20250211-batch-39"]=""
+    ["P44-20250211-batch-40"]=""
     ["P44-20250211-batch-41"]=""
     ["P44-20250211-batch-42"]=""
     ["P44-20250211-batch-43"]=""
