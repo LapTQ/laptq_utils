@@ -22,6 +22,7 @@ from laptq_pyutils.helper import (
     helper__extract__crops__with__mask__from__segmentation,
     helper__paste__seg_crops__over__det_boxes,
     helper__paste__seg_crops__over__background,
+    helper__merge__detection__result,
 )
 import argparse
 
@@ -50,6 +51,7 @@ def parse_args():
     ap.add_argument("--path__file__lbl__output", type=str)
     ap.add_argument("--path__file__output", type=str)
     ap.add_argument("--path__file__model", type=str)
+    ap.add_argument("--list__path__dir__lbl__input", type=str)  # sep by ,
     ap.add_argument("--device", type=str)
     ap.add_argument("--imgsz", type=int)
     ap.add_argument("--map__id_class__to__thresh_conf", type=str)
@@ -82,6 +84,7 @@ def parse_args():
     ap.add_argument("--num__steps", type=int)
     ap.add_argument("--seed", type=str)
     ap.add_argument("--is_ok__lbl_not_exist", type=str)
+    ap.add_argument("--is_ok__key_not_exist", type=str)
     ap.add_argument("--fourcc", type=str)
     ap.add_argument("--path__file__map__id_class__to__name_class", type=str)
     ap.add_argument("--filter_by", type=str)
@@ -100,6 +103,7 @@ def parse_args():
     ap.add_argument("--method", type=str)
     ap.add_argument("--flags", type=str)
     ap.add_argument("--roi__polygonn", type=str)
+    ap.add_argument("--to_use__yolov5_compat", type=str)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -182,6 +186,21 @@ def parse_args():
     )
     args.roi__polygonn = (
         eval(args.roi__polygonn) if args.roi__polygonn is not None else None
+    )
+    args.to_use__yolov5_compat = (
+        eval(args.to_use__yolov5_compat)
+        if args.to_use__yolov5_compat is not None
+        else None
+    )
+    args.is_ok__key_not_exist = (
+        eval(args.is_ok__key_not_exist)
+        if args.is_ok__key_not_exist is not None
+        else None
+    )
+    args.list__path__dir__lbl__input = (
+        args.list__path__dir__lbl__input.split(",")
+        if args.list__path__dir__lbl__input is not None
+        else None
     )
 
     return args

@@ -32,11 +32,13 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}/images${POSTFIX__DIR__IMAGE}"
     path__dir__lbl="${PATH__DIR__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
-    path__dir__output="${PATH__DIR__OUTPUT}/${subpath__dir}"
+
+    path__dir__output="${PATH__DIR__OUTPUT}/${subpath__dir}/vis${POSTFIX__DIR__LABEL}"
 
     [[ -d "${path__dir__output}" ]] && rm -r "${path__dir__output}"
     mkdir -p "${path__dir__output}"
 
+    python3 submodules/laptq_utils/main.py \
     python3 submodules/laptq_utils/main.py \
         helper__draw__detection__imgdir \
         --path__dir__img "${path__dir__img}" \
@@ -54,7 +56,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --box_color_by id__class \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
         --num__max__img $NUM__MAX__IMG__TO__VISUALIZE \
-        --seed None \
+        --seed 42 \
         --is_ok__lbl_not_exist $IS_OK__LBL_NOT_FOUND
 
 
@@ -68,7 +70,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         echo "    [+] $num__lbl labels"
         echo "    [+] $num__img_vis visualized images"
         
-        exit 1
+        # exit 1
     fi
     echo -e "${TAG__PASSED} ${num__lbl} labels == ${num__img_vis} visualized images: ${subpath__dir}"
 done

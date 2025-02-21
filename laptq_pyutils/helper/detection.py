@@ -1,3 +1,5 @@
+from abc import ABC, abstractmethod
+
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import ListAligner
 from laptq_pyutils.log import load_logger
@@ -17,52 +19,156 @@ from laptq_pyutils.algo import KMeans
 LOGGER = load_logger()
 
 
-def extract__ultralytics__detect(**kwargs):
+class BaseModel(ABC):
 
-    img__bgr = kwargs["img__bgr"]
-    model = kwargs["model"]
-    imgsz = kwargs["imgsz"]
-    thresh__conf__min = kwargs["thresh__conf__min"]
+    @abstractmethod
+    def __init__(self, **kwargs):
+        pass
 
-    result_ultralytics = (
-        model.predict(
-            source=img__bgr,
-            imgsz=imgsz,
-            conf=thresh__conf__min,
-            verbose=False,
-        )[0]
-        .cpu()
-        .numpy()
-    )
+    @abstractmethod
+    def predict(self, **kwargs):
+        pass
 
-    boxes = result_ultralytics.boxes
 
-    list_aligner__result = ListAligner(
-        list__key=[
-            "list__obj__id_class",
-            "list__obj__box_xcycwhn",
-            "list__obj__box_conf",
-        ]
-    )
+class UltralyticsModel(BaseModel):
 
-    for i_b, box in enumerate(boxes):
-        id_class = int(box.cls)
-        xcn, ycn, wn, hn = box.xywhn[0].tolist()
-        conf = float(box.conf)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
-        list_aligner__result.extend(
-            {
-                "list__obj__id_class": [id_class],
-                "list__obj__box_xcycwhn": [[xcn, ycn, wn, hn]],
-                "list__obj__box_conf": [conf],
-            }
+        from ultralytics import YOLO
+
+        self.path__file__model = kwargs["path__file__model"]
+        self.device = kwargs["device"]
+
+        self.model = YOLO(self.path__file__model).to(self.device)
+
+    def predict(self, **kwargs):
+
+        img__bgr = kwargs["img__bgr"]
+        imgsz = kwargs["imgsz"]
+        thresh__conf__min = kwargs["thresh__conf__min"]
+
+        result_ultralytics = (
+            self.model.predict(
+                source=img__bgr,
+                imgsz=imgsz,
+                conf=thresh__conf__min,
+                verbose=False,
+            )[0]
+            .cpu()
+            .numpy()
         )
 
-    dict__result = list_aligner__result.item()
+        boxes = result_ultralytics.boxes
 
-    return {
-        "dict__result": dict__result,
-    }
+        list_aligner__result = ListAligner(
+            list__key=[
+                "list__obj__id_class",
+                "list__obj__box_xcycwhn",
+                "list__obj__box_conf",
+            ]
+        )
+
+        for i_b, box in enumerate(boxes):
+            id_class = int(box.cls)
+            xcn, ycn, wn, hn = box.xywhn[0].tolist()
+            conf = float(box.conf)
+
+            list_aligner__result.extend(
+                {
+                    "list__obj__id_class": [id_class],
+                    "list__obj__box_xcycwhn": [[xcn, ycn, wn, hn]],
+                    "list__obj__box_conf": [conf],
+                }
+            )
+
+        dict__result = list_aligner__result.item()
+
+        return {
+            "dict__result": dict__result,
+        }
+
+
+class YOLOv5CompatModel(BaseModel):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        import torch
+
+        self.path__file__model = kwargs["path__file__model"]
+        self.device = kwargs["device"]
+
+        self.model = torch.hub.load(
+            repo_or_dir="ultralytics/yolov5",
+            model="custom",  # e.g., 'yolov5n', 'yolov5x6', or 'custom'
+            path=self.path__file__model,
+            device=self.device,
+        )
+
+    def predict(self, **kwargs):
+
+        import cv2
+
+        img__bgr = kwargs["img__bgr"]
+        imgsz = kwargs["imgsz"]
+        thresh__conf__min = kwargs["thresh__conf__min"]
+
+        self.model.conf = thresh__conf__min
+
+        img__rgb = cv2.cvtColor(img__bgr, cv2.COLOR_BGR2RGB)
+        imH, imW = img__bgr.shape[:2]
+
+        result_ultralytics = self.model(img__rgb, size=imgsz).pandas().xyxy[0]
+
+        list_aligner__result = ListAligner(
+            list__key=[
+                "list__obj__id_class",
+                "list__obj__box_xcycwhn",
+                "list__obj__box_conf",
+            ]
+        )
+
+        for i_b, box in result_ultralytics.iterrows():
+            id_class = int(box["class"])
+            x1, y1, x2, y2 = box[["xmin", "ymin", "xmax", "ymax"]].tolist()
+            conf = float(box["confidence"])
+
+            xc = (x1 + x2) / 2
+            yc = (y1 + y2) / 2
+            w = x2 - x1
+            h = y2 - y1
+
+            xcn = xc / imW
+            ycn = yc / imH
+            wn = w / imW
+            hn = h / imH
+
+            list_aligner__result.extend(
+                {
+                    "list__obj__id_class": [id_class],
+                    "list__obj__box_xcycwhn": [[xcn, ycn, wn, hn]],
+                    "list__obj__box_conf": [conf],
+                }
+            )
+
+        dict__result = list_aligner__result.item()
+
+        return {
+            "dict__result": dict__result,
+        }
+
+
+def parse__ultralytics_model(**kwargs):
+
+    to_use__yolov5_compat = kwargs["to_use__yolov5_compat"]
+
+    if to_use__yolov5_compat:
+        model = YOLOv5CompatModel(**kwargs)
+    else:
+        model = UltralyticsModel(**kwargs)
+
+    return model
 
 
 def helper__extract__ultralytics__detect__imgdir(**kwargs):
@@ -76,10 +182,8 @@ def helper__extract__ultralytics__detect__imgdir(**kwargs):
 
     path__dir__img = kwargs["path__dir__img"]
     path__dir__output = kwargs["path__dir__output"]
-    path__file__model = kwargs["path__file__model"]
-    device = kwargs["device"]
 
-    model = YOLO(path__file__model).to(device)
+    model = parse__ultralytics_model(**kwargs)
 
     os.makedirs(path__dir__output, exist_ok=True)
 
@@ -93,9 +197,8 @@ def helper__extract__ultralytics__detect__imgdir(**kwargs):
         img__bgr = cv2.imread(path__file__img)
 
         mtime_1 = time.time()
-        _ = extract__ultralytics__detect(
+        _ = model.predict(
             img__bgr=img__bgr,
-            model=model,
             **kwargs,
         )
         dict__result = _["dict__result"]
@@ -126,21 +229,16 @@ def helper__extract__ultralytics__detect__video(**kwargs):
     import time
 
     path__file__input = kwargs["path__file__input"]
-    path__dir__img__output = kwargs["path__dir__img__output"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
-    path__file__model = kwargs["path__file__model"]
-    device = kwargs["device"]
-    to_save__img = kwargs["to_save__img"]
     num__pad__0 = kwargs["num__pad__0"]
 
-    model = YOLO(path__file__model).to(device)
+    model = parse__ultralytics_model(**kwargs)
 
     cap = cv2.VideoCapture(path__file__input)
-    os.makedirs(path__dir__img__output, exist_ok=True)
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
     pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
-    id__frame = 0
+    id__frame = -1
     log__time = {
         "time__inference": None,
     }
@@ -148,27 +246,21 @@ def helper__extract__ultralytics__detect__video(**kwargs):
         success, img__bgr = cap.read()
         if not success:
             break
+        id__frame += 1
 
         mtime_1 = time.time()
-        _ = extract__ultralytics__detect(
+        _ = model.predict(
             img__bgr=img__bgr,
-            model=model,
             **kwargs,
         )
         dict__result = _["dict__result"]
         mtime_2 = time.time()
 
-        name__file__img = f"{id__frame:0{num__pad__0}d}.jpg"
-        path__file__img = os.path.join(path__dir__img__output, name__file__img)
         name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
         path__file__lbl = os.path.join(path__dir__lbl__output, name__file__lbl)
 
-        if to_save__img:
-            cv2.imwrite(path__file__img, img__bgr)
         with open(path__file__lbl, "w") as f:
             json.dump(dict__result, f, indent=4)
-
-        id__frame += 1
 
         if log__time["time__inference"] is None:
             log__time["time__inference"] = mtime_2 - mtime_1
@@ -1136,9 +1228,60 @@ def helper__cluster__detection__bboxes(**kwargs):
     cv2.imwrite(path__file__output__plot, img__plot)
 
 
-def helper__generate__detection__by__pasting__on__boxes(**kwargs):
+def helper__merge__detection__result(**kwargs):
 
-    import cv2
-    import numpy as np
     import os
+    import json
     from tqdm import tqdm
+
+    list__path__dir__lbl__input = kwargs["list__path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    is_ok__key_not_exist = kwargs["is_ok__key_not_exist"]
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    set__name__file__lbl = set()
+    for path__dir__lbl__input in list__path__dir__lbl__input:
+        for name__file__lbl in os.listdir(path__dir__lbl__input):
+            set__name__file__lbl.add(name__file__lbl)
+    list__name__file__lbl = sorted(list(set__name__file__lbl))
+    
+    for name__file__lbl in tqdm(list__name__file__lbl):
+        dict__result = None
+
+        for path__dir__lbl__input in list__path__dir__lbl__input:
+            path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+            if not os.path.exists(path__file__lbl__input):
+                if is_ok__lbl_not_exist:
+                    continue
+                else:
+                    raise FileNotFoundError(f"Label file not found: {path__file__lbl__input}")
+
+            with open(path__file__lbl__input, "r") as f:
+                dict__result__input = json.load(f)
+
+            if dict__result is None:
+                dict__result = dict__result__input
+            else:
+                # check if keys are the same
+                list__key__src = set(dict__result__input.keys())
+                list__key__dst = set(dict__result.keys())
+                list__key__diff = list__key__src - list__key__dst
+                if len(list__key__diff) > 0:
+                    if is_ok__key_not_exist:
+                        continue
+                    else:
+                        raise KeyError(f"Key not found: {list__key__diff}")
+                
+                for key in list__key__dst:
+                    if isinstance(dict__result[key], list):
+                        dict__result[key].extend(dict__result__input[key])
+                    else:
+                        dict__result[key] = dict__result__input[key]
+
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)
+
+
