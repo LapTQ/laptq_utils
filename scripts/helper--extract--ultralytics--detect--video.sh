@@ -1,4 +1,4 @@
-PATH__DIR__VIDEO=/home/laptq/laptq-prj-21/data/video-20250220
+PATH__DIR__VIDEO=/mnt/hdd10tb/Users/thanhnv/Datasets/data/FS_PRJ21
 
 TO_USE__YOLOv5_COMPAT=True
 PATH__FILE__MODEL=/home/laptq/laptq-prj-21/runs/data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person/yolov5s--832--scale-0.5--multiscale-True/exp/weights/best.pt
@@ -10,7 +10,7 @@ IMGSZ=640
 THRESH__CONF__MIN=0.01
 ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN
 
-DEVICE="cuda:3"
+DEVICE="cuda:1"
 NUM__PAD__0=9
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250220--labels
@@ -23,26 +23,28 @@ declare -A MAP__SUBPATH_VIDEO__TO__=(
     # ["1_2024-11-26_081159_2.mp4"]=""
     # ["1_2024-11-26_081159_3.mp4"]=""
 
-    ["Camera_４８/Camera_48_1_2025-01-30_000000.3gp"]=""
-    # ["Camera_４８/Camera_48_1_2025-01-31_000000.3gp"]=""
-    # ["Camera_４８/Camera_48_1_2025-01-29_000000.3gp"]=""
-        # ["Camera_４９/Camera_49_1_2025-01-27_000000.3gp.dobinal0.partial"]=""
-        # ["Camera_４９/Camera_49_1_2025-01-28_000001.3gp.tijocok9.partial"]=""
-        # ["Camera_４９/Camera_49_1_2025-01-30_000000.3gp.tuhibax1.partial"]=""
-    # ["Camera_４９/Camera_49_1_2025-01-29_000000.3gp"]=""
-    # ["Camera_４９/Camera_49_1_2025-01-31_000000.3gp"]=""
-    # ["Camera_４９/Camera_49_1_2025-01-27_000000.3gp"]=""
-    # ["Camera_４９/Camera_49_1_2025-01-30_000000.3gp"]=""
-        # ["Camera_４９/Camera_49_1_2025-01-29_000000.3gp.qiyujuh5.partial"]=""
-    # ["Camera_４９/Camera_49_1_2025-01-28_000001.3gp"]=""
-        # ["Camera_４７/Camera_47_1_2025-01-28_000000.3gp.sumohew9.partial"]=""
-        # ["Camera_４７/Camera_47_1_2025-01-29_000000.3gp.motokej7.partial"]=""
-        # ["Camera_４７/Camera_47_1_2025-01-30_000000.3gp.sunagaf4.partial"]=""
-        # ["Camera_４７/Camera_47_1_2025-01-29_000000.3gp.jogifej2.partial"]=""
-        # ["Camera_４７/Camera_47_1_2025-01-28_000000.3gp.rabihap6.partial"]=""
-    # ["Camera_４７/Camera_47_1_2025-01-30_000000.3gp"]=""
-        # ["Camera_４７/Camera_47_1_2025-01-31_000000.3gp.giwices1.partial"]=""
-        # ["Camera_４７/Camera_47_1_2025-01-31_000000.3gp.mesiwer7.partial"]=""
+    # ["Camera_４８/Camera_48_1_2025-01-28_000000.3gp"]=""
+        ["Camera_４８/Camera_48_1_2025-01-31_000000.3gp"]=""
+        # ["Camera_４８/Camera_48_1_2025-01-30_000000.3gp"]=""
+    # ["Camera_４８/Camera_48_1_2025-01-27_000000.3gp"]=""
+        # ["Camera_４８/Camera_48_1_2025-01-29_000000.3gp"]=""
+
+    # ["Camera_４７/Camera_47_1_2025-01-29_000000.3gp"]=""
+    # ["Camera_４７/Camera_47_1_2025-01-31_000000.3gp"]=""
+    # ["Camera_４７/Camera_47_1_2025-01-28_000000.3gp"]=""
+        # ["Camera_４７/Camera_47_1_2025-01-30_000000.3gp"]=""
+
+    # ["Camera_５０/Camera_50_1_2025-01-30_000000.3gp"]=""
+    # ["Camera_５０/Camera_50_1_2025-01-31_000000.3gp"]=""
+    # ["Camera_５０/Camera_50_1_2025-01-28_000000.3gp"]=""
+    # ["Camera_５０/Camera_50_1_2025-01-29_000000.3gp"]=""
+    # ["Camera_５０/Camera_50_1_2025-01-27_000000.3gp"]=""
+
+        # ["Camera_４９/Camera_49_1_2025-01-29_000000.3gp"]=""
+        # ["Camera_４９/Camera_49_1_2025-01-30_000000.3gp"]=""
+        # ["Camera_４９/Camera_49_1_2025-01-31_000000.3gp"]=""
+        # ["Camera_４９/Camera_49_1_2025-01-27_000000.3gp"]=""
+        # ["Camera_４９/Camera_49_1_2025-01-28_000001.3gp"]=""
 )
 
 IFS=$'\n'
