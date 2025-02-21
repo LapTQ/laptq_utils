@@ -103,7 +103,8 @@ class YOLOv5CompatModel(BaseModel):
             repo_or_dir="ultralytics/yolov5",
             model="custom",  # e.g., 'yolov5n', 'yolov5x6', or 'custom'
             path=self.path__file__model,
-        ).to(self.device)
+            device=self.device,
+        )
 
     def predict(self, **kwargs):
 
@@ -237,7 +238,7 @@ def helper__extract__ultralytics__detect__video(**kwargs):
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
     pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
-    id__frame = 0
+    id__frame = -1
     log__time = {
         "time__inference": None,
     }
@@ -245,6 +246,7 @@ def helper__extract__ultralytics__detect__video(**kwargs):
         success, img__bgr = cap.read()
         if not success:
             break
+        id__frame += 1
 
         mtime_1 = time.time()
         _ = model.predict(
@@ -259,8 +261,6 @@ def helper__extract__ultralytics__detect__video(**kwargs):
 
         with open(path__file__lbl, "w") as f:
             json.dump(dict__result, f, indent=4)
-
-        id__frame += 1
 
         if log__time["time__inference"] is None:
             log__time["time__inference"] = mtime_2 - mtime_1
