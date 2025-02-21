@@ -6,7 +6,9 @@ sleep 0
 # data=20241122--phase-2--annotation-ver2
 # data=product-person
 # data=20250120--finetune
-data=product-person--public--Satudora-finetune
+# data=product-person--public--Satudora-finetune
+# data=Deployment-store
+data=product-person--public--Satudora-finetune--Deployment-store
 
 path__dir__run=~/laptq-prj-44/runs
 
@@ -14,17 +16,16 @@ YOLO=yolo11m
 IMGSZ=640
 yolo detect train \
     data=src/configs/$data.yaml \
-    model=${YOLO}.pt \
     epochs=300 \
     imgsz=$IMGSZ \
-    device=1 \
+    device=2 \
     batch=16 \
     project=$path__dir__run/$data/$YOLO--$IMGSZ--weighted-fitness \
     plots=True \
     patience=30 \
-    to__use__weighted__fitness=True
-
-    # model=/mnt/ssd8tb/shared_workspace/laptq/laptq-prj-44/runs/product-person/yolo11m--640--weighted-fitness/train/weights/best.pt \
+    to__use__weighted__fitness=True \
+    model=${YOLO}.pt \
+    # model=/home/laptq/laptq-prj-44/runs/product-person--public--Satudora-finetune/yolo11m--640--weighted-fitness/train/weights/best.pt \
 
 exit
 
