@@ -1,8 +1,8 @@
 PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
-POSTFIX__DIR__LABEL__INPUT="--erase-IGNORE--json"
+POSTFIX__DIR__LABEL__INPUT="--erase-IGNORE--productPerson--json"
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
-POSTFIX__DIR__LABEL__OUTPUT="--erase-IGNORE"
+POSTFIX__DIR__LABEL__OUTPUT="--erase-IGNORE--productPerson"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     ["P44-20250211-batch-32"]=""

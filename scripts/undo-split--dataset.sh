@@ -1,27 +1,17 @@
-PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/20250211--finetune--ver3--merged--subset-10k--splitted
-POSTFIX__DIR__IMG__SOURCE="--raw"
+PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/Deployment-Store-20250221
+POSTFIX__DIR__IMG__SOURCE="_person"
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
-POSTFIX__DIR__LABEL__SOURCE="--raw"
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/Deployment-Store-20250221
+POSTFIX__DIR__LABEL__SOURCE="_person"
 
-PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/20250211--finetune--ver3--merged--subset-10k--splitted--undo-split
-POSTFIX__DIR__VERSION__TARGET="--raw"
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/Deployment-Store-20250221
+POSTFIX__DIR__VERSION__TARGET="_person"
 
 POSTFIX__DIR__SPLITTED='-batch-'
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["beppu_sue"]=""
-    ["P44-nothing-2個持ち_cut_fit"]=""
-    ["P44-notProducts-2個持ち_cut_fit"]=""
-    ["P44-1products-台置き_cut_fit"]=""
-    ["P44-nothing-台置き_cut_fit"]=""
-    ["P44-notProducts-台置き_cut_fit"]=""
-    ["P44-notProducts-bag20240906_1022"]=""
-    ["P44-2products-2個持ち_cut_fit"]=""
-    ["P44-1products-2個持ち_cut_fit"]=""
-    ["P44-2products-台置き_cut_fit"]=""
-    ["P44-notProducts-bag20240906_0000"]=""
+    ["P44-20250211"]=""
 )
 
 
