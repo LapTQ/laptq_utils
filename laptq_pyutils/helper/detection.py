@@ -103,7 +103,8 @@ class YOLOv5CompatModel(BaseModel):
             repo_or_dir="ultralytics/yolov5",
             model="custom",  # e.g., 'yolov5n', 'yolov5x6', or 'custom'
             path=self.path__file__model,
-        ).to(self.device)
+            device=self.device,
+        )
 
     def predict(self, **kwargs):
 
@@ -237,7 +238,7 @@ def helper__extract__ultralytics__detect__video(**kwargs):
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
     pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
-    id__frame = 0
+    id__frame = -1
     log__time = {
         "time__inference": None,
     }
@@ -245,6 +246,7 @@ def helper__extract__ultralytics__detect__video(**kwargs):
         success, img__bgr = cap.read()
         if not success:
             break
+        id__frame += 1
 
         mtime_1 = time.time()
         _ = model.predict(
@@ -259,8 +261,6 @@ def helper__extract__ultralytics__detect__video(**kwargs):
 
         with open(path__file__lbl, "w") as f:
             json.dump(dict__result, f, indent=4)
-
-        id__frame += 1
 
         if log__time["time__inference"] is None:
             log__time["time__inference"] = mtime_2 - mtime_1
@@ -1228,9 +1228,60 @@ def helper__cluster__detection__bboxes(**kwargs):
     cv2.imwrite(path__file__output__plot, img__plot)
 
 
-def helper__generate__detection__by__pasting__on__boxes(**kwargs):
+def helper__merge__detection__result(**kwargs):
 
-    import cv2
-    import numpy as np
     import os
+    import json
     from tqdm import tqdm
+
+    list__path__dir__lbl__input = kwargs["list__path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    is_ok__key_not_exist = kwargs["is_ok__key_not_exist"]
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    set__name__file__lbl = set()
+    for path__dir__lbl__input in list__path__dir__lbl__input:
+        for name__file__lbl in os.listdir(path__dir__lbl__input):
+            set__name__file__lbl.add(name__file__lbl)
+    list__name__file__lbl = sorted(list(set__name__file__lbl))
+    
+    for name__file__lbl in tqdm(list__name__file__lbl):
+        dict__result = None
+
+        for path__dir__lbl__input in list__path__dir__lbl__input:
+            path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+            if not os.path.exists(path__file__lbl__input):
+                if is_ok__lbl_not_exist:
+                    continue
+                else:
+                    raise FileNotFoundError(f"Label file not found: {path__file__lbl__input}")
+
+            with open(path__file__lbl__input, "r") as f:
+                dict__result__input = json.load(f)
+
+            if dict__result is None:
+                dict__result = dict__result__input
+            else:
+                # check if keys are the same
+                list__key__src = set(dict__result__input.keys())
+                list__key__dst = set(dict__result.keys())
+                list__key__diff = list__key__src - list__key__dst
+                if len(list__key__diff) > 0:
+                    if is_ok__key_not_exist:
+                        continue
+                    else:
+                        raise KeyError(f"Key not found: {list__key__diff}")
+                
+                for key in list__key__dst:
+                    if isinstance(dict__result[key], list):
+                        dict__result[key].extend(dict__result__input[key])
+                    else:
+                        dict__result[key] = dict__result__input[key]
+
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)
+
+
