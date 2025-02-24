@@ -31,7 +31,9 @@ TAG__INFO="\033[94m[INFO]\033[0m"
 TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 
-for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
+main() {
+    local name__video=$1
+
     path__file__input="${PATH__DIR__VIDEO}/${name__video}"
     path__dir__img__output="${PATH__DIR__IMAGE__OUTPUT}/${name__video}/images"
 
@@ -43,5 +45,23 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --path__file__input "${path__file__input}" \
         --path__dir__img__output "${path__dir__img__output}" \
         --num__pad__0 9
-        
+}
+
+export -f main
+
+cleanup() {
+    echo "Cleaning up..."
+    # Kill background processes if they are still running
+    kill $(jobs -p) 2>/dev/null
+    echo "All background processes terminated."
+}
+
+trap cleanup SIGINT
+
+for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
+    main "$name__video" &
 done
+
+wait
+
+echo "Done"
