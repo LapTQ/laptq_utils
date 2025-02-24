@@ -1,24 +1,24 @@
-path__dir__run=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs
+path__dir__run=~/laptq-prj-44/runs
 
-data=data--public--satudora
-data_val=data--testset-4cam-factory
+data=product-person--public--Satudora-finetune--Deployment-store
+data_val=Deployment-store
 
 
-ver__model=yolo11s--832--scale-0.5--multiscale-True
-imgsz=832
+ver__model=yolo11m--640--weighted-fitness
+imgsz=640
 
-ver__train=train2
-conf=0.05
+ver__train=train
+# conf=0.05
 
 yolo val \
     data=src/configs/$data_val.yaml \
     model=$path__dir__run/$data/${ver__model}/$ver__train/weights/best.pt \
     project=$path__dir__run/$data/${ver__model}/val--$ver__train--imgsz-$imgsz--conf-$conf \
     imgsz=$imgsz \
-    conf=$conf \
-    iou=0.5 \
     device=0 \
-    batch=8
+    batch=16 \
+    # conf=$conf \
+    # iou=0.5 \
 
     
     # model=/mnt/ssd8tb/shared_workspace/manhpc/FS_prj21/runs/train_RAF_val_RAF/weights/best.pt \
