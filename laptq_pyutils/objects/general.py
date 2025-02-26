@@ -44,7 +44,7 @@ class ListAligner:
         return self._dict__result[key]
 
     def get__index(self, i: int):
-        return {key: value[i] for key, value in self._dict__result}
+        return {key: value[i] for key, value in self._dict__result.items()}
 
     def pop__indexes(self, list__index__to_pop: list):
         """Remove a list of indexes."""
@@ -75,3 +75,9 @@ class ListAligner:
         assert len(value) == self._num, "Number of elements mismatch"
 
         self._dict__result[key] = value
+
+    def __repr__(self):
+        return "ListAligner({})".format(self._dict__result.__repr__())
+
+    def __str__(self):
+        return "ListAligner({})".format(self._dict__result.__str__())
