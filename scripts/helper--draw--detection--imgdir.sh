@@ -1,10 +1,10 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/20250211--finetune--ver3--merged--subset-10k--splitted
-POSTFIX__DIR__IMAGE="--erase-IGNORE"
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-44/data/prj44/dataset
+POSTFIX__DIR__IMAGE="--erase-IGNORE--productPerson"
 
-PATH__DIR__LABEL=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
-POSTFIX__DIR__LABEL="--erase-IGNORE--json"
+PATH__DIR__LABEL=/home/laptq/laptq-prj-44/data/prj44/dataset
+POSTFIX__DIR__LABEL="--erase-IGNORE--productPerson--json"
 
-NUM__MAX__IMG__TO__VISUALIZE=5
+NUM__MAX__IMG__TO__VISUALIZE=100
 IS_OK__LBL_NOT_FOUND=False
 PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/outputs/20250218--visualize
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
@@ -12,14 +12,11 @@ PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/c
 [[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["P44-20250211-batch-41"]=""
-    ["P44-20250211-batch-42"]=""
-    ["P44-20250211-batch-43"]=""
-    ["P44-20250211-batch-44"]=""
-    ["P44-20250211-batch-45"]=""
-    ["P44-20250211-batch-46"]=""
-    ["P44-20250211-batch-47"]=""
-    ["P44-20250211-batch-48"]=""
+    ["Deployment-Store-20250221-batch-1"]=""
+    ["Deployment-Store-20250221-batch-2"]=""
+    ["Deployment-Store-20250221-batch-3"]=""
+    ["Deployment-Store-20250221-batch-4"]=""
+    ["Deployment-Store-20250221-batch-5"]=""
 )
 
 IFS=$'\n'
@@ -39,7 +36,6 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     mkdir -p "${path__dir__output}"
 
     python3 submodules/laptq_utils/main.py \
-    python3 submodules/laptq_utils/main.py \
         helper__draw__detection__imgdir \
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
@@ -49,7 +45,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
         --to_draw__box_conf True \
-        --to_draw__id_class True \
+        --to_draw__id_class False \
         --to_draw__name_class True \
         --fontScale 1.5 \
         --thickness 2 \

@@ -1,5 +1,5 @@
 PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/Deployment-Store-20250221
-POSTFIX__DIR__IMG__SOURCE="_person"
+POSTFIX__DIR__IMG__SOURCE="--erase-IGNORE"
 
 PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/images-with-central-human-and-product-to-annotate/Deployment-Store-20250221
 POSTFIX__DIR__LABEL__SOURCE="_person"

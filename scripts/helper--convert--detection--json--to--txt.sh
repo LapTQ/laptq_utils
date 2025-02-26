@@ -1,10 +1,18 @@
 PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
-POSTFIX__DIR__LABEL__INPUT="--erase-IGNORE--productPerson--json"
+POSTFIX__DIR__LABEL__INPUT="--erase-IGNORE--json"
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
-POSTFIX__DIR__LABEL__OUTPUT="--erase-IGNORE--productPerson"
+POSTFIX__DIR__LABEL__OUTPUT="--erase-IGNORE"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
+    ["P44-20250211-batch-24"]=""
+    ["P44-20250211-batch-25"]=""
+    ["P44-20250211-batch-26"]=""
+    ["P44-20250211-batch-27"]=""
+    ["P44-20250211-batch-28"]=""
+    ["P44-20250211-batch-29"]=""
+    ["P44-20250211-batch-30"]=""
+    ["P44-20250211-batch-31"]=""
     ["P44-20250211-batch-32"]=""
     ["P44-20250211-batch-33"]=""
     ["P44-20250211-batch-34"]=""

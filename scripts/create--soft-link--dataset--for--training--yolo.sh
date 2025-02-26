@@ -5,6 +5,7 @@ declare -A MAP__SUBPATH_DIR__TO__POSTFIX_DIR_VERSION=(
     ["Deployment-Store-20250221-batch-2"]="--erase-IGNORE--productPerson"
     ["Deployment-Store-20250221-batch-3"]="--erase-IGNORE--productPerson"
     ["Deployment-Store-20250221-batch-4"]="--erase-IGNORE--productPerson"
+    ["Deployment-Store-20250221-batch-5"]="--erase-IGNORE--productPerson"
 )
 
 

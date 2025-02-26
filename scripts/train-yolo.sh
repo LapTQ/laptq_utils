@@ -8,6 +8,7 @@ sleep 0
 # data=20250120--finetune
 # data=product-person--public--Satudora-finetune
 # data=Deployment-store
+# data=product-person--Satudora-finetune--Deployment-store
 data=product-person--public--Satudora-finetune--Deployment-store
 
 path__dir__run=~/laptq-prj-44/runs
@@ -18,7 +19,7 @@ yolo detect train \
     data=src/configs/$data.yaml \
     epochs=300 \
     imgsz=$IMGSZ \
-    device=2 \
+    device=1 \
     batch=16 \
     project=$path__dir__run/$data/$YOLO--$IMGSZ--weighted-fitness \
     plots=True \
