@@ -432,6 +432,54 @@ def helper__filter__detection__result__by__miniou(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
+def helper__filter__detection__result__by__roi(**kwargs):
+
+    import os
+    import json
+    from tqdm import tqdm
+    import numpy as np
+    from shapely.geometry import Polygon
+
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    roi__polygonn = np.array(kwargs["roi__polygonn"]).reshape(-1, 2)
+    thresh__miniou = kwargs["thresh__miniou"]
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    roi__polygon = Polygon(roi__polygonn)
+    roi_area = roi__polygon.area
+
+    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
+
+        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+
+        list__obj__box_xcycwhn = list_aligner__result.get__key("list__obj__box_xcycwhn")
+        list__obj__box_polygonn = xcycwh__to__polygon(
+            np.array(list__obj__box_xcycwhn).reshape(-1, 4)
+        )
+
+        list__index__to_pop = []
+        for i_obj, box_polygon in enumerate(list__obj__box_polygonn):
+            box_polygon = Polygon(box_polygon.reshape(-1, 2))
+            box_area = box_polygon.area
+            inter_area = roi__polygon.intersection(box_polygon).area
+            miniou = inter_area / min(box_area, roi_area)
+            if miniou < thresh__miniou:
+                list__index__to_pop.append(i_obj)
+
+        list_aligner__result.pop__indexes(list__index__to_pop)
+
+        dict__result = list_aligner__result.item()
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)
+        
+
 def helper__draw__detection__imgdir(**kwargs):
 
     import os
