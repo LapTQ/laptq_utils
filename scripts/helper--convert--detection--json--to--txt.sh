@@ -1,17 +1,11 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/data/20250109--paste--seg-crops--over--background
-POSTFIX__DIR__LABEL__INPUT="--json"
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/
+POSTFIX__DIR__LABEL__INPUT="--conf-0.75--roi--json"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/data/20250109--paste--seg-crops--over--background
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/
 POSTFIX__DIR__LABEL__OUTPUT=""
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["1_2024-11-26_081159_0.mp4"]=""
-    # ["1_2024-11-26_081159_1.mp4"]=""
-    # ["1_2024-11-26_081159_2.mp4"]=""
-    # ["1_2024-11-26_081159_3.mp4"]=""
-
-    ["gen_only_syn_25Dec-batch-1/test-sample/test-sample"]=""
-    ["gen_only_syn_25Dec-batch-2/test-sample/test-sample"]=""
+    ["20250220--selected-imgs--final"]=""
 )
 
 IFS=$'\n'

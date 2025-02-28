@@ -1,14 +1,11 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolov8s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
-POSTFIX__DIR__LABEL__INPUT="--conf-0.001"
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/
+POSTFIX__DIR__LABEL__INPUT="--json"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/runs/data--synthetic--satudora-center-box/yolov8s--832--scale-0.5--multiscale-True/predict--train--imgsz-832--conf-0.1/predict
-POSTFIX__DIR__LABEL__OUTPUT="--conf-0.1"
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/
+POSTFIX__DIR__LABEL__OUTPUT="--conf-0.75--json"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["1_2024-11-26_081159_0.mp4"]=""
-    ["1_2024-11-26_081159_1.mp4"]=""
-    ["1_2024-11-26_081159_2.mp4"]=""
-    ["1_2024-11-26_081159_3.mp4"]=""
+    ["20250220--selected-imgs--final"]=""
 )
 
 IFS=$'\n'
@@ -29,7 +26,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         helper__filter__detection__result__by__conf \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
-        --map__id_class__to__thresh_conf "{0:0.1}"
+        --map__id_class__to__thresh_conf "{0:0.75}"
 
 
     num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
