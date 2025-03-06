@@ -1,14 +1,11 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/20241231--get--subset--dataset--yolo--test-set--annotated--to-json
-POSTFIX__DIR__LABEL__INPUT="--raw"
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged
+POSTFIX__DIR__LABEL__INPUT="--raw--json"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20241231--get--subset--dataset--yolo--test-set--annotated--to-json
-POSTFIX__DIR__LABEL__OUTPUT="--erase-ignored"
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged
+POSTFIX__DIR__LABEL__OUTPUT="--erase-ignored--json"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["1_2024-11-26_081159_0.mp4"]=""
-    ["1_2024-11-26_081159_1.mp4"]=""
-    ["1_2024-11-26_081159_2.mp4"]=""
-    ["1_2024-11-26_081159_3.mp4"]=""
+    ["P21"]=""
 )
 
 IFS=$'\n'

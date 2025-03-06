@@ -3,32 +3,33 @@ sleep 0
 # data=data--public--satudora
 # data=data--synthetic--satudora-center-box
 # data=data--RAP-change-clothes
+# data=data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person
+data=data--phase2-4cam-factory--phase1-4cam-factory
 
 path__dir__run=/home/laptq/laptq-prj-21/runs
 
-data=data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person
 YOLO=yolov5s
-IMGSZ=832
+IMGSZ=640
 SCALE=0.5
 MULTI_SCALE=True
 # LR0=0.005
 
 yolo detect train \
     data=src/configs/$data.yaml \
-    model=${YOLO}.pt \
     epochs=100 \
     imgsz=$IMGSZ \
-    device=2 \
+    device=1 \
     batch=16 \
     project=$path__dir__run/$data/$YOLO--$IMGSZ--scale-$SCALE--multiscale-$MULTI_SCALE \
     plots=True \
     patience=40 \
     scale=$SCALE \
-    multi_scale=$MULTI_SCALE
+    multi_scale=$MULTI_SCALE \
+    model=/home/laptq/laptq-prj-21/runs/data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person/yolov5s--832--scale-0.5--multiscale-True/train/weights/best.pt \
+    # model=${YOLO}.pt \
     # optimizer=SGD \
     # lr0=$LR0 \
 
-    # model=/home/laptq/laptq-prj-21/runs/data--public--satudora/yolo11s--832--scale-0.5--multiscale-True/train2/weights/best--epoch-141.pt \
 
 exit
 

@@ -1,11 +1,11 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/
-POSTFIX__DIR__LABEL__INPUT="--conf-0.75--roi--json"
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged
+POSTFIX__DIR__LABEL__INPUT="--erase-ignored--json"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/
-POSTFIX__DIR__LABEL__OUTPUT=""
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged
+POSTFIX__DIR__LABEL__OUTPUT="--erase-ignored"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["20250220--selected-imgs--final"]=""
+    ["P21"]=""
 )
 
 IFS=$'\n'

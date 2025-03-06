@@ -1,20 +1,14 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/data/20241225--gen-data--batches
-POSTFIX__DIR__LABEL__INPUT=""
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged
+POSTFIX__DIR__LABEL__INPUT="--raw"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/data/20241225--gen-data--batches--to-json
-POSTFIX__DIR__LABEL__OUTPUT=""
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged
+POSTFIX__DIR__LABEL__OUTPUT="--raw--json"
 
 MODE__BOX="xcycwhn"
 # MODE__BOX="polygonn"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["1_2024-11-26_081159_0.mp4"]=""
-    # ["1_2024-11-26_081159_1.mp4"]=""
-    # ["1_2024-11-26_081159_2.mp4"]=""
-    # ["1_2024-11-26_081159_3.mp4"]=""
-
-    ["gen_only_syn_25Dec-batch-1"]=""
-    ["gen_only_syn_25Dec-batch-2"]=""
+    ["P21"]=""
 )
 
 IFS=$'\n'

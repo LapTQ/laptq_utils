@@ -1,10 +1,28 @@
-PATH__DIR__DATASETS__SOURCE=/mnt/ssd8tb/shared_workspace/fs_prj21/datasets/20250102--testset--4cam-factory
+PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-prj-21/data/fs_prj21/datasets
 
 declare -A MAP__SUBPATH_DIR__TO__POSTFIX_DIR_VERSION=(
-    ["1_2024-11-26_081159_0.mp4"]="--erase-ignored"
-    ["1_2024-11-26_081159_1.mp4"]="--erase-ignored"
-    ["1_2024-11-26_081159_2.mp4"]="--erase-ignored"
-    ["1_2024-11-26_081159_3.mp4"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_47/Camera_47_1_2025-01-28_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_47/Camera_47_1_2025-01-29_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_47/Camera_47_1_2025-01-30_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_47/Camera_47_1_2025-01-31_000000.3gp"]="--erase-ignored"
+
+    ["20250303--phase2--4cam-factory/Camera_48/Camera_48_1_2025-01-27_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_48/Camera_48_1_2025-01-28_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_48/Camera_48_1_2025-01-29_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_48/Camera_48_1_2025-01-30_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_48/Camera_48_1_2025-01-31_000000.3gp"]="--erase-ignored"
+    
+    ["20250303--phase2--4cam-factory/Camera_49/Camera_49_1_2025-01-27_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_49/Camera_49_1_2025-01-28_000001.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_49/Camera_49_1_2025-01-29_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_49/Camera_49_1_2025-01-30_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_49/Camera_49_1_2025-01-31_000000.3gp"]="--erase-ignored"
+
+    ["20250303--phase2--4cam-factory/Camera_50/Camera_50_1_2025-01-27_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_50/Camera_50_1_2025-01-28_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_50/Camera_50_1_2025-01-29_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_50/Camera_50_1_2025-01-30_000000.3gp"]="--erase-ignored"
+    ["20250303--phase2--4cam-factory/Camera_50/Camera_50_1_2025-01-31_000000.3gp"]="--erase-ignored"
 )
 
 
