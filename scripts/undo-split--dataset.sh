@@ -1,33 +1,17 @@
-# PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1
-# PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json
-PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2
-POSTFIX__DIR__IMG__SOURCE=""
+PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-21/outputs/20250220--phase-2--images
+POSTFIX__DIR__IMG__SOURCE="--raw"
 
-# PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1
-# PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2
-POSTFIX__DIR__LABEL__SOURCE=""
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-21/outputs/20250228--annotation--downloaded--extracted
+POSTFIX__DIR__LABEL__SOURCE="--raw"
 
-# PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1--undo-split
-# PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json--undo-split
-PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split
-POSTFIX__DIR__VERSION__TARGET=""
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged
+POSTFIX__DIR__VERSION__TARGET="--raw"
 
 POSTFIX__DIR__SPLITTED='-batch-'
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["beppu_sue"]=""
-    # ["P44-nothing-2個持ち_cut_fit"]=""
-    # ["P44-notProducts-2個持ち_cut_fit"]=""
-    # ["P44-1products-台置き_cut_fit"]=""
-    # ["P44-nothing-台置き_cut_fit"]=""
-    # ["P44-notProducts-台置き_cut_fit"]=""
-    # ["P44-notProducts-bag20240906_1022"]=""
-    # ["P44-2products-2個持ち_cut_fit"]=""
-    # ["P44-1products-2個持ち_cut_fit"]=""
-    # ["P44-2products-台置き_cut_fit"]=""
-    # ["P44-notProducts-bag20240906_0000"]=""
+    ["P21"]=""
 )
 
 
