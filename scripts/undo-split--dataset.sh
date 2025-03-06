@@ -41,6 +41,20 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         path__dir__img__input="${PATH__DIR__IMAGE__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__IMG__SOURCE}"
         path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${subpath_dir}/labels${POSTFIX__DIR__LABEL__SOURCE}"
 
+        # check if the input directories exist
+        if [[ ! -d "${path__dir__img__input}" ]]; then
+            echo -e "${TAG__FAILED} missed images: ${subpath_dir}. Skipping or exiting..."
+            
+            # exit 1
+            continue
+        fi
+        if [[ ! -d "${path__dir__lbl__input}" ]]; then
+            echo -e "${TAG__FAILED} missed labels: ${subpath_dir}. Skipping or exiting..."
+            
+            # exit 1
+            continue
+        fi
+
         cp -r "${path__dir__img__input}"/* "${path__dir__img__output}"
         cp -r "${path__dir__lbl__input}"/* "${path__dir__lbl__output}"
 
@@ -51,6 +65,20 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         for subpath_dir__child in $( ls "${PATH__DIR__IMAGE__SOURCE}" | grep "${subpath_dir}${POSTFIX__DIR__SPLITTED}" ); do
             path__dir__img__input="${PATH__DIR__IMAGE__SOURCE}/${subpath_dir__child}/images${POSTFIX__DIR__IMG__SOURCE}"
             path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${subpath_dir__child}/labels${POSTFIX__DIR__LABEL__SOURCE}"
+
+            # check if the input directories exist
+            if [[ ! -d "${path__dir__img__input}" ]]; then
+                echo -e "${TAG__FAILED} missed images: ${subpath_dir__child}. Skipping or exiting..."
+                
+                # exit 1
+                continue
+            fi
+            if [[ ! -d "${path__dir__lbl__input}" ]]; then
+                echo -e "${TAG__FAILED} missed labels: ${subpath_dir__child}. Skipping or exiting..."
+                
+                # exit 1
+                continue
+            fi
 
             cp -r "${path__dir__img__input}"/* "${path__dir__img__output}"
             cp -r "${path__dir__lbl__input}"/* "${path__dir__lbl__output}"
