@@ -1,28 +1,20 @@
 PATH__DIR__VIDEO=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/videos--cropped
 
+TO_USE__YOLOv5_COMPAT=True
 PATH__FILE__MODEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m-p2--960--crop-20/train/weights/best.pt
+ID__DATA=20241122--phase-2--annotation-ver2
+ID__MODEL=yolo11m-p2--960--crop-20
+ID__TRAIN=train
 
-PATH__DIR__IMAGE__OUTPUT=/home/laptq/Downloads/outputs--video--1
-POSTFIX__DIR__IMAGE__OUTPUT=""
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--video--1
-POSTFIX__DIR__LABEL__OUTPUT=""
-# PATH__DIR__VIDEO=/home/laptq/laptq-prj-21/data/video-20250220
+IMGSZ=960
+THRESH__CONF__MIN=0.01
+ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN
 
-# TO_USE__YOLOv5_COMPAT=True
-# PATH__FILE__MODEL=/home/laptq/laptq-prj-21/runs/data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person/yolov5s--832--scale-0.5--multiscale-True/exp/weights/best.pt
-# ID__DATA=data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person
-# ID__MODEL=yolov5s--832--scale-0.5--multiscale-True
-# ID__TRAIN=exp
+DEVICE="cuda:0"
+NUM__PAD__0=9
 
-# IMGSZ=960
-# THRESH__CONF__MIN=0.01
-# ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN
-
-# DEVICE="cuda:0"
-# NUM__PAD__0=9
-
-# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250220--labels
-# POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--JSON"
+PATH__DIR__LABEL__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20250220--labels
+POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--JSON"
 
 
 declare -A MAP__NAME_VIDEO__TO__=(
