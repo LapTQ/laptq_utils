@@ -11,6 +11,7 @@ from .detection import (
     helper__filter__detection__result__by__id_class,
     helper__filter__detection__result__by__miniou,
     helper__filter__detection__result__by__size,
+    helper__filter__detection__result__by__roi,
     helper__filterout__image__by__id_class,
     helper__change__detection__id_class,
     helper__draw__detection__imgdir,
@@ -18,6 +19,7 @@ from .detection import (
     helper__rescale__detection__box,
     helper__erase__classes__on__images,
     helper__cluster__detection__bboxes,
+    helper__merge__detection__result,
 )
 from .segmentation import helper__extract__crops__with__mask__from__segmentation
 from .generation import (

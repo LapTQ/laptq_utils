@@ -4,3 +4,11 @@ from .pasting import (
     paste__cv2_seamlessClone,
     handler__paste,
 )
+from .background import (
+    BackgroundCreatorAddWeighted,
+    BackgroundCreatorFirstKFrames,
+    BackgroundCreatorMovingMedian,
+    BackgroundSubtractorGrayDiff,
+    createBackgroundSubtractorMOG2,
+    createBackgroundSubtractorKNN,
+)

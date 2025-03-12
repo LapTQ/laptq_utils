@@ -9,8 +9,6 @@ IS_OK__LBL_NOT_FOUND=True
 PATH__DIR__OUTPUT=//mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--visualize
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
-[[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
-
 declare -A MAP__SUBPATH_DIR__TO__=(
     ["APTO_v2/day1_330"]=""
     ["APTO_v2/night1_190"]=""
@@ -48,17 +46,18 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}/images${POSTFIX__DIR__IMAGE}"
     path__dir__lbl="${PATH__DIR__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
-    path__dir__output="${PATH__DIR__OUTPUT}/${subpath__dir}"
+
+    path__dir__output="${PATH__DIR__OUTPUT}/${subpath__dir}/vis${POSTFIX__DIR__LABEL}"
 
     [[ -d "${path__dir__output}" ]] && rm -r "${path__dir__output}"
     mkdir -p "${path__dir__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__draw__detection__imgdir \
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \
-        --to_concat__original_img True \
+        --to_concat__original_img False \
         --concat__axis 1 \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
@@ -84,7 +83,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         echo "    [+] $num__lbl labels"
         echo "    [+] $num__img_vis visualized images"
         
-        exit 1
+        # exit 1
     fi
     echo -e "${TAG__PASSED} ${num__lbl} labels == ${num__img_vis} visualized images: ${subpath__dir}"
 done

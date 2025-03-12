@@ -1,16 +1,24 @@
-PATH__DIR__IMAGE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection
-POSTFIX__DIR__IMAGE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-10
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/outputs/20250220--videos-to-frames
+POSTFIX__DIR__IMAGE=""
 
-PATH__FILE__MODEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs/20241122--phase-2--annotation-ver2/yolo11m--960--crop-20/train8/weights/best.pt
-# ID__MODEL=yolov10m_only_pot_det_960x960
-ID__MODEL=yolo11m--960--crop-20--train8
+TO_USE__YOLOv5_COMPAT=True
+PATH__FILE__MODEL=/home/laptq/laptq-prj-21/runs/data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person/yolov5s--832--scale-0.5--multiscale-True/exp/weights/best.pt
+ID__DATA=data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person
+ID__MODEL=yolov5s--832--scale-0.5--multiscale-True
+ID__TRAIN=exp
 
-PATH__DIR__LABEL__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--model-prediction--json/${ID__MODEL}
-POSTFIX__DIR__LABEL__OUTPUT=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-10
+IMGSZ=832
+THRESH__CONF__MIN=0.01
+ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN
+
+DEVICE="cuda:0"
+
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250220--labels
+POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--JSON"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["Pothole_235/train"]=""
-    ["Pothole_Maeda/first_shot_eval"]=""
+    ["Camera_４８/Camera_48_1_2025-01-30_000000.3gp"]=""
+    ["Camera_４８/Camera_48_1_2025-01-31_000000.3gp"]=""
 )
 
 IFS=$'\n'
@@ -32,9 +40,10 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__img "${path__dir__img__input}" \
         --path__dir__output "${path__dir__lbl__output}" \
         --path__file__model "${PATH__FILE__MODEL}" \
-        --device "cuda:0" \
-        --imgsz 960 \
-        --thresh__conf__min 0.01
+        --device $DEVICE \
+        --imgsz $IMGSZ \
+        --thresh__conf__min $THRESH__CONF__MIN \
+        --to_use__yolov5_compat $TO_USE__YOLOv5_COMPAT
     
     echo -e "${TAG__INFO} Done: ${subpath__dir}"
 done
