@@ -1,18 +1,18 @@
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-21/outputs/20241231--get--subset--dataset--yolo--test-set--annotated--to-json--to-txt
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-21/outputs/20250310--labels
 POSTFIX__DIR__LABEL__SOURCE="--erase-ignored"
 
-PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-prj-21/outputs/20250102--testset--4cam-factory--erase-ignored
+PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-prj-21/outputs/20250310--labels
 POSTFIX__DIR__IMG__SOURCE="--erase-ignored"
 
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/data/20250102--testset--4cam-factory
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/data/fs_prj21/datasets/20250303--phase2--4cam-factory
 POSTFIX__DIR__VERSION__TARGET="--erase-ignored"
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["1_2024-11-26_081159_0.mp4"]=""
-    ["1_2024-11-26_081159_1.mp4"]=""
-    ["1_2024-11-26_081159_2.mp4"]=""
-    ["1_2024-11-26_081159_3.mp4"]=""
+    ["Camera_47/Camera_47_1_2025-01-30_000000.3gp"]=""
+    ["Camera_48/Camera_48_1_2025-01-30_000000.3gp"]=""
+    ["Camera_49/Camera_49_1_2025-01-30_000000.3gp"]=""
+    ["Camera_50/Camera_50_1_2025-01-30_000000.3gp"]=""
 )
 
 

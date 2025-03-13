@@ -1,14 +1,17 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/data/fs_prj21/datasets/20250303--phase2--4cam-factory
 POSTFIX__DIR__LABEL__INPUT="--raw"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged
-POSTFIX__DIR__LABEL__OUTPUT="--raw--json"
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250310--labels
+POSTFIX__DIR__LABEL__OUTPUT="--raw--JSON"
 
 MODE__BOX="xcycwhn"
 # MODE__BOX="polygonn"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["P21"]=""
+    ["Camera_47/Camera_47_1_2025-01-30_000000.3gp"]=""
+    ["Camera_48/Camera_48_1_2025-01-30_000000.3gp"]=""
+    ["Camera_49/Camera_49_1_2025-01-30_000000.3gp"]=""
+    ["Camera_50/Camera_50_1_2025-01-30_000000.3gp"]=""
 )
 
 IFS=$'\n'

@@ -9,11 +9,13 @@ data_val=data--phase2-4cam-factory--testset
 
 # ver__model=yolov5s--832--scale-0.5--multiscale-True
 # imgsz=832
-ver__model=yolov5s--640--scale-0.5--multiscale-True
+# ver__model=yolov5s--640--scale-0.5--multiscale-True
+# imgsz=640
+ver__model=/yolo11s--640--scale-0.5--multiscale-True
 imgsz=640
 
 
-ver__train=train2
+ver__train=train
 conf=0.1
 
 yolo val \

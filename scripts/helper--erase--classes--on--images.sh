@@ -1,14 +1,17 @@
-PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged     # can be ignored if pad__max not set
+PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-21/data/fs_prj21/datasets/20250303--phase2--4cam-factory     # can be ignored if pad__max not set
 POSTFIX__DIR__IMAGE__INPUT="--raw"
 
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged
-POSTFIX__DIR__LABEL__INPUT="--raw--json"
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/20250310--labels
+POSTFIX__DIR__LABEL__INPUT="--raw--JSON"
 
-PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250228--phase-2--merged
+PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250310--labels
 POSTFIX__DIR__IMAGE__OUTPUT="--erase-ignored"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["P21"]=""
+    ["Camera_47/Camera_47_1_2025-01-30_000000.3gp"]=""
+    ["Camera_48/Camera_48_1_2025-01-30_000000.3gp"]=""
+    ["Camera_49/Camera_49_1_2025-01-30_000000.3gp"]=""
+    ["Camera_50/Camera_50_1_2025-01-30_000000.3gp"]=""
 )
 
 IFS=$'\n'

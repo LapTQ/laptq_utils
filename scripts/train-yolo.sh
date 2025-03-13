@@ -25,8 +25,8 @@ yolo detect train \
     patience=40 \
     scale=$SCALE \
     multi_scale=$MULTI_SCALE \
-    model=/home/laptq/laptq-prj-21/runs/data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person/yolov5s--832--scale-0.5--multiscale-True/train/weights/best.pt \
-    # model=${YOLO}.pt \
+    model=${YOLO}.pt \
+    # model=/home/laptq/laptq-prj-21/runs/data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person/yolov5s--832--scale-0.5--multiscale-True/train/weights/best.pt \
     # optimizer=SGD \
     # lr0=$LR0 \
 
