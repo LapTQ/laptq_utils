@@ -61,6 +61,7 @@ def parse_args():
     ap.add_argument("--list__id_class", type=str)
     ap.add_argument("--map__id_old__to__id_new", type=str)
     ap.add_argument("--thresh", type=float)
+    ap.add_argument("--thresh__iou", type=float)
     ap.add_argument("--thresh__miniou", type=float)
     ap.add_argument("--thresh__conf__min", type=float)
     ap.add_argument("--thresh__leftiou__min", type=float)
