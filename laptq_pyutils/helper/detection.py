@@ -47,12 +47,14 @@ class UltralyticsModel(BaseModel):
         img__bgr = kwargs["img__bgr"]
         imgsz = kwargs["imgsz"]
         thresh__conf__min = kwargs["thresh__conf__min"]
+        thresh__iou = kwargs["thresh__iou"]
 
         result_ultralytics = (
             self.model.predict(
                 source=img__bgr,
                 imgsz=imgsz,
                 conf=thresh__conf__min,
+                iou=thresh__iou,
                 verbose=False,
             )[0]
             .cpu()
@@ -113,8 +115,13 @@ class YOLOv5CompatModel(BaseModel):
         img__bgr = kwargs["img__bgr"]
         imgsz = kwargs["imgsz"]
         thresh__conf__min = kwargs["thresh__conf__min"]
+        thresh__iou = kwargs["thresh__iou"]
+
+        assert hasattr(self.model, "conf"), "self.model does not have attribute conf"
+        assert hasattr(self.model, "iou"), "self.model does not have attribute iou"
 
         self.model.conf = thresh__conf__min
+        self.model.iou = thresh__iou
 
         img__rgb = cv2.cvtColor(img__bgr, cv2.COLOR_BGR2RGB)
         imH, imW = img__bgr.shape[:2]
