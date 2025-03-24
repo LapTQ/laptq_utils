@@ -8,7 +8,8 @@ ID__TRAIN=exp
 
 IMGSZ=832
 THRESH__CONF__MIN=0.01
-ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN
+THRESH__IOU=0.45
+ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN--iou-$THRESH__IOU
 
 DEVICE="cuda:0"
 NUM__PAD__0=9
@@ -49,6 +50,7 @@ for subpath__video in "${!MAP__SUBPATH_VIDEO__TO__[@]}"; do
         --device $DEVICE \
         --imgsz $IMGSZ \
         --thresh__conf__min $THRESH__CONF__MIN \
+        --thresh__iou $THRESH__IOU \
         --to_save__img False \
         --num__pad__0 $NUM__PAD__0 \
         --to_use__yolov5_compat $TO_USE__YOLOv5_COMPAT
