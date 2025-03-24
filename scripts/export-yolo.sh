@@ -1,7 +1,7 @@
 
 
 yolo export \
-    model=/mnt/ssd8tb/shared_workspace/laptq/laptq-prj-44/runs/product-person--public--Satudora-finetune/yolo11m--640--weighted-fitness/train/weights/best.pt \
+    model=/mnt/ssd8tb/shared_workspace/prj44/models/pytorch/yolo11m_640_person_product_general_v5.pt \
     imgsz=640 \
     format=onnx \
     dynamic=True \
