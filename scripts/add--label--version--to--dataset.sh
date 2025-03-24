@@ -2,18 +2,48 @@ PATH__DIR__IMG__SOURCE=/home/laptq/laptq-prj-44/data/prj44/dataset
 POSTFIX__DIR__IMG__SOURCE="--erase-IGNORE"
 
 PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/data/prj44/dataset
-POSTFIX__DIR__LABEL__SOURCE="--erase-IGNORE--productPerson"
+POSTFIX__DIR__LABEL__SOURCE="--erase-IGNORE-productPerson"
 
 PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/data/prj44/dataset
-POSTFIX__DIR__VERSION__TARGET="--erase-IGNORE--productPerson"
+POSTFIX__DIR__VERSION__TARGET="--erase-IGNORE-productPerson"
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["Deployment-Store-20250221-batch-1"]=""
-    ["Deployment-Store-20250221-batch-2"]=""
-    ["Deployment-Store-20250221-batch-3"]=""
-    ["Deployment-Store-20250221-batch-4"]=""
-    ["Deployment-Store-20250221-batch-5"]=""
+    # ["customer/PoC2--beppu_sue-batch-1"]=""
+    # ["customer/PoC2--beppu_sue-batch-3"]=""
+    # ["customer/PoC2--beppu_sue-batch-4"]=""
+    # ["customer/PoC2--beppu_sue-batch-5"]=""
+    # ["customer/PoC2--2個持ち_cut_fit-1products-batch-1"]=""
+    # ["customer/PoC2--2個持ち_cut_fit-1products-batch-2"]=""
+    # ["customer/PoC2--2個持ち_cut_fit-1products-batch-3"]=""
+    # ["customer/PoC2--2個持ち_cut_fit-2products-batch-1"]=""
+    # ["customer/PoC2--2個持ち_cut_fit-nothing"]=""
+    # ["customer/PoC2--2個持ち_cut_fit-notProducts"]=""
+    # ["customer/PoC2--bag20240906_0000-notProducts"]=""
+    # ["customer/PoC2--bag20240906_1022-notProducts-batch-1"]=""
+    # ["customer/PoC2--台置き_cut_fit-1products"]=""
+    # ["customer/PoC2--台置き_cut_fit-2products-batch-1"]=""
+    # ["customer/PoC2--台置き_cut_fit-notProducts"]=""
+    # ["customer/PoC2--beppu_sue-batch-2"]=""
+    # ["customer/PoC2--2個持ち_cut_fit-2products-batch-2"]=""
+    # ["customer/PoC2--台置き_cut_fit-2products-batch-2"]=""
+    # ["customer/PoC2--bag20240906_1022-notProducts-batch-2"]=""
+    # ["customer/PoC2--台置き_cut_fit-nothing"]=""
+    ["private/Satudora_det_20250117/01_regularPurchase"]=""
+    ["private/Satudora_det_20250117/02_regularPurchase"]=""
+    ["private/Satudora_det_20250117/03_regularPurchase"]=""
+    ["private/Satudora_det_20250117/04_regularPurchase"]=""
+    ["private/Satudora_det_20250117/05_cancelTea"]=""
+    ["private/Satudora_det_20250117/06_pullingCart"]=""
+    ["private/Satudora_det_20250117/07_holding2items"]=""
+    ["private/Satudora_det_20250117/08_regularPurchase"]=""
+    ["private/Satudora_det_20250117/09_holding2items"]=""
+    ["private/Satudora_det_20250117/10_hideBarcode"]=""
+    # ["customer/Deployment-Store-20250221-batch-1"]=""
+    # ["customer/Deployment-Store-20250221-batch-2"]=""
+    # ["customer/Deployment-Store-20250221-batch-3"]=""
+    # ["customer/Deployment-Store-20250221-batch-4"]=""
+    # ["customer/Deployment-Store-20250221-batch-5"]=""
 )
 
 
