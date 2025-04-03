@@ -1,17 +1,19 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-prj-21/outputs/20250220--videos-to-frames
+PATH__DIR__IMAGE=/home/laptq/laptq-nedo-fed/data/pseudo_labels--restructured
 POSTFIX__DIR__IMAGE=""
 
-PATH__DIR__LABEL=/home/laptq/laptq-prj-21/outputs/20250220--labels
-POSTFIX__DIR__LABEL="--PRED--DATA--data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person--MODEL--yolov5s--832--scale-0.5--multiscale-True--TRAIN--exp--PREDICT--imgsz-832--conf-0.01--JSON"
+PATH__DIR__LABEL=/home/laptq/laptq-nedo-fed/outputs/labels
+POSTFIX__DIR__LABEL=""
 
 NUM__MAX__IMG__TO__VISUALIZE=20
 IS_OK__LBL_NOT_FOUND=False
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250220--visualized
+PATH__DIR__OUTPUT=/home/laptq/laptq-nedo-fed/outputs/labels
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["Camera_４８/Camera_48_1_2025-01-30_000000.3gp"]=""
-    ["Camera_４８/Camera_48_1_2025-01-31_000000.3gp"]=""
+    ["B8-A4-4F-D2-F8-3A/2025_03_19"]=""
+    ["B8-A4-4F-D2-F8-3A/2025_03_20"]=""
+    ["B8-A4-4F-D2-FF-98/2025_03_19"]=""
+    ["B8-A4-4F-D2-FF-98/2025_03_20"]=""
 )
 
 IFS=$'\n'

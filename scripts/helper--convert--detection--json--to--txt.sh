@@ -1,12 +1,14 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/Downloads/outputs--5
-POSTFIX__DIR__LABEL__INPUT=""
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-nedo-fed/outputs/labels
+POSTFIX__DIR__LABEL__INPUT="--img-w-person"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--7
-POSTFIX__DIR__LABEL__OUTPUT=""
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-nedo-fed/outputs/labels
+POSTFIX__DIR__LABEL__OUTPUT="--img-w-person--TXT"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["set1"]=""
-    ["set2"]=""
+    ["B8-A4-4F-D2-F8-3A/2025_03_19"]=""
+    ["B8-A4-4F-D2-F8-3A/2025_03_20"]=""
+    ["B8-A4-4F-D2-FF-98/2025_03_19"]=""
+    ["B8-A4-4F-D2-FF-98/2025_03_20"]=""
 )
 
 IFS=$'\n'
@@ -23,7 +25,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__convert__detection__json__to__txt \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}"

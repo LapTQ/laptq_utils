@@ -1,15 +1,17 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/Downloads/outputs--7
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-nedo-fed/data/pseudo_labels--restructured
 POSTFIX__DIR__LABEL__INPUT=""
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--8
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-nedo-fed/outputs/labels
 POSTFIX__DIR__LABEL__OUTPUT=""
 
 MODE__BOX="xcycwhn"
 # MODE__BOX="polygonn"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["set1"]=""
-    ["set2"]=""
+    ["B8-A4-4F-D2-F8-3A/2025_03_19"]=""
+    ["B8-A4-4F-D2-F8-3A/2025_03_20"]=""
+    ["B8-A4-4F-D2-FF-98/2025_03_19"]=""
+    ["B8-A4-4F-D2-FF-98/2025_03_20"]=""
 )
 
 IFS=$'\n'
@@ -26,14 +28,14 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__convert__detection__txt__to__json \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
         --mode__box "${MODE__BOX}"
 
 
-    num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
+    num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \)  | wc -l)
     num__lbl__output=$(find "${path__dir__lbl__output}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
     if [ $num__lbl__output -ne $num__lbl__input ]; then
         echo -e "${TAG__FAILED} Number of labels mismatched: ${subpath__dir}"

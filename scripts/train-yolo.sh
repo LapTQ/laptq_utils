@@ -1,8 +1,10 @@
 sleep 0
 
-data=data--subset-d2
+# data=data--c1-d19
+# data=data--c2-d20
+data=data--c1-d19--c2-d20
 
-path__dir__run=/home/lap_awlv/fed-object-detection/runs
+path__dir__run=/home/laptq/laptq-nedo-fed/runs
 
 YOLO=yolov8s
 IMGSZ=640
@@ -10,20 +12,17 @@ IMGSZ=640
 
 yolo detect train \
     data=src/configs/$data.yaml \
-    epochs=50 \
+    epochs=100 \
     imgsz=$IMGSZ \
-    device=5 \
+    device=0 \
     batch=64 \
     project=$path__dir__run/$data/$YOLO--$IMGSZ \
     plots=True \
     patience=40 \
+    save_period=1 \
     model=${YOLO}.pt \
-    # project=$path__dir__run/$data/$YOLO--$IMGSZ--scale-$SCALE--multiscale-$MULTI_SCALE \
-    # model=/home/laptq/laptq-prj-21/runs/data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person/yolov5s--832--scale-0.5--multiscale-True/train/weights/best.pt \
     # optimizer=SGD \
     # lr0=$LR0 \
-
-    # model=${YOLO}.pt \
 
 exit
 

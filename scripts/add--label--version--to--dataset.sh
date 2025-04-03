@@ -1,26 +1,18 @@
-PATH__DIR__IMG__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--erase-IGNORE
-POSTFIX__DIR__IMG__SOURCE="--erase-IGNORE"
+PATH__DIR__IMG__SOURCE=/home/laptq/laptq-nedo-fed/data/pseudo_labels--restructured
+POSTFIX__DIR__IMG__SOURCE=""
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--json--filterby-id_class--to-txt
-POSTFIX__DIR__LABEL__SOURCE="--erase-IGNORE"
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-nedo-fed/outputs/labels
+POSTFIX__DIR__LABEL__SOURCE="--img-w-person"
 
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
-POSTFIX__DIR__VERSION__TARGET="--erase-IGNORE"
+PATH__DIR__OUTPUT=/home/laptq/laptq-nedo-fed/outputs/labels
+POSTFIX__DIR__VERSION__TARGET="--img-w-person"
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["PoC2--2個持ち_cut_fit-1products"]=""
-    ["PoC2--2個持ち_cut_fit-2products"]=""
-    ["PoC2--2個持ち_cut_fit-nothing"]=""
-    ["PoC2--2個持ち_cut_fit-notProducts"]=""
-    ["PoC2--bag20240906_0000-notProducts"]=""
-    ["PoC2--bag20240906_1022-notProducts"]=""
-    ["PoC1--beppu_sue"]=""
-    ["PoC2--beppu_sue"]=""
-    ["PoC2--台置き_cut_fit-1products"]=""
-    ["PoC2--台置き_cut_fit-2products"]=""
-    ["PoC2--台置き_cut_fit-nothing"]=""
-    ["PoC2--台置き_cut_fit-notProducts"]=""
+    ["B8-A4-4F-D2-F8-3A/2025_03_19"]=""
+    ["B8-A4-4F-D2-F8-3A/2025_03_20"]=""
+    ["B8-A4-4F-D2-FF-98/2025_03_19"]=""
+    ["B8-A4-4F-D2-FF-98/2025_03_20"]=""
 )
 
 

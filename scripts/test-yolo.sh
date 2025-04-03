@@ -1,30 +1,24 @@
-path__dir__run=/home/lap_awlv/fed-object-detection/runs
+path__dir__run=/home/laptq/laptq-nedo-fed/runs
 
-# data_val=data--subset-d2.1
-# data_val=data--subset-d2.2
-# data_val=data--subset-d2
-# data_val=data--subset-d1
-data_val=data--subset-d1-d2
-# data_val=data--subset-d3
+# data_val=data--c1-d19
+# data_val=data--c2-d20
+data_val=data--c1-d19--c2-d20
 
-# data=data--subset-d2.1
-# data=data--subset-d2.2
-data=data--subset-d2
-
-ver__model=yolov8s--640
-
+# data=data--c1-d19
+# data=data--c2-d20
+data=data--c1-d19--c2-d20
 
 imgsz=640
 
-ver__train=train2
+ver__model=yolov8s--640
+ver__train=train
 # conf=0.1
 
 yolo val \
     data=src/configs/$data_val.yaml \
     imgsz=$imgsz \
-    iou=0.6 \
-    device=1 \
-    batch=16 \
+    device=0 \
+    batch=64 \
     model=$path__dir__run/$data/${ver__model}/$ver__train/weights/best.pt \
     project=$path__dir__run/$data/${ver__model}/val--$ver__train--imgsz-$imgsz \
 
@@ -41,3 +35,4 @@ yolo val \
     # project=$path__dir__run/data--d1.1/24Mar_person13/val--imgsz-$imgsz \
 
     # conf=$conf \
+    # iou=0.6 \
