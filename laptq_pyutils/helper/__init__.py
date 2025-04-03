@@ -12,7 +12,7 @@ from .detection import (
     helper__filter__detection__result__by__miniou,
     helper__filter__detection__result__by__size,
     helper__filter__detection__result__by__roi,
-    helper__filterout__image__by__id_class,
+    helper__filter__image__by__id_class,
     helper__change__detection__id_class,
     helper__draw__detection__imgdir,
     helper__draw__detection__video,

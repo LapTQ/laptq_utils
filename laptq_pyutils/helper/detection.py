@@ -485,7 +485,7 @@ def helper__filter__detection__result__by__roi(**kwargs):
         dict__result = list_aligner__result.item()
         with open(path__file__lbl__output, "w") as f:
             json.dump(dict__result, f, indent=4)
-        
+
 
 def helper__draw__detection__imgdir(**kwargs):
 
@@ -1003,7 +1003,7 @@ def helper__filter__detection__result__by__size(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
-def helper__filterout__image__by__id_class(**kwargs):
+def helper__filter__image__by__id_class(**kwargs):
 
     import os
     import json
@@ -1011,7 +1011,8 @@ def helper__filterout__image__by__id_class(**kwargs):
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
-    list__id_class = kwargs["list__id_class"]
+    list__id_class__to_include = kwargs["list__id_class__to_include"]
+    list__id_class__to_exclude = kwargs["list__id_class__to_exclude"]
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
@@ -1027,13 +1028,19 @@ def helper__filterout__image__by__id_class(**kwargs):
         num__img__total += 1
 
         list__obj__id_class = dict__result["list__obj__id_class"]
-        tobe__filtered_out = False
+
+        to__filter_out = False
+        if list__id_class__to_include is not None and len(list__obj__id_class) == 0:
+            to__filter_out = True
         for id_class in list__obj__id_class:
-            if id_class in list__id_class:
-                tobe__filtered_out = True
+            if (
+                list__id_class__to_include is not None
+                and id_class not in list__id_class__to_include
+            ) or id_class in list__id_class__to_exclude:
+                to__filter_out = True
                 break
 
-        if tobe__filtered_out:
+        if to__filter_out:
             num__img__filtered_out += 1
             continue
 
@@ -1301,17 +1308,21 @@ def helper__merge__detection__result(**kwargs):
         for name__file__lbl in os.listdir(path__dir__lbl__input):
             set__name__file__lbl.add(name__file__lbl)
     list__name__file__lbl = sorted(list(set__name__file__lbl))
-    
+
     for name__file__lbl in tqdm(list__name__file__lbl):
         dict__result = None
 
         for path__dir__lbl__input in list__path__dir__lbl__input:
-            path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+            path__file__lbl__input = os.path.join(
+                path__dir__lbl__input, name__file__lbl
+            )
             if not os.path.exists(path__file__lbl__input):
                 if is_ok__lbl_not_exist:
                     continue
                 else:
-                    raise FileNotFoundError(f"Label file not found: {path__file__lbl__input}")
+                    raise FileNotFoundError(
+                        f"Label file not found: {path__file__lbl__input}"
+                    )
 
             with open(path__file__lbl__input, "r") as f:
                 dict__result__input = json.load(f)
@@ -1328,7 +1339,7 @@ def helper__merge__detection__result(**kwargs):
                         continue
                     else:
                         raise KeyError(f"Key not found: {list__key__diff}")
-                
+
                 for key in list__key__dst:
                     if isinstance(dict__result[key], list):
                         dict__result[key].extend(dict__result__input[key])
@@ -1338,5 +1349,3 @@ def helper__merge__detection__result(**kwargs):
         path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
         with open(path__file__lbl__output, "w") as f:
             json.dump(dict__result, f, indent=4)
-
-
