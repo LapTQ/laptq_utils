@@ -1,25 +1,43 @@
-path__dir__run=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs
+path__dir__run=/home/lap_awlv/fed-object-detection/runs
 
-data=data--public--satudora
-data_val=data--testset-4cam-factory
+# data_val=data--subset-d2.1
+# data_val=data--subset-d2.2
+# data_val=data--subset-d2
+# data_val=data--subset-d1
+data_val=data--subset-d1-d2
+# data_val=data--subset-d3
+
+# data=data--subset-d2.1
+# data=data--subset-d2.2
+data=data--subset-d2
+
+ver__model=yolov8s--640
 
 
-ver__model=yolo11s--832--scale-0.5--multiscale-True
-imgsz=832
+imgsz=640
 
 ver__train=train2
-conf=0.05
+# conf=0.1
 
 yolo val \
     data=src/configs/$data_val.yaml \
-    model=$path__dir__run/$data/${ver__model}/$ver__train/weights/best.pt \
-    project=$path__dir__run/$data/${ver__model}/val--$ver__train--imgsz-$imgsz--conf-$conf \
     imgsz=$imgsz \
-    conf=$conf \
-    iou=0.5 \
-    device=0 \
-    batch=8
+    iou=0.6 \
+    device=1 \
+    batch=16 \
+    model=$path__dir__run/$data/${ver__model}/$ver__train/weights/best.pt \
+    project=$path__dir__run/$data/${ver__model}/val--$ver__train--imgsz-$imgsz \
 
-    
-    # model=/mnt/ssd8tb/shared_workspace/manhpc/FS_prj21/runs/train_RAF_val_RAF/weights/best.pt \
-    # project=$path__dir__run/RAF/train_RAF_val_RAF/val--train_RAF_val_RAF--imgsz-$imgsz--conf-$conf \
+    # model=/home/lap_awlv/fed-object-detection/outputs/soup/yolov8s_model_soup.pt \
+    # project=$path__dir__run/soup/yolov8s_model_soup/val--imgsz-$imgsz \
+
+    # model=yolov8s.pt \
+    # project=$path__dir__run/coco/yolov8s/val--imgsz-$imgsz \
+
+    # model=/home/thuongnh_awlv/NEDO/ultralytics/runs/detect/24Mar_person2/weights/best.pt \
+    # project=$path__dir__run/data--d1.2/24Mar_person2/val--imgsz-$imgsz \
+
+    # model=/home/thuongnh_awlv/NEDO/ultralytics/runs/detect/24Mar_person13/weights/best.pt \
+    # project=$path__dir__run/data--d1.1/24Mar_person13/val--imgsz-$imgsz \
+
+    # conf=$conf \
