@@ -1,14 +1,12 @@
 PATH__DIR__LABEL__INPUT=/home/laptq/laptq-nedo-fed/outputs/labels
-POSTFIX__DIR__LABEL__INPUT="--img-w-person"
+POSTFIX__DIR__LABEL__INPUT="--only-person"
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-nedo-fed/outputs/labels
-POSTFIX__DIR__LABEL__OUTPUT="--img-w-person--TXT"
+POSTFIX__DIR__LABEL__OUTPUT="--only-person--TXT"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["B8-A4-4F-D2-F8-3A/2025_03_19"]=""
-    ["B8-A4-4F-D2-F8-3A/2025_03_20"]=""
-    ["B8-A4-4F-D2-FF-98/2025_03_19"]=""
-    ["B8-A4-4F-D2-FF-98/2025_03_20"]=""
+    ["fastlabel/train"]=""
+    ["fastlabel/val"]=""
 )
 
 IFS=$'\n'

@@ -1,4 +1,4 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-nedo-fed/data/pseudo_labels--restructured
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-nedo-fed/data/
 POSTFIX__DIR__LABEL__INPUT=""
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-nedo-fed/outputs/labels
@@ -8,10 +8,8 @@ MODE__BOX="xcycwhn"
 # MODE__BOX="polygonn"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["B8-A4-4F-D2-F8-3A/2025_03_19"]=""
-    ["B8-A4-4F-D2-F8-3A/2025_03_20"]=""
-    ["B8-A4-4F-D2-FF-98/2025_03_19"]=""
-    ["B8-A4-4F-D2-FF-98/2025_03_20"]=""
+    ["fastlabel/train"]=""
+    ["fastlabel/val"]=""
 )
 
 IFS=$'\n'

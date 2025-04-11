@@ -1,18 +1,16 @@
-PATH__DIR__IMG__SOURCE=/home/laptq/laptq-nedo-fed/data/pseudo_labels--restructured
+PATH__DIR__IMG__SOURCE=/home/laptq/laptq-nedo-fed/data
 POSTFIX__DIR__IMG__SOURCE=""
 
 PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-nedo-fed/outputs/labels
-POSTFIX__DIR__LABEL__SOURCE="--img-w-person"
+POSTFIX__DIR__LABEL__SOURCE="--only-person--TXT"
 
-PATH__DIR__OUTPUT=/home/laptq/laptq-nedo-fed/outputs/labels
-POSTFIX__DIR__VERSION__TARGET="--img-w-person"
+PATH__DIR__OUTPUT=/home/laptq/laptq-nedo-fed/data
+POSTFIX__DIR__VERSION__TARGET="--only-person"
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["B8-A4-4F-D2-F8-3A/2025_03_19"]=""
-    ["B8-A4-4F-D2-F8-3A/2025_03_20"]=""
-    ["B8-A4-4F-D2-FF-98/2025_03_19"]=""
-    ["B8-A4-4F-D2-FF-98/2025_03_20"]=""
+    ["fastlabel/train"]=""
+    ["fastlabel/val"]=""
 )
 
 

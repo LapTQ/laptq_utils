@@ -1,11 +1,12 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/Downloads/outputs--video--1
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-nedo-fed/outputs/labels
 POSTFIX__DIR__LABEL__INPUT=""
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--video--2
-POSTFIX__DIR__LABEL__OUTPUT=""
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-nedo-fed/outputs/labels
+POSTFIX__DIR__LABEL__OUTPUT="--only-person--frag"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["clideo_editor_177d5d7cdb144c1598d5419573b0449c.mp4"]=""
+    ["fastlabel/train"]=""
+    ["fastlabel/val"]=""
 )
 
 IFS=$'\n'
@@ -22,11 +23,11 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__filter__detection__result__by__id_class \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
-        --list__id_class__to_include 0,56 \
+        --list__id_class__to_include 0,1,2 \
         --list__id_class__to_exclude "[]"
 
 
