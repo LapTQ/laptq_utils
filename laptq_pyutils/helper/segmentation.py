@@ -1,4 +1,13 @@
+from laptq_pyutils.log import load_logger
+
+LOGGER = load_logger()
+
+
 def helper__extract__crops__with__mask__from__segmentation(**kwargs):
+
+    LOGGER.warning(
+        "Please consider generalize this function with helper__extract__crops__with__mask__from__segmentation. These functions have something in common."
+    )
 
     import cv2
     import numpy as np
@@ -25,7 +34,9 @@ def helper__extract__crops__with__mask__from__segmentation(**kwargs):
 
         if not os.path.isfile(path__file__lbl__input):
             if not is_ok__lbl_not_exist:
-                raise FileNotFoundError("File not found: {}".format(path__file__lbl__input))
+                raise FileNotFoundError(
+                    "File not found: {}".format(path__file__lbl__input)
+                )
             else:
                 continue
 

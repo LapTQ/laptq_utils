@@ -1,12 +1,12 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-convert-video-to-images
-POSTFIX__DIR__IMAGE=""
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection
+POSTFIX__DIR__IMAGE="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.2--iou-0.45--keypoint-normalized--filterby-roi--extract-crops--JSON"
 
-PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.01--iou-0.45--JSON"
+PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection
+POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.2--iou-0.45--keypoint-normalized--filterby-roi--extract-crops--JSON"
 
 NUM__MAX__IMG__TO__VISUALIZE=20
 IS_OK__LBL_NOT_FOUND=False
-PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(

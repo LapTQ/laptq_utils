@@ -144,6 +144,52 @@ def helper__extract__ultralytics__detect__video(**kwargs):
         pbar.update(1)
 
 
+def helper__normalize__keypoint__wrt__box(**kwargs):
+
+    import json
+    from tqdm import tqdm
+    import os
+
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
+
+        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+
+        list__obj__box_xcycwhn = list_aligner__result.get__key("list__obj__box_xcycwhn")
+        list__obj__kpts_xyn = list_aligner__result.get__key("list__obj__kpts_xyn")
+        for i_obj, (box_xcycwhn, kpts_xyn) in enumerate(
+            zip(list__obj__box_xcycwhn, list__obj__kpts_xyn)
+        ):
+            if kpts_xyn is None:
+                continue
+
+            b_xcn = box_xcycwhn[0]
+            b_ycn = box_xcycwhn[1]
+            b_wn = box_xcycwhn[2]
+            b_hn = box_xcycwhn[3]
+            b_x1n = b_xcn - b_wn / 2
+            b_y1n = b_ycn - b_hn / 2
+            for kname, (k_xn, k_yn) in kpts_xyn.items():
+                if k_xn == 0 and k_yn == 0:
+                    continue
+                k_xn = (k_xn - b_x1n) / b_wn
+                k_yn = (k_yn - b_y1n) / b_hn
+                kpts_xyn[kname] = [k_xn, k_yn]
+
+        dict__result = list_aligner__result.item()
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)
+
+
 def helper__filter__detection__result__by__id_class(**kwargs):
 
     import json
@@ -1234,3 +1280,82 @@ def helper__merge__detection__result(**kwargs):
         path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
         with open(path__file__lbl__output, "w") as f:
             json.dump(dict__result, f, indent=4)
+
+
+def helper__extract__crops__from__detection(**kwargs):
+
+    LOGGER.warning(
+        "Please consider generalize this function with helper__extract__crops__with__mask__from__segmentation. These functions have something in common."
+    )
+
+    import os
+    import json
+    from tqdm import tqdm
+    import cv2
+    import numpy as np
+
+    path__dir__img__input = kwargs["path__dir__img__input"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__crop__img__output = kwargs["path__dir__crop__img__output"]
+    path__dir__crop__lbl__output = kwargs["path__dir__crop__lbl__output"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    num__pad__0 = kwargs["num__pad__0"]
+
+    os.makedirs(path__dir__crop__img__output, exist_ok=True)
+    os.makedirs(path__dir__crop__lbl__output, exist_ok=True)
+
+    for name__file__img in tqdm(sorted(os.listdir(path__dir__img__input))):
+        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
+        path__file__img = os.path.join(path__dir__img__input, name__file__img)
+        path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
+
+        if not os.path.exists(path__file__lbl):
+            if is_ok__lbl_not_exist:
+                continue
+            else:
+                raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
+
+        with open(path__file__lbl, "r") as f:
+            dict__result = json.load(f)
+
+        img = cv2.imread(path__file__img)
+        H, W = img.shape[:2]
+
+        list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
+        for i_obj, box_xcycwhn in enumerate(list__obj__box_xcycwhn):
+            xcn, ycn, wn, hn = box_xcycwhn
+            x1n = xcn - wn / 2
+            y1n = ycn - hn / 2
+            x2n = x1n + wn
+            y2n = y1n + hn
+
+            x1 = int(x1n * W)
+            y1 = int(y1n * H)
+            x2 = int(x2n * W)
+            y2 = int(y2n * H)
+
+            box_xcycwhn[0] = 0
+            box_xcycwhn[1] = 0
+            box_xcycwhn[2] = 1
+            box_xcycwhn[3] = 1
+
+            crop_img = img[y1:y2, x1:x2]
+            path__file__crop__img__output = os.path.join(
+                path__dir__crop__img__output,
+                "{}--{:0{}}.jpg".format(
+                    os.path.splitext(name__file__img)[0], i_obj, num__pad__0
+                ),
+            )
+            cv2.imwrite(path__file__crop__img__output, crop_img)
+
+            dict__result__crop = {
+                k: dict__result[k][i_obj : i_obj + 1] for k in dict__result
+            }
+            path__file__crop__lbl__output = os.path.join(
+                path__dir__crop__lbl__output,
+                "{}--{:0{}}.json".format(
+                    os.path.splitext(name__file__img)[0], i_obj, num__pad__0
+                ),
+            )
+            with open(path__file__crop__lbl__output, "w") as f:
+                json.dump(dict__result__crop, f, indent=4)
