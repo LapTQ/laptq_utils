@@ -1,3 +1,5 @@
+from laptq_pyutils.convert import convert_onnx_to_tensorrt
+
 from laptq_pyutils.helper import (
     helper__extract__ultralytics__detect__imgdir,
     helper__extract__ultralytics__detect__video,
@@ -106,6 +108,9 @@ def parse_args():
     ap.add_argument("--flags", type=str)
     ap.add_argument("--roi__polygonn", type=str)
     ap.add_argument("--to_use__yolov5_compat", type=str)
+    ap.add_argument("--precision", type=str)
+    ap.add_argument("--dynamic_shape", type=str)
+    ap.add_argument("--max_workspace_size", type=int)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -202,6 +207,11 @@ def parse_args():
     args.list__path__dir__lbl__input = (
         args.list__path__dir__lbl__input.split(",")
         if args.list__path__dir__lbl__input is not None
+        else None
+    )
+    args.dynamic_shape = (
+        eval(args.dynamic_shape)
+        if args.dynamic_shape is not None
         else None
     )
 

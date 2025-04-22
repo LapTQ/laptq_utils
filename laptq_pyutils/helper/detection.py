@@ -1,7 +1,9 @@
-from abc import ABC, abstractmethod
-
 from laptq_pyutils.draw import draw__image
-from laptq_pyutils.objects import ListAligner
+from laptq_pyutils.objects import (
+    ListAligner,
+    UltralyticsPredictor,
+    YOLOv5CompatPredictor,
+)
 from laptq_pyutils.log import load_logger
 from laptq_pyutils.common import LIST__MODE__BOX
 from laptq_pyutils.ops import (
@@ -19,161 +21,14 @@ from laptq_pyutils.algo import KMeans
 LOGGER = load_logger()
 
 
-class BaseModel(ABC):
-
-    @abstractmethod
-    def __init__(self, **kwargs):
-        pass
-
-    @abstractmethod
-    def predict(self, **kwargs):
-        pass
-
-
-class UltralyticsModel(BaseModel):
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        from ultralytics import YOLO
-
-        self.path__file__model = kwargs["path__file__model"]
-        self.device = kwargs["device"]
-
-        self.model = YOLO(self.path__file__model).to(self.device)
-
-    def predict(self, **kwargs):
-
-        img__bgr = kwargs["img__bgr"]
-        imgsz = kwargs["imgsz"]
-        thresh__conf__min = kwargs["thresh__conf__min"]
-        thresh__iou = kwargs["thresh__iou"]
-
-        result_ultralytics = (
-            self.model.predict(
-                source=img__bgr,
-                imgsz=imgsz,
-                conf=thresh__conf__min,
-                iou=thresh__iou,
-                verbose=False,
-            )[0]
-            .cpu()
-            .numpy()
-        )
-
-        boxes = result_ultralytics.boxes
-
-        list_aligner__result = ListAligner(
-            list__key=[
-                "list__obj__id_class",
-                "list__obj__box_xcycwhn",
-                "list__obj__box_conf",
-            ]
-        )
-
-        for i_b, box in enumerate(boxes):
-            id_class = int(box.cls)
-            xcn, ycn, wn, hn = box.xywhn[0].tolist()
-            conf = float(box.conf)
-
-            list_aligner__result.extend(
-                {
-                    "list__obj__id_class": [id_class],
-                    "list__obj__box_xcycwhn": [[xcn, ycn, wn, hn]],
-                    "list__obj__box_conf": [conf],
-                }
-            )
-
-        dict__result = list_aligner__result.item()
-
-        return {
-            "dict__result": dict__result,
-        }
-
-
-class YOLOv5CompatModel(BaseModel):
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        import torch
-
-        self.path__file__model = kwargs["path__file__model"]
-        self.device = kwargs["device"]
-
-        self.model = torch.hub.load(
-            repo_or_dir="ultralytics/yolov5",
-            model="custom",  # e.g., 'yolov5n', 'yolov5x6', or 'custom'
-            path=self.path__file__model,
-            device=self.device,
-        )
-
-    def predict(self, **kwargs):
-
-        import cv2
-
-        img__bgr = kwargs["img__bgr"]
-        imgsz = kwargs["imgsz"]
-        thresh__conf__min = kwargs["thresh__conf__min"]
-        thresh__iou = kwargs["thresh__iou"]
-
-        assert hasattr(self.model, "conf"), "self.model does not have attribute conf"
-        assert hasattr(self.model, "iou"), "self.model does not have attribute iou"
-
-        self.model.conf = thresh__conf__min
-        self.model.iou = thresh__iou
-
-        img__rgb = cv2.cvtColor(img__bgr, cv2.COLOR_BGR2RGB)
-        imH, imW = img__bgr.shape[:2]
-
-        result_ultralytics = self.model(img__rgb, size=imgsz).pandas().xyxy[0]
-
-        list_aligner__result = ListAligner(
-            list__key=[
-                "list__obj__id_class",
-                "list__obj__box_xcycwhn",
-                "list__obj__box_conf",
-            ]
-        )
-
-        for i_b, box in result_ultralytics.iterrows():
-            id_class = int(box["class"])
-            x1, y1, x2, y2 = box[["xmin", "ymin", "xmax", "ymax"]].tolist()
-            conf = float(box["confidence"])
-
-            xc = (x1 + x2) / 2
-            yc = (y1 + y2) / 2
-            w = x2 - x1
-            h = y2 - y1
-
-            xcn = xc / imW
-            ycn = yc / imH
-            wn = w / imW
-            hn = h / imH
-
-            list_aligner__result.extend(
-                {
-                    "list__obj__id_class": [id_class],
-                    "list__obj__box_xcycwhn": [[xcn, ycn, wn, hn]],
-                    "list__obj__box_conf": [conf],
-                }
-            )
-
-        dict__result = list_aligner__result.item()
-
-        return {
-            "dict__result": dict__result,
-        }
-
-
 def parse__ultralytics_model(**kwargs):
 
     to_use__yolov5_compat = kwargs["to_use__yolov5_compat"]
 
     if to_use__yolov5_compat:
-        model = YOLOv5CompatModel(**kwargs)
+        model = YOLOv5CompatPredictor(**kwargs)
     else:
-        model = UltralyticsModel(**kwargs)
+        model = UltralyticsPredictor(**kwargs)
 
     return model
 
