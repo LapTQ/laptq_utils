@@ -44,6 +44,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --to_draw__box_conf True \
         --to_draw__id_class False \
         --to_draw__name_class False \
+        --to_draw__pose True \
         --fontScale 1 \
         --thickness 2 \
         --box_color_by id__class \

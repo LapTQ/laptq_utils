@@ -18,7 +18,7 @@ class BaseModel(ABC):
         pass
 
 
-class UltralyticsPredictor(BaseModel):
+class UltralyticsBasePredictor(BaseModel):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -29,6 +29,13 @@ class UltralyticsPredictor(BaseModel):
         self.device = kwargs["device"]
 
         self.model = YOLO(self.path__file__model).to(self.device)
+
+    @abstractmethod
+    def predict(self, **kwargs):
+        pass
+
+
+class UltralyticsDetectPredictor(UltralyticsBasePredictor):
 
     def predict(self, **kwargs):
 
@@ -79,7 +86,96 @@ class UltralyticsPredictor(BaseModel):
         }
 
 
-class YOLOv5CompatPredictor(BaseModel):
+class UltralyticsPosePredictor(UltralyticsBasePredictor):
+
+    def predict(self, **kwargs):
+
+        img__bgr = kwargs["img__bgr"]
+        imgsz = kwargs["imgsz"]
+        thresh__conf__min = kwargs["thresh__conf__min"]
+        thresh__iou = kwargs["thresh__iou"]
+        list__name_keypoints = kwargs["list__name_keypoints"]
+
+        result_ultralytics = (
+            self.model.predict(
+                source=img__bgr,
+                imgsz=imgsz,
+                conf=thresh__conf__min,
+                iou=thresh__iou,
+                verbose=False,
+            )[0]
+            .cpu()
+            .numpy()
+        )
+
+        boxes = result_ultralytics.boxes
+        keypoints = result_ultralytics.keypoints
+        keypoints = (
+            keypoints if keypoints.xyn.shape != (1, 0, 2) else [None] * len(boxes)
+        )
+
+        list_aligner__result = ListAligner(
+            list__key=[
+                "list__obj__id_class",
+                "list__obj__box_xcycwhn",
+                "list__obj__box_conf",
+                "list__obj__kpts_xyn",
+                "list__obj__kpts_conf",
+            ]
+        )
+
+        for i_b, (box, kpts) in enumerate(zip(boxes, keypoints)):
+            id_class = int(box.cls)
+            b_xcn, b_ycn, b_wn, b_hn = box.xywhn[0].tolist()
+            b_conf = float(box.conf)
+
+            if kpts is None:
+                kpts_xyn = None
+                kpts_conf = None
+            else:
+                kpts_xyn = kpts.xyn[0].tolist()
+                kpts_conf = kpts.conf[0].tolist()
+
+            assert len(list__name_keypoints) == len(
+                kpts_xyn
+            ), f"len(list__name_keypoints)={len(list__name_keypoints)} != len(kpts_xyn)={len(kpts_xyn)}"
+
+            list_aligner__result.extend(
+                {
+                    "list__obj__id_class": [id_class],
+                    "list__obj__box_xcycwhn": [[b_xcn, b_ycn, b_wn, b_hn]],
+                    "list__obj__box_conf": [b_conf],
+                    "list__obj__kpts_xyn": [
+                        (
+                            {
+                                name: [kpts_xyn[i]][0]
+                                for i, name in enumerate(list__name_keypoints)
+                            }
+                            if kpts_xyn is not None
+                            else None
+                        )
+                    ],
+                    "list__obj__kpts_conf": [
+                        (
+                            {
+                                name: [kpts_conf[i]][0]
+                                for i, name in enumerate(list__name_keypoints)
+                            }
+                            if kpts_conf is not None
+                            else None
+                        )
+                    ],
+                }
+            )
+
+        dict__result = list_aligner__result.item()
+
+        return {
+            "dict__result": dict__result,
+        }
+
+
+class YOLOv5CompatDetectPredictor(BaseModel):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

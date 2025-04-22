@@ -77,6 +77,7 @@ def parse_args():
     ap.add_argument("--to_draw__box_conf", choices=["True", "False"])
     ap.add_argument("--to_draw__id_class", choices=["True", "False"])
     ap.add_argument("--to_draw__name_class", choices=["True", "False"])
+    ap.add_argument("--to_draw__pose", choices=["True", "False"])
     ap.add_argument("--to_save__img", type=str)
     ap.add_argument("--fontScale", type=float)
     ap.add_argument("--thickness", type=int)
@@ -111,6 +112,8 @@ def parse_args():
     ap.add_argument("--precision", type=str)
     ap.add_argument("--dynamic_shape", type=str)
     ap.add_argument("--max_workspace_size", type=int)
+    ap.add_argument("--list__name_keypoints", type=str)
+    ap.add_argument("--task", type=str)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -212,6 +215,16 @@ def parse_args():
     args.dynamic_shape = (
         eval(args.dynamic_shape)
         if args.dynamic_shape is not None
+        else None
+    )
+    args.list__name_keypoints = (
+        eval(args.list__name_keypoints)
+        if args.list__name_keypoints is not None
+        else None
+    )
+    args.to_draw__pose = (
+        eval(args.to_draw__pose)
+        if args.to_draw__pose is not None
         else None
     )
 

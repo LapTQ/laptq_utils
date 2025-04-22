@@ -1,8 +1,9 @@
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import (
     ListAligner,
-    UltralyticsPredictor,
-    YOLOv5CompatPredictor,
+    UltralyticsDetectPredictor,
+    UltralyticsPosePredictor,
+    YOLOv5CompatDetectPredictor,
 )
 from laptq_pyutils.log import load_logger
 from laptq_pyutils.common import LIST__MODE__BOX
@@ -23,12 +24,21 @@ LOGGER = load_logger()
 
 def parse__ultralytics_model(**kwargs):
 
+    task = kwargs["task"]
     to_use__yolov5_compat = kwargs["to_use__yolov5_compat"]
 
+    assert task in ["detect", "pose"]
+
     if to_use__yolov5_compat:
-        model = YOLOv5CompatPredictor(**kwargs)
+        if task == "detect":
+            model = YOLOv5CompatDetectPredictor(**kwargs)
+        elif task == "pose":
+            raise NotImplementedError("Keypoint task is not supported yet.")
     else:
-        model = UltralyticsPredictor(**kwargs)
+        if task == "detect":
+            model = UltralyticsDetectPredictor(**kwargs)
+        elif task == "pose":
+            model = UltralyticsPosePredictor(**kwargs)
 
     return model
 
@@ -419,6 +429,16 @@ def helper__draw__detection__imgdir(**kwargs):
                 ),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result.get("list__obj__box_conf", None),
+                "list__obj__kpts_xyn": (
+                    [_.values() for _ in dict__result["list__obj__kpts_xyn"]]
+                    if "list__obj__kpts_xyn" in dict__result
+                    else None
+                ),
+                "list__obj__kpts_conf": (
+                    [_.values() for _ in dict__result["list__obj__kpts_conf"]]
+                    if "list__obj__kpts_conf" in dict__result
+                    else None
+                ),
             },
             map__id_class__to__name_class=map__id_class__to__name_class,
             **kwargs,
@@ -499,6 +519,16 @@ def helper__draw__detection__video(**kwargs):
                 ),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result["list__obj__box_conf"],
+                "list__obj__kpts_xyn": (
+                    [_.values() for _ in dict__result["list__obj__kpts_xyn"]]
+                    if "list__obj__kpts_xyn" in dict__result
+                    else None
+                ),
+                "list__obj__kpts_conf": (
+                    [_.values() for _ in dict__result["list__obj__kpts_conf"]]
+                    if "list__obj__kpts_conf" in dict__result
+                    else None
+                ),
             },
             map__id_class__to__name_class=map__id_class__to__name_class,
             **kwargs,
