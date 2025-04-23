@@ -43,7 +43,7 @@ def parse__ultralytics_model(**kwargs):
     return model
 
 
-def helper__extract__ultralytics__detect__imgdir(**kwargs):
+def helper__extract__ultralytics__imgdir(**kwargs):
 
     from ultralytics import YOLO
     import os
@@ -91,7 +91,7 @@ def helper__extract__ultralytics__detect__imgdir(**kwargs):
         pbar.set_postfix(time__inference=log__time["time__inference"])
 
 
-def helper__extract__ultralytics__detect__video(**kwargs):
+def helper__extract__ultralytics__video(**kwargs):
 
     from ultralytics import YOLO
     import cv2
@@ -398,7 +398,7 @@ def helper__filter__detection__result__by__roi(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
-def helper__draw__detection__imgdir(**kwargs):
+def helper__draw__imgdir(**kwargs):
 
     import os
     from tqdm import tqdm
@@ -498,7 +498,7 @@ def helper__draw__detection__imgdir(**kwargs):
         cv2.imwrite(path__file__output, img__vis)
 
 
-def helper__draw__detection__video(**kwargs):
+def helper__draw__video(**kwargs):
 
     import cv2
     import yaml
@@ -874,11 +874,13 @@ def helper__filter__detection__result__by__size(**kwargs):
     import json
     from tqdm import tqdm
     import os
+    import numpy as np
 
     path__dir__img = kwargs["path__dir__img"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     filter_by = kwargs["filter_by"]
+    to_keep__only_max = kwargs["to_keep__only_max"]
     thresh = kwargs["thresh"]
 
     assert filter_by in ["area", "width", "height"]
@@ -905,6 +907,7 @@ def helper__filter__detection__result__by__size(**kwargs):
         list__obj__box_xcycwhn = list_aligner__result.get__key("list__obj__box_xcycwhn")
 
         num__box__popped = 0
+        list__size = []
         for i_obj, box_xcycwhn in enumerate(list__obj__box_xcycwhn):
             xcn, ycn, wn, hn = box_xcycwhn
             w = wn * W
@@ -920,6 +923,24 @@ def helper__filter__detection__result__by__size(**kwargs):
             if tobe__popped:
                 list__index__to_pop.append(i_obj)
                 num__box__popped += 1
+
+            if to_keep__only_max:
+                if filter_by == "area":
+                    size = w * h
+                elif filter_by == "width":
+                    size = w
+                else:
+                    size = h
+
+                list__size.append(size)
+
+        if to_keep__only_max and len(list__size) > 0:
+            list__size = np.array(list__size)
+            argmax = np.argmax(list__size)
+            for i_obj in range(len(list__size)):
+                if i_obj != argmax and i_obj not in list__index__to_pop:
+                    list__index__to_pop.append(i_obj)
+                    num__box__popped += 1
 
         list_aligner__result.pop__indexes(list__index__to_pop)
 
@@ -1342,7 +1363,7 @@ def helper__extract__crops__from__detection(**kwargs):
             crop_img = img[y1:y2, x1:x2]
             path__file__crop__img__output = os.path.join(
                 path__dir__crop__img__output,
-                "{}--{:0{}}.jpg".format(
+                "{}--crop-{:0{}}.jpg".format(
                     os.path.splitext(name__file__img)[0], i_obj, num__pad__0
                 ),
             )

@@ -213,7 +213,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     mkdir -p "${path__dir__output}"
 
     python3 submodules/laptq_utils/main.py \
-        helper__draw__detection__imgdir \
+        helper__draw__imgdir \
         --path__dir__img "${path__dir__img}" \
         --path__dir__lbl "${path__dir__lbl}" \
         --path__dir__output "${path__dir__output}" \

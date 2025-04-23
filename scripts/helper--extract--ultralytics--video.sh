@@ -220,7 +220,7 @@ for subpath__video in "${!MAP__SUBPATH_VIDEO__TO__[@]}"; do
     mkdir -p "${path__dir__lbl__output}"
 
     python3 submodules/laptq_utils/main.py \
-        helper__extract__ultralytics__detect__video \
+        helper__extract__ultralytics__video \
         --path__file__input "${path__file__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
         --path__file__model "${PATH__FILE__MODEL}" \

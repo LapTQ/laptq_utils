@@ -32,7 +32,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     path__file__output="${PATH__DIR__OUTPUT}/${name__video}"
 
     python3 submodules/laptq_utils/main.py \
-        helper__draw__detection__video \
+        helper__draw__video \
         --path__file__video__input "${path__file__video__input}" \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__file__output "${path__file__output}" \

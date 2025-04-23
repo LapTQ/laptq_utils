@@ -220,7 +220,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     mkdir -p "${path__dir__lbl__output}"
 
     python3 submodules/laptq_utils/main.py \
-        helper__extract__ultralytics__detect__imgdir \
+        helper__extract__ultralytics__imgdir \
         --path__dir__img "${path__dir__img__input}" \
         --path__dir__output "${path__dir__lbl__output}" \
         --path__file__model "${PATH__FILE__MODEL}" \

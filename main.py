@@ -1,8 +1,8 @@
 from laptq_pyutils.convert import convert_onnx_to_tensorrt
 
 from laptq_pyutils.helper import (
-    helper__extract__ultralytics__detect__imgdir,
-    helper__extract__ultralytics__detect__video,
+    helper__extract__ultralytics__imgdir,
+    helper__extract__ultralytics__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
     helper__convert__result__coco__to__json,
@@ -17,8 +17,8 @@ from laptq_pyutils.helper import (
     helper__filter__detection__result__by__roi,
     helper__filter__image__by__id_class,
     helper__change__detection__id_class,
-    helper__draw__detection__imgdir,
-    helper__draw__detection__video,
+    helper__draw__imgdir,
+    helper__draw__video,
     helper__rescale__detection__box,
     helper__erase__classes__on__images,
     helper__check__duplicate__images,
@@ -116,6 +116,7 @@ def parse_args():
     ap.add_argument("--max_workspace_size", type=int)
     ap.add_argument("--list__name_keypoints", type=str)
     ap.add_argument("--task", type=str)
+    ap.add_argument("--to_keep__only_max", type=str)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -215,9 +216,7 @@ def parse_args():
         else None
     )
     args.dynamic_shape = (
-        eval(args.dynamic_shape)
-        if args.dynamic_shape is not None
-        else None
+        eval(args.dynamic_shape) if args.dynamic_shape is not None else None
     )
     args.list__name_keypoints = (
         eval(args.list__name_keypoints)
@@ -225,9 +224,10 @@ def parse_args():
         else None
     )
     args.to_draw__pose = (
-        eval(args.to_draw__pose)
-        if args.to_draw__pose is not None
-        else None
+        eval(args.to_draw__pose) if args.to_draw__pose is not None else None
+    )
+    args.to_keep__only_max = (
+        eval(args.to_keep__only_max) if args.to_keep__only_max is not None else None
     )
 
     return args
