@@ -32,7 +32,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     path__file__output="${PATH__DIR__OUTPUT}/${name__video}"
 
     python3 submodules/laptq_utils/main.py \
-        helper__draw__detection__video \
+        helper__draw__video \
         --path__file__video__input "${path__file__video__input}" \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__file__output "${path__file__output}" \
@@ -44,6 +44,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --to_draw__box_conf True \
         --to_draw__id_class False \
         --to_draw__name_class False \
+        --to_draw__pose True \
         --fontScale 1 \
         --thickness 2 \
         --box_color_by id__class \

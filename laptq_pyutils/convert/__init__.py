@@ -5,3 +5,4 @@ from .general import (
     obj_to_pklstr,
     pklstr_to_obj,
 )
+from .model import convert_onnx_to_tensorrt

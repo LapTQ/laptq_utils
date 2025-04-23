@@ -76,7 +76,7 @@ def draw__image(**kwargs):
     if list__obj__kpts_xyn is None:
         list__obj__kpts_xyn = [None] * len(list__obj__box_x1y1whn)
     if list__obj__kpts_conf is None:
-        list__obj__kpts_conf = [-1] * len(list__obj__kpts_xyn)
+        list__obj__kpts_conf = [None] * len(list__obj__kpts_xyn)
     if list__obj__box_x1y1whn_refined is None:
         list__obj__box_x1y1whn_refined = [None] * len(list__obj__box_x1y1whn)
     if list__obj__confirmed_status is None:
