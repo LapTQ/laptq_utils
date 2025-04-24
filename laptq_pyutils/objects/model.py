@@ -35,58 +35,7 @@ class UltralyticsBasePredictor(BaseModel):
         pass
 
 
-class UltralyticsDetectPredictor(UltralyticsBasePredictor):
-
-    def predict(self, **kwargs):
-
-        img__bgr = kwargs["img__bgr"]
-        imgsz = kwargs["imgsz"]
-        thresh__conf__min = kwargs["thresh__conf__min"]
-        thresh__iou = kwargs["thresh__iou"]
-
-        result_ultralytics = (
-            self.model.predict(
-                source=img__bgr,
-                imgsz=imgsz,
-                conf=thresh__conf__min,
-                iou=thresh__iou,
-                verbose=False,
-            )[0]
-            .cpu()
-            .numpy()
-        )
-
-        boxes = result_ultralytics.boxes
-
-        list_aligner__result = ListAligner(
-            list__key=[
-                "list__obj__id_class",
-                "list__obj__box_xcycwhn",
-                "list__obj__box_conf",
-            ]
-        )
-
-        for i_b, box in enumerate(boxes):
-            id_class = int(box.cls)
-            xcn, ycn, wn, hn = box.xywhn[0].tolist()
-            conf = float(box.conf)
-
-            list_aligner__result.extend(
-                {
-                    "list__obj__id_class": [id_class],
-                    "list__obj__box_xcycwhn": [[xcn, ycn, wn, hn]],
-                    "list__obj__box_conf": [conf],
-                }
-            )
-
-        dict__result = list_aligner__result.item()
-
-        return {
-            "dict__result": dict__result,
-        }
-
-
-class UltralyticsPosePredictor(UltralyticsBasePredictor):
+class UltralyticsPredictor(UltralyticsBasePredictor):
 
     def predict(self, **kwargs):
 
@@ -95,13 +44,21 @@ class UltralyticsPosePredictor(UltralyticsBasePredictor):
         thresh__conf__min = kwargs["thresh__conf__min"]
         thresh__iou = kwargs["thresh__iou"]
         list__name_keypoints = kwargs["list__name_keypoints"]
+        persist = kwargs["persist"]
+        task = kwargs["task"]
+
+        if task == "track":
+            _func = self.model.track
+        else:
+            _func = self.model.predict
 
         result_ultralytics = (
-            self.model.predict(
+            _func(
                 source=img__bgr,
                 imgsz=imgsz,
                 conf=thresh__conf__min,
                 iou=thresh__iou,
+                persist=persist,
                 verbose=False,
             )[0]
             .cpu()
@@ -111,7 +68,14 @@ class UltralyticsPosePredictor(UltralyticsBasePredictor):
         boxes = result_ultralytics.boxes
         keypoints = result_ultralytics.keypoints
         keypoints = (
-            keypoints if keypoints.xyn.shape != (1, 0, 2) else [None] * len(boxes)
+            keypoints
+            if keypoints is not None and keypoints.xyn.shape != (1, 0, 2)
+            else [None] * len(boxes)
+        )
+        track_ids = (
+            boxes.id
+            if hasattr(boxes, "id") and boxes.id is not None
+            else [None] * len(boxes)
         )
 
         list_aligner__result = ListAligner(
@@ -121,10 +85,12 @@ class UltralyticsPosePredictor(UltralyticsBasePredictor):
                 "list__obj__box_conf",
                 "list__obj__kpts_xyn",
                 "list__obj__kpts_conf",
+                "list__obj__id_track",
             ]
         )
 
-        for i_b, (box, kpts) in enumerate(zip(boxes, keypoints)):
+        for i_b, (id_track, box, kpts) in enumerate(zip(track_ids, boxes, keypoints)):
+            id_track = int(id_track) if id_track is not None else None
             id_class = int(box.cls)
             b_xcn, b_ycn, b_wn, b_hn = box.xywhn[0].tolist()
             b_conf = float(box.conf)
@@ -136,9 +102,10 @@ class UltralyticsPosePredictor(UltralyticsBasePredictor):
                 kpts_xyn = kpts.xyn[0].tolist()
                 kpts_conf = kpts.conf[0].tolist()
 
-            assert len(list__name_keypoints) == len(
-                kpts_xyn
-            ), f"len(list__name_keypoints)={len(list__name_keypoints)} != len(kpts_xyn)={len(kpts_xyn)}"
+            if task == "pose":
+                assert len(list__name_keypoints) == len(
+                    kpts_xyn
+                ), f"len(list__name_keypoints)={len(list__name_keypoints)} != len(kpts_xyn)={len(kpts_xyn)}"
 
             list_aligner__result.extend(
                 {
@@ -165,6 +132,7 @@ class UltralyticsPosePredictor(UltralyticsBasePredictor):
                             else None
                         )
                     ],
+                    "list__obj__id_track": [id_track],
                 }
             )
 

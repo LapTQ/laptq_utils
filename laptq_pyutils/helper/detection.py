@@ -1,8 +1,7 @@
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import (
     ListAligner,
-    UltralyticsDetectPredictor,
-    UltralyticsPosePredictor,
+    UltralyticsPredictor,
     YOLOv5CompatDetectPredictor,
 )
 from laptq_pyutils.log import load_logger
@@ -27,18 +26,15 @@ def parse__ultralytics_model(**kwargs):
     task = kwargs["task"]
     to_use__yolov5_compat = kwargs["to_use__yolov5_compat"]
 
-    assert task in ["detect", "pose"]
+    assert task in ["detect", "pose", "track"]
 
     if to_use__yolov5_compat:
         if task == "detect":
             model = YOLOv5CompatDetectPredictor(**kwargs)
-        elif task == "pose":
-            raise NotImplementedError("Keypoint task is not supported yet.")
+        else:
+            raise NotImplementedError("Task {} is not supported yet.".format(task))
     else:
-        if task == "detect":
-            model = UltralyticsDetectPredictor(**kwargs)
-        elif task == "pose":
-            model = UltralyticsPosePredictor(**kwargs)
+        model = UltralyticsPredictor(**kwargs)
 
     return model
 
@@ -473,15 +469,16 @@ def helper__draw__imgdir(**kwargs):
                 "list__obj__box_polygonn": dict__result.get(
                     "list__obj__box_polygonn", None
                 ),
+                "list__obj__id_track": dict__result["list__obj__id_track"],
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result.get("list__obj__box_conf", None),
                 "list__obj__kpts_xyn": (
-                    [_.values() for _ in dict__result["list__obj__kpts_xyn"]]
+                    dict__result["list__obj__kpts_xyn"]
                     if "list__obj__kpts_xyn" in dict__result
                     else None
                 ),
                 "list__obj__kpts_conf": (
-                    [_.values() for _ in dict__result["list__obj__kpts_conf"]]
+                    dict__result["list__obj__kpts_conf"]
                     if "list__obj__kpts_conf" in dict__result
                     else None
                 ),
@@ -563,15 +560,16 @@ def helper__draw__video(**kwargs):
                 "list__obj__box_polygonn": dict__result.get(
                     "list__obj__box_polygonn", None
                 ),
+                "list__obj__id_track": dict__result["list__obj__id_track"],
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result["list__obj__box_conf"],
                 "list__obj__kpts_xyn": (
-                    [_.values() for _ in dict__result["list__obj__kpts_xyn"]]
+                    dict__result["list__obj__kpts_xyn"]
                     if "list__obj__kpts_xyn" in dict__result
                     else None
                 ),
                 "list__obj__kpts_conf": (
-                    [_.values() for _ in dict__result["list__obj__kpts_conf"]]
+                    dict__result["list__obj__kpts_conf"]
                     if "list__obj__kpts_conf" in dict__result
                     else None
                 ),

@@ -1,10 +1,10 @@
-PATH__DIR__INPUT=/home/laptq/laptq-prj-21/data/Videos/241210_受け取り動画/mp4_5min
-PATH__DIR__OUTPUT=/home/laptq/laptq-prj-21/data/Videos/241210_受け取り動画/mp4_5min--cropped-10-pct
+PATH__DIR__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/data
+PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/crop--videos
 
-pct__crop__top=0.1
-pct__crop__bottom=0.1
-pct__crop__left=0.1
-pct__crop__right=0.1
+pct__crop__top=0
+pct__crop__bottom=0
+pct__crop__left=0.31
+pct__crop__right=0.31
 
 [[ -d "$PATH__DIR__OUTPUT" ]] && rm -r "$PATH__DIR__OUTPUT"
 mkdir -p "$PATH__DIR__OUTPUT"

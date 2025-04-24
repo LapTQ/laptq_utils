@@ -117,6 +117,11 @@ def parse_args():
     ap.add_argument("--list__name_keypoints", type=str)
     ap.add_argument("--task", type=str)
     ap.add_argument("--to_keep__only_max", type=str)
+    ap.add_argument("--to_draw__connected_keypoints", type=str)
+    ap.add_argument("--list__keypoints_same_color", type=str)
+    ap.add_argument("--list__keypoints_edge", type=str)
+    ap.add_argument("--list__edges_same_color", type=str)
+    ap.add_argument("--persist", type=str)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -229,6 +234,27 @@ def parse_args():
     args.to_keep__only_max = (
         eval(args.to_keep__only_max) if args.to_keep__only_max is not None else None
     )
+    args.to_draw__connected_keypoints = (
+        eval(args.to_draw__connected_keypoints)
+        if args.to_draw__connected_keypoints is not None
+        else None
+    )
+    args.list__keypoints_same_color = (
+        eval(args.list__keypoints_same_color)
+        if args.list__keypoints_same_color is not None
+        else None
+    )
+    args.list__keypoints_edge = (
+        eval(args.list__keypoints_edge)
+        if args.list__keypoints_edge is not None
+        else None
+    )
+    args.list__edges_same_color = (
+        eval(args.list__edges_same_color)
+        if args.list__edges_same_color is not None
+        else None
+    )
+    args.persist = eval(args.persist) if args.persist is not None else None
 
     return args
 

@@ -229,7 +229,8 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --thresh__conf__min $THRESH__CONF__MIN \
         --thresh__iou $THRESH__IOU \
         --to_use__yolov5_compat $TO_USE__YOLOv5_COMPAT \
-        --task pose \
+        --task track \
+        --persist True \
         --list__name_keypoints "['nose', 'left_eye', 'right_eye', 'left_ear', 'right_ear', 'left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow', 'left_wrist', 'right_wrist', 'left_hip', 'right_hip', 'left_knee', 'right_knee', 'left_ankle', 'right_ankle']" \
     
     echo -e "${TAG__INFO} Done: ${subpath__dir}"
