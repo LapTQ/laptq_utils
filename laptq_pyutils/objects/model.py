@@ -47,23 +47,20 @@ class UltralyticsPredictor(UltralyticsBasePredictor):
         persist = kwargs["persist"]
         task = kwargs["task"]
 
+        _args = {
+            "source": img__bgr,
+            "imgsz": imgsz,
+            "conf": thresh__conf__min,
+            "iou": thresh__iou,
+            "verbose": False,
+        }
         if task == "track":
             _func = self.model.track
+            _args.update({"persist": persist})
         else:
             _func = self.model.predict
 
-        result_ultralytics = (
-            _func(
-                source=img__bgr,
-                imgsz=imgsz,
-                conf=thresh__conf__min,
-                iou=thresh__iou,
-                persist=persist,
-                verbose=False,
-            )[0]
-            .cpu()
-            .numpy()
-        )
+        result_ultralytics = _func(**_args)[0].cpu().numpy()
 
         boxes = result_ultralytics.boxes
         keypoints = result_ultralytics.keypoints
