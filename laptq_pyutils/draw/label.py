@@ -48,14 +48,8 @@ def draw__image(**kwargs):
     list__obj__name_track = data.get("list__obj__name_track", None)
     list__obj__box_conf = data.get("list__obj__box_conf", None)
     list__obj__id_class = data.get("list__obj__id_class", None)
-    list__obj__action_conf = data.get("list__obj__action_conf", {})
-    list__obj__action_status = data.get(
-        "list__obj__action_status",
-        {
-            id__action: [False] * len(list__obj__box_x1y1whn)
-            for id__action in list__obj__action_conf
-        },
-    )
+    list__obj__action_conf = data.get("list__obj__action_conf", None)
+    list__obj__action_status = data.get("list__obj__action_status", None)
     list__obj__kpts_xyn = data.get("list__obj__kpts_xyn", None)
     list__obj__kpts_conf = data.get("list__obj__kpts_conf", None)
     list__obj__box_x1y1whn_refined = data.get("list__obj__box_x1y1whn_refined", None)
@@ -85,6 +79,13 @@ def draw__image(**kwargs):
         list__obj__box_x1y1whn_refined = [None] * len(list__obj__box_x1y1whn)
     if list__obj__confirmed_status is None:
         list__obj__confirmed_status = [None] * len(list__obj__box_x1y1whn)
+    if list__obj__action_conf is None:
+        list__obj__action_conf = {}
+    if list__obj__action_status is None:
+        list__obj__action_status = {
+            id__action: [False] * len(list__obj__box_x1y1whn)
+            for id__action in list__obj__action_conf
+        }
     map__keypoints__to__idx_color = {}
     if list__keypoints_same_color is not None:
         for i_c, list__name_kpt in enumerate(list__keypoints_same_color):
@@ -153,40 +154,42 @@ def draw__image(**kwargs):
         else:
             raise ValueError("Invalid box_color_by: {}".format(box_color_by))
 
-        if to_draw__box_x1y1whn and box__x1y1whn is not None:
+        if box__x1y1whn is not None:
             x1n, y1n, wn, hn = box__x1y1whn
             x1 = int(x1n * W)
             y1 = int(y1n * H)
             w = int(wn * W)
             h = int(hn * H)
+            x2 = x1 + w
+            y2 = y1 + h
 
-            cv2_rectangle(
-                img__bgr,
-                (x1, y1),
-                (x1 + w, y1 + h),
-                color=color_box,
-                thickness=thickness,
-            )
+            if to_draw__box_x1y1whn:
+                cv2_rectangle(
+                    img__bgr,
+                    (x1, y1),
+                    (x1 + w, y1 + h),
+                    color=color_box,
+                    thickness=thickness,
+                )
 
-        if to_draw__box_polygonn and box__polygonn is not None:
+        if box__polygonn is not None:
             box__polygon = np.array(box__polygonn).reshape(-1, 2)
             box__polygon[:, 0] *= W
             box__polygon[:, 1] *= H
             box__polygon = box__polygon.astype(np.int32)
 
-            cv2_polylines(
-                img__bgr,
-                [box__polygon],
-                isClosed=True,
-                color=color_box,
-                thickness=thickness,
-            )
+            if to_draw__box_polygonn:
+                cv2_polylines(
+                    img__bgr,
+                    [box__polygon],
+                    isClosed=True,
+                    color=color_box,
+                    thickness=thickness,
+                )
 
             x1, y1 = box__polygon[np.argmin(box__polygon[:, 1])]
 
-        _has_box = (to_draw__box_x1y1whn and box__x1y1whn is not None) or (
-            to_draw__box_polygonn and box__polygonn is not None
-        )
+        _has_box = (box__x1y1whn is not None) or (box__polygonn is not None)
 
         if not _has_box:
             continue
@@ -250,18 +253,18 @@ def draw__image(**kwargs):
             thickness=thickness,
         )
 
-        if to_draw__id_action:
+        if to_draw__id_action or to_draw__name_action:
             action_counter = 0
             for id__action, statuses in list__obj__action_status.items():
                 status = statuses[i_obj]
                 if status is True:
                     action_counter += 1
-                    org = (x1 + 3, y1 + 20 * action_counter)
+                    org = (x1 + 3, y2 + 28 * action_counter)
                     msg = (
                         str(id__action)
                         if not to_draw__name_action
                         or id__action not in map__id_action__to__name_action
-                        else '"{}"'.format(map__id_action__to__name_action[id__action])
+                        else "{}".format(map__id_action__to__name_action[id__action])
                     )
                     cv2_putText(
                         img__bgr,

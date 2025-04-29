@@ -1,21 +1,21 @@
-PATH__DIR__VIDEO=/home/laptq/laptq-fs26-shoplifting-detection/data/mendeley/Dataset
+PATH__DIR__VIDEO=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-convert-video-to-images
 
 TO_USE__YOLOv5_COMPAT=False
-PATH__FILE__MODEL=yolov8n-pose.pt
+PATH__FILE__MODEL=yolov8x-pose.pt
 ID__DATA=None
-ID__MODEL=yolov8n-pose
+ID__MODEL=yolov8x-pose
 ID__TRAIN=None
 
 IMGSZ=640
-THRESH__CONF__MIN=0.01
+THRESH__CONF__MIN=0.1
 THRESH__IOU=0.45
 ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN--iou-$THRESH__IOU
 
 DEVICE="cuda:0"
 NUM__PAD__0=9
 
-# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/trivials
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
+# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/trivials
 POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--JSON"
 
 
@@ -112,7 +112,7 @@ declare -A MAP__SUBPATH_VIDEO__TO__=(
     # ["Normal/Normal__90_.mp4"]=""
 
     # ["Shoplifting/Shoplifting__1_.mp4"]=""
-    ["Shoplifting/Shoplifting__2_.mp4"]=""
+    # ["Shoplifting/Shoplifting__2_.mp4"]=""
     # ["Shoplifting/Shoplifting__3_.mp4"]=""
     # ["Shoplifting/Shoplifting__4_.mp4"]=""
     # ["Shoplifting/Shoplifting__5_.mp4"]=""
@@ -204,6 +204,8 @@ declare -A MAP__SUBPATH_VIDEO__TO__=(
     # ["Shoplifting/Shoplifting__91_.mp4"]=""
     # ["Shoplifting/Shoplifting__92_.mp4"]=""
     # ["Shoplifting/Shoplifting__93_.mp4"]=""
+
+    ["shoplifting-25min.mp4"]=""
 )
 
 IFS=$'\n'
