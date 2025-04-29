@@ -1,6 +1,6 @@
-PATH__DIR__VIDEO=/home/laptq/laptq-fs26-shoplifting-detection/outputs/crop--videos
+PATH__DIR__VIDEO=/home/laptq/laptq-fs26-shoplifting-detection/data
 
-PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-convert-video-to-images
+PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
 
 declare -A MAP__NAME_VIDEO__TO__=(
     # ["Normal/Normal__1_.mp4"]=""
@@ -188,7 +188,8 @@ declare -A MAP__NAME_VIDEO__TO__=(
     # ["Shoplifting/Shoplifting__92_.mp4"]=""
     # ["Shoplifting/Shoplifting__93_.mp4"]=""
 
-    ["shoplifting-25min.mp4"]=""
+    # ["shoplifting-25min.mp4"]=""
+    ["satudora-1min.mp4"]=""
 )
 
 IFS=$'\n'

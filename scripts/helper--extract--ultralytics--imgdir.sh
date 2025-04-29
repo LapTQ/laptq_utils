@@ -1,4 +1,4 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-convert-video-to-images
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
 POSTFIX__DIR__IMAGE=""
 
 TO_USE__YOLOv5_COMPAT=False
@@ -204,7 +204,8 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__92_.mp4"]=""
     # ["Shoplifting/Shoplifting__93_.mp4"]=""
 
-    ["shoplifting-25min.mp4"]=""
+    # ["shoplifting-25min.mp4"]=""
+    ["satudora-1min.mp4"]=""
 )
 
 IFS=$'\n'

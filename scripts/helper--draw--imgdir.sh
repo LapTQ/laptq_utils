@@ -1,4 +1,4 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
 POSTFIX__DIR__IMAGE=""
 
 PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict2/20250428-152326--TSSTG_HO--2-kpt-channels
@@ -198,7 +198,8 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__81_.mp4"]=""
     # ["Shoplifting/Shoplifting__91_.mp4"]=""
     
-    ["shoplifting-25min.mp4"]=""
+    # ["shoplifting-25min.mp4"]=""
+    ["satudora-1min.mp4"]=""
 )
 
 IFS=$'\n'

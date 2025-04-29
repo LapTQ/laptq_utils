@@ -4,7 +4,8 @@ POSTFIX__DIR__IMAGE="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDIC
 PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video
 
 declare -A MAP__NAME_VIDEO__TO__=(
-    ["shoplifting-25min.mp4"]=""
+    # ["shoplifting-25min.mp4"]=""
+    ["satudora-1min.mp4"]=""
 )
 
 # [[ -d "${PATH__DIR__VIDEO__OUTPUT}" ]] && rm -r "${PATH__DIR__VIDEO__OUTPUT}"
@@ -22,7 +23,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     path__file__output="${PATH__DIR__VIDEO__OUTPUT}/${name__video}"
 
     ffmpeg \
-        -framerate 15 \
+        -framerate 5 \
         -i "${path__dir__img__input}/%09d.jpg" \
         -c:v libx264 \
         -y \
