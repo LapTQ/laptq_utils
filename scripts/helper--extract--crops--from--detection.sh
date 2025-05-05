@@ -2,7 +2,7 @@ PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-con
 POSTFIX__DIR__IMAGE=""
 
 PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--keypoint-normalized--filterby-size--JSON"
+POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--JSON"
 
 PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection
 POSTFIX__DIR__OUTPUT=""
@@ -192,6 +192,8 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     ["Shoplifting/Shoplifting__91_.mp4"]=""
     ["Shoplifting/Shoplifting__92_.mp4"]=""
     ["Shoplifting/Shoplifting__93_.mp4"]=""
+
+    # ["shoplifting-25min.mp4"]=""
 )
 
 IFS=$'\n'
@@ -219,7 +221,8 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__crop__img__output "${path__dir__crop__img__output}" \
         --path__dir__crop__lbl__output "${path__dir__crop__lbl__output}" \
         --is_ok__lbl_not_exist False \
-        --num__pad__0 6
+        --num__pad__0 6 \
+        --split_by None # '"id__track"' # if not None, please add a "/{}" before /images and /labels assuming there's an /images and /labels in path__dir__crop__img__output and path__dir__crop__lbl__output
     
     echo -e "${TAG__INFO} Done: ${subpath__dir}"
 done

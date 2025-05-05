@@ -9,7 +9,6 @@ from laptq_pyutils.helper import (
     helper__convert__detection__xcycwhn__to__polygonn,
     helper__convert__video__to__images,
     helper__convert__labelstudio_json__to__json,
-    helper__normalize__keypoint__wrt__box,
     helper__filter__detection__result__by__conf,
     helper__filter__detection__result__by__id_class,
     helper__filter__detection__result__by__miniou,
@@ -80,6 +79,8 @@ def parse_args():
     ap.add_argument("--to_draw__id_class", choices=["True", "False"])
     ap.add_argument("--to_draw__name_class", choices=["True", "False"])
     ap.add_argument("--to_draw__pose", choices=["True", "False"])
+    ap.add_argument("--to_draw__id_action", choices=["True", "False"])
+    ap.add_argument("--to_draw__name_action", choices=["True", "False"])
     ap.add_argument("--to_save__img", type=str)
     ap.add_argument("--fontScale", type=float)
     ap.add_argument("--thickness", type=int)
@@ -94,6 +95,7 @@ def parse_args():
     ap.add_argument("--is_ok__key_not_exist", type=str)
     ap.add_argument("--fourcc", type=str)
     ap.add_argument("--path__file__map__id_class__to__name_class", type=str)
+    ap.add_argument("--path__file__map__id_action__to__name_action", type=str)
     ap.add_argument("--filter_by", type=str)
     ap.add_argument("--ratio__w", type=float)
     ap.add_argument("--ratio__h", type=float)
@@ -117,6 +119,12 @@ def parse_args():
     ap.add_argument("--list__name_keypoints", type=str)
     ap.add_argument("--task", type=str)
     ap.add_argument("--to_keep__only_max", type=str)
+    ap.add_argument("--to_draw__connected_keypoints", type=str)
+    ap.add_argument("--list__keypoints_same_color", type=str)
+    ap.add_argument("--list__keypoints_edge", type=str)
+    ap.add_argument("--list__edges_same_color", type=str)
+    ap.add_argument("--persist", type=str)
+    ap.add_argument("--split_by", type=str)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -229,6 +237,36 @@ def parse_args():
     args.to_keep__only_max = (
         eval(args.to_keep__only_max) if args.to_keep__only_max is not None else None
     )
+    args.to_draw__connected_keypoints = (
+        eval(args.to_draw__connected_keypoints)
+        if args.to_draw__connected_keypoints is not None
+        else None
+    )
+    args.list__keypoints_same_color = (
+        eval(args.list__keypoints_same_color)
+        if args.list__keypoints_same_color is not None
+        else None
+    )
+    args.list__keypoints_edge = (
+        eval(args.list__keypoints_edge)
+        if args.list__keypoints_edge is not None
+        else None
+    )
+    args.list__edges_same_color = (
+        eval(args.list__edges_same_color)
+        if args.list__edges_same_color is not None
+        else None
+    )
+    args.persist = eval(args.persist) if args.persist is not None else None
+    args.to_draw__id_action = (
+        eval(args.to_draw__id_action) if args.to_draw__id_action is not None else None
+    )
+    args.to_draw__name_action = (
+        eval(args.to_draw__name_action)
+        if args.to_draw__name_action is not None
+        else None
+    )
+    args.split_by = eval(args.split_by) if args.split_by is not None else None
 
     return args
 

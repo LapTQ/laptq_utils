@@ -1,8 +1,7 @@
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import (
     ListAligner,
-    UltralyticsDetectPredictor,
-    UltralyticsPosePredictor,
+    UltralyticsPredictor,
     YOLOv5CompatDetectPredictor,
 )
 from laptq_pyutils.log import load_logger
@@ -27,18 +26,15 @@ def parse__ultralytics_model(**kwargs):
     task = kwargs["task"]
     to_use__yolov5_compat = kwargs["to_use__yolov5_compat"]
 
-    assert task in ["detect", "pose"]
+    assert task in ["detect", "pose", "track"]
 
     if to_use__yolov5_compat:
         if task == "detect":
             model = YOLOv5CompatDetectPredictor(**kwargs)
-        elif task == "pose":
-            raise NotImplementedError("Keypoint task is not supported yet.")
+        else:
+            raise NotImplementedError("Task {} is not supported yet.".format(task))
     else:
-        if task == "detect":
-            model = UltralyticsDetectPredictor(**kwargs)
-        elif task == "pose":
-            model = UltralyticsPosePredictor(**kwargs)
+        model = UltralyticsPredictor(**kwargs)
 
     return model
 
@@ -142,52 +138,6 @@ def helper__extract__ultralytics__video(**kwargs):
             )
         pbar.set_postfix(time__inference=log__time["time__inference"])
         pbar.update(1)
-
-
-def helper__normalize__keypoint__wrt__box(**kwargs):
-
-    import json
-    from tqdm import tqdm
-    import os
-
-    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
-    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
-
-    os.makedirs(path__dir__lbl__output, exist_ok=True)
-
-    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
-        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
-        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
-
-        with open(path__file__lbl__input, "r") as f:
-            dict__result = json.load(f)
-
-        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
-
-        list__obj__box_xcycwhn = list_aligner__result.get__key("list__obj__box_xcycwhn")
-        list__obj__kpts_xyn = list_aligner__result.get__key("list__obj__kpts_xyn")
-        for i_obj, (box_xcycwhn, kpts_xyn) in enumerate(
-            zip(list__obj__box_xcycwhn, list__obj__kpts_xyn)
-        ):
-            if kpts_xyn is None:
-                continue
-
-            b_xcn = box_xcycwhn[0]
-            b_ycn = box_xcycwhn[1]
-            b_wn = box_xcycwhn[2]
-            b_hn = box_xcycwhn[3]
-            b_x1n = b_xcn - b_wn / 2
-            b_y1n = b_ycn - b_hn / 2
-            for kname, (k_xn, k_yn) in kpts_xyn.items():
-                if k_xn == 0 and k_yn == 0:
-                    continue
-                k_xn = (k_xn - b_x1n) / b_wn
-                k_yn = (k_yn - b_y1n) / b_hn
-                kpts_xyn[kname] = [k_xn, k_yn]
-
-        dict__result = list_aligner__result.item()
-        with open(path__file__lbl__output, "w") as f:
-            json.dump(dict__result, f, indent=4)
 
 
 def helper__filter__detection__result__by__id_class(**kwargs):
@@ -414,8 +364,12 @@ def helper__draw__imgdir(**kwargs):
     seed = kwargs["seed"]
     is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
     to_draw__name_class = kwargs["to_draw__name_class"]
+    to_draw__name_action = kwargs["to_draw__name_action"]
     path__file__map__id_class__to__name_class = kwargs[
         "path__file__map__id_class__to__name_class"
+    ]
+    path__file__map__id_action__to__name_action = kwargs[
+        "path__file__map__id_action__to__name_action"
     ]
     to_concat__original_img = kwargs["to_concat__original_img"]
     concat__axis = kwargs["concat__axis"]
@@ -451,6 +405,12 @@ def helper__draw__imgdir(**kwargs):
     else:
         map__id_class__to__name_class = {}
 
+    if to_draw__name_action:
+        with open(path__file__map__id_action__to__name_action, "r") as f:
+            map__id_action__to__name_action = yaml.safe_load(f)
+    else:
+        map__id_action__to__name_action = {}
+
     for i_f in tqdm(list__index__sample):
         name__file__img = list__name__file__img[i_f]
         path__file__lbl = list__path__file__lbl[i_f]
@@ -473,20 +433,32 @@ def helper__draw__imgdir(**kwargs):
                 "list__obj__box_polygonn": dict__result.get(
                     "list__obj__box_polygonn", None
                 ),
+                "list__obj__id_track": dict__result.get("list__obj__id_track", None),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result.get("list__obj__box_conf", None),
                 "list__obj__kpts_xyn": (
-                    [_.values() for _ in dict__result["list__obj__kpts_xyn"]]
+                    dict__result["list__obj__kpts_xyn"]
                     if "list__obj__kpts_xyn" in dict__result
                     else None
                 ),
                 "list__obj__kpts_conf": (
-                    [_.values() for _ in dict__result["list__obj__kpts_conf"]]
+                    dict__result["list__obj__kpts_conf"]
                     if "list__obj__kpts_conf" in dict__result
+                    else None
+                ),
+                "list__obj__action_conf": (
+                    dict__result["list__obj__action_conf"]
+                    if "list__obj__action_conf" in dict__result
+                    else None
+                ),
+                "list__obj__action_status": (
+                    dict__result["list__obj__action_status"]
+                    if "list__obj__action_status" in dict__result
                     else None
                 ),
             },
             map__id_class__to__name_class=map__id_class__to__name_class,
+            map__id_action__to__name_action=map__id_action__to__name_action,
             **kwargs,
         )
 
@@ -512,9 +484,13 @@ def helper__draw__video(**kwargs):
     path__file__output = kwargs["path__file__output"]
     num__pad__0 = kwargs["num__pad__0"]
     to_draw__name_class = kwargs["to_draw__name_class"]
+    to_draw__name_action = kwargs["to_draw__name_action"]
     fourcc = kwargs["fourcc"]
     path__file__map__id_class__to__name_class = kwargs[
         "path__file__map__id_class__to__name_class"
+    ]
+    path__file__map__id_action__to__name_action = kwargs[
+        "path__file__map__id_action__to__name_action"
     ]
     to_concat__original_img = kwargs["to_concat__original_img"]
 
@@ -523,6 +499,12 @@ def helper__draw__video(**kwargs):
             map__id_class__to__name_class = yaml.safe_load(f)
     else:
         map__id_class__to__name_class = {}
+
+    if to_draw__name_action:
+        with open(path__file__map__id_action__to__name_action, "r") as f:
+            map__id_action__to__name_action = yaml.safe_load(f)
+    else:
+        map__id_action__to__name_action = {}
 
     cap = cv2.VideoCapture(path__file__video__input)
 
@@ -563,20 +545,32 @@ def helper__draw__video(**kwargs):
                 "list__obj__box_polygonn": dict__result.get(
                     "list__obj__box_polygonn", None
                 ),
+                "list__obj__id_track": dict__result.get("list__obj__id_track", None),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result["list__obj__box_conf"],
                 "list__obj__kpts_xyn": (
-                    [_.values() for _ in dict__result["list__obj__kpts_xyn"]]
+                    dict__result["list__obj__kpts_xyn"]
                     if "list__obj__kpts_xyn" in dict__result
                     else None
                 ),
                 "list__obj__kpts_conf": (
-                    [_.values() for _ in dict__result["list__obj__kpts_conf"]]
+                    dict__result["list__obj__kpts_conf"]
                     if "list__obj__kpts_conf" in dict__result
+                    else None
+                ),
+                "list__obj__action_conf": (
+                    dict__result["list__obj__action_conf"]
+                    if "list__obj__action_conf" in dict__result
+                    else None
+                ),
+                "list__obj__action_status": (
+                    dict__result["list__obj__action_status"]
+                    if "list__obj__action_status" in dict__result
                     else None
                 ),
             },
             map__id_class__to__name_class=map__id_class__to__name_class,
+            map__id_action__to__name_action=map__id_action__to__name_action,
             **kwargs,
         )
 
@@ -1321,9 +1315,9 @@ def helper__extract__crops__from__detection(**kwargs):
     path__dir__crop__lbl__output = kwargs["path__dir__crop__lbl__output"]
     is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
     num__pad__0 = kwargs["num__pad__0"]
+    split_by = kwargs["split_by"]
 
-    os.makedirs(path__dir__crop__img__output, exist_ok=True)
-    os.makedirs(path__dir__crop__lbl__output, exist_ok=True)
+    assert split_by in [None, "id__track", "id__class"]
 
     for name__file__img in tqdm(sorted(os.listdir(path__dir__img__input))):
         name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
@@ -1343,26 +1337,64 @@ def helper__extract__crops__from__detection(**kwargs):
         H, W = img.shape[:2]
 
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
-        for i_obj, box_xcycwhn in enumerate(list__obj__box_xcycwhn):
-            xcn, ycn, wn, hn = box_xcycwhn
-            x1n = xcn - wn / 2
-            y1n = ycn - hn / 2
-            x2n = x1n + wn
-            y2n = y1n + hn
+        list__obj__id_track = dict__result.get(
+            "list__obj__id_track", [None] * len(list__obj__box_xcycwhn)
+        )
+        list__obj__id_class = dict__result.get(
+            "list__obj__id_class", [None] * len(list__obj__box_xcycwhn)
+        )
+        list__obj__kpts_xyn = dict__result.get(
+            "list__obj__kpts_xyn", [None] * len(list__obj__box_xcycwhn)
+        )
+        for i_obj, (id__track, id__class, box_xcycwhn, kpts_xyn) in enumerate(
+            zip(list__obj__id_track, list__obj__id_class, list__obj__box_xcycwhn, list__obj__kpts_xyn)
+        ):
+            b_xcn, b_ycn, b_wn, b_hn = box_xcycwhn
+            b_x1n = b_xcn - b_wn / 2
+            b_y1n = b_ycn - b_hn / 2
+            b_x2n = b_x1n + b_wn
+            b_y2n = b_y1n + b_hn
 
-            x1 = int(x1n * W)
-            y1 = int(y1n * H)
-            x2 = int(x2n * W)
-            y2 = int(y2n * H)
+            # get croped patch
+            b_x1 = int(b_x1n * W)
+            b_y1 = int(b_y1n * H)
+            b_x2 = int(b_x2n * W)
+            b_y2 = int(b_y2n * H)
+            crop_img = img[b_y1:b_y2, b_x1:b_x2]
 
-            box_xcycwhn[0] = 0
-            box_xcycwhn[1] = 0
+            # shift keypoints
+            if kpts_xyn is not None:
+                for kname, (k_xn, k_yn) in kpts_xyn.items():
+                    if k_xn == 0 and k_yn == 0:
+                        continue
+                    k_xn = (k_xn - b_x1n) / b_wn
+                    k_yn = (k_yn - b_y1n) / b_hn
+                    kpts_xyn[kname] = [k_xn, k_yn]
+
+            # shift box
+            box_xcycwhn[0] = 0.5
+            box_xcycwhn[1] = 0.5
             box_xcycwhn[2] = 1
             box_xcycwhn[3] = 1
 
-            crop_img = img[y1:y2, x1:x2]
+            if split_by is not None: 
+                if split_by == "id__track":
+                    subpathd = str(id__track)
+                elif split_by == "id__class":
+                    subpathd = str(id__class)
+                
+                # assuming path__dir__crop__img__output has a {} placeholder
+                __path__dir__crop__img__output = path__dir__crop__img__output.format(subpathd)
+                __path__dir__crop__lbl__output = path__dir__crop__lbl__output.format(subpathd)
+            else:
+                __path__dir__crop__img__output = path__dir__crop__img__output
+                __path__dir__crop__lbl__output = path__dir__crop__lbl__output
+                
+            os.makedirs(__path__dir__crop__img__output, exist_ok=True)
+            os.makedirs(__path__dir__crop__lbl__output, exist_ok=True)
+
             path__file__crop__img__output = os.path.join(
-                path__dir__crop__img__output,
+                __path__dir__crop__img__output,
                 "{}--crop-{:0{}}.jpg".format(
                     os.path.splitext(name__file__img)[0], i_obj, num__pad__0
                 ),
@@ -1373,8 +1405,8 @@ def helper__extract__crops__from__detection(**kwargs):
                 k: dict__result[k][i_obj : i_obj + 1] for k in dict__result
             }
             path__file__crop__lbl__output = os.path.join(
-                path__dir__crop__lbl__output,
-                "{}--{:0{}}.json".format(
+                __path__dir__crop__lbl__output,
+                "{}--crop-{:0{}}.json".format(
                     os.path.splitext(name__file__img)[0], i_obj, num__pad__0
                 ),
             )

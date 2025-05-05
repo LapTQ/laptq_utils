@@ -7,7 +7,6 @@ from .detection import (
     helper__convert__result__coco__to__json,
     helper__convert__labelstudio_json__to__json,
     helper__convert__detection__xcycwhn__to__polygonn,
-    helper__normalize__keypoint__wrt__box,
     helper__filter__detection__result__by__conf,
     helper__filter__detection__result__by__id_class,
     helper__filter__detection__result__by__miniou,

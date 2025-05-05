@@ -1,20 +1,21 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection
-POSTFIX__DIR__IMAGE="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.2--iou-0.45--keypoint-normalized--filterby-roi--extract-crops--JSON"
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
+POSTFIX__DIR__IMAGE=""
 
-PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection
-POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.2--iou-0.45--keypoint-normalized--filterby-roi--extract-crops--JSON"
+PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict2/20250428-152326--TSSTG_HO--2-kpt-channels
+POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--STGCN--JSON"
 
-NUM__MAX__IMG__TO__VISUALIZE=20
+NUM__MAX__IMG__TO__VISUALIZE=None
 IS_OK__LBL_NOT_FOUND=False
-PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection
+PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict2/20250428-152326--TSSTG_HO--2-kpt-channels
+
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
+PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/action_names.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Normal/Normal__1_.mp4"]=""
     # ["Normal/Normal__2_.mp4"]=""
     # ["Normal/Normal__3_.mp4"]=""
     # ["Normal/Normal__4_.mp4"]=""
-    ["Normal/Normal__5_.mp4"]=""
     # ["Normal/Normal__6_.mp4"]=""
     # ["Normal/Normal__7_.mp4"]=""
     # ["Normal/Normal__8_.mp4"]=""
@@ -30,7 +31,6 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Normal/Normal__18_.mp4"]=""
     # ["Normal/Normal__19_.mp4"]=""
     # ["Normal/Normal__20_.mp4"]=""
-    # ["Normal/Normal__21_.mp4"]=""
     # ["Normal/Normal__22_.mp4"]=""
     # ["Normal/Normal__23_.mp4"]=""
     # ["Normal/Normal__24_.mp4"]=""
@@ -57,7 +57,6 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Normal/Normal__45_.mp4"]=""
     # ["Normal/Normal__46_.mp4"]=""
     # ["Normal/Normal__47_.mp4"]=""
-    # ["Normal/Normal__48_.mp4"]=""
     # ["Normal/Normal__49_.mp4"]=""
     # ["Normal/Normal__50_.mp4"]=""
     # ["Normal/Normal__51_.mp4"]=""
@@ -77,13 +76,11 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Normal/Normal__65_.mp4"]=""
     # ["Normal/Normal__66_.mp4"]=""
     # ["Normal/Normal__67_.mp4"]=""
-    # ["Normal/Normal__68_.mp4"]=""
     # ["Normal/Normal__69_.mp4"]=""
     # ["Normal/Normal__70_.mp4"]=""
     # ["Normal/Normal__71_.mp4"]=""
     # ["Normal/Normal__72_.mp4"]=""
     # ["Normal/Normal__73_.mp4"]=""
-    # ["Normal/Normal__74_.mp4"]=""
     # ["Normal/Normal__75_.mp4"]=""
     # ["Normal/Normal__76_.mp4"]=""
     # ["Normal/Normal__77_.mp4"]=""
@@ -109,22 +106,18 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__6_.mp4"]=""
     # ["Shoplifting/Shoplifting__7_.mp4"]=""
     # ["Shoplifting/Shoplifting__8_.mp4"]=""
-    # ["Shoplifting/Shoplifting__9_.mp4"]=""
     # ["Shoplifting/Shoplifting__10_.mp4"]=""
     # ["Shoplifting/Shoplifting__11_.mp4"]=""
     # ["Shoplifting/Shoplifting__12_.mp4"]=""
     # ["Shoplifting/Shoplifting__13_.mp4"]=""
     # ["Shoplifting/Shoplifting__14_.mp4"]=""
     # ["Shoplifting/Shoplifting__15_.mp4"]=""
-    # ["Shoplifting/Shoplifting__16_.mp4"]=""
-    # ["Shoplifting/Shoplifting__17_.mp4"]=""
     # ["Shoplifting/Shoplifting__18_.mp4"]=""
     # ["Shoplifting/Shoplifting__19_.mp4"]=""
     # ["Shoplifting/Shoplifting__20_.mp4"]=""
     # ["Shoplifting/Shoplifting__21_.mp4"]=""
     # ["Shoplifting/Shoplifting__22_.mp4"]=""
     # ["Shoplifting/Shoplifting__23_.mp4"]=""
-    # ["Shoplifting/Shoplifting__24_.mp4"]=""
     # ["Shoplifting/Shoplifting__25_.mp4"]=""
     # ["Shoplifting/Shoplifting__26_.mp4"]=""
     # ["Shoplifting/Shoplifting__27_.mp4"]=""
@@ -133,7 +126,6 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__30_.mp4"]=""
     # ["Shoplifting/Shoplifting__31_.mp4"]=""
     # ["Shoplifting/Shoplifting__32_.mp4"]=""
-    # ["Shoplifting/Shoplifting__33_.mp4"]=""
     # ["Shoplifting/Shoplifting__34_.mp4"]=""
     # ["Shoplifting/Shoplifting__35_.mp4"]=""
     # ["Shoplifting/Shoplifting__36_.mp4"]=""
@@ -144,13 +136,10 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__41_.mp4"]=""
     # ["Shoplifting/Shoplifting__42_.mp4"]=""
     # ["Shoplifting/Shoplifting__43_.mp4"]=""
-    # ["Shoplifting/Shoplifting__44_.mp4"]=""
     # ["Shoplifting/Shoplifting__45_.mp4"]=""
-    # ["Shoplifting/Shoplifting__46_.mp4"]=""
     # ["Shoplifting/Shoplifting__47_.mp4"]=""
     # ["Shoplifting/Shoplifting__48_.mp4"]=""
     # ["Shoplifting/Shoplifting__49_.mp4"]=""
-    # ["Shoplifting/Shoplifting__50_.mp4"]=""
     # ["Shoplifting/Shoplifting__51_.mp4"]=""
     # ["Shoplifting/Shoplifting__52_.mp4"]=""
     # ["Shoplifting/Shoplifting__53_.mp4"]=""
@@ -160,7 +149,6 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__57_.mp4"]=""
     # ["Shoplifting/Shoplifting__58_.mp4"]=""
     # ["Shoplifting/Shoplifting__59_.mp4"]=""
-    # ["Shoplifting/Shoplifting__60_.mp4"]=""
     # ["Shoplifting/Shoplifting__61_.mp4"]=""
     # ["Shoplifting/Shoplifting__62_.mp4"]=""
     # ["Shoplifting/Shoplifting__63_.mp4"]=""
@@ -169,7 +157,6 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__66_.mp4"]=""
     # ["Shoplifting/Shoplifting__67_.mp4"]=""
     # ["Shoplifting/Shoplifting__68_.mp4"]=""
-    # ["Shoplifting/Shoplifting__69_.mp4"]=""
     # ["Shoplifting/Shoplifting__70_.mp4"]=""
     # ["Shoplifting/Shoplifting__71_.mp4"]=""
     # ["Shoplifting/Shoplifting__72_.mp4"]=""
@@ -178,10 +165,8 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__75_.mp4"]=""
     # ["Shoplifting/Shoplifting__76_.mp4"]=""
     # ["Shoplifting/Shoplifting__77_.mp4"]=""
-    # ["Shoplifting/Shoplifting__78_.mp4"]=""
     # ["Shoplifting/Shoplifting__79_.mp4"]=""
     # ["Shoplifting/Shoplifting__80_.mp4"]=""
-    # ["Shoplifting/Shoplifting__81_.mp4"]=""
     # ["Shoplifting/Shoplifting__82_.mp4"]=""
     # ["Shoplifting/Shoplifting__83_.mp4"]=""
     # ["Shoplifting/Shoplifting__84_.mp4"]=""
@@ -191,9 +176,29 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__88_.mp4"]=""
     # ["Shoplifting/Shoplifting__89_.mp4"]=""
     # ["Shoplifting/Shoplifting__90_.mp4"]=""
-    # ["Shoplifting/Shoplifting__91_.mp4"]=""
     # ["Shoplifting/Shoplifting__92_.mp4"]=""
     # ["Shoplifting/Shoplifting__93_.mp4"]=""
+    
+    # ["Normal/Normal__5_.mp4"]=""
+    # ["Normal/Normal__21_.mp4"]=""
+    # ["Normal/Normal__48_.mp4"]=""
+    # ["Normal/Normal__68_.mp4"]=""
+    # ["Normal/Normal__74_.mp4"]=""
+    # ["Shoplifting/Shoplifting__9_.mp4"]=""
+    # ["Shoplifting/Shoplifting__16_.mp4"]=""
+    # ["Shoplifting/Shoplifting__17_.mp4"]=""
+    # ["Shoplifting/Shoplifting__24_.mp4"]=""
+    # ["Shoplifting/Shoplifting__33_.mp4"]=""
+    # ["Shoplifting/Shoplifting__44_.mp4"]=""
+    # ["Shoplifting/Shoplifting__46_.mp4"]=""
+    # ["Shoplifting/Shoplifting__50_.mp4"]=""
+    # ["Shoplifting/Shoplifting__60_.mp4"]=""
+    # ["Shoplifting/Shoplifting__69_.mp4"]=""
+    # ["Shoplifting/Shoplifting__78_.mp4"]=""
+    # ["Shoplifting/Shoplifting__81_.mp4"]=""
+    # ["Shoplifting/Shoplifting__91_.mp4"]=""
+    
+    ["shoplifting-25min.mp4"]=""
 )
 
 IFS=$'\n'
@@ -219,19 +224,28 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__output "${path__dir__output}" \
         --to_concat__original_img False \
         --concat__axis 1 \
+        --to_draw__id_track True \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
-        --to_draw__box_conf True \
+        --to_draw__box_conf False \
         --to_draw__id_class False \
         --to_draw__name_class False \
         --to_draw__pose True \
-        --fontScale 2 \
+        --to_draw__connected_keypoints True \
+        --to_draw__id_action False \
+        --to_draw__name_action True \
+        --fontScale 1 \
         --thickness 2 \
-        --box_color_by id__class \
+        --box_color_by id__track \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
+        --path__file__map__id_action__to__name_action $PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION \
         --num__max__img $NUM__MAX__IMG__TO__VISUALIZE \
         --seed 42 \
-        --is_ok__lbl_not_exist $IS_OK__LBL_NOT_FOUND
+        --is_ok__lbl_not_exist $IS_OK__LBL_NOT_FOUND \
+        --path__file__map__id_class__to__name_class /home/laptq/Downloads/class_name.yaml \
+        --list__keypoints_same_color "[['left_eye', 'right_eye', 'left_ear', 'right_ear'],['left_shoulder', 'right_shoulder', 'left_hip', 'right_hip'],['left_elbow', 'right_elbow', 'left_wrist', 'right_wrist'],['left_knee', 'right_knee', 'left_ankle', 'right_ankle']]" \
+        --list__keypoints_edge "[['nose', 'left_eye'],['nose', 'right_eye'],['left_eye', 'left_ear'],['right_eye', 'right_ear'],['left_shoulder', 'right_shoulder'],['left_hip', 'right_hip'],['left_shoulder', 'left_hip'],['right_shoulder', 'right_hip'],['left_shoulder', 'left_elbow'],['right_shoulder', 'right_elbow'],['left_elbow', 'left_wrist'],['right_elbow', 'right_wrist'],['left_hip', 'left_knee'],['right_hip', 'right_knee'],['left_knee', 'left_ankle'],['right_knee', 'right_ankle']]" \
+        --list__edges_same_color "[[['nose', 'left_eye'],['nose', 'right_eye'],['left_eye', 'left_ear'],['right_eye', 'right_ear']], [['left_shoulder', 'right_shoulder'],['left_hip', 'right_hip'],['left_shoulder', 'left_hip'],['right_shoulder', 'right_hip']], [['left_shoulder', 'left_elbow'],['right_shoulder', 'right_elbow'],['left_elbow', 'left_wrist'],['right_elbow', 'right_wrist']], [['left_hip', 'left_knee'],['right_hip', 'right_knee'],['left_knee', 'left_ankle'],['right_knee', 'right_ankle']]]" \
 
 
     num__lbl=$(find "${path__dir__lbl}/" -mindepth 1 -maxdepth 1 -type f | wc -l)

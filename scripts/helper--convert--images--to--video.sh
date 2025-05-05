@@ -1,13 +1,10 @@
-PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-21/outputs/20250220--visualized
-POSTFIX__DIR__IMAGE="--PRED--DATA--data--synthetic--syn-text2image-satudora-center--satudora-center-box--paste-not-person--MODEL--yolov5s--832--scale-0.5--multiscale-True--TRAIN--train--PREDICT--imgsz-832--conf-0.1--JSON"
+PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict2/20250428-152326--TSSTG_HO--2-kpt-channels
+POSTFIX__DIR__IMAGE="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--STGCN--JSON"
 
-PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250220--frames-to-video-2
+PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video
 
 declare -A MAP__NAME_VIDEO__TO__=(
-    ["1_2024-11-26_081159_0.mp4"]=""
-    ["1_2024-11-26_081159_1.mp4"]=""
-    ["1_2024-11-26_081159_2.mp4"]=""
-    ["1_2024-11-26_081159_3.mp4"]=""
+    ["shoplifting-25min.mp4"]=""
 )
 
 # [[ -d "${PATH__DIR__VIDEO__OUTPUT}" ]] && rm -r "${PATH__DIR__VIDEO__OUTPUT}"
@@ -25,11 +22,14 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     path__file__output="${PATH__DIR__VIDEO__OUTPUT}/${name__video}"
 
     ffmpeg \
-        -framerate 5 \
-        -i "${path__dir__img__input}/%06d.jpg" \
+        -framerate 15 \
+        -i "${path__dir__img__input}/%09d.jpg" \
         -c:v libx264 \
+        -y \
         -pix_fmt yuv420p \
         "$path__file__output"
     
     echo -e "${TAG__INFO} Done: ${name__video}"
 done
+
+# -pattern_type glob -i "${path__dir__img__input}/*.jpg"

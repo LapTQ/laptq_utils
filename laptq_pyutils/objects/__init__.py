@@ -1,7 +1,6 @@
 from .general import ListAligner
 from .model import (
-    UltralyticsDetectPredictor,
-    UltralyticsPosePredictor,
+    UltralyticsPredictor,
     YOLOv5CompatDetectPredictor,
     TensorRTPredictor,
 )
