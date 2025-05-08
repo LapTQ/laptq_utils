@@ -1,7 +1,7 @@
 # PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN
 # PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/major_vote_action
-PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/trivials/1
-PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/trivials/2
+PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/trivials
+PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN
 
 PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/concat--videos
 
@@ -70,9 +70,8 @@ declare -A MAP__NAME_VIDEO__TO__=(
     # ["Shoplifting/Shoplifting__93_.mp4"]=""
     # ["Shoplifting/Shoplifting__9_.mp4"]=""
     
-    # ["shoplifting-25min.mp4"]=""
+    ["shoplifting-25min.mp4"]=""
     # ["satudora-1min.mp4"]=""
-    ["output.mp4"]=""
 )
 
 for name__file in "${!MAP__NAME_VIDEO__TO__[@]}"; do
