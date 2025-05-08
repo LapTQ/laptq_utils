@@ -90,11 +90,11 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
 
     ffmpeg \
         -framerate 15 \
+        -pattern_type glob -i "${path__dir__img__input}/*.jpg" \
         -c:v libx264 \
         -y \
         -pix_fmt yuv420p \
         "$path__file__output" \
-        -pattern_type glob -i "${path__dir__img__input}/*.jpg"
         # -i "${path__dir__img__input}/%09d.jpg" \
     
     echo -e "${TAG__INFO} Done: ${name__video}"

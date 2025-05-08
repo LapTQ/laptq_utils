@@ -217,7 +217,7 @@ class YOLOv5CompatDetectPredictor(BaseModel):
 
 class TensorRTPredictor:
 
-    def __init__(self, model_path):
+    def __init__(self, model_path, max_dynmic_shape):
         self.logger = trt.Logger(trt.Logger.INFO)
 
         with open(model_path, "rb") as f, trt.Runtime(self.logger) as runtime:
@@ -231,7 +231,12 @@ class TensorRTPredictor:
             ts_dtype = self.model.get_tensor_dtype(ts_name)
             ts_shape = self.model.get_tensor_shape(ts_name)
             ts_size = np.dtype(trt.nptype(ts_dtype)).itemsize
+
+            if max_dynmic_shape is not None and ts_name in max_dynmic_shape:
+                ts_shape = max_dynmic_shape[ts_name]
+
             for s in ts_shape:
+                assert s > 0, f"TensorRT shape dimension for {ts_name} must be greater than 0, got {s}"
                 ts_size *= s
             allocation = cuda.mem_alloc(ts_size)
             binding = {
@@ -274,7 +279,13 @@ class TensorRTPredictor:
             cuda.memcpy_htod(
                 self.io_bindings[name]["allocation"], np.ascontiguousarray(inputs[name])
             )
+            self.context.set_input_shape(
+                self.io_bindings[name]["name"], inputs[name].shape
+            )
+
         self.context.execute_v2(self.allocations)
+
         for name in outputs:
             cuda.memcpy_dtoh(outputs[name], self.io_bindings[name]["allocation"])
+
         return outputs
