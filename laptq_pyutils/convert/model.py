@@ -78,4 +78,4 @@ def convert_onnx_to_tensorrt(**kwargs):
     # Serialize and save the engine
     with open(path__file__output, "wb") as file:
         file.write(engine.serialize())
-    LOGGER.success("TensorRT engine is saved at:".format(path__file__output))
+    LOGGER.success("TensorRT engine is saved at: {}".format(path__file__output))
