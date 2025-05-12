@@ -1,4 +1,5 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
+# PATH__DIR__IMAGE=helper--convert--video--to--images
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs
 POSTFIX__DIR__IMAGE=""
 
 TO_USE__YOLOv5_COMPAT=False
@@ -206,7 +207,39 @@ declare -A MAP__SUBPATH_DIR__TO__=(
 
     # ["shoplifting-25min.mp4"]=""
     # ["satudora-1min.mp4"]=""
-    ["1568080723085_67014_fix.mkv"]=""
+    # ["1568080723085_67014_fix.mkv"]=""
+
+    # ["roboflow-data/filtered--w-label/0"]=""
+    # ["roboflow-data/filtered--w-label/1"]=""
+    # ["roboflow-data/filtered--w-label/2"]=""
+    # ["roboflow-data/filtered--w-label/3"]=""
+    # ["roboflow-data/filtered--w-label/4"]=""
+    # ["roboflow-data/filtered--w-label/5"]=""
+    # ["roboflow-data/filtered--w-label/6"]=""
+    # ["roboflow-data/filtered--w-label/7"]=""
+    # ["roboflow-data/filtered--w-label/8"]=""
+    # ["roboflow-data/filtered--w-label/9"]=""
+    # ["roboflow-data/filtered--w-label/10"]=""
+    # ["roboflow-data/filtered--w-label/11"]=""
+    # ["roboflow-data/filtered--w-label/12"]=""
+    # ["roboflow-data/filtered--w-label/13"]=""
+    # ["roboflow-data/filtered--w-label/14"]=""
+    # ["roboflow-data/filtered--w-label/15"]=""
+    # ["roboflow-data/filtered--w-label/16"]=""
+    # ["roboflow-data/filtered--w-label/17"]=""
+    # ["roboflow-data/filtered--w-label/18"]=""
+    # ["roboflow-data/filtered--w-label/19"]=""
+    # ["roboflow-data/filtered--w-label/20"]=""
+    # ["roboflow-data/filtered--w-label/21"]=""
+
+    ["roboflow-data/filtered--wo-label/2"]=""
+    ["roboflow-data/filtered--wo-label/3"]=""
+    ["roboflow-data/filtered--wo-label/4"]=""
+    ["roboflow-data/filtered--wo-label/5"]=""
+    ["roboflow-data/filtered--wo-label/6"]=""
+    ["roboflow-data/filtered--wo-label/7"]=""
+    ["roboflow-data/filtered--wo-label/8"]=""
+    ["roboflow-data/filtered--wo-label/10"]=""
 )
 
 IFS=$'\n'
