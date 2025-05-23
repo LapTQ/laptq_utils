@@ -1,5 +1,4 @@
-# PATH__DIR__IMAGE=helper--convert--video--to--images
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
 POSTFIX__DIR__IMAGE=""
 
 TO_USE__YOLOv5_COMPAT=False
@@ -232,14 +231,17 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["roboflow-data/filtered--w-label/20"]=""
     # ["roboflow-data/filtered--w-label/21"]=""
 
-    ["roboflow-data/filtered--wo-label/2"]=""
-    ["roboflow-data/filtered--wo-label/3"]=""
-    ["roboflow-data/filtered--wo-label/4"]=""
-    ["roboflow-data/filtered--wo-label/5"]=""
-    ["roboflow-data/filtered--wo-label/6"]=""
-    ["roboflow-data/filtered--wo-label/7"]=""
-    ["roboflow-data/filtered--wo-label/8"]=""
-    ["roboflow-data/filtered--wo-label/10"]=""
+    # ["roboflow-data/filtered--wo-label/2"]=""
+    # ["roboflow-data/filtered--wo-label/3"]=""
+    # ["roboflow-data/filtered--wo-label/4"]=""
+    # ["roboflow-data/filtered--wo-label/5"]=""
+    # ["roboflow-data/filtered--wo-label/6"]=""
+    # ["roboflow-data/filtered--wo-label/7"]=""
+    # ["roboflow-data/filtered--wo-label/8"]=""
+    # ["roboflow-data/filtered--wo-label/10"]=""
+
+
+    ["shoplifting-1min_anonymized.mp4"]=""
 )
 
 IFS=$'\n'

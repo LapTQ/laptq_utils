@@ -1,14 +1,21 @@
-PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250505-000000--TSSTG_HO--2-kpt-channels--match-MrCuong-train-test-split
-# PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/20250505-000000--TSSTG_HO--2-kpt-channels--match-MrCuong-train-test-split
-POSTFIX__DIR__IMAGE=""
+# PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11
+# PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
+# PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/2DCNN/predict/classification
+# PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/20250505-000000--TSSTG_HO--2-kpt-channels
+PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+POSTFIX__DIR__IMAGE="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--JSON"
 
-PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN
+# PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11
+# PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
+# PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/2DCNN
 # PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/major_vote_action
+PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/helper--extract--ultralytics--imgdir
+
 
 declare -A MAP__NAME_VIDEO__TO__=(
     # ["Normal/Normal__66_.mp4"]=""
     # ["Normal/Normal__67_.mp4"]=""
-    # ["Normal/Normal__68_.mp4"]=""
+    # # ["Normal/Normal__68_.mp4"]=""
     # ["Normal/Normal__69_.mp4"]=""
     # ["Normal/Normal__6_.mp4"]=""
     # ["Normal/Normal__70_.mp4"]=""
@@ -67,8 +74,10 @@ declare -A MAP__NAME_VIDEO__TO__=(
     # ["Shoplifting/Shoplifting__93_.mp4"]=""
     # ["Shoplifting/Shoplifting__9_.mp4"]=""
     
-    ["shoplifting-25min.mp4"]=""
+    # ["shoplifting-25min.mp4"]=""
     # ["satudora-1min.mp4"]=""
+
+    ["shoplifting-1min_anonymized.mp4"]=""
 )
 
 # [[ -d "${PATH__DIR__VIDEO__OUTPUT}" ]] && rm -r "${PATH__DIR__VIDEO__OUTPUT}"
@@ -89,7 +98,7 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     mkdir -p "$(dirname "$path__file__output")"
 
     ffmpeg \
-        -framerate 15 \
+        -framerate 30 \
         -pattern_type glob -i "${path__dir__img__input}/*.jpg" \
         -c:v libx264 \
         -y \
