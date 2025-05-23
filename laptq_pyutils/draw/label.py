@@ -260,6 +260,7 @@ def draw__image(**kwargs):
                 if status is True:
                     action_counter += 1
                     org = (x1 + 3, y2 + 28 * action_counter)
+                    # org = (x1 + 3, y1 - 10)
                     msg = (
                         str(id__action)
                         if not to_draw__name_action
