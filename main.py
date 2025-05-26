@@ -81,6 +81,7 @@ def parse_args():
     ap.add_argument("--to_draw__pose", choices=["True", "False"])
     ap.add_argument("--to_draw__id_action", choices=["True", "False"])
     ap.add_argument("--to_draw__name_action", choices=["True", "False"])
+    ap.add_argument("--to_draw__action_conf", choices=["True", "False"])
     ap.add_argument("--to_save__img", type=str)
     ap.add_argument("--fontScale", type=float)
     ap.add_argument("--thickness", type=int)
@@ -125,6 +126,7 @@ def parse_args():
     ap.add_argument("--list__edges_same_color", type=str)
     ap.add_argument("--persist", type=str)
     ap.add_argument("--split_by", type=str)
+    ap.add_argument("--thresh__conf__keypoints__min", type=float)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -264,6 +266,11 @@ def parse_args():
     args.to_draw__name_action = (
         eval(args.to_draw__name_action)
         if args.to_draw__name_action is not None
+        else None
+    )
+    args.to_draw__action_conf = (
+        eval(args.to_draw__action_conf)
+        if args.to_draw__action_conf is not None
         else None
     )
     args.split_by = eval(args.split_by) if args.split_by is not None else None

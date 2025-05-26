@@ -237,6 +237,7 @@ for subpath__video in "${!MAP__SUBPATH_VIDEO__TO__[@]}"; do
         --task track \
         --persist True \
         --list__name_keypoints "['nose', 'left_eye', 'right_eye', 'left_ear', 'right_ear', 'left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow', 'left_wrist', 'right_wrist', 'left_hip', 'right_hip', 'left_knee', 'right_knee', 'left_ankle', 'right_ankle']" \
+        --thresh__conf__keypoints__min 0.0 \
 
     echo -e "${TAG__INFO} Done: ${subpath__video}"
         
