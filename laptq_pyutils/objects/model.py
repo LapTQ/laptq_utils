@@ -46,7 +46,7 @@ class UltralyticsPredictor(UltralyticsBasePredictor):
         list__name_keypoints = kwargs["list__name_keypoints"]
         persist = kwargs["persist"]
         task = kwargs["task"]
-        to_enable__all_keypoints = kwargs['to_enable__all_keypoints']
+        thresh__conf__keypoints__min = kwargs["thresh__conf__keypoints__min"]
 
         _args = {
             "source": img__bgr,
@@ -54,7 +54,7 @@ class UltralyticsPredictor(UltralyticsBasePredictor):
             "conf": thresh__conf__min,
             "iou": thresh__iou,
             "verbose": False,
-            "to_enable__all_keypoints": to_enable__all_keypoints
+            "thresh__conf__keypoints__min": thresh__conf__keypoints__min,
         }
         if task == "track":
             _func = self.model.track
@@ -238,7 +238,9 @@ class TensorRTPredictor:
                 ts_shape = max_dynmic_shape[ts_name]
 
             for s in ts_shape:
-                assert s > 0, f"TensorRT shape dimension for {ts_name} must be greater than 0, got {s}"
+                assert (
+                    s > 0
+                ), f"TensorRT shape dimension for {ts_name} must be greater than 0, got {s}"
                 ts_size *= s
             allocation = cuda.mem_alloc(ts_size)
             binding = {
