@@ -1,17 +1,20 @@
 # actually, I just remove the label files. So you should create symblink to image corresponding to the accepted labels
-PATH__DIR__LABEL__INPUT=/home/laptq/Downloads/outputs--5
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-nedo-fed/outputs/labels
 POSTFIX__DIR__LABEL__INPUT=""
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--9
-POSTFIX__DIR__LABEL__OUTPUT=""
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-nedo-fed/outputs/labels
+POSTFIX__DIR__LABEL__OUTPUT="--img-w-person"
 
-# LIST__ID_CLASS=3,
-LIST__ID_CLASS=1,2,3
+LIST__ID_CLASS__TO_INCLUDE=0,
+LIST__ID_CLASS__TO_EXCLUDE="[]"
+
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["set1"]=""
-    ["set2"]=""
+    ["B8-A4-4F-D2-F8-3A/2025_03_19"]=""
+    ["B8-A4-4F-D2-F8-3A/2025_03_20"]=""
+    ["B8-A4-4F-D2-FF-98/2025_03_19"]=""
+    ["B8-A4-4F-D2-FF-98/2025_03_20"]=""
 )
 
 
@@ -30,11 +33,12 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
     
-    python3 main.py \
-        helper__filterout__image__by__id_class \
+    python3 submodules/laptq_utils/main.py \
+        helper__filter__image__by__id_class \
         --path__dir__lbl__input "$path__dir__lbl__input" \
         --path__dir__lbl__output "$path__dir__lbl__output" \
-        --list__id_class $LIST__ID_CLASS
+        --list__id_class__to_include $LIST__ID_CLASS__TO_INCLUDE \
+        --list__id_class__to_exclude $LIST__ID_CLASS__TO_EXCLUDE
     
     if [[ ! -d "$path__dir__lbl__output" ]]; then
         echo -e "$TAG__FAILED The output $path__dir__lbl__output not existed"

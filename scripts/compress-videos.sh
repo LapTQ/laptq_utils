@@ -1,0 +1,1 @@
+ffmpeg -i shoplifting-25min.avi -c:v libx264 -y shoplifting-25min--compr.mp4

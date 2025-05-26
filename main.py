@@ -1,6 +1,8 @@
+from laptq_pyutils.convert import convert_onnx_to_tensorrt
+
 from laptq_pyutils.helper import (
-    helper__extract__ultralytics__detect__imgdir,
-    helper__extract__ultralytics__detect__video,
+    helper__extract__ultralytics__imgdir,
+    helper__extract__ultralytics__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
     helper__convert__result__coco__to__json,
@@ -12,10 +14,10 @@ from laptq_pyutils.helper import (
     helper__filter__detection__result__by__miniou,
     helper__filter__detection__result__by__size,
     helper__filter__detection__result__by__roi,
-    helper__filterout__image__by__id_class,
+    helper__filter__image__by__id_class,
     helper__change__detection__id_class,
-    helper__draw__detection__imgdir,
-    helper__draw__detection__video,
+    helper__draw__imgdir,
+    helper__draw__video,
     helper__rescale__detection__box,
     helper__erase__classes__on__images,
     helper__check__duplicate__images,
@@ -24,6 +26,7 @@ from laptq_pyutils.helper import (
     helper__paste__seg_crops__over__det_boxes,
     helper__paste__seg_crops__over__background,
     helper__merge__detection__result,
+    helper__extract__crops__from__detection,
 )
 import argparse
 
@@ -61,6 +64,7 @@ def parse_args():
     ap.add_argument("--list__id_class", type=str)
     ap.add_argument("--map__id_old__to__id_new", type=str)
     ap.add_argument("--thresh", type=float)
+    ap.add_argument("--thresh__iou", type=float)
     ap.add_argument("--thresh__miniou", type=float)
     ap.add_argument("--thresh__conf__min", type=float)
     ap.add_argument("--thresh__leftiou__min", type=float)
@@ -74,6 +78,10 @@ def parse_args():
     ap.add_argument("--to_draw__box_conf", choices=["True", "False"])
     ap.add_argument("--to_draw__id_class", choices=["True", "False"])
     ap.add_argument("--to_draw__name_class", choices=["True", "False"])
+    ap.add_argument("--to_draw__pose", choices=["True", "False"])
+    ap.add_argument("--to_draw__id_action", choices=["True", "False"])
+    ap.add_argument("--to_draw__name_action", choices=["True", "False"])
+    ap.add_argument("--to_draw__action_conf", choices=["True", "False"])
     ap.add_argument("--to_save__img", type=str)
     ap.add_argument("--fontScale", type=float)
     ap.add_argument("--thickness", type=int)
@@ -88,6 +96,7 @@ def parse_args():
     ap.add_argument("--is_ok__key_not_exist", type=str)
     ap.add_argument("--fourcc", type=str)
     ap.add_argument("--path__file__map__id_class__to__name_class", type=str)
+    ap.add_argument("--path__file__map__id_action__to__name_action", type=str)
     ap.add_argument("--filter_by", type=str)
     ap.add_argument("--ratio__w", type=float)
     ap.add_argument("--ratio__h", type=float)
@@ -105,6 +114,19 @@ def parse_args():
     ap.add_argument("--flags", type=str)
     ap.add_argument("--roi__polygonn", type=str)
     ap.add_argument("--to_use__yolov5_compat", type=str)
+    ap.add_argument("--precision", type=str)
+    ap.add_argument("--dynamic_shape", type=str)
+    ap.add_argument("--max_workspace_size", type=int)
+    ap.add_argument("--list__name_keypoints", type=str)
+    ap.add_argument("--task", type=str)
+    ap.add_argument("--to_keep__only_max", type=str)
+    ap.add_argument("--to_draw__connected_keypoints", type=str)
+    ap.add_argument("--list__keypoints_same_color", type=str)
+    ap.add_argument("--list__keypoints_edge", type=str)
+    ap.add_argument("--list__edges_same_color", type=str)
+    ap.add_argument("--persist", type=str)
+    ap.add_argument("--split_by", type=str)
+    ap.add_argument("--thresh__conf__keypoints__min", type=float)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -203,6 +225,55 @@ def parse_args():
         if args.list__path__dir__lbl__input is not None
         else None
     )
+    args.dynamic_shape = (
+        eval(args.dynamic_shape) if args.dynamic_shape is not None else None
+    )
+    args.list__name_keypoints = (
+        eval(args.list__name_keypoints)
+        if args.list__name_keypoints is not None
+        else None
+    )
+    args.to_draw__pose = (
+        eval(args.to_draw__pose) if args.to_draw__pose is not None else None
+    )
+    args.to_keep__only_max = (
+        eval(args.to_keep__only_max) if args.to_keep__only_max is not None else None
+    )
+    args.to_draw__connected_keypoints = (
+        eval(args.to_draw__connected_keypoints)
+        if args.to_draw__connected_keypoints is not None
+        else None
+    )
+    args.list__keypoints_same_color = (
+        eval(args.list__keypoints_same_color)
+        if args.list__keypoints_same_color is not None
+        else None
+    )
+    args.list__keypoints_edge = (
+        eval(args.list__keypoints_edge)
+        if args.list__keypoints_edge is not None
+        else None
+    )
+    args.list__edges_same_color = (
+        eval(args.list__edges_same_color)
+        if args.list__edges_same_color is not None
+        else None
+    )
+    args.persist = eval(args.persist) if args.persist is not None else None
+    args.to_draw__id_action = (
+        eval(args.to_draw__id_action) if args.to_draw__id_action is not None else None
+    )
+    args.to_draw__name_action = (
+        eval(args.to_draw__name_action)
+        if args.to_draw__name_action is not None
+        else None
+    )
+    args.to_draw__action_conf = (
+        eval(args.to_draw__action_conf)
+        if args.to_draw__action_conf is not None
+        else None
+    )
+    args.split_by = eval(args.split_by) if args.split_by is not None else None
 
     return args
 

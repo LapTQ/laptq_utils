@@ -49,6 +49,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     mkdir -p "${path__dir__lbl__output}"
 
     python3 submodules/laptq_utils/main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__filter__detection__result__by__conf \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
