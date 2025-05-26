@@ -31,7 +31,12 @@ def generate_background_images(**kwargs):
         pathf_img_input = os.path.join(path__dir__img, namef_img_input)
         W, H = Image.open(pathf_img_input).size
 
-        img_bg = np.full((H, W, 3), (255, 229, 204), dtype=np.uint8)
+        img_bg = np.full(
+            (H, W, 3),
+            # (255, 229, 204),
+            (25, 25, 25),
+            dtype=np.uint8,
+        )
 
         pathf_img_output = os.path.join(path__dir__output, namef_img_input)
         if not is__1st_image__created:

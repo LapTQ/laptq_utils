@@ -46,6 +46,7 @@ class UltralyticsPredictor(UltralyticsBasePredictor):
         list__name_keypoints = kwargs["list__name_keypoints"]
         persist = kwargs["persist"]
         task = kwargs["task"]
+        to_enable__all_keypoints = kwargs['to_enable__all_keypoints']
 
         _args = {
             "source": img__bgr,
@@ -53,6 +54,7 @@ class UltralyticsPredictor(UltralyticsBasePredictor):
             "conf": thresh__conf__min,
             "iou": thresh__iou,
             "verbose": False,
+            "to_enable__all_keypoints": to_enable__all_keypoints
         }
         if task == "track":
             _func = self.model.track
