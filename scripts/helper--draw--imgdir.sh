@@ -234,6 +234,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__connected_keypoints True \
         --to_draw__id_action False \
         --to_draw__name_action True \
+        --to_draw__action_conf True \
         --fontScale 1 \
         --thickness 2 \
         --box_color_by id__track \

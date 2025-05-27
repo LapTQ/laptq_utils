@@ -24,6 +24,7 @@ def draw__image(**kwargs):
     to_draw__name_class = kwargs.get("to_draw__name_class", False)
     to_draw__id_action = kwargs.get("to_draw__id_action", False)
     to_draw__name_action = kwargs.get("to_draw__name_action", False)
+    to_draw__action_conf = kwargs.get("to_draw__action_conf", False)
     to_draw__box_refined = kwargs.get("to_draw__box_refined", False)
     to_draw__confirmed_status = kwargs.get("to_draw__confirmed_status", False)
     to_draw__pose = kwargs.get("to_draw__pose", False)
@@ -80,7 +81,10 @@ def draw__image(**kwargs):
     if list__obj__confirmed_status is None:
         list__obj__confirmed_status = [None] * len(list__obj__box_x1y1whn)
     if list__obj__action_conf is None:
-        list__obj__action_conf = {}
+        list__obj__action_conf = {
+            id__action: [None] * len(list__obj__box_x1y1whn)
+            for id__action in map__id_action__to__name_action
+        }
     if list__obj__action_status is None:
         list__obj__action_status = {
             id__action: [False] * len(list__obj__box_x1y1whn)
@@ -255,16 +259,21 @@ def draw__image(**kwargs):
 
         if to_draw__id_action or to_draw__name_action:
             action_counter = 0
-            for id__action, statuses in list__obj__action_status.items():
-                status = statuses[i_obj]
-                if status is True:
+            for id__action in list__obj__action_status:
+                action_statuses = list__obj__action_status[id__action]
+                action_confs = list__obj__action_conf[id__action]
+                astatus = action_statuses[i_obj]
+                aconf = action_confs[i_obj]
+                if astatus is True:
                     action_counter += 1
                     org = (x1 + 3, y2 + 28 * action_counter)
+                    # org = (x1 + 3, y1 - 10)
                     msg = (
                         str(id__action)
                         if not to_draw__name_action
                         or id__action not in map__id_action__to__name_action
                         else "{}".format(map__id_action__to__name_action[id__action])
+                        + (" {:.2f}".format(aconf) if to_draw__action_conf and aconf is not None else "")
                     )
                     cv2_putText(
                         img__bgr,
