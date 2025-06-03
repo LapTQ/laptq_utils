@@ -1,32 +1,32 @@
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
-# PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/generate_background_images
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
+# PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/generate_background_images
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs
 POSTFIX__DIR__IMAGE=""
 
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250505-000000--TSSTG_HO--2-kpt-channels
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD3/predict
+PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict-onnx/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD4/predict
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/2DCNN/predict/classification
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/20250505-000000--TSSTG_HO--2-kpt-channels
-PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-# POSTFIX__DIR__LABEL=""
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+POSTFIX__DIR__LABEL=""
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filterby-size--JSON"
-POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+# POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 
 
 NUM__MAX__IMG__TO__VISUALIZE=None
-IS_OK__LBL_NOT_FOUND=True
+IS_OK__LBL_NOT_FOUND=False
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250505-000000--TSSTG_HO--2-kpt-channels
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD3/predict
+PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict-onnx/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
+# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD4/predict
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/2DCNN/predict/classification
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/20250505-000000--TSSTG_HO--2-kpt-channels
-PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
 
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
 PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/action_names.yaml
@@ -94,7 +94,7 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__9_.mp4"]=""
     
     # ["shoplifting-25min.mp4"]=""
-    # ["satudora-1min.mp4"]=""
+    ["satudora-1min.mp4"]=""
     # ["1568080723085_67014_fix.mkv"]=""
 
     # ["roboflow-data/filtered--w-label/0"]=""
@@ -129,7 +129,7 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["roboflow-data/filtered--wo-label/8"]=""
     # ["roboflow-data/filtered--wo-label/10"]=""
 
-    ["shoplifting-1min_anonymized.mp4"]=""
+    # ["shoplifting-1min_anonymized.mp4"]=""
 )
 
 IFS=$'\n'

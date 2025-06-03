@@ -1,8 +1,8 @@
 PATH__DIR__LABEL__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-POSTFIX__DIR__LABEL__INPUT="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.01--iou-0.45--JSON"
+POSTFIX__DIR__LABEL__INPUT="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.01--iou-0.45--all-keypoints--JSON"
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--JSON"
+POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--all-keypoints--JSON"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     ["Normal/Normal__1_.mp4"]=""

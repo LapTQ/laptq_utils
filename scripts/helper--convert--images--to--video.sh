@@ -1,17 +1,17 @@
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11
-# PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
+PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict-onnx/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/2DCNN/predict/classification
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/20250505-000000--TSSTG_HO--2-kpt-channels
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD3/predict
+# PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD4/predict
 POSTFIX__DIR__IMAGE=""
 
 # PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11
-# PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
+PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
 # PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/2DCNN
 # PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/major_vote_action
 # PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/helper--extract--ultralytics--imgdir
-PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/TSGAD3
+# PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/TSGAD4
 
 
 declare -A MAP__NAME_VIDEO__TO__=(
