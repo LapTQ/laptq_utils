@@ -255,6 +255,8 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__crop__lbl__output "${path__dir__crop__lbl__output}" \
         --is_ok__lbl_not_exist False \
         --num__pad__0 6 \
+        --to_resize_box__wrt__pose True \
+        --to_shift__coords__wrt__box False \
         --split_by None # '"id__track"' # if not None, please add a "/{}" before /images and /labels assuming there's an /images and /labels in path__dir__crop__img__output and path__dir__crop__lbl__output
     
     echo -e "${TAG__INFO} Done: ${subpath__dir}"
