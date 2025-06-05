@@ -1318,12 +1318,21 @@ def helper__extract__crops__from__detection(**kwargs):
     split_by = kwargs["split_by"]
     to_resize_box__wrt__pose = kwargs["to_resize_box__wrt__pose"]
     to_shift__coords__wrt__box = kwargs["to_shift__coords__wrt__box"]
+    to_save__img = kwargs["to_save__img"]
 
     assert split_by in [None, "id__track", "id__class"]
 
-    for name__file__img in tqdm(sorted(os.listdir(path__dir__img__input))):
-        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
-        path__file__img = os.path.join(path__dir__img__input, name__file__img)
+    if to_save__img:
+        list__name__file = sorted(os.listdir(path__dir__img__input))
+    else:
+        list__name__file = sorted(os.listdir(path__dir__lbl__input))
+    for name__file in tqdm(list__name__file):
+        if to_save__img:
+            name__file__img = name__file
+            name__file__lbl = os.path.splitext(name__file)[0] + ".json"
+            path__file__img = os.path.join(path__dir__img__input, name__file__img)
+        else:
+            name__file__lbl = name__file    
         path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
 
         if not os.path.exists(path__file__lbl):
@@ -1335,8 +1344,9 @@ def helper__extract__crops__from__detection(**kwargs):
         with open(path__file__lbl, "r") as f:
             dict__result = json.load(f)
 
-        img = cv2.imread(path__file__img)
-        H, W = img.shape[:2]
+        if to_save__img:
+            img = cv2.imread(path__file__img)
+            H, W = img.shape[:2]
 
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
         list__obj__id_track = dict__result.get(
@@ -1399,11 +1409,12 @@ def helper__extract__crops__from__detection(**kwargs):
                 box_xcycwhn[3] = b_hn
 
             # get croped patch
-            b_x1 = int(b_x1n * W)
-            b_y1 = int(b_y1n * H)
-            b_x2 = int(b_x2n * W)
-            b_y2 = int(b_y2n * H)
-            crop_img = img[b_y1:b_y2, b_x1:b_x2]
+            if to_save__img:
+                b_x1 = int(b_x1n * W)
+                b_y1 = int(b_y1n * H)
+                b_x2 = int(b_x2n * W)
+                b_y2 = int(b_y2n * H)
+                crop_img = img[b_y1:b_y2, b_x1:b_x2]
 
             if to_shift__coords__wrt__box:
                 # shift keypoints
@@ -1441,13 +1452,14 @@ def helper__extract__crops__from__detection(**kwargs):
             os.makedirs(__path__dir__crop__img__output, exist_ok=True)
             os.makedirs(__path__dir__crop__lbl__output, exist_ok=True)
 
-            path__file__crop__img__output = os.path.join(
-                __path__dir__crop__img__output,
-                "{}--crop-{:0{}}.jpg".format(
-                    os.path.splitext(name__file__img)[0], i_obj, num__pad__0
-                ),
-            )
-            cv2.imwrite(path__file__crop__img__output, crop_img)
+            if to_save__img:
+                path__file__crop__img__output = os.path.join(
+                    __path__dir__crop__img__output,
+                    "{}--crop-{:0{}}.jpg".format(
+                        os.path.splitext(name__file__img)[0], i_obj, num__pad__0
+                    ),
+                )
+                cv2.imwrite(path__file__crop__img__output, crop_img)
 
             dict__result__crop = {
                 k: dict__result[k][i_obj : i_obj + 1] for k in dict__result
@@ -1455,7 +1467,7 @@ def helper__extract__crops__from__detection(**kwargs):
             path__file__crop__lbl__output = os.path.join(
                 __path__dir__crop__lbl__output,
                 "{}--crop-{:0{}}.json".format(
-                    os.path.splitext(name__file__img)[0], i_obj, num__pad__0
+                    os.path.splitext(name__file__lbl)[0], i_obj, num__pad__0
                 ),
             )
             with open(path__file__crop__lbl__output, "w") as f:
