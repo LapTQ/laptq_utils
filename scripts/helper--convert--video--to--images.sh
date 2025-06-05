@@ -1,4 +1,5 @@
-PATH__DIR__VIDEO=/home/laptq/laptq-fs26-shoplifting-detection/data
+# PATH__DIR__VIDEO=/home/laptq/laptq-fs26-shoplifting-detection/data
+PATH__DIR__VIDEO=/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516
 
 PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
 
@@ -191,7 +192,8 @@ declare -A MAP__NAME_VIDEO__TO__=(
     # ["shoplifting-25min.mp4"]=""
     # ["satudora-1min.mp4"]=""
     # ["1568080723085_67014_fix.mkv"]=""
-    ["shoplifting-1min_anonymized.mp4"]=""
+    # ["shoplifting-1min_anonymized.mp4"]=""
+    ["r10_10min_rotate.mp4"]=""
 )
 
 IFS=$'\n'
