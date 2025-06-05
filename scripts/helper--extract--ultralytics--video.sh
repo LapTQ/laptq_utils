@@ -22,7 +22,9 @@ POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRA
 
 declare -A MAP__SUBPATH_VIDEO__TO__=(
     # ["R7_2025_05_15_23_40_32_rotate.mp4"]=""
-    ["R8_2025_05_15_23_40_32_rotate.mp4"]=""
+    # ["R8_2025_05_15_23_40_32_rotate.mp4"]=""
+    # ["R3_2025_05_15_23_40_32_rotate.mp4"]=""
+    ["R4_2025_05_15_23_40_32_rotate.mp4"]=""
 )
 
 IFS=$'\n'
