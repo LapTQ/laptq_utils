@@ -1,5 +1,5 @@
-# PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
+# PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/generate_background_images
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs
 POSTFIX__DIR__IMAGE=""
@@ -8,8 +8,9 @@ POSTFIX__DIR__IMAGE=""
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift--all-keypoints
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-satudora-postlift_test--VAL-poselift_test/predict
+PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-mnit-roboflow-poselift/predict
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/2DCNN/predict/classification
-PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/20250505-000000--TSSTG_HO--2-kpt-channels
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
@@ -27,8 +28,9 @@ IS_OK__LBL_NOT_FOUND=False
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift--all-keypoints
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-satudora-postlift_test--VAL-poselift_test/predict
+PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-mnit-roboflow-poselift/predict
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/2DCNN/predict/classification
-PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN
+# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/20250505-000000--TSSTG_HO--2-kpt-channels
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
@@ -100,7 +102,7 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     
     # ["shoplifting-25min.mp4"]=""
     # ["satudora-1min.mp4"]=""
-    ["r10_10min_rotate.mp4"]=""
+    # ["r10_10min_rotate.mp4"]=""
     # ["1568080723085_67014_fix.mkv"]=""
     # ["R3_2025_05_15_23_40_32_rotate.mp4"]=""
 
@@ -137,6 +139,7 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["roboflow-data/filtered--wo-label/10"]=""
 
     # ["shoplifting-1min_anonymized.mp4"]=""
+    ["Shoplifting/Shoplifting__30_.mp4"]=""
 )
 
 IFS=$'\n'

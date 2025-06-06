@@ -196,8 +196,11 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__93_.mp4"]=""
 
     # ["shoplifting-25min.mp4"]=""
-    ["R7_2025_05_15_23_40_32_rotate.mp4"]=""
+    # ["R7_2025_05_15_23_40_32_rotate.mp4"]=""
     # ["R8_2025_05_15_23_40_32_rotate.mp4"]=""
+    # ["R3_2025_05_15_23_40_32_rotate.mp4"]=""
+    ["R4_2025_05_15_23_40_32_rotate.mp4"]=""
+    # ["R9_2025_05_15_23_40_32_rotate.mp4"]=""
 
     # ["roboflow-data/filtered--w-label/0"]=""
     # ["roboflow-data/filtered--w-label/1"]=""
