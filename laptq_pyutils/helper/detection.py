@@ -1316,12 +1316,23 @@ def helper__extract__crops__from__detection(**kwargs):
     is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
     num__pad__0 = kwargs["num__pad__0"]
     split_by = kwargs["split_by"]
+    to_resize_box__wrt__pose = kwargs["to_resize_box__wrt__pose"]
+    to_shift__coords__wrt__box = kwargs["to_shift__coords__wrt__box"]
+    to_save__img = kwargs["to_save__img"]
 
     assert split_by in [None, "id__track", "id__class"]
 
-    for name__file__img in tqdm(sorted(os.listdir(path__dir__img__input))):
-        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
-        path__file__img = os.path.join(path__dir__img__input, name__file__img)
+    if to_save__img:
+        list__name__file = sorted(os.listdir(path__dir__img__input))
+    else:
+        list__name__file = sorted(os.listdir(path__dir__lbl__input))
+    for name__file in tqdm(list__name__file):
+        if to_save__img:
+            name__file__img = name__file
+            name__file__lbl = os.path.splitext(name__file)[0] + ".json"
+            path__file__img = os.path.join(path__dir__img__input, name__file__img)
+        else:
+            name__file__lbl = name__file    
         path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
 
         if not os.path.exists(path__file__lbl):
@@ -1333,8 +1344,9 @@ def helper__extract__crops__from__detection(**kwargs):
         with open(path__file__lbl, "r") as f:
             dict__result = json.load(f)
 
-        img = cv2.imread(path__file__img)
-        H, W = img.shape[:2]
+        if to_save__img:
+            img = cv2.imread(path__file__img)
+            H, W = img.shape[:2]
 
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
         list__obj__id_track = dict__result.get(
@@ -1347,7 +1359,12 @@ def helper__extract__crops__from__detection(**kwargs):
             "list__obj__kpts_xyn", [None] * len(list__obj__box_xcycwhn)
         )
         for i_obj, (id__track, id__class, box_xcycwhn, kpts_xyn) in enumerate(
-            zip(list__obj__id_track, list__obj__id_class, list__obj__box_xcycwhn, list__obj__kpts_xyn)
+            zip(
+                list__obj__id_track,
+                list__obj__id_class,
+                list__obj__box_xcycwhn,
+                list__obj__kpts_xyn,
+            )
         ):
             b_xcn, b_ycn, b_wn, b_hn = box_xcycwhn
             b_x1n = b_xcn - b_wn / 2
@@ -1355,51 +1372,94 @@ def helper__extract__crops__from__detection(**kwargs):
             b_x2n = b_x1n + b_wn
             b_y2n = b_y1n + b_hn
 
+            # resize box wrt pose
+            if kpts_xyn is not None and to_resize_box__wrt__pose:
+                k_xnmin = 1e9
+                k_ynmin = 1e9
+                k_xnmax = -1e9
+                k_ynmax = -1e9
+                for k_xn, k_yn in kpts_xyn.values():
+                    if k_xn < k_xnmin:
+                        k_xnmin = k_xn
+                    if k_yn < k_ynmin:
+                        k_ynmin = k_yn
+                    if k_xn > k_xnmax:
+                        k_xnmax = k_xn
+                    if k_yn > k_ynmax:
+                        k_ynmax = k_yn
+                b_x1n = min(b_x1n, k_xnmin)
+                b_y1n = min(b_y1n, k_ynmin)
+                b_x2n = max(b_x2n, k_xnmax)
+                b_y2n = max(b_y2n, k_ynmax)
+
+                b_x1n = max(0, b_x1n)
+                b_y1n = max(0, b_y1n)
+                b_x2n = min(1, b_x2n)
+                b_y2n = min(1, b_y2n)
+
+                b_xcn = (b_x1n + b_x2n) / 2
+                b_ycn = (b_y1n + b_y2n) / 2
+                b_wn = b_x2n - b_x1n
+                b_hn = b_y2n - b_y1n
+
+                # update new box
+                box_xcycwhn[0] = b_xcn
+                box_xcycwhn[1] = b_ycn
+                box_xcycwhn[2] = b_wn
+                box_xcycwhn[3] = b_hn
+
             # get croped patch
-            b_x1 = int(b_x1n * W)
-            b_y1 = int(b_y1n * H)
-            b_x2 = int(b_x2n * W)
-            b_y2 = int(b_y2n * H)
-            crop_img = img[b_y1:b_y2, b_x1:b_x2]
+            if to_save__img:
+                b_x1 = int(b_x1n * W)
+                b_y1 = int(b_y1n * H)
+                b_x2 = int(b_x2n * W)
+                b_y2 = int(b_y2n * H)
+                crop_img = img[b_y1:b_y2, b_x1:b_x2]
 
-            # shift keypoints
-            if kpts_xyn is not None:
-                for kname, (k_xn, k_yn) in kpts_xyn.items():
-                    if k_xn == 0 and k_yn == 0:
-                        continue
-                    k_xn = (k_xn - b_x1n) / b_wn
-                    k_yn = (k_yn - b_y1n) / b_hn
-                    kpts_xyn[kname] = [k_xn, k_yn]
+            if to_shift__coords__wrt__box:
+                # shift keypoints
+                if kpts_xyn is not None:
+                    for kname, (k_xn, k_yn) in kpts_xyn.items():
+                        if k_xn == 0 and k_yn == 0:
+                            continue
+                        k_xn = (k_xn - b_x1n) / b_wn
+                        k_yn = (k_yn - b_y1n) / b_hn
+                        kpts_xyn[kname] = [k_xn, k_yn]
 
-            # shift box
-            box_xcycwhn[0] = 0.5
-            box_xcycwhn[1] = 0.5
-            box_xcycwhn[2] = 1
-            box_xcycwhn[3] = 1
+                # shift box
+                box_xcycwhn[0] = 0.5
+                box_xcycwhn[1] = 0.5
+                box_xcycwhn[2] = 1
+                box_xcycwhn[3] = 1
 
-            if split_by is not None: 
+            if split_by is not None:
                 if split_by == "id__track":
                     subpathd = str(id__track)
                 elif split_by == "id__class":
                     subpathd = str(id__class)
-                
+
                 # assuming path__dir__crop__img__output has a {} placeholder
-                __path__dir__crop__img__output = path__dir__crop__img__output.format(subpathd)
-                __path__dir__crop__lbl__output = path__dir__crop__lbl__output.format(subpathd)
+                __path__dir__crop__img__output = path__dir__crop__img__output.format(
+                    subpathd
+                )
+                __path__dir__crop__lbl__output = path__dir__crop__lbl__output.format(
+                    subpathd
+                )
             else:
                 __path__dir__crop__img__output = path__dir__crop__img__output
                 __path__dir__crop__lbl__output = path__dir__crop__lbl__output
-                
+
             os.makedirs(__path__dir__crop__img__output, exist_ok=True)
             os.makedirs(__path__dir__crop__lbl__output, exist_ok=True)
 
-            path__file__crop__img__output = os.path.join(
-                __path__dir__crop__img__output,
-                "{}--crop-{:0{}}.jpg".format(
-                    os.path.splitext(name__file__img)[0], i_obj, num__pad__0
-                ),
-            )
-            cv2.imwrite(path__file__crop__img__output, crop_img)
+            if to_save__img:
+                path__file__crop__img__output = os.path.join(
+                    __path__dir__crop__img__output,
+                    "{}--crop-{:0{}}.jpg".format(
+                        os.path.splitext(name__file__img)[0], i_obj, num__pad__0
+                    ),
+                )
+                cv2.imwrite(path__file__crop__img__output, crop_img)
 
             dict__result__crop = {
                 k: dict__result[k][i_obj : i_obj + 1] for k in dict__result
@@ -1407,7 +1467,7 @@ def helper__extract__crops__from__detection(**kwargs):
             path__file__crop__lbl__output = os.path.join(
                 __path__dir__crop__lbl__output,
                 "{}--crop-{:0{}}.json".format(
-                    os.path.splitext(name__file__img)[0], i_obj, num__pad__0
+                    os.path.splitext(name__file__lbl)[0], i_obj, num__pad__0
                 ),
             )
             with open(path__file__crop__lbl__output, "w") as f:

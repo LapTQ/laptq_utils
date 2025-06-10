@@ -3,6 +3,8 @@ import numpy as np
 import tensorrt as trt
 import pycuda.driver as cuda
 import pycuda.autoinit
+import onnxruntime as ort
+import onnx
 
 from laptq_pyutils.objects import ListAligner
 
@@ -293,3 +295,23 @@ class TensorRTPredictor:
             cuda.memcpy_dtoh(outputs[name], self.io_bindings[name]["allocation"])
 
         return outputs
+
+
+class ONNXPredictor:
+
+    def __init__(self, model_path):
+        self.model = onnx.load(model_path)
+        self.session = ort.InferenceSession(
+            model_path,
+            providers=[
+                "CUDAExecutionProvider",
+                "CPUExecutionProvider",
+            ],
+        )
+
+        onnx.checker.check_model(self.model)
+
+    def predict(self, inputs, output_names):
+        inputs = {name: np.array(inputs[name], dtype=np.float32) for name in inputs}
+        outputs = self.session.run(output_names, inputs)
+        return {name: outputs[i] for i, name in enumerate(output_names)}

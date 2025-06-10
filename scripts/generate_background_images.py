@@ -1,5 +1,11 @@
+TO_USE_SHAPE_FROM_ = "imgsz"  # 'img' or 'imgsz'
+
 PATHD_IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images"
 POSTFIXD_IMAGE = ""
+# or get filenames from labels
+IMGSZ = (64, 128)  # (W, H)
+PATHD_LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection"
+POSTFIXD_LABEL = ""
 
 PATHD_OUTPUT = (
     "/home/laptq/laptq-fs26-shoplifting-detection/outputs/generate_background_images"
@@ -9,7 +15,9 @@ POSTFIX_OUTPUT = ""
 TO_USE__SOFTLINK = True
 
 MAP_SUBPATHD_TO = {
-    "shoplifting-1min_anonymized.mp4": None,
+    # "shoplifting-1min_anonymized.mp4": None,
+    # "R3_2025_05_15_23_40_32_rotate.mp4": None,
+    "R7_2025_05_15_23_40_32_rotate.mp4/10729": None,
 }
 
 
@@ -24,12 +32,27 @@ def generate_background_images(**kwargs):
     path__dir__img = kwargs["path__dir__img"]
     path__dir__output = kwargs["path__dir__output"]
     to_use__softlink = kwargs["to_use__softlink"]
+    to_use_shape_from_ = kwargs["to_use_shape_from_"]
+    imgsz = kwargs["imgsz"]
+    path__dir__lbl = kwargs["path__dir__lbl"]
+
+    assert to_use_shape_from_ in ["img", "imgsz"]
 
     is__1st_image__created = False
     pathf__1st_img__output = None
-    for namef_img_input in tqdm(sorted(os.listdir(path__dir__img))):
-        pathf_img_input = os.path.join(path__dir__img, namef_img_input)
-        W, H = Image.open(pathf_img_input).size
+    pool = (
+        sorted(os.listdir(path__dir__img))
+        if to_use_shape_from_ == "img"
+        else sorted(os.listdir(path__dir__lbl))
+    )
+    for namef_input in tqdm(pool):
+        if to_use_shape_from_ == "img":
+            namef_img_input = namef_input
+            pathf_img_input = os.path.join(path__dir__img, namef_input)
+            W, H = Image.open(pathf_img_input).size
+        else:
+            namef_img_input = namef_input.replace(".json", ".jpg")
+            W, H = imgsz
 
         img_bg = np.full(
             (H, W, 3),
@@ -56,6 +79,7 @@ for subpathd in MAP_SUBPATHD_TO:
     pathd_output = os.path.join(
         PATHD_OUTPUT, subpathd, "images{}".format(POSTFIX_OUTPUT)
     )
+    pathd_lbl = os.path.join(PATHD_LABEL, subpathd, "labels{}".format(POSTFIXD_LABEL))
 
     if os.path.exists(pathd_output):
         os.system("rm -rf {}".format(pathd_output))
@@ -65,6 +89,9 @@ for subpathd in MAP_SUBPATHD_TO:
         path__dir__img=pathd_img,
         path__dir__output=pathd_output,
         to_use__softlink=TO_USE__SOFTLINK,
+        to_use_shape_from_="imgsz",
+        imgsz=IMGSZ,
+        path__dir__lbl=pathd_lbl,
     )
 
     print("Done: {}".format(subpathd))
