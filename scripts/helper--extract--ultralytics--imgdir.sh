@@ -207,7 +207,8 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["shoplifting-25min.mp4"]=""
     # ["satudora-1min.mp4"]=""
     # ["1568080723085_67014_fix.mkv"]=""
-    ["r10_10min_rotate.mp4"]=""
+    # ["r10_10min_rotate.mp4"]=""
+    ["r9_25min_rotate.mp4"]=""
 
     # ["roboflow-data/filtered--w-label/0"]=""
     # ["roboflow-data/filtered--w-label/1"]=""

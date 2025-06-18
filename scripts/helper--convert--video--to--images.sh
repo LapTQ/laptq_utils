@@ -193,7 +193,8 @@ declare -A MAP__NAME_VIDEO__TO__=(
     # ["satudora-1min.mp4"]=""
     # ["1568080723085_67014_fix.mkv"]=""
     # ["shoplifting-1min_anonymized.mp4"]=""
-    ["r10_10min_rotate.mp4"]=""
+    # ["r10_10min_rotate.mp4"]=""
+    ["r9_25min_rotate.mp4"]=""
 )
 
 IFS=$'\n'

@@ -1,7 +1,10 @@
 # PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN
 # PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/major_vote_action
-PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift--all-keypoints
-PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN
+# PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN/torch
+PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v3/torch
+PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v6/torch
+# PATH__DIR__INPUT__3=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v12/torch
+# PATH__DIR__INPUT__4=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v3/torch
 # PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/2DCNN
 
 PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/concat--videos
@@ -71,7 +74,7 @@ declare -A MAP__NAME_VIDEO__TO__=(
     # ["Shoplifting/Shoplifting__93_.mp4"]=""
     # ["Shoplifting/Shoplifting__9_.mp4"]=""
     
-    # ["shoplifting-25min.mp4"]=""
+    ["shoplifting-25min.mp4"]=""
     # ["satudora-1min.mp4"]=""
     ["r10_10min_rotate.mp4"]=""
 )
@@ -79,6 +82,8 @@ declare -A MAP__NAME_VIDEO__TO__=(
 for name__file in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     path__file__input__1="$PATH__DIR__INPUT__1/$name__file"
     path__file__input__2="$PATH__DIR__INPUT__2/$name__file"
+    path__file__input__3="$PATH__DIR__INPUT__3/$name__file"
+    path__file__input__4="$PATH__DIR__INPUT__4/$name__file"
     path__file__output="$PATH__DIR__OUTPUT/$name__file"
 
     if [[ ! -f "$path__file__input__1" ]]; then
@@ -96,7 +101,10 @@ for name__file in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         -filter_complex "[0:v][1:v]hstack=inputs=2" \
         -c:v libx264 -preset ultrafast -crf 18 \
         -y \
-        "$path__file__output"
+        "$path__file__output" \
+        # -i "$path__file__input__3" \
+        # -i "$path__file__input__4" \
+        # -filter_complex "[0:v][1:v][2:v][3:v]hstack=inputs=4" \
     
     echo "Done: ${name__file}"
 done
