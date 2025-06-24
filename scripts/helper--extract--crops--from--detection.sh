@@ -1,10 +1,13 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
+# PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
 POSTFIX__DIR__IMAGE=""
 
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
+PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--all-keypoints--JSON"
 POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--None--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 
 PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection
 POSTFIX__DIR__OUTPUT=""
@@ -195,13 +198,13 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__92_.mp4"]=""
     # ["Shoplifting/Shoplifting__93_.mp4"]=""
 
-    # ["shoplifting-25min.mp4"]=""
+    ["shoplifting-25min.mp4"]=""
     # ["R7_2025_05_15_23_40_32_rotate.mp4"]=""
     # ["R8_2025_05_15_23_40_32_rotate.mp4"]=""
     # ["R3_2025_05_15_23_40_32_rotate.mp4"]=""
     # ["R4_2025_05_15_23_40_32_rotate.mp4"]=""
     # ["R9_2025_05_15_23_40_32_rotate.mp4"]=""
-    ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
+    # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
 
     # ["roboflow-data/filtered--w-label/0"]=""
     # ["roboflow-data/filtered--w-label/1"]=""
@@ -263,8 +266,8 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --is_ok__lbl_not_exist False \
         --num__pad__0 6 \
         --to_resize_box__wrt__pose True \
-        --to_shift__coords__wrt__box True \
-        --to_save__img False \
+        --to_shift__coords__wrt__box False \
+        --to_save__img True \
         --split_by '"id__track"' # '"id__track"' # if not None, please add a "/{}" before /images and /labels assuming there's an /images and /labels in path__dir__crop__img__output and path__dir__crop__lbl__output
     
     echo -e "${TAG__INFO} Done: ${subpath__dir}"
