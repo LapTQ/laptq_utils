@@ -2,41 +2,72 @@ import numpy as np
 from pprint import pprint
 
 
-def get_cb_info(beta, num_samples):
-    effective_num = (1.0 - np.power(beta, num_samples)) / (1.0 - beta)
-    weights = 1 / effective_num
-    num_prototypes = 1 / (1 - beta)
-    return {
-        "effective_num": effective_num.item(),
-        "num_prototypes": num_prototypes,
-        "effective_num/num_samples": (effective_num / num_samples).item(),
-        "num_samples/effective_num": (num_samples / effective_num).item(),
-        "weights": weights.item(),
-    }
+ls_params = [
+    {
+        "num_samples": 1174124,
+        "expected_ratio_of_num_effective": 1 / 7,
+    },
+    {
+        "num_samples": 391578,
+        "expected_ratio_of_num_effective": 1 / 7 / 66,
+    },
+]
 
 
-def get_weights(ls_params):
-    # ls_params: List of lists, each containing [beta, num_samples] for each class
+def solve_beta(num_samples, num_effective, tolerance=1e-15, beta0=0):
+
+    def f(beta, num_samples, num_effective):
+        return np.power(beta, num_samples) - num_effective * beta + num_effective - 1
+
+    def df(x, num_samples, num_effective):
+        return num_samples * np.power(x, num_samples - 1) - num_effective
+
+    while True:
+        beta1 = beta0 - f(beta0, num_samples, num_effective) / df(
+            beta0, num_samples, num_effective
+        )
+        if abs(beta1 - beta0) < tolerance:
+            break
+        beta0 = beta1
+
+    return beta1
+
+
+def get_weight_based_on_expected_ratio_of_num_effective(ls_params):
     no_of_classes = len(ls_params)
     weights = []
     for id_class in range(no_of_classes):
-        cb_info = get_cb_info(ls_params[id_class][0], ls_params[id_class][1])
-        print(f"\nClass {id_class} info")
-        pprint(cb_info)
-        weights.append(cb_info["weights"])
+        print(f"\nClass {id_class} params")
+
+        num_samples = ls_params[id_class]["num_samples"]
+        expected_ratio_of_num_effective = ls_params[id_class][
+            "expected_ratio_of_num_effective"
+        ]
+        num_effective = num_samples * expected_ratio_of_num_effective
+        beta = solve_beta(
+            num_samples=num_samples,
+            num_effective=num_effective,
+        )
+        num_prototypes = 1 / (1 - beta)
+
+        print(f" + num_samples:    {num_samples}")
+        print(f" + %effective:     {expected_ratio_of_num_effective}")
+        print(f" + num_effective:  {num_effective}")
+        print(f" + num_prototypes: {num_prototypes}")
+        print(f" + beta:           {beta}")
+
+        weights.append(1 / num_effective)
+
     weights = np.array(weights)
     weights = weights / np.sum(weights) * no_of_classes
     return weights
 
 
-weights = get_weights(
-    [
-        [0.9999941, 1174124],  # Class 0
-        [0.99882, 5933],  # Class 1
-    ]
-)
+weights = get_weight_based_on_expected_ratio_of_num_effective(ls_params=ls_params)
+
 print("\nFinal weights for class balanced loss:")
 print(weights)
+
 
 # import torch
 # labels = torch.tensor([0, 1, 0, 1, 0])  # Example labels

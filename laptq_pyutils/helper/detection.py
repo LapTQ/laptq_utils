@@ -363,6 +363,9 @@ def helper__draw__imgdir(**kwargs):
     num__max__img = kwargs["num__max__img"]
     seed = kwargs["seed"]
     is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    to_draw__id_frame = kwargs["to_draw__id_frame"]
+    id_frame__from = kwargs["id_frame__from"]
+    lambda__id_frame__from = kwargs["lambda__id_frame__from"]
     to_draw__name_class = kwargs["to_draw__name_class"]
     to_draw__name_action = kwargs["to_draw__name_action"]
     path__file__map__id_class__to__name_class = kwargs[
@@ -373,6 +376,10 @@ def helper__draw__imgdir(**kwargs):
     ]
     to_concat__original_img = kwargs["to_concat__original_img"]
     concat__axis = kwargs["concat__axis"]
+
+    assert id_frame__from in [
+        "filename"
+    ], "id_frame__from {} not supported. Supporting: 'filename'.".format(id_frame__from)
 
     os.makedirs(path__dir__output, exist_ok=True)
 
@@ -416,12 +423,17 @@ def helper__draw__imgdir(**kwargs):
         path__file__lbl = list__path__file__lbl[i_f]
         path__file__img = os.path.join(path__dir__img, name__file__img)
 
+        if to_draw__id_frame:
+            if id_frame__from == "filename":
+                id__frame = lambda__id_frame__from(name__file__img)
+
         img__bgr = cv2.imread(path__file__img)
         with open(path__file__lbl, "r") as f:
             dict__result = json.load(f)
 
         img__vis = draw__image(
             data={
+                "id__frame": id__frame if to_draw__id_frame else None,
                 "img__bgr": img__bgr,
                 "list__obj__box_x1y1whn": (
                     xcycwh__to__x1y1wh(
@@ -1332,7 +1344,7 @@ def helper__extract__crops__from__detection(**kwargs):
             name__file__lbl = os.path.splitext(name__file)[0] + ".json"
             path__file__img = os.path.join(path__dir__img__input, name__file__img)
         else:
-            name__file__lbl = name__file    
+            name__file__lbl = name__file
         path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
 
         if not os.path.exists(path__file__lbl):
