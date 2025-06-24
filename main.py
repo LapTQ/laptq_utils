@@ -129,6 +129,8 @@ def parse_args():
     ap.add_argument("--thresh__conf__keypoints__min", type=float)
     ap.add_argument("--to_resize_box__wrt__pose", type=str, choices=["True", "False"])
     ap.add_argument("--to_shift__coords__wrt__box", type=str, choices=["True", "False"])
+    ap.add_argument("--id_frame__from", type=str)
+    ap.add_argument("--lambda__id_frame__from", type=str)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -284,6 +286,11 @@ def parse_args():
     args.to_shift__coords__wrt__box = (
         eval(args.to_shift__coords__wrt__box)
         if args.to_shift__coords__wrt__box is not None
+        else None
+    )
+    args.lambda__id_frame__from = (
+        eval(args.lambda__id_frame__from)
+        if args.lambda__id_frame__from is not None
         else None
     )
 

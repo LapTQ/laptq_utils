@@ -224,6 +224,9 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__output "${path__dir__output}" \
         --to_concat__original_img False \
         --concat__axis 1 \
+        --to_draw__id_frame False \
+        --id_frame__from "filename" \
+        --lambda__id_frame__from "lambda x: x.split('.')[0]" \
         --to_draw__id_track True \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \

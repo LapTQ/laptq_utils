@@ -119,7 +119,14 @@ def draw__image(**kwargs):
     H, W = img__bgr.shape[:2]
 
     if to_draw__id_frame and id__frame is not None:
-        cv2_putText(img__bgr, str(id__frame), (10, 30))
+        cv2_putText(
+            img__bgr,
+            str(id__frame),
+            (10, 30),
+            color=COLORS[1],
+            fontScale=fontScale,
+            thickness=thickness,
+        )
 
     for i_obj, (
         box__x1y1whn,
@@ -273,7 +280,11 @@ def draw__image(**kwargs):
                         if not to_draw__name_action
                         or id__action not in map__id_action__to__name_action
                         else "{}".format(map__id_action__to__name_action[id__action])
-                        + (" {:.2f}".format(aconf) if to_draw__action_conf and aconf is not None else "")
+                        + (
+                            " {:.2f}".format(aconf)
+                            if to_draw__action_conf and aconf is not None
+                            else ""
+                        )
                     )
                     cv2_putText(
                         img__bgr,
