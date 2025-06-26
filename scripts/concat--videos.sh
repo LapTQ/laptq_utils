@@ -1,9 +1,9 @@
 # PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN
 # PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/major_vote_action
 # PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN/torch
-PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v7/torch
-PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v17/torch
-# PATH__DIR__INPUT__3=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v12/torch
+PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v20/torch
+PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v16/torch
+PATH__DIR__INPUT__3=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v7/torch
 # PATH__DIR__INPUT__4=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v3/torch
 # PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/2DCNN
 
@@ -98,11 +98,11 @@ for name__file in "${!MAP__NAME_VIDEO__TO__[@]}"; do
     ffmpeg \
         -i "$path__file__input__1" \
         -i "$path__file__input__2" \
-        -filter_complex "[0:v][1:v]hstack=inputs=2" \
+        -i "$path__file__input__3" \
+        -filter_complex "[0:v][1:v][2:v]hstack=inputs=3" \
         -c:v libx264 -preset ultrafast -crf 18 \
         -y \
         "$path__file__output" \
-        # -i "$path__file__input__3" \
         # -i "$path__file__input__4" \
         # -filter_complex "[0:v][1:v][2:v][3:v]hstack=inputs=4" \
     
