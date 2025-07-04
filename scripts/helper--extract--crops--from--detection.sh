@@ -1,12 +1,11 @@
 PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-convert-video-to-images
 POSTFIX__DIR__IMAGE=""
 
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-POSTFIX__DIR__LABEL__INPUT="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--JSON"
+PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--JSON"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--JSON"
-
+PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection
+POSTFIX__DIR__OUTPUT=""
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     ["Normal/Normal__1_.mp4"]=""
@@ -193,6 +192,8 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     ["Shoplifting/Shoplifting__91_.mp4"]=""
     ["Shoplifting/Shoplifting__92_.mp4"]=""
     ["Shoplifting/Shoplifting__93_.mp4"]=""
+
+    # ["shoplifting-25min.mp4"]=""
 )
 
 IFS=$'\n'
@@ -203,32 +204,28 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 
 for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
-    path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}/images${POSTFIX__DIR__IMAGE}"
-    path__dir__lbl__input="${PATH__DIR__LABEL__INPUT}/${subpath__dir}/labels${POSTFIX__DIR__LABEL__INPUT}"
-    path__dir__lbl__output="${PATH__DIR__LABEL__OUTPUT}/${subpath__dir}/labels${POSTFIX__DIR__LABEL__OUTPUT}"
+    path__dir__img__input="${PATH__DIR__IMAGE}/${subpath__dir}/images${POSTFIX__DIR__IMAGE}"
+    path__dir__lbl__input="${PATH__DIR__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
+    path__dir__crop__img__output="${PATH__DIR__OUTPUT}/${subpath__dir}/images${POSTFIX__DIR__OUTPUT}"
+    path__dir__crop__lbl__output="${PATH__DIR__OUTPUT}/${subpath__dir}/labels${POSTFIX__DIR__OUTPUT}"
 
-    [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
-    mkdir -p "${path__dir__lbl__output}"
+    [[ -d "${path__dir__crop__img__output}" ]] && rm -r "${path__dir__crop__img__output}"
+    [[ -d "${path__dir__crop__lbl__output}" ]] && rm -r "${path__dir__crop__lbl__output}"
+    mkdir -p "${path__dir__crop__img__output}"
+    mkdir -p "${path__dir__crop__lbl__output}"
 
     python3 submodules/laptq_utils/main.py \
-        helper__filter__detection__result__by__size \
-        --path__dir__img "${path__dir__img}" \
+        helper__extract__crops__from__detection \
+        --path__dir__img__input "${path__dir__img__input}" \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
-        --path__dir__lbl__output "${path__dir__lbl__output}" \
-        --filter_by "area" \
-        --to_keep__only_max True \
-        --thresh 0
-
-
-    num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
-    num__lbl__output=$(find "${path__dir__lbl__output}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
-    if [ $num__lbl__output -ne $num__lbl__input ]; then
-        echo -e "${TAG__FAILED} Number of labels mismatched: ${subpath__dir}"
-        echo "    [+] $num__lbl__input old labels"
-        echo "    [+] $num__lbl__output new labels"
-        
-        exit 1
-    fi
-    echo -e "${TAG__PASSED} ${num__lbl__input} old labels == ${num__lbl__output} target labels: ${subpath__dir}"
-
+        --path__dir__crop__img__output "${path__dir__crop__img__output}" \
+        --path__dir__crop__lbl__output "${path__dir__crop__lbl__output}" \
+        --is_ok__lbl_not_exist False \
+        --num__pad__0 6 \
+        --to_resize_box__wrt__pose True \
+        --to_shift__coords__wrt__box False \
+        --to_save__img False \
+        --split_by None # '"id__track"' # if not None, please add a "/{}" before /images and /labels assuming there's an /images and /labels in path__dir__crop__img__output and path__dir__crop__lbl__output
+    
+    echo -e "${TAG__INFO} Done: ${subpath__dir}"
 done

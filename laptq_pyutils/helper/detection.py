@@ -1,7 +1,9 @@
-from abc import ABC, abstractmethod
-
 from laptq_pyutils.draw import draw__image
-from laptq_pyutils.objects import ListAligner
+from laptq_pyutils.objects import (
+    ListAligner,
+    UltralyticsPredictor,
+    YOLOv5CompatDetectPredictor,
+)
 from laptq_pyutils.log import load_logger
 from laptq_pyutils.common import LIST__MODE__BOX
 from laptq_pyutils.ops import (
@@ -19,166 +21,25 @@ from laptq_pyutils.algo import KMeans
 LOGGER = load_logger()
 
 
-class BaseModel(ABC):
-
-    @abstractmethod
-    def __init__(self, **kwargs):
-        pass
-
-    @abstractmethod
-    def predict(self, **kwargs):
-        pass
-
-
-class UltralyticsModel(BaseModel):
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        from ultralytics import YOLO
-
-        self.path__file__model = kwargs["path__file__model"]
-        self.device = kwargs["device"]
-
-        self.model = YOLO(self.path__file__model).to(self.device)
-
-    def predict(self, **kwargs):
-
-        img__bgr = kwargs["img__bgr"]
-        imgsz = kwargs["imgsz"]
-        thresh__conf__min = kwargs["thresh__conf__min"]
-        thresh__iou = kwargs["thresh__iou"]
-
-        result_ultralytics = (
-            self.model.predict(
-                source=img__bgr,
-                imgsz=imgsz,
-                conf=thresh__conf__min,
-                iou=thresh__iou,
-                verbose=False,
-            )[0]
-            .cpu()
-            .numpy()
-        )
-
-        boxes = result_ultralytics.boxes
-
-        list_aligner__result = ListAligner(
-            list__key=[
-                "list__obj__id_class",
-                "list__obj__box_xcycwhn",
-                "list__obj__box_conf",
-            ]
-        )
-
-        for i_b, box in enumerate(boxes):
-            id_class = int(box.cls)
-            xcn, ycn, wn, hn = box.xywhn[0].tolist()
-            conf = float(box.conf)
-
-            list_aligner__result.extend(
-                {
-                    "list__obj__id_class": [id_class],
-                    "list__obj__box_xcycwhn": [[xcn, ycn, wn, hn]],
-                    "list__obj__box_conf": [conf],
-                }
-            )
-
-        dict__result = list_aligner__result.item()
-
-        return {
-            "dict__result": dict__result,
-        }
-
-
-class YOLOv5CompatModel(BaseModel):
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        import torch
-
-        self.path__file__model = kwargs["path__file__model"]
-        self.device = kwargs["device"]
-
-        self.model = torch.hub.load(
-            repo_or_dir="ultralytics/yolov5",
-            model="custom",  # e.g., 'yolov5n', 'yolov5x6', or 'custom'
-            path=self.path__file__model,
-            device=self.device,
-        )
-
-    def predict(self, **kwargs):
-
-        import cv2
-
-        img__bgr = kwargs["img__bgr"]
-        imgsz = kwargs["imgsz"]
-        thresh__conf__min = kwargs["thresh__conf__min"]
-        thresh__iou = kwargs["thresh__iou"]
-
-        assert hasattr(self.model, "conf"), "self.model does not have attribute conf"
-        assert hasattr(self.model, "iou"), "self.model does not have attribute iou"
-
-        self.model.conf = thresh__conf__min
-        self.model.iou = thresh__iou
-
-        img__rgb = cv2.cvtColor(img__bgr, cv2.COLOR_BGR2RGB)
-        imH, imW = img__bgr.shape[:2]
-
-        result_ultralytics = self.model(img__rgb, size=imgsz).pandas().xyxy[0]
-
-        list_aligner__result = ListAligner(
-            list__key=[
-                "list__obj__id_class",
-                "list__obj__box_xcycwhn",
-                "list__obj__box_conf",
-            ]
-        )
-
-        for i_b, box in result_ultralytics.iterrows():
-            id_class = int(box["class"])
-            x1, y1, x2, y2 = box[["xmin", "ymin", "xmax", "ymax"]].tolist()
-            conf = float(box["confidence"])
-
-            xc = (x1 + x2) / 2
-            yc = (y1 + y2) / 2
-            w = x2 - x1
-            h = y2 - y1
-
-            xcn = xc / imW
-            ycn = yc / imH
-            wn = w / imW
-            hn = h / imH
-
-            list_aligner__result.extend(
-                {
-                    "list__obj__id_class": [id_class],
-                    "list__obj__box_xcycwhn": [[xcn, ycn, wn, hn]],
-                    "list__obj__box_conf": [conf],
-                }
-            )
-
-        dict__result = list_aligner__result.item()
-
-        return {
-            "dict__result": dict__result,
-        }
-
-
 def parse__ultralytics_model(**kwargs):
 
+    task = kwargs["task"]
     to_use__yolov5_compat = kwargs["to_use__yolov5_compat"]
 
+    assert task in ["detect", "pose", "track"]
+
     if to_use__yolov5_compat:
-        model = YOLOv5CompatModel(**kwargs)
+        if task == "detect":
+            model = YOLOv5CompatDetectPredictor(**kwargs)
+        else:
+            raise NotImplementedError("Task {} is not supported yet.".format(task))
     else:
-        model = UltralyticsModel(**kwargs)
+        model = UltralyticsPredictor(**kwargs)
 
     return model
 
 
-def helper__extract__ultralytics__detect__imgdir(**kwargs):
+def helper__extract__ultralytics__imgdir(**kwargs):
 
     from ultralytics import YOLO
     import os
@@ -226,7 +87,7 @@ def helper__extract__ultralytics__detect__imgdir(**kwargs):
         pbar.set_postfix(time__inference=log__time["time__inference"])
 
 
-def helper__extract__ultralytics__detect__video(**kwargs):
+def helper__extract__ultralytics__video(**kwargs):
 
     from ultralytics import YOLO
     import cv2
@@ -485,9 +346,9 @@ def helper__filter__detection__result__by__roi(**kwargs):
         dict__result = list_aligner__result.item()
         with open(path__file__lbl__output, "w") as f:
             json.dump(dict__result, f, indent=4)
-        
 
-def helper__draw__detection__imgdir(**kwargs):
+
+def helper__draw__imgdir(**kwargs):
 
     import os
     from tqdm import tqdm
@@ -502,12 +363,23 @@ def helper__draw__detection__imgdir(**kwargs):
     num__max__img = kwargs["num__max__img"]
     seed = kwargs["seed"]
     is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    to_draw__id_frame = kwargs["to_draw__id_frame"]
+    id_frame__from = kwargs["id_frame__from"]
+    lambda__id_frame__from = kwargs["lambda__id_frame__from"]
     to_draw__name_class = kwargs["to_draw__name_class"]
+    to_draw__name_action = kwargs["to_draw__name_action"]
     path__file__map__id_class__to__name_class = kwargs[
         "path__file__map__id_class__to__name_class"
     ]
+    path__file__map__id_action__to__name_action = kwargs[
+        "path__file__map__id_action__to__name_action"
+    ]
     to_concat__original_img = kwargs["to_concat__original_img"]
     concat__axis = kwargs["concat__axis"]
+
+    assert id_frame__from in [
+        "filename"
+    ], "id_frame__from {} not supported. Supporting: 'filename'.".format(id_frame__from)
 
     os.makedirs(path__dir__output, exist_ok=True)
 
@@ -540,10 +412,20 @@ def helper__draw__detection__imgdir(**kwargs):
     else:
         map__id_class__to__name_class = {}
 
+    if to_draw__name_action:
+        with open(path__file__map__id_action__to__name_action, "r") as f:
+            map__id_action__to__name_action = yaml.safe_load(f)
+    else:
+        map__id_action__to__name_action = {}
+
     for i_f in tqdm(list__index__sample):
         name__file__img = list__name__file__img[i_f]
         path__file__lbl = list__path__file__lbl[i_f]
         path__file__img = os.path.join(path__dir__img, name__file__img)
+
+        if to_draw__id_frame:
+            if id_frame__from == "filename":
+                id__frame = lambda__id_frame__from(name__file__img)
 
         img__bgr = cv2.imread(path__file__img)
         with open(path__file__lbl, "r") as f:
@@ -551,6 +433,7 @@ def helper__draw__detection__imgdir(**kwargs):
 
         img__vis = draw__image(
             data={
+                "id__frame": id__frame if to_draw__id_frame else None,
                 "img__bgr": img__bgr,
                 "list__obj__box_x1y1whn": (
                     xcycwh__to__x1y1wh(
@@ -562,10 +445,32 @@ def helper__draw__detection__imgdir(**kwargs):
                 "list__obj__box_polygonn": dict__result.get(
                     "list__obj__box_polygonn", None
                 ),
+                "list__obj__id_track": dict__result.get("list__obj__id_track", None),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result.get("list__obj__box_conf", None),
+                "list__obj__kpts_xyn": (
+                    dict__result["list__obj__kpts_xyn"]
+                    if "list__obj__kpts_xyn" in dict__result
+                    else None
+                ),
+                "list__obj__kpts_conf": (
+                    dict__result["list__obj__kpts_conf"]
+                    if "list__obj__kpts_conf" in dict__result
+                    else None
+                ),
+                "list__obj__action_conf": (
+                    dict__result["list__obj__action_conf"]
+                    if "list__obj__action_conf" in dict__result
+                    else None
+                ),
+                "list__obj__action_status": (
+                    dict__result["list__obj__action_status"]
+                    if "list__obj__action_status" in dict__result
+                    else None
+                ),
             },
             map__id_class__to__name_class=map__id_class__to__name_class,
+            map__id_action__to__name_action=map__id_action__to__name_action,
             **kwargs,
         )
 
@@ -577,7 +482,7 @@ def helper__draw__detection__imgdir(**kwargs):
         cv2.imwrite(path__file__output, img__vis)
 
 
-def helper__draw__detection__video(**kwargs):
+def helper__draw__video(**kwargs):
 
     import cv2
     import yaml
@@ -591,9 +496,13 @@ def helper__draw__detection__video(**kwargs):
     path__file__output = kwargs["path__file__output"]
     num__pad__0 = kwargs["num__pad__0"]
     to_draw__name_class = kwargs["to_draw__name_class"]
+    to_draw__name_action = kwargs["to_draw__name_action"]
     fourcc = kwargs["fourcc"]
     path__file__map__id_class__to__name_class = kwargs[
         "path__file__map__id_class__to__name_class"
+    ]
+    path__file__map__id_action__to__name_action = kwargs[
+        "path__file__map__id_action__to__name_action"
     ]
     to_concat__original_img = kwargs["to_concat__original_img"]
 
@@ -602,6 +511,12 @@ def helper__draw__detection__video(**kwargs):
             map__id_class__to__name_class = yaml.safe_load(f)
     else:
         map__id_class__to__name_class = {}
+
+    if to_draw__name_action:
+        with open(path__file__map__id_action__to__name_action, "r") as f:
+            map__id_action__to__name_action = yaml.safe_load(f)
+    else:
+        map__id_action__to__name_action = {}
 
     cap = cv2.VideoCapture(path__file__video__input)
 
@@ -642,10 +557,32 @@ def helper__draw__detection__video(**kwargs):
                 "list__obj__box_polygonn": dict__result.get(
                     "list__obj__box_polygonn", None
                 ),
+                "list__obj__id_track": dict__result.get("list__obj__id_track", None),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result["list__obj__box_conf"],
+                "list__obj__kpts_xyn": (
+                    dict__result["list__obj__kpts_xyn"]
+                    if "list__obj__kpts_xyn" in dict__result
+                    else None
+                ),
+                "list__obj__kpts_conf": (
+                    dict__result["list__obj__kpts_conf"]
+                    if "list__obj__kpts_conf" in dict__result
+                    else None
+                ),
+                "list__obj__action_conf": (
+                    dict__result["list__obj__action_conf"]
+                    if "list__obj__action_conf" in dict__result
+                    else None
+                ),
+                "list__obj__action_status": (
+                    dict__result["list__obj__action_status"]
+                    if "list__obj__action_status" in dict__result
+                    else None
+                ),
             },
             map__id_class__to__name_class=map__id_class__to__name_class,
+            map__id_action__to__name_action=map__id_action__to__name_action,
             **kwargs,
         )
 
@@ -943,11 +880,13 @@ def helper__filter__detection__result__by__size(**kwargs):
     import json
     from tqdm import tqdm
     import os
+    import numpy as np
 
     path__dir__img = kwargs["path__dir__img"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     filter_by = kwargs["filter_by"]
+    to_keep__only_max = kwargs["to_keep__only_max"]
     thresh = kwargs["thresh"]
 
     assert filter_by in ["area", "width", "height"]
@@ -974,6 +913,7 @@ def helper__filter__detection__result__by__size(**kwargs):
         list__obj__box_xcycwhn = list_aligner__result.get__key("list__obj__box_xcycwhn")
 
         num__box__popped = 0
+        list__size = []
         for i_obj, box_xcycwhn in enumerate(list__obj__box_xcycwhn):
             xcn, ycn, wn, hn = box_xcycwhn
             w = wn * W
@@ -990,6 +930,24 @@ def helper__filter__detection__result__by__size(**kwargs):
                 list__index__to_pop.append(i_obj)
                 num__box__popped += 1
 
+            if to_keep__only_max:
+                if filter_by == "area":
+                    size = w * h
+                elif filter_by == "width":
+                    size = w
+                else:
+                    size = h
+
+                list__size.append(size)
+
+        if to_keep__only_max and len(list__size) > 0:
+            list__size = np.array(list__size)
+            argmax = np.argmax(list__size)
+            for i_obj in range(len(list__size)):
+                if i_obj != argmax and i_obj not in list__index__to_pop:
+                    list__index__to_pop.append(i_obj)
+                    num__box__popped += 1
+
         list_aligner__result.pop__indexes(list__index__to_pop)
 
         if num__box__popped > 0:
@@ -1003,7 +961,7 @@ def helper__filter__detection__result__by__size(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
-def helper__filterout__image__by__id_class(**kwargs):
+def helper__filter__image__by__id_class(**kwargs):
 
     import os
     import json
@@ -1011,7 +969,8 @@ def helper__filterout__image__by__id_class(**kwargs):
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
-    list__id_class = kwargs["list__id_class"]
+    list__id_class__to_include = kwargs["list__id_class__to_include"]
+    list__id_class__to_exclude = kwargs["list__id_class__to_exclude"]
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
@@ -1027,13 +986,19 @@ def helper__filterout__image__by__id_class(**kwargs):
         num__img__total += 1
 
         list__obj__id_class = dict__result["list__obj__id_class"]
-        tobe__filtered_out = False
+
+        to__filter_out = False
+        if list__id_class__to_include is not None and len(list__obj__id_class) == 0:
+            to__filter_out = True
         for id_class in list__obj__id_class:
-            if id_class in list__id_class:
-                tobe__filtered_out = True
+            if (
+                list__id_class__to_include is not None
+                and id_class not in list__id_class__to_include
+            ) or id_class in list__id_class__to_exclude:
+                to__filter_out = True
                 break
 
-        if tobe__filtered_out:
+        if to__filter_out:
             num__img__filtered_out += 1
             continue
 
@@ -1301,17 +1266,21 @@ def helper__merge__detection__result(**kwargs):
         for name__file__lbl in os.listdir(path__dir__lbl__input):
             set__name__file__lbl.add(name__file__lbl)
     list__name__file__lbl = sorted(list(set__name__file__lbl))
-    
+
     for name__file__lbl in tqdm(list__name__file__lbl):
         dict__result = None
 
         for path__dir__lbl__input in list__path__dir__lbl__input:
-            path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+            path__file__lbl__input = os.path.join(
+                path__dir__lbl__input, name__file__lbl
+            )
             if not os.path.exists(path__file__lbl__input):
                 if is_ok__lbl_not_exist:
                     continue
                 else:
-                    raise FileNotFoundError(f"Label file not found: {path__file__lbl__input}")
+                    raise FileNotFoundError(
+                        f"Label file not found: {path__file__lbl__input}"
+                    )
 
             with open(path__file__lbl__input, "r") as f:
                 dict__result__input = json.load(f)
@@ -1328,7 +1297,7 @@ def helper__merge__detection__result(**kwargs):
                         continue
                     else:
                         raise KeyError(f"Key not found: {list__key__diff}")
-                
+
                 for key in list__key__dst:
                     if isinstance(dict__result[key], list):
                         dict__result[key].extend(dict__result__input[key])
@@ -1340,3 +1309,178 @@ def helper__merge__detection__result(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
+def helper__extract__crops__from__detection(**kwargs):
+
+    LOGGER.warning(
+        "Please consider generalize this function with helper__extract__crops__with__mask__from__segmentation. These functions have something in common."
+    )
+
+    import os
+    import json
+    from tqdm import tqdm
+    import cv2
+    import numpy as np
+
+    path__dir__img__input = kwargs["path__dir__img__input"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__crop__img__output = kwargs["path__dir__crop__img__output"]
+    path__dir__crop__lbl__output = kwargs["path__dir__crop__lbl__output"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    num__pad__0 = kwargs["num__pad__0"]
+    split_by = kwargs["split_by"]
+    to_resize_box__wrt__pose = kwargs["to_resize_box__wrt__pose"]
+    to_shift__coords__wrt__box = kwargs["to_shift__coords__wrt__box"]
+    to_save__img = kwargs["to_save__img"]
+
+    assert split_by in [None, "id__track", "id__class"]
+
+    if to_save__img:
+        list__name__file = sorted(os.listdir(path__dir__img__input))
+    else:
+        list__name__file = sorted(os.listdir(path__dir__lbl__input))
+    for name__file in tqdm(list__name__file):
+        if to_save__img:
+            name__file__img = name__file
+            name__file__lbl = os.path.splitext(name__file)[0] + ".json"
+            path__file__img = os.path.join(path__dir__img__input, name__file__img)
+        else:
+            name__file__lbl = name__file
+        path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
+
+        if not os.path.exists(path__file__lbl):
+            if is_ok__lbl_not_exist:
+                continue
+            else:
+                raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
+
+        with open(path__file__lbl, "r") as f:
+            dict__result = json.load(f)
+
+        if to_save__img:
+            img = cv2.imread(path__file__img)
+            H, W = img.shape[:2]
+
+        list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
+        list__obj__id_track = dict__result.get(
+            "list__obj__id_track", [None] * len(list__obj__box_xcycwhn)
+        )
+        list__obj__id_class = dict__result.get(
+            "list__obj__id_class", [None] * len(list__obj__box_xcycwhn)
+        )
+        list__obj__kpts_xyn = dict__result.get(
+            "list__obj__kpts_xyn", [None] * len(list__obj__box_xcycwhn)
+        )
+        for i_obj, (id__track, id__class, box_xcycwhn, kpts_xyn) in enumerate(
+            zip(
+                list__obj__id_track,
+                list__obj__id_class,
+                list__obj__box_xcycwhn,
+                list__obj__kpts_xyn,
+            )
+        ):
+            b_xcn, b_ycn, b_wn, b_hn = box_xcycwhn
+            b_x1n = b_xcn - b_wn / 2
+            b_y1n = b_ycn - b_hn / 2
+            b_x2n = b_x1n + b_wn
+            b_y2n = b_y1n + b_hn
+
+            # resize box wrt pose
+            if kpts_xyn is not None and to_resize_box__wrt__pose:
+                k_xnmin = 1e9
+                k_ynmin = 1e9
+                k_xnmax = -1e9
+                k_ynmax = -1e9
+                for k_xn, k_yn in kpts_xyn.values():
+                    if k_xn < k_xnmin:
+                        k_xnmin = k_xn
+                    if k_yn < k_ynmin:
+                        k_ynmin = k_yn
+                    if k_xn > k_xnmax:
+                        k_xnmax = k_xn
+                    if k_yn > k_ynmax:
+                        k_ynmax = k_yn
+                b_x1n = min(b_x1n, k_xnmin)
+                b_y1n = min(b_y1n, k_ynmin)
+                b_x2n = max(b_x2n, k_xnmax)
+                b_y2n = max(b_y2n, k_ynmax)
+
+                b_x1n = max(0, b_x1n)
+                b_y1n = max(0, b_y1n)
+                b_x2n = min(1, b_x2n)
+                b_y2n = min(1, b_y2n)
+
+                b_xcn = (b_x1n + b_x2n) / 2
+                b_ycn = (b_y1n + b_y2n) / 2
+                b_wn = b_x2n - b_x1n
+                b_hn = b_y2n - b_y1n
+
+                # update new box
+                box_xcycwhn[0] = b_xcn
+                box_xcycwhn[1] = b_ycn
+                box_xcycwhn[2] = b_wn
+                box_xcycwhn[3] = b_hn
+
+            # get croped patch
+            if to_save__img:
+                b_x1 = int(b_x1n * W)
+                b_y1 = int(b_y1n * H)
+                b_x2 = int(b_x2n * W)
+                b_y2 = int(b_y2n * H)
+                crop_img = img[b_y1:b_y2, b_x1:b_x2]
+
+            if to_shift__coords__wrt__box:
+                # shift keypoints
+                if kpts_xyn is not None:
+                    for kname, (k_xn, k_yn) in kpts_xyn.items():
+                        if k_xn == 0 and k_yn == 0:
+                            continue
+                        k_xn = (k_xn - b_x1n) / b_wn
+                        k_yn = (k_yn - b_y1n) / b_hn
+                        kpts_xyn[kname] = [k_xn, k_yn]
+
+                # shift box
+                box_xcycwhn[0] = 0.5
+                box_xcycwhn[1] = 0.5
+                box_xcycwhn[2] = 1
+                box_xcycwhn[3] = 1
+
+            if split_by is not None:
+                if split_by == "id__track":
+                    subpathd = str(id__track)
+                elif split_by == "id__class":
+                    subpathd = str(id__class)
+
+                # assuming path__dir__crop__img__output has a {} placeholder
+                __path__dir__crop__img__output = path__dir__crop__img__output.format(
+                    subpathd
+                )
+                __path__dir__crop__lbl__output = path__dir__crop__lbl__output.format(
+                    subpathd
+                )
+            else:
+                __path__dir__crop__img__output = path__dir__crop__img__output
+                __path__dir__crop__lbl__output = path__dir__crop__lbl__output
+
+            os.makedirs(__path__dir__crop__img__output, exist_ok=True)
+            os.makedirs(__path__dir__crop__lbl__output, exist_ok=True)
+
+            if to_save__img:
+                path__file__crop__img__output = os.path.join(
+                    __path__dir__crop__img__output,
+                    "{}--crop-{:0{}}.jpg".format(
+                        os.path.splitext(name__file__img)[0], i_obj, num__pad__0
+                    ),
+                )
+                cv2.imwrite(path__file__crop__img__output, crop_img)
+
+            dict__result__crop = {
+                k: dict__result[k][i_obj : i_obj + 1] for k in dict__result
+            }
+            path__file__crop__lbl__output = os.path.join(
+                __path__dir__crop__lbl__output,
+                "{}--crop-{:0{}}.json".format(
+                    os.path.splitext(name__file__lbl)[0], i_obj, num__pad__0
+                ),
+            )
+            with open(path__file__crop__lbl__output, "w") as f:
+                json.dump(dict__result__crop, f, indent=4)
