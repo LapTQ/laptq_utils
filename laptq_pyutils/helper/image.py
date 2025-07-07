@@ -87,6 +87,7 @@ def helper__convert__video__to__images(**kwargs):
     path__file__input = kwargs["path__file__input"]
     path__dir__img__output = kwargs["path__dir__img__output"]
     num__pad__0 = kwargs["num__pad__0"]
+    step_size = kwargs["step_size"]
 
     cap = cv2.VideoCapture(path__file__input)
     os.makedirs(path__dir__img__output, exist_ok=True)
@@ -101,6 +102,10 @@ def helper__convert__video__to__images(**kwargs):
 
         name__file__img = f"{id__frame:0{num__pad__0}d}.jpg"
         path__file__img = os.path.join(path__dir__img__output, name__file__img)
+
+        if id__frame % step_size != 0:
+            pbar.update(1)
+            continue
 
         cv2.imwrite(path__file__img, img__bgr)
 

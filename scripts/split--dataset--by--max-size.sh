@@ -84,11 +84,11 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
             path__file__img__input=$( realpath "$path__dir__img__input/$name__file__img" )
             path__file__lbl__input="${path__dir__lbl__input}/${name__file__lbl}"
 
-            cp "$path__file__img__input" "$path__dir__img__output"
+            cp "$path__file__img__input" "$path__dir__img__output"/$name__file__img
 
             # choose either
             # touch "${path__dir__lbl__output}/${name__file__lbl}"
-            cp "$path__file__lbl__input" "$path__dir__lbl__output"
+            cp "$path__file__lbl__input" "$path__dir__lbl__output"/$name__file__img
         done
         # cp "${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/classes.txt" "${PATH__DIR__DATASETS__OUTPUT}/${subpath_dir}${postfix}/"
 

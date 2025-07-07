@@ -211,6 +211,7 @@ main() {
         helper__convert__video__to__images \
         --path__file__input "${path__file__input}" \
         --path__dir__img__output "${path__dir__img__output}" \
+        --step_size 1 \
         --num__pad__0 9
 }
 

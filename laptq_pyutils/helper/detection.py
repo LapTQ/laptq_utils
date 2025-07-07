@@ -1112,6 +1112,7 @@ def helper__erase__classes__on__images(**kwargs):
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__img__output = kwargs["path__dir__img__output"]
     list__id_class = kwargs["list__id_class"]
+    color = kwargs["color"]
 
     os.makedirs(path__dir__img__output, exist_ok=True)
 
@@ -1148,7 +1149,7 @@ def helper__erase__classes__on__images(**kwargs):
             x2 = int(x2n * W)
             y2 = int(y2n * H)
 
-            img[y1:y2, x1:x2] = 0
+            img[y1:y2, x1:x2] = color
 
         cv2.imwrite(path__file__img__output, img)
 
