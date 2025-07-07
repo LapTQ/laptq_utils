@@ -1,11 +1,11 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/Downloads/outputs--video--2
-POSTFIX__DIR__LABEL__INPUT=""
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+POSTFIX__DIR__LABEL__INPUT="--PRED--DATA--None--MODEL--yolov8x--TRAIN--exp--PREDICT--imgsz-960--conf-0.25--iou-0.45--backpack-handbag--img-w-bag--JSON"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/Downloads/outputs--video--3
-POSTFIX__DIR__LABEL__OUTPUT=""
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--None--MODEL--yolov8x--TRAIN--exp--PREDICT--imgsz-960--conf-0.25--iou-0.45--backpack-handbag--img-w-bag--changeID--JSON"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["clideo_editor_177d5d7cdb144c1598d5419573b0449c.mp4"]=""
+    ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
 )
 
 IFS=$'\n'
@@ -22,11 +22,11 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__change__detection__id_class \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
-        --map__id_old__to__id_new "{56:1}"
+        --map__id_old__to__id_new "{24:0,26:1}"
 
 
     num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)

@@ -4,28 +4,29 @@ sleep 0
 # data=data--synthetic--satudora-center-box
 # data=data--RAP-change-clothes
 
-path__dir__run=/home/laptq/laptq-prj-21/runs
+path__dir__run=/home/laptq/laptq-fs26-shoplifting-detection/runs
 
-data=data--synthetic--satudora-center-box
-YOLO=yolo11s
-IMGSZ=832
-SCALE=0.5
-MULTI_SCALE=True
+data=bag-detection
+YOLO=yolov8s
+IMGSZ=640
+# SCALE=0.5
+# MULTI_SCALE=True
 
 yolo detect train \
     data=src/configs/$data.yaml \
-    model=/home/laptq/laptq-prj-21/runs/data--public--satudora/yolo11s--832--scale-0.5--multiscale-True/train2/weights/best--epoch-141.pt \
-    epochs=200 \
+    model=${YOLO}.pt \
+    epochs=100 \
     imgsz=$IMGSZ \
-    device=2 \
+    device=4 \
     batch=16 \
-    project=$path__dir__run/$data/$YOLO--$IMGSZ--scale-$SCALE--multiscale-$MULTI_SCALE \
+    project=$path__dir__run/$data/$YOLO--$IMGSZ \
     plots=True \
     patience=40 \
-    scale=$SCALE \
-    multi_scale=$MULTI_SCALE
+    # scale=$SCALE \
+    # multi_scale=$MULTI_SCALE
 
-    # model=${YOLO}.pt \
+    # model=/home/laptq/laptq-prj-21/runs/data--public--satudora/yolo11s--832--scale-0.5--multiscale-True/train2/weights/best--epoch-141.pt \
+    # project=$path__dir__run/$data/$YOLO--$IMGSZ--scale-$SCALE--multiscale-$MULTI_SCALE \
 
 exit
 

@@ -1,24 +1,15 @@
-PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-prj-21/data/20250102--testset--4cam-factory     # can be ignored if pad__max not set
+PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4/annotation-corrected--v2     # can be ignored if pad__max not set
 POSTFIX__DIR__IMAGE__INPUT="--raw"
 
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-21/outputs/20241231--get--subset--dataset--yolo--test-set--annotated--to-json
-POSTFIX__DIR__LABEL__INPUT="--raw"
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4/annotation-corrected--v2
+POSTFIX__DIR__LABEL__INPUT="--raw--JSON"
 
-PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-prj-21/outputs/20250102--testset--4cam-factory--erase-ignored
+PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4/annotation-corrected--v2
 POSTFIX__DIR__IMAGE__OUTPUT="--erase-ignored"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["beppu_sue"]=""
-    # ["P44-nothing-2個持ち_cut_fit"]=""
-    # ["P44-notProducts-2個持ち_cut_fit"]=""
-    # ["P44-1products-台置き_cut_fit"]=""
-    # ["P44-nothing-台置き_cut_fit"]=""
-    # ["P44-notProducts-台置き_cut_fit"]=""
-    # ["P44-notProducts-bag20240906_1022"]=""
-    # ["P44-2products-2個持ち_cut_fit"]=""
-    # ["P44-1products-2個持ち_cut_fit"]=""
-    # ["P44-2products-台置き_cut_fit"]=""
-    # ["P44-notProducts-bag20240906_0000"]=""
+    ["split-1"]=""
+    ["split-2"]=""
 )
 
 IFS=$'\n'
@@ -41,7 +32,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__img__input "${path__dir__img__input}" \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__img__output "${path__dir__img__output}" \
-        --list__id_class 1,
+        --list__id_class 4,
 
 
     num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)

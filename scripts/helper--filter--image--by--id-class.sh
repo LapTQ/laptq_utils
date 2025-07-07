@@ -1,20 +1,17 @@
 # actually, I just remove the label files. So you should create symblink to image corresponding to the accepted labels
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-nedo-fed/outputs/labels
-POSTFIX__DIR__LABEL__INPUT=""
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+POSTFIX__DIR__LABEL__INPUT="--PRED--DATA--None--MODEL--yolov8x--TRAIN--exp--PREDICT--imgsz-960--conf-0.25--iou-0.45--backpack-handbag--JSON"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-nedo-fed/outputs/labels
-POSTFIX__DIR__LABEL__OUTPUT="--img-w-person"
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--None--MODEL--yolov8x--TRAIN--exp--PREDICT--imgsz-960--conf-0.25--iou-0.45--backpack-handbag--img-w-bag--JSON"
 
-LIST__ID_CLASS__TO_INCLUDE=0,
+LIST__ID_CLASS__TO_INCLUDE=24,26
 LIST__ID_CLASS__TO_EXCLUDE="[]"
 
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["B8-A4-4F-D2-F8-3A/2025_03_19"]=""
-    ["B8-A4-4F-D2-F8-3A/2025_03_20"]=""
-    ["B8-A4-4F-D2-FF-98/2025_03_19"]=""
-    ["B8-A4-4F-D2-FF-98/2025_03_20"]=""
+    ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
 )
 
 

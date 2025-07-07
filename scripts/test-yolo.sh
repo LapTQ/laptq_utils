@@ -1,13 +1,13 @@
-path__dir__run=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs
+path__dir__run=/home/laptq/laptq-fs26-shoplifting-detection/runs
 
-data=data--public--satudora
-data_val=data--testset-4cam-factory
+data=bag-detection
+data_val=bag-detection
 
 
-ver__model=yolo11s--832--scale-0.5--multiscale-True
-imgsz=832
+ver__model=yolov8s--640
+imgsz=640
 
-ver__train=train2
+ver__train=train
 conf=0.05
 
 yolo val \
@@ -15,11 +15,12 @@ yolo val \
     model=$path__dir__run/$data/${ver__model}/$ver__train/weights/best.pt \
     project=$path__dir__run/$data/${ver__model}/val--$ver__train--imgsz-$imgsz--conf-$conf \
     imgsz=$imgsz \
-    conf=$conf \
-    iou=0.5 \
     device=0 \
     batch=8
 
-    
     # model=/mnt/ssd8tb/shared_workspace/manhpc/FS_prj21/runs/train_RAF_val_RAF/weights/best.pt \
     # project=$path__dir__run/RAF/train_RAF_val_RAF/val--train_RAF_val_RAF--imgsz-$imgsz--conf-$conf \
+    
+    # conf=$conf \
+    # iou=0.5 \
+    

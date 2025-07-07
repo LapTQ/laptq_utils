@@ -1,22 +1,27 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
 POSTFIX__DIR__IMAGE=""
 
 TO_USE__YOLOv5_COMPAT=False
-PATH__FILE__MODEL=yolov8x-pose.pt
-ID__DATA=None
-ID__MODEL=yolov8x-pose
-ID__TRAIN=None
-ID__TRAIN=exp
+# PATH__FILE__MODEL=yolov8x-pose.pt
+PATH__FILE__MODEL=/home/laptq/laptq-fs26-shoplifting-detection/runs/bag-detection/yolov8s--640/train/weights/best.pt
+ID__DATA=bag-detection
+# ID__MODEL=yolov8x-pose
+ID__MODEL=yolov8s
+ID__TRAIN=train
+# ID__TRAIN=exp
 
 IMGSZ=640
+# IMGSZ=960
 THRESH__CONF__MIN=0.1
+# THRESH__CONF__MIN=0.01
 THRESH__IOU=0.45
 ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN--iou-$THRESH__IOU
 
-DEVICE="cuda:0"
+DEVICE="cuda:4"
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--all-keypoints--JSON"
+# POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--all-keypoints--JSON"
+POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--JSON"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Normal/Normal__1_.mp4"]=""
@@ -204,11 +209,12 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["Shoplifting/Shoplifting__92_.mp4"]=""
     # ["Shoplifting/Shoplifting__93_.mp4"]=""
 
-    # ["shoplifting-25min.mp4"]=""
+    ["shoplifting-25min.mp4"]=""
     # ["satudora-1min.mp4"]=""
     # ["1568080723085_67014_fix.mkv"]=""
     # ["r10_10min_rotate.mp4"]=""
     ["r9_25min_rotate.mp4"]=""
+    # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
 
     # ["roboflow-data/filtered--w-label/0"]=""
     # ["roboflow-data/filtered--w-label/1"]=""
@@ -269,7 +275,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --thresh__conf__min $THRESH__CONF__MIN \
         --thresh__iou $THRESH__IOU \
         --to_use__yolov5_compat $TO_USE__YOLOv5_COMPAT \
-        --task track \
+        --task detect \
         --persist True \
         --list__name_keypoints "['nose', 'left_eye', 'right_eye', 'left_ear', 'right_ear', 'left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow', 'left_wrist', 'right_wrist', 'left_hip', 'right_hip', 'left_knee', 'right_knee', 'left_ankle', 'right_ankle']" \
         --thresh__conf__keypoints__min 0.0 \

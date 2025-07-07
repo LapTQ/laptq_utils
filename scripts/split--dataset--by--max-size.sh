@@ -1,32 +1,21 @@
-PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
-POSTFIX__DIR__IMG__SOURCE="--raw"
+PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4
+POSTFIX__DIR__IMG__SOURCE="--erase-ignored"
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset
-POSTFIX__DIR__LABEL__SOURCE="--raw"
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4
+POSTFIX__DIR__LABEL__SOURCE="--erase-ignored"
 
-PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--cleaned--dataset--splitted
-POSTFIX__DIR__VERSION__TARGET="--raw"
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4/R10--splitted
+POSTFIX__DIR__VERSION__TARGET=""
 
 TO__SHUFFLE=True
 SEED=42
 
-SIZE__MAX=400
+SIZE__MAX=300
 POSTFIX__DIR__SPLITTED='-batch-'
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["PoC2--2個持ち_cut_fit-1products"]=""
-    ["PoC2--2個持ち_cut_fit-2products"]=""
-    ["PoC2--2個持ち_cut_fit-nothing"]=""
-    ["PoC2--2個持ち_cut_fit-notProducts"]=""
-    ["PoC2--bag20240906_0000-notProducts"]=""
-    ["PoC2--bag20240906_1022-notProducts"]=""
-    ["PoC1--beppu_sue"]=""
-    ["PoC2--beppu_sue"]=""
-    ["PoC2--台置き_cut_fit-1products"]=""
-    ["PoC2--台置き_cut_fit-2products"]=""
-    ["PoC2--台置き_cut_fit-nothing"]=""
-    ["PoC2--台置き_cut_fit-notProducts"]=""
+    ["bag-detection"]=""
 )
 
 
