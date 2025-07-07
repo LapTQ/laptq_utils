@@ -131,6 +131,8 @@ def parse_args():
     ap.add_argument("--to_shift__coords__wrt__box", type=str, choices=["True", "False"])
     ap.add_argument("--id_frame__from", type=str)
     ap.add_argument("--lambda__id_frame__from", type=str)
+    ap.add_argument("--step_size", type=int)
+    ap.add_argument("--color", type=str)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -291,6 +293,11 @@ def parse_args():
     args.lambda__id_frame__from = (
         eval(args.lambda__id_frame__from)
         if args.lambda__id_frame__from is not None
+        else None
+    )
+    args.color = (
+        eval(args.color)
+        if args.color is not None
         else None
     )
 

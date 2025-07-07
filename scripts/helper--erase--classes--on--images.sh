@@ -32,7 +32,8 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__img__input "${path__dir__img__input}" \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__img__output "${path__dir__img__output}" \
-        --list__id_class 4,
+        --list__id_class 4, \
+        --color "(0, 0, 0)" \
 
 
     num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
