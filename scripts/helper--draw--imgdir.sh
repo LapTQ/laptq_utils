@@ -2,7 +2,10 @@ PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_fra
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/generate_background_images
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs
+# PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4/annotation-corrected--v2
 POSTFIX__DIR__IMAGE=""
+# POSTFIX__DIR__IMAGE="--erase-ignored"
+
 
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250505-000000--TSSTG_HO--2-kpt-channels
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift--all-keypoints/torch
@@ -24,7 +27,7 @@ POSTFIX__DIR__IMAGE=""
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v11/torch
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v11_v2/torch
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v12_v2/torch
-PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v13/torch
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v13/torch
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v14/torch
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v15/torch
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v16/torch
@@ -33,15 +36,20 @@ PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/p
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v19/torch
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v20/torch
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/20250505-000000--TSSTG_HO--2-kpt-channels
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4/annotation-corrected--v2
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/data/bag/annotations
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/annotated-frames-with-action-labels
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--None--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filterby-size--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/annotated-frames-with-action-labels
-POSTFIX__DIR__LABEL=""
+# POSTFIX__DIR__LABEL=""
+POSTFIX__DIR__LABEL="--PRED--DATA--bag-detection--MODEL--yolov8s--TRAIN--train--PREDICT--imgsz-640--conf-0.1--iou-0.45--JSON"
+# POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x--TRAIN--exp--PREDICT--imgsz-960--conf-0.25--iou-0.45--backpack-handbag--img-w-bag--JSON"
+# POSTFIX__DIR__LABEL="--JSON"
+# POSTFIX__DIR__LABEL="--erase-ignored--JSON"
 
 
 NUM__MAX__IMG__TO__VISUALIZE=None
@@ -66,7 +74,7 @@ IS_OK__LBL_NOT_FOUND=False
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v11/torch
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v11_v2/torch
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v12_v2/torch
-PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v13/torch
+# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v13/torch
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v14/torch
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v15/torch
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v16/torch
@@ -75,11 +83,13 @@ PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v19/torch
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v20/torch
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/20250505-000000--TSSTG_HO--2-kpt-channels
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
+PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/annotated-frames-with-action-labels
+# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/data/bag/annotations
+# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4/annotation-corrected--v2
 
-PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-prj-44/src/configs/class_name.yaml
+PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/class_name.yaml
 PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/action_names.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
@@ -148,10 +158,10 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     
     ["shoplifting-25min.mp4"]=""
     # ["satudora-1min.mp4"]=""
-    ["r10_10min_rotate.mp4"]=""
-    # ["r9_25min_rotate.mp4"]=""
+    # ["r10_10min_rotate.mp4"]=""
+    ["r9_25min_rotate.mp4"]=""
     # ["1568080723085_67014_fix.mkv"]=""
-    # ["R3_2025_05_15_23_40_32_rotate.mp4"]=""
+    # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
 
     # ["roboflow-data/filtered--w-label/0"]=""
     # ["roboflow-data/filtered--w-label/1"]=""
@@ -188,6 +198,12 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["shoplifting-1min_anonymized.mp4"]=""
     # ["Shoplifting/Shoplifting__30_.mp4"]=""
     # ["Shoplifting/Shoplifting__68_.mp4"]=""
+
+    # ["train"]=""
+    # ["val"]=""
+    # ["test"]=""
+    # ["split-1"]=""
+    # ["split-2"]=""
 )
 
 IFS=$'\n'
@@ -219,9 +235,9 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__id_track False \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
-        --to_draw__box_conf False \
+        --to_draw__box_conf True \
         --to_draw__id_class False \
-        --to_draw__name_class False \
+        --to_draw__name_class True \
         --to_draw__pose True \
         --to_draw__connected_keypoints True \
         --to_draw__id_action False \
@@ -229,13 +245,12 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__action_conf True \
         --fontScale 1 \
         --thickness 2 \
-        --box_color_by id__track \
+        --box_color_by id__class \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
         --path__file__map__id_action__to__name_action $PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION \
         --num__max__img $NUM__MAX__IMG__TO__VISUALIZE \
         --seed 42 \
         --is_ok__lbl_not_exist $IS_OK__LBL_NOT_FOUND \
-        --path__file__map__id_class__to__name_class /home/laptq/Downloads/class_name.yaml \
         --list__keypoints_same_color "[['left_eye', 'right_eye', 'left_ear', 'right_ear'],['left_shoulder', 'right_shoulder', 'left_hip', 'right_hip'],['left_elbow', 'right_elbow', 'left_wrist', 'right_wrist'],['left_knee', 'right_knee', 'left_ankle', 'right_ankle']]" \
         --list__keypoints_edge "[['nose', 'left_eye'],['nose', 'right_eye'],['left_eye', 'left_ear'],['right_eye', 'right_ear'],['left_shoulder', 'right_shoulder'],['left_hip', 'right_hip'],['left_shoulder', 'left_hip'],['right_shoulder', 'right_hip'],['left_shoulder', 'left_elbow'],['right_shoulder', 'right_elbow'],['left_elbow', 'left_wrist'],['right_elbow', 'right_wrist'],['left_hip', 'left_knee'],['right_hip', 'right_knee'],['left_knee', 'left_ankle'],['right_knee', 'right_ankle']]" \
         --list__edges_same_color "[[['nose', 'left_eye'],['nose', 'right_eye'],['left_eye', 'left_ear'],['right_eye', 'right_ear']], [['left_shoulder', 'right_shoulder'],['left_hip', 'right_hip'],['left_shoulder', 'left_hip'],['right_shoulder', 'right_hip']], [['left_shoulder', 'left_elbow'],['right_shoulder', 'right_elbow'],['left_elbow', 'left_wrist'],['right_elbow', 'right_wrist']], [['left_hip', 'left_knee'],['right_hip', 'right_knee'],['left_knee', 'left_ankle'],['right_knee', 'right_ankle']]]" \

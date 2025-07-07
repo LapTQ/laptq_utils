@@ -1,5 +1,6 @@
 # PATH__DIR__VIDEO=/home/laptq/laptq-fs26-shoplifting-detection/data
-PATH__DIR__VIDEO=/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516
+# PATH__DIR__VIDEO=/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516
+PATH__DIR__VIDEO=/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate
 
 PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
 
@@ -194,7 +195,8 @@ declare -A MAP__NAME_VIDEO__TO__=(
     # ["1568080723085_67014_fix.mkv"]=""
     # ["shoplifting-1min_anonymized.mp4"]=""
     # ["r10_10min_rotate.mp4"]=""
-    ["r9_25min_rotate.mp4"]=""
+    # ["r9_25min_rotate.mp4"]=""
+    ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
 )
 
 IFS=$'\n'
@@ -217,6 +219,7 @@ main() {
         helper__convert__video__to__images \
         --path__file__input "${path__file__input}" \
         --path__dir__img__output "${path__dir__img__output}" \
+        --step_size 15 \
         --num__pad__0 9
 }
 
