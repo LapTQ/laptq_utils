@@ -1,38 +1,18 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
-POSTFIX__DIR__LABEL__INPUT="--raw"
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-prj-44/outputs/undo-split--dataset
+POSTFIX__DIR__LABEL__INPUT=""
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/20250217--downloaded-annotations--extracted
-POSTFIX__DIR__LABEL__OUTPUT="--raw--json"
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-prj-44/outputs/undo-split--dataset
+POSTFIX__DIR__LABEL__OUTPUT="--JSON"
 
 MODE__BOX="xcycwhn"
 # MODE__BOX="polygonn"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["P44-20250211-batch-24"]=""
-    ["P44-20250211-batch-25"]=""
-    ["P44-20250211-batch-26"]=""
-    ["P44-20250211-batch-27"]=""
-    ["P44-20250211-batch-28"]=""
-    ["P44-20250211-batch-29"]=""
-    ["P44-20250211-batch-30"]=""
-    ["P44-20250211-batch-31"]=""
-    ["P44-20250211-batch-32"]=""
-    ["P44-20250211-batch-33"]=""
-    ["P44-20250211-batch-34"]=""
-    ["P44-20250211-batch-35"]=""
-    ["P44-20250211-batch-36"]=""
-    ["P44-20250211-batch-37"]=""
-    ["P44-20250211-batch-38"]=""
-    ["P44-20250211-batch-39"]=""
-    ["P44-20250211-batch-40"]=""
-    ["P44-20250211-batch-41"]=""
-    ["P44-20250211-batch-42"]=""
-    ["P44-20250211-batch-43"]=""
-    ["P44-20250211-batch-44"]=""
-    ["P44-20250211-batch-45"]=""
-    ["P44-20250211-batch-46"]=""
-    ["P44-20250211-batch-47"]=""
-    ["P44-20250211-batch-48"]=""
+    ["customer/train"]=""
+    ["customer/val"]=""
+    ["private/train"]=""
+    ["private/val"]=""
+    ["private/test"]=""
 )
 
 IFS=$'\n'
