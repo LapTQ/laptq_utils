@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 import numpy as np
-import tensorrt as trt
-import pycuda.driver as cuda
-import pycuda.autoinit
-import onnxruntime as ort
-import onnx
+# import tensorrt as trt
+# import pycuda.driver as cuda
+# import pycuda.autoinit
+# import onnxruntime as ort
+# import onnx
 
 from laptq_pyutils.objects import ListAligner
 
