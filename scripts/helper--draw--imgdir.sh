@@ -1,5 +1,5 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
-# PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
+# PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/generate_background_images
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4/annotation-corrected--v2
@@ -42,17 +42,19 @@ PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--ex
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/data/bag/annotations
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/annotated-frames-with-action-labels
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--None--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+# POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filterby-size--all-keypoints--RTMPose--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filterby-size--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 # POSTFIX__DIR__LABEL=""
-POSTFIX__DIR__LABEL="--PRED--DATA--bag-detection--MODEL--yolov8s--TRAIN--train--PREDICT--imgsz-640--conf-0.1--iou-0.45--JSON"
+# POSTFIX__DIR__LABEL="--PRED--DATA--bag-detection--MODEL--yolov8s--TRAIN--train--PREDICT--imgsz-640--conf-0.1--iou-0.45--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x--TRAIN--exp--PREDICT--imgsz-960--conf-0.25--iou-0.45--backpack-handbag--img-w-bag--JSON"
 # POSTFIX__DIR__LABEL="--JSON"
 # POSTFIX__DIR__LABEL="--erase-ignored--JSON"
 
 
-NUM__MAX__IMG__TO__VISUALIZE=None
+NUM__MAX__IMG__TO__VISUALIZE=10
 IS_OK__LBL_NOT_FOUND=False
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250505-000000--TSSTG_HO--2-kpt-channels
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift--all-keypoints/torch
@@ -92,119 +94,58 @@ PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--e
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/class_name.yaml
 PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/action_names.yaml
 
-declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["Shoplifting/Shoplifting__10_.mp4"]=""
-
-    # ["Normal/Normal__66_.mp4"]=""
-    # ["Normal/Normal__67_.mp4"]=""
-    # # ["Normal/Normal__68_.mp4"]=""
-    # ["Normal/Normal__69_.mp4"]=""
-    # ["Normal/Normal__6_.mp4"]=""
-    # ["Normal/Normal__70_.mp4"]=""
-    # ["Normal/Normal__71_.mp4"]=""
-    # ["Normal/Normal__72_.mp4"]=""
-    # ["Normal/Normal__73_.mp4"]=""
-    # ["Normal/Normal__74_.mp4"]=""
-    # ["Normal/Normal__75_.mp4"]=""
-    # ["Normal/Normal__76_.mp4"]=""
-    # ["Normal/Normal__77_.mp4"]=""
-    # ["Normal/Normal__78_.mp4"]=""
-    # ["Normal/Normal__79_.mp4"]=""
-    # ["Normal/Normal__7_.mp4"]=""
-    # ["Normal/Normal__80_.mp4"]=""
-    # ["Normal/Normal__81_.mp4"]=""
-    # ["Normal/Normal__82_.mp4"]=""
-    # ["Normal/Normal__83_.mp4"]=""
-    # ["Normal/Normal__84_.mp4"]=""
-    # ["Normal/Normal__85_.mp4"]=""
-    # ["Normal/Normal__86_.mp4"]=""
-    # ["Normal/Normal__87_.mp4"]=""
-    # ["Normal/Normal__88_.mp4"]=""
-    # ["Normal/Normal__89_.mp4"]=""
-    # ["Normal/Normal__8_.mp4"]=""
-    # ["Normal/Normal__90_.mp4"]=""
-    # ["Normal/Normal__9_.mp4"]=""
-    # ["Shoplifting/Shoplifting__67_.mp4"]=""
-    # ["Shoplifting/Shoplifting__68_.mp4"]=""
-    # ["Shoplifting/Shoplifting__69_.mp4"]=""
-    # ["Shoplifting/Shoplifting__6_.mp4"]=""
-    # ["Shoplifting/Shoplifting__70_.mp4"]=""
-    # ["Shoplifting/Shoplifting__71_.mp4"]=""
-    # ["Shoplifting/Shoplifting__72_.mp4"]=""
-    # ["Shoplifting/Shoplifting__73_.mp4"]=""
-    # ["Shoplifting/Shoplifting__74_.mp4"]=""
-    # ["Shoplifting/Shoplifting__75_.mp4"]=""
-    # ["Shoplifting/Shoplifting__76_.mp4"]=""
-    # ["Shoplifting/Shoplifting__77_.mp4"]=""
-    # ["Shoplifting/Shoplifting__78_.mp4"]=""
-    # ["Shoplifting/Shoplifting__79_.mp4"]=""
-    # ["Shoplifting/Shoplifting__7_.mp4"]=""
-    # ["Shoplifting/Shoplifting__80_.mp4"]=""
-    # ["Shoplifting/Shoplifting__81_.mp4"]=""
-    # ["Shoplifting/Shoplifting__82_.mp4"]=""
-    # ["Shoplifting/Shoplifting__83_.mp4"]=""
-    # ["Shoplifting/Shoplifting__84_.mp4"]=""
-    # ["Shoplifting/Shoplifting__85_.mp4"]=""
-    # ["Shoplifting/Shoplifting__86_.mp4"]=""
-    # ["Shoplifting/Shoplifting__87_.mp4"]=""
-    # ["Shoplifting/Shoplifting__88_.mp4"]=""
-    # ["Shoplifting/Shoplifting__89_.mp4"]=""
-    # ["Shoplifting/Shoplifting__8_.mp4"]=""
-    # ["Shoplifting/Shoplifting__90_.mp4"]=""
-    # ["Shoplifting/Shoplifting__91_.mp4"]=""
-    # ["Shoplifting/Shoplifting__92_.mp4"]=""
-    # ["Shoplifting/Shoplifting__93_.mp4"]=""
-    # ["Shoplifting/Shoplifting__9_.mp4"]=""
+# declare -A MAP__SUBPATH_DIR__TO__=(
     
-    ["shoplifting-25min.mp4"]=""
-    # ["satudora-1min.mp4"]=""
-    # ["r10_10min_rotate.mp4"]=""
-    ["r9_25min_rotate.mp4"]=""
-    # ["1568080723085_67014_fix.mkv"]=""
-    # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
+#     ["shoplifting-25min.mp4"]=""
+#     # ["satudora-1min.mp4"]=""
+#     # ["r10_10min_rotate.mp4"]=""
+#     ["r9_25min_rotate.mp4"]=""
+#     # ["1568080723085_67014_fix.mkv"]=""
+#     # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
 
-    # ["roboflow-data/filtered--w-label/0"]=""
-    # ["roboflow-data/filtered--w-label/1"]=""
-    # ["roboflow-data/filtered--w-label/2"]=""
-    # ["roboflow-data/filtered--w-label/3"]=""
-    # ["roboflow-data/filtered--w-label/4"]=""
-    # ["roboflow-data/filtered--w-label/5"]=""
-    # ["roboflow-data/filtered--w-label/6"]=""
-    # ["roboflow-data/filtered--w-label/7"]=""
-    # ["roboflow-data/filtered--w-label/8"]=""
-    # ["roboflow-data/filtered--w-label/9"]=""
-    # ["roboflow-data/filtered--w-label/10"]=""
-    # ["roboflow-data/filtered--w-label/11"]=""
-    # ["roboflow-data/filtered--w-label/12"]=""
-    # ["roboflow-data/filtered--w-label/13"]=""
-    # ["roboflow-data/filtered--w-label/14"]=""
-    # ["roboflow-data/filtered--w-label/15"]=""
-    # ["roboflow-data/filtered--w-label/16"]=""
-    # ["roboflow-data/filtered--w-label/17"]=""
-    # ["roboflow-data/filtered--w-label/18"]=""
-    # ["roboflow-data/filtered--w-label/19"]=""
-    # ["roboflow-data/filtered--w-label/20"]=""
-    # ["roboflow-data/filtered--w-label/21"]=""
+#     # ["roboflow-data/filtered--w-label/0"]=""
+#     # ["roboflow-data/filtered--w-label/1"]=""
+#     # ["roboflow-data/filtered--w-label/2"]=""
+#     # ["roboflow-data/filtered--w-label/3"]=""
+#     # ["roboflow-data/filtered--w-label/4"]=""
+#     # ["roboflow-data/filtered--w-label/5"]=""
+#     # ["roboflow-data/filtered--w-label/6"]=""
+#     # ["roboflow-data/filtered--w-label/7"]=""
+#     # ["roboflow-data/filtered--w-label/8"]=""
+#     # ["roboflow-data/filtered--w-label/9"]=""
+#     # ["roboflow-data/filtered--w-label/10"]=""
+#     # ["roboflow-data/filtered--w-label/11"]=""
+#     # ["roboflow-data/filtered--w-label/12"]=""
+#     # ["roboflow-data/filtered--w-label/13"]=""
+#     # ["roboflow-data/filtered--w-label/14"]=""
+#     # ["roboflow-data/filtered--w-label/15"]=""
+#     # ["roboflow-data/filtered--w-label/16"]=""
+#     # ["roboflow-data/filtered--w-label/17"]=""
+#     # ["roboflow-data/filtered--w-label/18"]=""
+#     # ["roboflow-data/filtered--w-label/19"]=""
+#     # ["roboflow-data/filtered--w-label/20"]=""
+#     # ["roboflow-data/filtered--w-label/21"]=""
 
-    # ["roboflow-data/filtered--wo-label/2"]=""
-    # ["roboflow-data/filtered--wo-label/3"]=""
-    # ["roboflow-data/filtered--wo-label/4"]=""
-    # ["roboflow-data/filtered--wo-label/5"]=""
-    # ["roboflow-data/filtered--wo-label/6"]=""
-    # ["roboflow-data/filtered--wo-label/7"]=""
-    # ["roboflow-data/filtered--wo-label/8"]=""
-    # ["roboflow-data/filtered--wo-label/10"]=""
+#     # ["roboflow-data/filtered--wo-label/2"]=""
+#     # ["roboflow-data/filtered--wo-label/3"]=""
+#     # ["roboflow-data/filtered--wo-label/4"]=""
+#     # ["roboflow-data/filtered--wo-label/5"]=""
+#     # ["roboflow-data/filtered--wo-label/6"]=""
+#     # ["roboflow-data/filtered--wo-label/7"]=""
+#     # ["roboflow-data/filtered--wo-label/8"]=""
+#     # ["roboflow-data/filtered--wo-label/10"]=""
 
-    # ["shoplifting-1min_anonymized.mp4"]=""
-    # ["Shoplifting/Shoplifting__30_.mp4"]=""
-    # ["Shoplifting/Shoplifting__68_.mp4"]=""
+#     # ["shoplifting-1min_anonymized.mp4"]=""
+#     # ["Shoplifting/Shoplifting__30_.mp4"]=""
+#     # ["Shoplifting/Shoplifting__68_.mp4"]=""
 
-    # ["train"]=""
-    # ["val"]=""
-    # ["test"]=""
-    # ["split-1"]=""
-    # ["split-2"]=""
-)
+#     # ["train"]=""
+#     # ["val"]=""
+#     # ["test"]=""
+#     # ["split-1"]=""
+#     # ["split-2"]=""
+# )
+source /home/laptq/laptq-fs26-shoplifting-detection/data/shoplifting-gen-video-paths.sh
 
 IFS=$'\n'
 TAG__FAILED="\033[31m[FAILED]\033[0m"
@@ -213,7 +154,7 @@ TAG__INFO="\033[94m[INFO]\033[0m"
 TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 
-for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
+for subpath__dir in "${!MAP__SUBPATH_VIDEO__TO__[@]}"; do
     path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}/images${POSTFIX__DIR__IMAGE}"
     path__dir__lbl="${PATH__DIR__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
 
@@ -235,9 +176,9 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__id_track False \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
-        --to_draw__box_conf True \
+        --to_draw__box_conf False \
         --to_draw__id_class False \
-        --to_draw__name_class True \
+        --to_draw__name_class False \
         --to_draw__pose True \
         --to_draw__connected_keypoints True \
         --to_draw__id_action False \
@@ -245,7 +186,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__action_conf True \
         --fontScale 1 \
         --thickness 2 \
-        --box_color_by id__class \
+        --box_color_by id__track \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
         --path__file__map__id_action__to__name_action $PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION \
         --num__max__img $NUM__MAX__IMG__TO__VISUALIZE \

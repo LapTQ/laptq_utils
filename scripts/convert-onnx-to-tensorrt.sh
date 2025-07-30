@@ -7,3 +7,5 @@ python3 submodules/laptq_utils/main.py \
         --precision fp32 \
         --dynamic_shape "{'input1': [(1, 2, 15, 17),(10, 2, 15, 17), (100, 2, 15, 17)]}" \
         --max_workspace_size 1 \
+
+        # --dynamic_shape "{'input1': [(1, 2, 15, 6),(10, 2, 15, 6), (100, 2, 15, 6)], 'input2': [(1, 2, 3, 64, 64),(10, 2, 3, 64, 64),(100, 2, 3, 64, 64)]}" \
