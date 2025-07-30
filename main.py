@@ -27,6 +27,7 @@ from laptq_pyutils.helper import (
     helper__paste__seg_crops__over__background,
     helper__merge__detection__result,
     helper__extract__crops__from__detection,
+    helper__extract__topdown__pose,
 )
 import argparse
 
@@ -55,6 +56,7 @@ def parse_args():
     ap.add_argument("--path__file__lbl__output", type=str)
     ap.add_argument("--path__file__output", type=str)
     ap.add_argument("--path__file__model", type=str)
+    ap.add_argument("--path__file__config", type=str)
     ap.add_argument("--list__path__dir__lbl__input", type=str)  # sep by ,
     ap.add_argument("--device", type=str)
     ap.add_argument("--imgsz", type=int)
