@@ -21,6 +21,7 @@ from .detection import (
     helper__cluster__detection__bboxes,
     helper__merge__detection__result,
     helper__extract__crops__from__detection,
+    helper__extract__topdown__pose,
 )
 from .segmentation import helper__extract__crops__with__mask__from__segmentation
 from .generation import (
