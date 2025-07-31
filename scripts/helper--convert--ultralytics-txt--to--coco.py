@@ -5,6 +5,12 @@ LS__PATHF_INPUT = [
     "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/valid_d1_90k.txt",
     # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/train_d2_110k.txt",
     "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/valid_d2_110k.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/trivials/toy_dataset.txt"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/trivials/toy_dataset2.txt"
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/train_d6_cam1.txt",
+    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/valid_d6_cam1.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/train_d6_cam2.txt",
+    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/valid_d6_cam2.txt",
 ]
 PATHF_OUTPUT = (
     # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d1_90k.json"
@@ -12,7 +18,15 @@ PATHF_OUTPUT = (
     # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d2_110k.json"
     # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/valid_d2_110k.json"
     # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d1_90k--train_d2_110k.json"
-    "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/valid_d1_90k--valid_d2_110k.json"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/toy.json"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/toy2.json"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d1_90k--train_d6_cam1.json"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/valid_d1_90k--valid_d6_cam1.json"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d2_110k--train_d6_cam2.json"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/valid_d2_110k--valid_d6_cam2.json"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d1_90k--train_d2_110k--train_d6_cam1--train_d6_cam2.json"
+    "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/valid_d1_90k--valid_d2_110k--valid_d6_cam1--valid_d6_cam2.json"
+
 )
 
 
