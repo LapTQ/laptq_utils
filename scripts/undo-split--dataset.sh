@@ -1,33 +1,21 @@
-# PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1
-# PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json
-PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2
+PATH__DIR__IMAGE__SOURCE=/home/laptq/laptq-prj-44/outputs/undo-unslashed--subpath-dir--dataset
 POSTFIX__DIR__IMG__SOURCE=""
 
-# PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1
-# PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-44/outputs/undo-unslashed--subpath-dir--dataset
 POSTFIX__DIR__LABEL__SOURCE=""
 
-# PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part1--undo-split
-# PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241217--downloaded--annotation--json--undo-split
-PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/20241213--prepare--annotate--part2--undo-split
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-44/outputs/undo-split--dataset
 POSTFIX__DIR__VERSION__TARGET=""
 
 POSTFIX__DIR__SPLITTED='-batch-'
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["beppu_sue"]=""
-    # ["P44-nothing-2個持ち_cut_fit"]=""
-    # ["P44-notProducts-2個持ち_cut_fit"]=""
-    # ["P44-1products-台置き_cut_fit"]=""
-    # ["P44-nothing-台置き_cut_fit"]=""
-    # ["P44-notProducts-台置き_cut_fit"]=""
-    # ["P44-notProducts-bag20240906_1022"]=""
-    # ["P44-2products-2個持ち_cut_fit"]=""
-    # ["P44-1products-2個持ち_cut_fit"]=""
-    # ["P44-2products-台置き_cut_fit"]=""
-    # ["P44-notProducts-bag20240906_0000"]=""
+    ["customer/train"]=""
+    ["customer/val"]=""
+    ["private/train"]=""
+    ["private/val"]=""
+    ["private/test"]=""
 )
 
 
@@ -53,7 +41,10 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     sum__num__file__img=0
     sum__num__file__lbl=0
 
-    if [[ $( ls "${PATH__DIR__IMAGE__SOURCE}" | grep "${subpath_dir}${POSTFIX__DIR__SPLITTED}" | wc -l ) -eq 0 ]]; then
+    subpath_dir_parent=${subpath_dir%/*}
+    namef_dir="${subpath_dir##*/}"
+
+    if [[ $( ls "${PATH__DIR__IMAGE__SOURCE}/${subpath_dir_parent}" | grep "${namef_dir}${POSTFIX__DIR__SPLITTED}" | wc -l ) -eq 0 ]]; then
         path__dir__img__input="${PATH__DIR__IMAGE__SOURCE}/${subpath_dir}/images${POSTFIX__DIR__IMG__SOURCE}"
         path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${subpath_dir}/labels${POSTFIX__DIR__LABEL__SOURCE}"
 
@@ -61,14 +52,14 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         if [[ ! -d "${path__dir__img__input}" ]]; then
             echo -e "${TAG__FAILED} missed images: ${subpath_dir}. Skipping or exiting..."
             
-            # exit 1
-            continue
+            exit 1
+            # continue
         fi
         if [[ ! -d "${path__dir__lbl__input}" ]]; then
             echo -e "${TAG__FAILED} missed labels: ${subpath_dir}. Skipping or exiting..."
             
-            # exit 1
-            continue
+            exit 1
+            # continue
         fi
 
         cp -r "${path__dir__img__input}"/* "${path__dir__img__output}"
@@ -78,7 +69,9 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         sum__num__file__img=$(find "${path__dir__img__input}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l)
         sum__num__file__lbl=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
     else
-        for subpath_dir__child in $( ls "${PATH__DIR__IMAGE__SOURCE}" | grep "${subpath_dir}${POSTFIX__DIR__SPLITTED}" ); do
+        for namef_dir__child in $( ls "${PATH__DIR__IMAGE__SOURCE}/${subpath_dir_parent}" | grep "${namef_dir}${POSTFIX__DIR__SPLITTED}" ); do
+            subpath_dir__child=${subpath_dir_parent}/${namef_dir__child}
+
             path__dir__img__input="${PATH__DIR__IMAGE__SOURCE}/${subpath_dir__child}/images${POSTFIX__DIR__IMG__SOURCE}"
             path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${subpath_dir__child}/labels${POSTFIX__DIR__LABEL__SOURCE}"
 
@@ -86,16 +79,15 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
             if [[ ! -d "${path__dir__img__input}" ]]; then
                 echo -e "${TAG__FAILED} missed images: ${subpath_dir__child}. Skipping or exiting..."
                 
-                # exit 1
-                continue
+                exit 1
+                # continue
             fi
             if [[ ! -d "${path__dir__lbl__input}" ]]; then
                 echo -e "${TAG__FAILED} missed labels: ${subpath_dir__child}. Skipping or exiting..."
                 
-                # exit 1
-                continue
+                exit 1
+                # continue
             fi
-
             cp -r "${path__dir__img__input}"/* "${path__dir__img__output}"
             cp -r "${path__dir__lbl__input}"/* "${path__dir__lbl__output}"
 

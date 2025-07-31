@@ -12,3 +12,7 @@ from .background import (
     createBackgroundSubtractorMOG2,
     createBackgroundSubtractorKNN,
 )
+from .general import (
+    crop_with_pad,
+    SquarePad,
+)
