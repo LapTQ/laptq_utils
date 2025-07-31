@@ -126,6 +126,8 @@ def parse_args():
     ap.add_argument("--list__keypoints_same_color", type=str)
     ap.add_argument("--list__keypoints_edge", type=str)
     ap.add_argument("--list__edges_same_color", type=str)
+    ap.add_argument("--list__keypoints_to_include", type=str)
+    ap.add_argument("--list__keypoints_to_exclude", type=str)
     ap.add_argument("--persist", type=str)
     ap.add_argument("--split_by", type=str)
     ap.add_argument("--thresh__conf__keypoints__min", type=float)
@@ -297,9 +299,15 @@ def parse_args():
         if args.lambda__id_frame__from is not None
         else None
     )
-    args.color = (
-        eval(args.color)
-        if args.color is not None
+    args.color = eval(args.color) if args.color is not None else None
+    args.list__keypoints_to_include = (
+        eval(args.list__keypoints_to_include)
+        if args.list__keypoints_to_include is not None
+        else None
+    )
+    args.list__keypoints_to_exclude = (
+        eval(args.list__keypoints_to_exclude)
+        if args.list__keypoints_to_exclude is not None
         else None
     )
 
