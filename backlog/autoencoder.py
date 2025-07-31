@@ -2,20 +2,30 @@ from diffusers import AutoencoderKL
 from PIL import Image
 import torch
 from torchvision import transforms
+import numpy as np
 
 
+vae = AutoencoderKL.from_pretrained(
+    "CompVis/stable-diffusion-v1-4", subfolder="vae", device_map="auto"
+)
 
-vae = AutoencoderKL.from_pretrained("CompVis/stable-diffusion-v1-4", subfolder="vae", device_map='auto')
 
-
-image = Image.open(
-    # "/home/lap_awlv/fed-object-detection/data/people_detection/test/images/8JWLHYHHBIFX_jpg.rf.5b5fff2e203a8dac1ab6370734d5ad28.jpg"
-    "/home/lap_awlv/fed-object-detection/data/147_rice_2021_11_09_8AM_20_58_edit_63.jpg"
-).convert('RGB').resize((512, 512))
+image = (
+    Image.open(
+        # "/home/lap_awlv/fed-object-detection/data/people_detection/test/images/8JWLHYHHBIFX_jpg.rf.5b5fff2e203a8dac1ab6370734d5ad28.jpg"
+        "/media/home2/share/fedobjdet/detection_people_pseudo/batch1/B8-A4-4F-D2-F8-3A/images/2025_03_31/1743388920881_42000.jpg"
+    )
+    .convert("RGB")
+    .resize((512, 512))
+)
 image = transforms.ToTensor()(image).unsqueeze(0)
 print(image.shape)
-out = vae.encode(image*2-1).latent_dist.sample()
-print(out.shape)
+out = vae.encode(image * 2 - 1).latent_dist.sample()
+print(out.shape, out.dtype)
+with open(
+    "/home/lap_awlv/fed-object-detection/outputs/autoencoder/vae_out.npy", "wb"
+) as f:
+    np.save(f, out.detach().cpu().numpy())
 out = vae.decode(out).sample
 print(out[0].shape)
 out = (out / 2 + 0.5).clamp(0, 1)

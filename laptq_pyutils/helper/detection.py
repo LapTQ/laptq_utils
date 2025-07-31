@@ -363,6 +363,9 @@ def helper__draw__imgdir(**kwargs):
     num__max__img = kwargs["num__max__img"]
     seed = kwargs["seed"]
     is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    to_draw__id_frame = kwargs["to_draw__id_frame"]
+    id_frame__from = kwargs["id_frame__from"]
+    lambda__id_frame__from = kwargs["lambda__id_frame__from"]
     to_draw__name_class = kwargs["to_draw__name_class"]
     to_draw__name_action = kwargs["to_draw__name_action"]
     path__file__map__id_class__to__name_class = kwargs[
@@ -373,6 +376,10 @@ def helper__draw__imgdir(**kwargs):
     ]
     to_concat__original_img = kwargs["to_concat__original_img"]
     concat__axis = kwargs["concat__axis"]
+
+    assert id_frame__from in [
+        "filename"
+    ], "id_frame__from {} not supported. Supporting: 'filename'.".format(id_frame__from)
 
     os.makedirs(path__dir__output, exist_ok=True)
 
@@ -416,12 +423,17 @@ def helper__draw__imgdir(**kwargs):
         path__file__lbl = list__path__file__lbl[i_f]
         path__file__img = os.path.join(path__dir__img, name__file__img)
 
+        if to_draw__id_frame:
+            if id_frame__from == "filename":
+                id__frame = lambda__id_frame__from(name__file__img)
+
         img__bgr = cv2.imread(path__file__img)
         with open(path__file__lbl, "r") as f:
             dict__result = json.load(f)
 
         img__vis = draw__image(
             data={
+                "id__frame": id__frame if to_draw__id_frame else None,
                 "img__bgr": img__bgr,
                 "list__obj__box_x1y1whn": (
                     xcycwh__to__x1y1wh(
@@ -507,6 +519,8 @@ def helper__draw__video(**kwargs):
         map__id_action__to__name_action = {}
 
     cap = cv2.VideoCapture(path__file__video__input)
+
+    os.makedirs(os.path.dirname(path__file__output), exist_ok=True)
 
     writer = cv2.VideoWriter(
         path__file__output,
@@ -1100,6 +1114,7 @@ def helper__erase__classes__on__images(**kwargs):
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__img__output = kwargs["path__dir__img__output"]
     list__id_class = kwargs["list__id_class"]
+    color = kwargs["color"]
 
     os.makedirs(path__dir__img__output, exist_ok=True)
 
@@ -1136,7 +1151,7 @@ def helper__erase__classes__on__images(**kwargs):
             x2 = int(x2n * W)
             y2 = int(y2n * H)
 
-            img[y1:y2, x1:x2] = 0
+            img[y1:y2, x1:x2] = color
 
         cv2.imwrite(path__file__img__output, img)
 
@@ -1316,12 +1331,23 @@ def helper__extract__crops__from__detection(**kwargs):
     is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
     num__pad__0 = kwargs["num__pad__0"]
     split_by = kwargs["split_by"]
+    to_resize_box__wrt__pose = kwargs["to_resize_box__wrt__pose"]
+    to_shift__coords__wrt__box = kwargs["to_shift__coords__wrt__box"]
+    to_save__img = kwargs["to_save__img"]
 
     assert split_by in [None, "id__track", "id__class"]
 
-    for name__file__img in tqdm(sorted(os.listdir(path__dir__img__input))):
-        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
-        path__file__img = os.path.join(path__dir__img__input, name__file__img)
+    if to_save__img:
+        list__name__file = sorted(os.listdir(path__dir__img__input))
+    else:
+        list__name__file = sorted(os.listdir(path__dir__lbl__input))
+    for name__file in tqdm(list__name__file):
+        if to_save__img:
+            name__file__img = name__file
+            name__file__lbl = os.path.splitext(name__file)[0] + ".json"
+            path__file__img = os.path.join(path__dir__img__input, name__file__img)
+        else:
+            name__file__lbl = name__file
         path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
 
         if not os.path.exists(path__file__lbl):
@@ -1333,8 +1359,9 @@ def helper__extract__crops__from__detection(**kwargs):
         with open(path__file__lbl, "r") as f:
             dict__result = json.load(f)
 
-        img = cv2.imread(path__file__img)
-        H, W = img.shape[:2]
+        if to_save__img:
+            img = cv2.imread(path__file__img)
+            H, W = img.shape[:2]
 
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
         list__obj__id_track = dict__result.get(
@@ -1347,7 +1374,12 @@ def helper__extract__crops__from__detection(**kwargs):
             "list__obj__kpts_xyn", [None] * len(list__obj__box_xcycwhn)
         )
         for i_obj, (id__track, id__class, box_xcycwhn, kpts_xyn) in enumerate(
-            zip(list__obj__id_track, list__obj__id_class, list__obj__box_xcycwhn, list__obj__kpts_xyn)
+            zip(
+                list__obj__id_track,
+                list__obj__id_class,
+                list__obj__box_xcycwhn,
+                list__obj__kpts_xyn,
+            )
         ):
             b_xcn, b_ycn, b_wn, b_hn = box_xcycwhn
             b_x1n = b_xcn - b_wn / 2
@@ -1355,51 +1387,94 @@ def helper__extract__crops__from__detection(**kwargs):
             b_x2n = b_x1n + b_wn
             b_y2n = b_y1n + b_hn
 
+            # resize box wrt pose
+            if kpts_xyn is not None and to_resize_box__wrt__pose:
+                k_xnmin = 1e9
+                k_ynmin = 1e9
+                k_xnmax = -1e9
+                k_ynmax = -1e9
+                for k_xn, k_yn in kpts_xyn.values():
+                    if k_xn < k_xnmin:
+                        k_xnmin = k_xn
+                    if k_yn < k_ynmin:
+                        k_ynmin = k_yn
+                    if k_xn > k_xnmax:
+                        k_xnmax = k_xn
+                    if k_yn > k_ynmax:
+                        k_ynmax = k_yn
+                b_x1n = min(b_x1n, k_xnmin)
+                b_y1n = min(b_y1n, k_ynmin)
+                b_x2n = max(b_x2n, k_xnmax)
+                b_y2n = max(b_y2n, k_ynmax)
+
+                b_x1n = max(0, b_x1n)
+                b_y1n = max(0, b_y1n)
+                b_x2n = min(1, b_x2n)
+                b_y2n = min(1, b_y2n)
+
+                b_xcn = (b_x1n + b_x2n) / 2
+                b_ycn = (b_y1n + b_y2n) / 2
+                b_wn = b_x2n - b_x1n
+                b_hn = b_y2n - b_y1n
+
+                # update new box
+                box_xcycwhn[0] = b_xcn
+                box_xcycwhn[1] = b_ycn
+                box_xcycwhn[2] = b_wn
+                box_xcycwhn[3] = b_hn
+
             # get croped patch
-            b_x1 = int(b_x1n * W)
-            b_y1 = int(b_y1n * H)
-            b_x2 = int(b_x2n * W)
-            b_y2 = int(b_y2n * H)
-            crop_img = img[b_y1:b_y2, b_x1:b_x2]
+            if to_save__img:
+                b_x1 = int(b_x1n * W)
+                b_y1 = int(b_y1n * H)
+                b_x2 = int(b_x2n * W)
+                b_y2 = int(b_y2n * H)
+                crop_img = img[b_y1:b_y2, b_x1:b_x2]
 
-            # shift keypoints
-            if kpts_xyn is not None:
-                for kname, (k_xn, k_yn) in kpts_xyn.items():
-                    if k_xn == 0 and k_yn == 0:
-                        continue
-                    k_xn = (k_xn - b_x1n) / b_wn
-                    k_yn = (k_yn - b_y1n) / b_hn
-                    kpts_xyn[kname] = [k_xn, k_yn]
+            if to_shift__coords__wrt__box:
+                # shift keypoints
+                if kpts_xyn is not None:
+                    for kname, (k_xn, k_yn) in kpts_xyn.items():
+                        if k_xn == 0 and k_yn == 0:
+                            continue
+                        k_xn = (k_xn - b_x1n) / b_wn
+                        k_yn = (k_yn - b_y1n) / b_hn
+                        kpts_xyn[kname] = [k_xn, k_yn]
 
-            # shift box
-            box_xcycwhn[0] = 0.5
-            box_xcycwhn[1] = 0.5
-            box_xcycwhn[2] = 1
-            box_xcycwhn[3] = 1
+                # shift box
+                box_xcycwhn[0] = 0.5
+                box_xcycwhn[1] = 0.5
+                box_xcycwhn[2] = 1
+                box_xcycwhn[3] = 1
 
-            if split_by is not None: 
+            if split_by is not None:
                 if split_by == "id__track":
                     subpathd = str(id__track)
                 elif split_by == "id__class":
                     subpathd = str(id__class)
-                
+
                 # assuming path__dir__crop__img__output has a {} placeholder
-                __path__dir__crop__img__output = path__dir__crop__img__output.format(subpathd)
-                __path__dir__crop__lbl__output = path__dir__crop__lbl__output.format(subpathd)
+                __path__dir__crop__img__output = path__dir__crop__img__output.format(
+                    subpathd
+                )
+                __path__dir__crop__lbl__output = path__dir__crop__lbl__output.format(
+                    subpathd
+                )
             else:
                 __path__dir__crop__img__output = path__dir__crop__img__output
                 __path__dir__crop__lbl__output = path__dir__crop__lbl__output
-                
+
             os.makedirs(__path__dir__crop__img__output, exist_ok=True)
             os.makedirs(__path__dir__crop__lbl__output, exist_ok=True)
 
-            path__file__crop__img__output = os.path.join(
-                __path__dir__crop__img__output,
-                "{}--crop-{:0{}}.jpg".format(
-                    os.path.splitext(name__file__img)[0], i_obj, num__pad__0
-                ),
-            )
-            cv2.imwrite(path__file__crop__img__output, crop_img)
+            if to_save__img:
+                path__file__crop__img__output = os.path.join(
+                    __path__dir__crop__img__output,
+                    "{}--crop-{:0{}}.jpg".format(
+                        os.path.splitext(name__file__img)[0], i_obj, num__pad__0
+                    ),
+                )
+                cv2.imwrite(path__file__crop__img__output, crop_img)
 
             dict__result__crop = {
                 k: dict__result[k][i_obj : i_obj + 1] for k in dict__result
@@ -1407,8 +1482,98 @@ def helper__extract__crops__from__detection(**kwargs):
             path__file__crop__lbl__output = os.path.join(
                 __path__dir__crop__lbl__output,
                 "{}--crop-{:0{}}.json".format(
-                    os.path.splitext(name__file__img)[0], i_obj, num__pad__0
+                    os.path.splitext(name__file__lbl)[0], i_obj, num__pad__0
                 ),
             )
             with open(path__file__crop__lbl__output, "w") as f:
                 json.dump(dict__result__crop, f, indent=4)
+
+
+def helper__extract__topdown__pose(**kwargs):
+
+    import json
+    from tqdm import tqdm
+    import os
+    import numpy as np
+    import cv2
+    from mmpose.apis import inference_topdown
+    from mmpose.apis import init_model
+    from mmpose.structures.pose_data_sample import PoseDataSample
+
+    path__dir__img = kwargs["path__dir__img"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    path__file__model = kwargs["path__file__model"]
+    path__file__config = kwargs["path__file__config"]
+    device = kwargs["device"]
+    list__name_keypoints = kwargs["list__name_keypoints"]
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    class RTMPOSE:
+        def __init__(self):
+            self.pose_estimator = init_model(
+                path__file__config, path__file__model, device
+            )
+
+        def predict(self, image: np.ndarray, boxes):
+            poses = inference_topdown(
+                self.pose_estimator, image, boxes, bbox_format="xyxy"
+            )
+            list_keypoints = []
+            for pose in poses:
+                keypoints: np.ndarray = pose.get("pred_instances").get("keypoints")[0]
+                scores: np.ndarray = (
+                    pose.get("pred_instances").get("keypoint_scores")[0].reshape(-1, 1)
+                )
+                pose_result = np.concatenate((keypoints, scores), axis=1)
+                # print(keypoints.shape, scores.shape, pose_result.shape)
+                list_keypoints.append(pose_result)
+
+            return list_keypoints
+
+    pose_estimator = RTMPOSE()
+
+    for name__file__img in tqdm(sorted(os.listdir(path__dir__img))):
+        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
+        path__file__img__input = os.path.join(path__dir__img, name__file__img)
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+        img = cv2.imread(path__file__img__input)
+        H, W = img.shape[:2]
+
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
+
+        list__obj__box_xcycwhn = np.array(
+            dict__result["list__obj__box_xcycwhn"]
+        ).reshape(-1, 4)
+        list__obj__box_x1y1x2y2 = box_normalized__to__box_pixels(
+            xcycwh__to__x1y1x2y2(list__obj__box_xcycwhn), (W, H)
+        )
+
+        list_keypoints = pose_estimator.predict(img, list__obj__box_x1y1x2y2)
+        list__obj__kpts_xyn = []
+        list__obj__kpts_conf = []
+        for i_obj, kpts in enumerate(list_keypoints):
+            kpts_xyn = kpts[:, :2] / [W, H]
+            kpts_conf = kpts[:, 2]
+            list__obj__kpts_xyn.append(
+                {
+                    name: kpt.tolist()
+                    for name, kpt in zip(list__name_keypoints, kpts_xyn)
+                }
+            )
+            list__obj__kpts_conf.append(
+                {
+                    name: conf.item()
+                    for name, conf in zip(list__name_keypoints, kpts_conf)
+                }
+            )
+
+        dict__result["list__obj__kpts_xyn"] = list__obj__kpts_xyn
+        dict__result["list__obj__kpts_conf"] = list__obj__kpts_conf
+
+        with open(path__file__lbl__output, "w") as f:
+            json.dump(dict__result, f, indent=4)

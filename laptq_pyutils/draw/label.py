@@ -35,6 +35,8 @@ def draw__image(**kwargs):
     thickness = kwargs.get("thickness", 1)
     map__id_class__to__name_class = kwargs.get("map__id_class__to__name_class", {})
     map__id_action__to__name_action = kwargs.get("map__id_action__to__name_action", {})
+    list__keypoints_to_include = kwargs.get("list__keypoints_to_include", None)
+    list__keypoints_to_exclude = kwargs.get("list__keypoints_to_exclude", [])
     list__keypoints_same_color = kwargs.get("list__keypoints_same_color", None)
     list__keypoints_edge = kwargs.get("list__keypoints_edge", None)
     list__edges_same_color = kwargs.get("list__edges_same_color", None)
@@ -119,7 +121,14 @@ def draw__image(**kwargs):
     H, W = img__bgr.shape[:2]
 
     if to_draw__id_frame and id__frame is not None:
-        cv2_putText(img__bgr, str(id__frame), (10, 30))
+        cv2_putText(
+            img__bgr,
+            str(id__frame),
+            (10, 30),
+            color=COLORS[1],
+            fontScale=fontScale,
+            thickness=thickness,
+        )
 
     for i_obj, (
         box__x1y1whn,
@@ -273,7 +282,11 @@ def draw__image(**kwargs):
                         if not to_draw__name_action
                         or id__action not in map__id_action__to__name_action
                         else "{}".format(map__id_action__to__name_action[id__action])
-                        + (" {:.2f}".format(aconf) if to_draw__action_conf and aconf is not None else "")
+                        + (
+                            " {:.2f}".format(aconf)
+                            if to_draw__action_conf and aconf is not None
+                            else ""
+                        )
                     )
                     cv2_putText(
                         img__bgr,
@@ -286,6 +299,20 @@ def draw__image(**kwargs):
         if to_draw__pose and kpts__xyn is not None:
             if to_draw__connected_keypoints:
                 for i_e, (name_kpt1, name_kpt2) in enumerate(list__keypoints_edge):
+
+                    if (
+                        (
+                            list__keypoints_to_include is not None
+                            and (
+                                name_kpt1 not in list__keypoints_to_include
+                                or name_kpt2 not in list__keypoints_to_include
+                            )
+                        )
+                        or name_kpt1 in list__keypoints_to_exclude
+                        or name_kpt2 in list__keypoints_to_exclude
+                    ):
+                        continue
+
                     xn1 = kpts__xyn[name_kpt1][0]
                     yn1 = kpts__xyn[name_kpt1][1]
                     xn2 = kpts__xyn[name_kpt2][0]
@@ -314,6 +341,13 @@ def draw__image(**kwargs):
                     )
 
             for i, (name_kpt, (xn, yn)) in enumerate(kpts__xyn.items()):
+
+                if (
+                    list__keypoints_to_include is not None
+                    and name_kpt not in list__keypoints_to_include
+                ) or name_kpt in list__keypoints_to_exclude:
+                    continue
+
                 x = int(xn * W)
                 y = int(yn * H)
                 if x == 0 and y == 0:

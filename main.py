@@ -27,6 +27,7 @@ from laptq_pyutils.helper import (
     helper__paste__seg_crops__over__background,
     helper__merge__detection__result,
     helper__extract__crops__from__detection,
+    helper__extract__topdown__pose,
 )
 import argparse
 
@@ -55,6 +56,7 @@ def parse_args():
     ap.add_argument("--path__file__lbl__output", type=str)
     ap.add_argument("--path__file__output", type=str)
     ap.add_argument("--path__file__model", type=str)
+    ap.add_argument("--path__file__config", type=str)
     ap.add_argument("--list__path__dir__lbl__input", type=str)  # sep by ,
     ap.add_argument("--device", type=str)
     ap.add_argument("--imgsz", type=int)
@@ -124,9 +126,17 @@ def parse_args():
     ap.add_argument("--list__keypoints_same_color", type=str)
     ap.add_argument("--list__keypoints_edge", type=str)
     ap.add_argument("--list__edges_same_color", type=str)
+    ap.add_argument("--list__keypoints_to_include", type=str)
+    ap.add_argument("--list__keypoints_to_exclude", type=str)
     ap.add_argument("--persist", type=str)
     ap.add_argument("--split_by", type=str)
     ap.add_argument("--thresh__conf__keypoints__min", type=float)
+    ap.add_argument("--to_resize_box__wrt__pose", type=str, choices=["True", "False"])
+    ap.add_argument("--to_shift__coords__wrt__box", type=str, choices=["True", "False"])
+    ap.add_argument("--id_frame__from", type=str)
+    ap.add_argument("--lambda__id_frame__from", type=str)
+    ap.add_argument("--step_size", type=int)
+    ap.add_argument("--color", type=str)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -274,6 +284,32 @@ def parse_args():
         else None
     )
     args.split_by = eval(args.split_by) if args.split_by is not None else None
+    args.to_resize_box__wrt__pose = (
+        eval(args.to_resize_box__wrt__pose)
+        if args.to_resize_box__wrt__pose is not None
+        else None
+    )
+    args.to_shift__coords__wrt__box = (
+        eval(args.to_shift__coords__wrt__box)
+        if args.to_shift__coords__wrt__box is not None
+        else None
+    )
+    args.lambda__id_frame__from = (
+        eval(args.lambda__id_frame__from)
+        if args.lambda__id_frame__from is not None
+        else None
+    )
+    args.color = eval(args.color) if args.color is not None else None
+    args.list__keypoints_to_include = (
+        eval(args.list__keypoints_to_include)
+        if args.list__keypoints_to_include is not None
+        else None
+    )
+    args.list__keypoints_to_exclude = (
+        eval(args.list__keypoints_to_exclude)
+        if args.list__keypoints_to_exclude is not None
+        else None
+    )
 
     return args
 

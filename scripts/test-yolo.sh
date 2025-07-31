@@ -1,8 +1,13 @@
 path__dir__run=/mnt/hdd10tb/Users/laptq/laptq-prj-46/runs
 
-data=20241122--phase-2--annotation-ver2
-
 # bash ~/laptq-prj-46/submodules/laptq_utils/scripts/create--soft-link--dataset--for--training--yolo.sh
+
+LS__DATA_VAL=(
+    data--c1
+    data--c2
+)
+
+data=20241122--phase-2--annotation-ver2
 
 # ver__model=yolo11m--960--full
 # imgsz=960
@@ -22,22 +27,21 @@ imgsz=960
 # imgsz=960
 
 ver__train=train8
-conf=0.01
+conf=0.1
 
-yolo val \
-    data=src/configs/$data_val.yaml \
-    model=$path__dir__run/$data/${ver__model}/$ver__train/weights/best.pt \
-    project=$path__dir__run/$data/${ver__model}/val--$ver__train--imgsz-$imgsz--conf-$conf \
-    imgsz=$imgsz \
-    iou=0.5 \
-    conf=$conf \
-    device=0 \
-    batch=4
-    
+for data_val in ${LS__DATA_VAL[@]}; do
+    echo
+    echo "========= Evaluating data $data_val ========="
 
-    # model=/mnt/hdd10tb/Users/laptq/laptq-prj-46/weights/yolov10m_only_pot_det_960x960.pt \
-    # project=$path__dir__run/$data/yolov10m_only_pot_det_960x960/val--conf-$conf \
-    
-    # model=/mnt/ssd4tb/shared_workspace/prj46/models/pytorch/yolov11m-p2_pot_man_crop_det_960x960_new_data.pt \
-    # project=$path__dir__run/$data/yolov11m-p2_pot_man_crop_det_960x960_new_data/val--conf-$conf \
-    
+    yolo val \
+        data=src/configs/$data_val.yaml \
+        imgsz=$imgsz \
+        device=0 \
+        batch=4 \
+        project=$path__dir__run/$data/${ver__model}/val--$ver__train--imgsz-$imgsz--conf-$conf \
+        model=$path__dir__run/$data/${ver__model}/$ver__train/weights/best.pt \
+        conf=$conf \
+
+        # iou=0.6 \
+
+done
