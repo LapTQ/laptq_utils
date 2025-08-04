@@ -1417,6 +1417,9 @@ def helper__extract__crops__from__detection(**kwargs):
                 b_wn = b_x2n - b_x1n
                 b_hn = b_y2n - b_y1n
 
+                if b_wn == 0 or b_hn == 0:
+                    continue
+
                 # update new box
                 box_xcycwhn[0] = b_xcn
                 box_xcycwhn[1] = b_ycn
