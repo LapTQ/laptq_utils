@@ -4,58 +4,29 @@ POSTFIX__DIR__IMAGE=""
 
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
-PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
+PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--ntu-rgbd-skeleton--to--json
+POSTFIX__DIR__LABEL=""
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--all-keypoints--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--None--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
-POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+# POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 
 PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection
 POSTFIX__DIR__OUTPUT=""
 
-declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["shoplifting-25min.mp4"]=""
-    ["r9_25min_rotate.mp4"]=""
-    # ["R7_2025_05_15_23_40_32_rotate.mp4"]=""
-    # ["R8_2025_05_15_23_40_32_rotate.mp4"]=""
-    # ["R3_2025_05_15_23_40_32_rotate.mp4"]=""
-    # ["R4_2025_05_15_23_40_32_rotate.mp4"]=""
-    # ["R9_2025_05_15_23_40_32_rotate.mp4"]=""
-    # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
-
-    # ["roboflow-data/filtered--w-label/0"]=""
-    # ["roboflow-data/filtered--w-label/1"]=""
-    # ["roboflow-data/filtered--w-label/2"]=""
-    # ["roboflow-data/filtered--w-label/3"]=""
-    # ["roboflow-data/filtered--w-label/4"]=""
-    # ["roboflow-data/filtered--w-label/5"]=""
-    # ["roboflow-data/filtered--w-label/6"]=""
-    # ["roboflow-data/filtered--w-label/7"]=""
-    # ["roboflow-data/filtered--w-label/8"]=""
-    # ["roboflow-data/filtered--w-label/9"]=""
-    # ["roboflow-data/filtered--w-label/10"]=""
-    # ["roboflow-data/filtered--w-label/11"]=""
-    # ["roboflow-data/filtered--w-label/12"]=""
-    # ["roboflow-data/filtered--w-label/13"]=""
-    # ["roboflow-data/filtered--w-label/14"]=""
-    # ["roboflow-data/filtered--w-label/15"]=""
-    # ["roboflow-data/filtered--w-label/16"]=""
-    # ["roboflow-data/filtered--w-label/17"]=""
-    # ["roboflow-data/filtered--w-label/18"]=""
-    # ["roboflow-data/filtered--w-label/19"]=""
-    # ["roboflow-data/filtered--w-label/20"]=""
-    # ["roboflow-data/filtered--w-label/21"]=""
-
-    # ["roboflow-data/filtered--wo-label/2"]=""
-    # ["roboflow-data/filtered--wo-label/3"]=""
-    # ["roboflow-data/filtered--wo-label/4"]=""
-    # ["roboflow-data/filtered--wo-label/5"]=""
-    # ["roboflow-data/filtered--wo-label/6"]=""
-    # ["roboflow-data/filtered--wo-label/7"]=""
-    # ["roboflow-data/filtered--wo-label/8"]=""
-    # ["roboflow-data/filtered--wo-label/10"]=""
-)
+# declare -A MAP__SUBPATH_DIR__TO__=(
+#     # ["shoplifting-25min.mp4"]=""
+#     ["r9_25min_rotate.mp4"]=""
+#     # ["R7_2025_05_15_23_40_32_rotate.mp4"]=""
+#     # ["R8_2025_05_15_23_40_32_rotate.mp4"]=""
+#     # ["R3_2025_05_15_23_40_32_rotate.mp4"]=""
+#     # ["R4_2025_05_15_23_40_32_rotate.mp4"]=""
+#     # ["R9_2025_05_15_23_40_32_rotate.mp4"]=""
+#     # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
+# )
 # source /home/laptq/laptq-fs26-shoplifting-detection/data/mnit-video-paths.sh
-source /home/laptq/laptq-fs26-shoplifting-detection/data/shoplifting-gen-video-paths.sh
+# source /home/laptq/laptq-fs26-shoplifting-detection/data/shoplifting-gen-video-paths.sh
+source /home/laptq/laptq-fs26-shoplifting-detection/data/fall_violence_subpaths.sh
 
 IFS=$'\n'
 TAG__FAILED="\033[31m[FAILED]\033[0m"

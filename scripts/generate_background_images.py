@@ -3,8 +3,9 @@ TO_USE_SHAPE_FROM_ = "imgsz"  # 'img' or 'imgsz'
 PATHD_IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images"
 POSTFIXD_IMAGE = ""
 # or get filenames from labels
-IMGSZ = (64, 128)  # (W, H)
-PATHD_LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection"
+IMGSZ = (960, 540)  # (W, H)
+# PATHD_LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection"
+PATHD_LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--ntu-rgbd-skeleton--to--json"
 POSTFIXD_LABEL = ""
 
 PATHD_OUTPUT = (
@@ -17,7 +18,9 @@ TO_USE__SOFTLINK = True
 MAP_SUBPATHD_TO = {
     # "shoplifting-1min_anonymized.mp4": None,
     # "R3_2025_05_15_23_40_32_rotate.mp4": None,
-    "R7_2025_05_15_23_40_32_rotate.mp4/10729": None,
+    # "R7_2025_05_15_23_40_32_rotate.mp4/10729": None,
+    # "nturgb+d_skeletons/S011C001P015R001A024.skeleton": None,
+    "nturgb+d_skeletons/S001C001P006R002A051.skeleton": None,
 }
 
 
