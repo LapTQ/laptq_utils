@@ -1477,7 +1477,12 @@ def helper__extract__crops__from__detection(**kwargs):
                 cv2.imwrite(path__file__crop__img__output, crop_img)
 
             dict__result__crop = {
-                k: dict__result[k][i_obj : i_obj + 1] for k in dict__result
+                k: (
+                    v[i_obj : i_obj + 1]
+                    if not isinstance(v, dict)
+                    else ({vk: [vv[i_obj]] for vk, vv in v.items()})
+                )
+                for k, v in dict__result.items()
             }
             path__file__crop__lbl__output = os.path.join(
                 __path__dir__crop__lbl__output,
