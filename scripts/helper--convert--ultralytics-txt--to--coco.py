@@ -2,15 +2,28 @@
 
 LS__PATHF_INPUT = [
     # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/train_d1_90k.txt",
-    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/valid_d1_90k.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/valid_d1_90k.txt",
     # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/train_d2_110k.txt",
-    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/valid_d2_110k.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/valid_d2_110k.txt",
     # "/home/lap_awlv/laptq-nedo-fed/outputs/trivials/toy_dataset.txt"
     # "/home/lap_awlv/laptq-nedo-fed/outputs/trivials/toy_dataset2.txt"
     # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/train_d6_cam1.txt",
-    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/valid_d6_cam1.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/valid_d6_cam1.txt",
     # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/train_d6_cam2.txt",
-    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/valid_d6_cam2.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/valid_d6_cam2.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/train_d3.1_32k.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/train_d32.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/valid_d3.1_32k.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/valid_d32.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/train_d3-satudora.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/test_d3-satudora.txt"
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch2/D5_May_cam1.txt",
+    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch2/D5_May_cam2.txt",
+    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/train_d7_cam1.txt",
+    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/valid_d7_cam1.txt",
+    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/train_d7_cam2.txt",
+    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/valid_d7_cam2.txt",
+
 ]
 PATHF_OUTPUT = (
     # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d1_90k.json"
@@ -25,7 +38,11 @@ PATHF_OUTPUT = (
     # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d2_110k--train_d6_cam2.json"
     # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/valid_d2_110k--valid_d6_cam2.json"
     # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d1_90k--train_d2_110k--train_d6_cam1--train_d6_cam2.json"
-    "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/valid_d1_90k--valid_d2_110k--valid_d6_cam1--valid_d6_cam2.json"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/valid_d1_90k--valid_d2_110k--valid_d6_cam1--valid_d6_cam2.json"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/d3.1--d3.2.json"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/d3-satudora.json"
+    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/d5.1--d5.2.json"
+    "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/d7.1--d7.2.json"
 
 )
 
