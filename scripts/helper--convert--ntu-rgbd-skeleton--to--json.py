@@ -1,24 +1,22 @@
-PATHD_LBL_INPUT = "/home/laptq/laptq-fs26-shoplifting-detection/data"
-PATHD_LBL_OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--ntu-rgbd-skeleton--to--json"
-
-# ============================
-# MAP__SUBPATHF__TO__ = {
-# }
-import sys
-
-sys.path.append("/home/laptq/laptq-fs26-shoplifting-detection/data")
-from fall_violence_subpaths import MAP__SUBPATHF__TO__
-
-# ============================
-
-
-# ======================================================
 import os
 import json
 import numpy as np
 from pprint import pprint
 from tqdm import tqdm
 from laptq_pyutils.objects import ListAligner
+
+
+PATHD_LBL_INPUT = "/home/laptq/laptq-fs26-shoplifting-detection/data/nturgb+d_skeletons"
+PATHD_LBL_OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--ntu-rgbd-skeleton--to--json"
+
+MAP__SUBPATHF__TO__ = {
+    p[len(PATHD_LBL_INPUT) :]: None
+    for p in glob.glob(f"{PATHD_LBL_INPUT}/*.skeleton")
+    if os.path.isfile(p)
+}
+
+
+# ======================================================
 
 
 def read__ntu_grbd_skeleton__file(pathf):
