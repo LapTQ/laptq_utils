@@ -13,70 +13,13 @@ PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/concat--v
 mkdir -p "$PATH__DIR__OUTPUT"
 
 declare -A MAP__NAME_VIDEO__TO__=(
-    # ["Normal/Normal__66_.mp4"]=""
-    # ["Normal/Normal__67_.mp4"]=""
-    # # ["Normal/Normal__68_.mp4"]=""
-    # ["Normal/Normal__69_.mp4"]=""
-    # ["Normal/Normal__6_.mp4"]=""
-    # ["Normal/Normal__70_.mp4"]=""
-    # ["Normal/Normal__71_.mp4"]=""
-    # ["Normal/Normal__72_.mp4"]=""
-    # ["Normal/Normal__73_.mp4"]=""
-    # ["Normal/Normal__74_.mp4"]=""
-    # ["Normal/Normal__75_.mp4"]=""
-    # ["Normal/Normal__76_.mp4"]=""
-    # ["Normal/Normal__77_.mp4"]=""
-    # ["Normal/Normal__78_.mp4"]=""
-    # ["Normal/Normal__79_.mp4"]=""
-    # ["Normal/Normal__7_.mp4"]=""
-    # ["Normal/Normal__80_.mp4"]=""
-    # ["Normal/Normal__81_.mp4"]=""
-    # ["Normal/Normal__82_.mp4"]=""
-    # ["Normal/Normal__83_.mp4"]=""
-    # ["Normal/Normal__84_.mp4"]=""
-    # ["Normal/Normal__85_.mp4"]=""
-    # ["Normal/Normal__86_.mp4"]=""
-    # ["Normal/Normal__87_.mp4"]=""
-    # ["Normal/Normal__88_.mp4"]=""
-    # ["Normal/Normal__89_.mp4"]=""
-    # ["Normal/Normal__8_.mp4"]=""
-    # ["Normal/Normal__90_.mp4"]=""
-    # ["Normal/Normal__9_.mp4"]=""
-    # ["Shoplifting/Shoplifting__67_.mp4"]=""
-    # ["Shoplifting/Shoplifting__68_.mp4"]=""
-    # ["Shoplifting/Shoplifting__69_.mp4"]=""
-    # ["Shoplifting/Shoplifting__6_.mp4"]=""
-    # ["Shoplifting/Shoplifting__70_.mp4"]=""
-    # ["Shoplifting/Shoplifting__71_.mp4"]=""
-    # ["Shoplifting/Shoplifting__72_.mp4"]=""
-    # ["Shoplifting/Shoplifting__73_.mp4"]=""
-    # ["Shoplifting/Shoplifting__74_.mp4"]=""
-    # ["Shoplifting/Shoplifting__75_.mp4"]=""
-    # ["Shoplifting/Shoplifting__76_.mp4"]=""
-    # ["Shoplifting/Shoplifting__77_.mp4"]=""
-    # ["Shoplifting/Shoplifting__78_.mp4"]=""
-    # ["Shoplifting/Shoplifting__79_.mp4"]=""
-    # ["Shoplifting/Shoplifting__7_.mp4"]=""
-    # ["Shoplifting/Shoplifting__80_.mp4"]=""
-    # ["Shoplifting/Shoplifting__81_.mp4"]=""
-    # ["Shoplifting/Shoplifting__82_.mp4"]=""
-    # ["Shoplifting/Shoplifting__83_.mp4"]=""
-    # ["Shoplifting/Shoplifting__84_.mp4"]=""
-    # ["Shoplifting/Shoplifting__85_.mp4"]=""
-    # ["Shoplifting/Shoplifting__86_.mp4"]=""
-    # ["Shoplifting/Shoplifting__87_.mp4"]=""
-    # ["Shoplifting/Shoplifting__88_.mp4"]=""
-    # ["Shoplifting/Shoplifting__89_.mp4"]=""
-    # ["Shoplifting/Shoplifting__8_.mp4"]=""
-    # ["Shoplifting/Shoplifting__90_.mp4"]=""
-    # ["Shoplifting/Shoplifting__91_.mp4"]=""
-    # ["Shoplifting/Shoplifting__92_.mp4"]=""
-    # ["Shoplifting/Shoplifting__93_.mp4"]=""
-    # ["Shoplifting/Shoplifting__9_.mp4"]=""
     
-    ["shoplifting-25min.mp4"]=""
-    # ["satudora-1min.mp4"]=""
-    ["r10_10min_rotate.mp4"]=""
+    ["fall_violence/test/fall/Fall_1.mp4"]=""
+    ["fall_violence/test/fall/Fall_2.mp4"]=""
+    ["fall_violence/test/violence/Violence_1.mp4"]=""
+    
+    # ["shoplifting-25min.mp4"]=""
+    # ["r10_10min_rotate.mp4"]=""
 )
 
 for name__file in "${!MAP__NAME_VIDEO__TO__[@]}"; do
@@ -101,15 +44,19 @@ for name__file in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         -filter_complex "[0:v][1:v]hstack=inputs=2" \
         -c:v libx264 -preset ultrafast -crf 18 \
         -y \
-        "$path__file__output" \
+        "$path__file__output"
         # -i "$path__file__input__3" \
         # -i "$path__file__input__4" \
-        # -filter_complex "[0:v][1:v][2:v][3:v]hstack=inputs=4" \
     
     echo "Done: ${name__file}"
 done
 
+# -filter_complex "[0:v][1:v]hstack=inputs=2" \
 # -filter_complex "[0:v][1:v]concat=n=2:v=1:a=0,scale=iw:ih" \
+# -filter_complex "\
+#             [0:v][1:v]hstack=inputs=2[top]; \
+#             [2:v][3:v]hstack=inputs=2[bottom]; \
+#             [top][bottom]vstack=inputs=2" \
 
 # to make it fast:
 # -c:v libx264 -preset ultrafast -crf 18 \
