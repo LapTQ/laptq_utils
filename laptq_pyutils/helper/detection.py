@@ -1381,6 +1381,9 @@ def helper__extract__crops__from__detection(**kwargs):
                 list__obj__kpts_xyn,
             )
         ):
+            if id__track is None:
+                continue
+            
             b_xcn, b_ycn, b_wn, b_hn = box_xcycwhn
             b_x1n = b_xcn - b_wn / 2
             b_y1n = b_ycn - b_hn / 2
