@@ -1,8 +1,8 @@
 # PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN
 # PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/major_vote_action
 # PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN/torch
-PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v7/torch
-PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v13/torch
+PATH__DIR__INPUT__1=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/STGCN/prj54/STGCN--nturgbd--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick
+PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/prj54/v1__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick
 # PATH__DIR__INPUT__3=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v7/torch
 # PATH__DIR__INPUT__4=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/ProtoGCN/ProtoGCN_v3/torch
 # PATH__DIR__INPUT__2=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/2DCNN

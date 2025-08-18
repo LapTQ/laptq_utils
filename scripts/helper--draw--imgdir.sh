@@ -1,30 +1,15 @@
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
 PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
 # PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/generate_background_images
-# PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs
-# PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4/annotation-corrected--v2
 POSTFIX__DIR__IMAGE=""
 # POSTFIX__DIR__IMAGE="--erase-ignored"
 
 
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250505-000000--TSSTG_HO--2-kpt-channels
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift--all-keypoints/torch
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift--onlyhand/torch
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/STGCN--nturgbd--fps5--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick/torch
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-satudora-postlift_test--VAL-poselift_test/predict
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-mnit-roboflow-poselift/predict
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-mnit-roboflow-poselift--lr0.001--no-mse/predict/torch
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-satudoraR-poselift--VAL-poselift/predict/torch
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/2DCNN/predict/classification
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v24/torch
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/20250505-000000--TSSTG_HO--2-kpt-channels
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/data/ground-truth
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4/annotation-corrected--v2
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/data/bag/annotations
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/annotated-frames-with-action-labels
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--ntu-rgbd-skeleton--to--json
+PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/STGCN/prj54/STGCN--nturgbd--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/STGCN/prj54/STGCN--nturgbd--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick--Le2i
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v1__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i
+POSTFIX__DIR__LABEL=""
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--None--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filterby-size--all-keypoints--RTMPose--JSON"
@@ -32,7 +17,6 @@ PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/data/ground-truth
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filterby-size--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
-POSTFIX__DIR__LABEL=""
 # POSTFIX__DIR__LABEL="--voting"
 # POSTFIX__DIR__LABEL="--PRED--DATA--bag-detection--MODEL--yolov8s--TRAIN--train--PREDICT--imgsz-640--conf-0.1--iou-0.45--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x--TRAIN--exp--PREDICT--imgsz-960--conf-0.25--iou-0.45--backpack-handbag--img-w-bag--JSON"
@@ -42,24 +26,11 @@ POSTFIX__DIR__LABEL=""
 
 NUM__MAX__IMG__TO__VISUALIZE=None
 IS_OK__LBL_NOT_FOUND=False
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250505-000000--TSSTG_HO--2-kpt-channels
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/20250514-000000--STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift--all-keypoints/torch
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/STGCN--seed--rm-wrong-normal--LR1e-06--scale-11--plus-roboflow-poselift--onlyhand/torch
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict/STGCN--nturgbd--fps5--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick/torch
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-satudora-postlift_test--VAL-poselift_test/predict
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-mnit-roboflow-poselift/predict
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-mnit-roboflow-poselift--lr0.001--no-mse/predict/torch
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/TSGAD-2class--TRAIN-satudoraR-poselift--VAL-poselift/predict/torch
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/2DCNN/predict/classification
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/ProtoGCN/predict/ProtoGCN_v24/torch
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/20250505-000000--TSSTG_HO--2-kpt-channels
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/annotated-frames-with-action-labels
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/data/bag/annotations
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/R10_2025_05_15_23_40_32_rotate.mp4/annotation-corrected--v2
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/generate_background_images
-PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/trivials
+PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/STGCN/prj54/STGCN--nturgbd--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick
+# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/STGCN/prj54/STGCN--nturgbd--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick--Le2i
+# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v1__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick
+# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i
+# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/trivials
 
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/class_name.yaml
 PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/action_names.yaml
@@ -83,11 +54,11 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["split-1"]=""
     # ["split-2"]=""
 
-    # ["fall_violence/test/fall/Fall_1.mp4"]=""
-    # ["fall_violence/test/fall/Fall_2.mp4"]=""
-    # ["fall_violence/test/violence/Violence_1.mp4"]=""
+    ["fall_violence/test/fall/Fall_1.mp4"]=""
+    ["fall_violence/test/fall/Fall_2.mp4"]=""
+    ["fall_violence/test/violence/Violence_1.mp4"]=""
 
-    ["fall_violence/train/fall/Le2i/Coffee_room_02/Videos/video (68).avi"]=""
+    # ["fall_violence/train/fall/Le2i/Coffee_room_02/Videos/video (68).avi"]=""
 )
 # source /home/laptq/laptq-fs26-shoplifting-detection/data/shoplifting-gen-video-paths.sh
 
@@ -118,7 +89,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --id_frame__from "filename" \
         --lambda__id_frame__from "lambda x: x.split('.')[0]" \
         --to_draw__id_track False \
-        --to_draw__box_x1y1whn False \
+        --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
         --to_draw__box_conf False \
         --to_draw__id_class False \
@@ -128,8 +99,8 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__id_action False \
         --to_draw__name_action True \
         --to_draw__action_conf False \
-        --fontScale 1 \
-        --thickness 1 \
+        --fontScale 2 \
+        --thickness 2 \
         --box_color_by id__track \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
         --path__file__map__id_action__to__name_action $PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION \
