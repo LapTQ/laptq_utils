@@ -4,6 +4,7 @@ from laptq_pyutils.draw import (
     cv2_circle,
     COLORS,
     cv2_polylines,
+    cv2_arrowedLine,
 )
 from laptq_pyutils.common import LIST__MODE__BOX
 
@@ -30,6 +31,9 @@ def draw__image(**kwargs):
     to_draw__pose = kwargs.get("to_draw__pose", False)
     to_draw__index_pose = kwargs.get("to_draw__index_pose", False)
     to_draw__connected_keypoints = kwargs.get("to_draw__connected_keypoints", False)
+    to_draw__keypoints_displacement = kwargs.get(
+        "to_draw__keypoints_displacement", False
+    )
     box_color_by = kwargs.get("box_color_by", None)
     fontScale = kwargs.get("fontScale", 1)
     thickness = kwargs.get("thickness", 1)
@@ -57,6 +61,7 @@ def draw__image(**kwargs):
     list__obj__kpts_conf = data.get("list__obj__kpts_conf", None)
     list__obj__box_x1y1whn_refined = data.get("list__obj__box_x1y1whn_refined", None)
     list__obj__confirmed_status = data.get("list__obj__confirmed_status", None)
+    list__obj__kpts_displacement = data.get("list__obj__kpts_displacement", None)
 
     # preprocesss arguments
     if list__obj__box_x1y1whn is None and list__obj__box_polygonn is None:
@@ -82,6 +87,8 @@ def draw__image(**kwargs):
         list__obj__box_x1y1whn_refined = [None] * len(list__obj__box_x1y1whn)
     if list__obj__confirmed_status is None:
         list__obj__confirmed_status = [None] * len(list__obj__box_x1y1whn)
+    if list__obj__kpts_displacement is None:
+        list__obj__kpts_displacement = [None] * len(list__obj__box_x1y1whn)
     if list__obj__action_conf is None:
         list__obj__action_conf = {
             id__action: [None] * len(list__obj__box_x1y1whn)
@@ -141,6 +148,7 @@ def draw__image(**kwargs):
         is__confirmed,
         kpts__xyn,
         kpts__conf,
+        kpts__displacement,
     ) in enumerate(
         zip(
             list__obj__box_x1y1whn,
@@ -153,6 +161,7 @@ def draw__image(**kwargs):
             list__obj__confirmed_status,
             list__obj__kpts_xyn,
             list__obj__kpts_conf,
+            list__obj__kpts_displacement,
         )
     ):
         if id__track is None:
@@ -362,9 +371,22 @@ def draw__image(**kwargs):
                         img__bgr,
                         str(i),
                         (x, y - thickness - 3),
-                        color=COLORS[i % len(COLORS)],
+                        color=COLORS[i_c],
                         fontScale=fontScale,
                         thickness=thickness,
                     )
+
+                if to_draw__keypoints_displacement and kpts__displacement is not None:
+                    if kpts__displacement[name_kpt] is not None:
+                        dxn, dyn = kpts__displacement[name_kpt]
+                        dx = int(dxn * W)
+                        dy = int(dyn * H)
+                        cv2_arrowedLine(
+                            img__bgr,
+                            (x - dx, y - dy),
+                            (x, y),
+                            color=COLORS[i_c],
+                            thickness=max(1, thickness - 1),
+                        )
 
     return img__bgr
