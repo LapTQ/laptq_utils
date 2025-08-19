@@ -376,6 +376,7 @@ def helper__draw__imgdir(**kwargs):
     ]
     to_concat__original_img = kwargs["to_concat__original_img"]
     concat__axis = kwargs["concat__axis"]
+    displacement_key = kwargs["displacement_key"]
 
     assert id_frame__from in [
         "filename"
@@ -448,25 +449,16 @@ def helper__draw__imgdir(**kwargs):
                 "list__obj__id_track": dict__result.get("list__obj__id_track", None),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result.get("list__obj__box_conf", None),
-                "list__obj__kpts_xyn": (
-                    dict__result["list__obj__kpts_xyn"]
-                    if "list__obj__kpts_xyn" in dict__result
-                    else None
+                "list__obj__kpts_xyn": dict__result.get("list__obj__kpts_xyn", None),
+                "list__obj__kpts_conf": dict__result.get("list__obj__kpts_conf", None),
+                "list__obj__action_conf": dict__result.get(
+                    "list__obj__action_conf", None
                 ),
-                "list__obj__kpts_conf": (
-                    dict__result["list__obj__kpts_conf"]
-                    if "list__obj__kpts_conf" in dict__result
-                    else None
+                "list__obj__action_status": dict__result.get(
+                    "list__obj__action_status", None
                 ),
-                "list__obj__action_conf": (
-                    dict__result["list__obj__action_conf"]
-                    if "list__obj__action_conf" in dict__result
-                    else None
-                ),
-                "list__obj__action_status": (
-                    dict__result["list__obj__action_status"]
-                    if "list__obj__action_status" in dict__result
-                    else None
+                "list__obj__kpts_displacement": dict__result.get(
+                    displacement_key, None
                 ),
             },
             map__id_class__to__name_class=map__id_class__to__name_class,
@@ -505,6 +497,7 @@ def helper__draw__video(**kwargs):
         "path__file__map__id_action__to__name_action"
     ]
     to_concat__original_img = kwargs["to_concat__original_img"]
+    displacement_key = kwargs["displacement_key"]
 
     if to_draw__name_class:
         with open(path__file__map__id_class__to__name_class, "r") as f:
@@ -562,25 +555,16 @@ def helper__draw__video(**kwargs):
                 "list__obj__id_track": dict__result.get("list__obj__id_track", None),
                 "list__obj__id_class": dict__result["list__obj__id_class"],
                 "list__obj__box_conf": dict__result["list__obj__box_conf"],
-                "list__obj__kpts_xyn": (
-                    dict__result["list__obj__kpts_xyn"]
-                    if "list__obj__kpts_xyn" in dict__result
-                    else None
+                "list__obj__kpts_xyn": dict__result.get("list__obj__kpts_xyn", None),
+                "list__obj__kpts_conf": dict__result.get("list__obj__kpts_conf", None),
+                "list__obj__action_conf": dict__result.get(
+                    "list__obj__action_conf", None
                 ),
-                "list__obj__kpts_conf": (
-                    dict__result["list__obj__kpts_conf"]
-                    if "list__obj__kpts_conf" in dict__result
-                    else None
+                "list__obj__action_status": dict__result.get(
+                    "list__obj__action_status", None
                 ),
-                "list__obj__action_conf": (
-                    dict__result["list__obj__action_conf"]
-                    if "list__obj__action_conf" in dict__result
-                    else None
-                ),
-                "list__obj__action_status": (
-                    dict__result["list__obj__action_status"]
-                    if "list__obj__action_status" in dict__result
-                    else None
+                "list__obj__kpts_displacement": dict__result.get(
+                    displacement_key, None
                 ),
             },
             map__id_class__to__name_class=map__id_class__to__name_class,
@@ -1383,7 +1367,7 @@ def helper__extract__crops__from__detection(**kwargs):
         ):
             if id__track is None:
                 continue
-            
+
             b_xcn, b_ycn, b_wn, b_hn = box_xcycwhn
             b_x1n = b_xcn - b_wn / 2
             b_y1n = b_ycn - b_hn / 2

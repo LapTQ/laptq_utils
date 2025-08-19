@@ -151,3 +151,41 @@ def cv2_polylines(img, pts, isClosed, **kwargs):
         lineType,
     )
     cv2.polylines(img, pts, isClosed, color, thickness, lineType)
+
+
+def cv2_arrowedLine(img, pt1, pt2, **kwargs):
+    import cv2
+
+    color = kwargs.get("color", (255, 255, 255))
+    thickness = kwargs.get("thickness", 1)
+    lineType = kwargs.get("lineType", cv2.LINE_AA)
+    tipLength = kwargs.get("tipLength", 0.1)
+
+    x1, y1 = pt1
+    x2, y2 = pt2
+    b, g, r = color
+
+    # Draw shadow (black outline)
+    cv2.arrowedLine(
+        img,
+        (x1 + 2, y1 + 2),
+        (x2 + 2, y2 + 2),
+        (0, 0, 0),
+        thickness,
+        lineType,
+        tipLength=tipLength,
+    )
+
+    # Draw middle layer (half intensity)
+    cv2.arrowedLine(
+        img,
+        (x1 + 1, y1 + 1),
+        (x2 + 1, y2 + 1),
+        (b // 2, g // 2, r // 2),
+        thickness,
+        lineType,
+        tipLength=tipLength,
+    )
+
+    # Draw main arrow
+    cv2.arrowedLine(img, pt1, pt2, color, thickness, lineType, tipLength=tipLength)
