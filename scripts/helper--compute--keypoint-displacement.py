@@ -194,11 +194,11 @@ if __name__ == "__main__":
             "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i/{}/labels".format(
                 subpathf
             ),
-            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i/{}/labels--speed".format(
+            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i/{}/labels".format(
                 subpathf
             ),
-            "left_window": 5,
-            "right_window": 5,
-            "alpha": 0.3,  # EMA smoothing factor
+            "left_window": 10,
+            "right_window": 0,
+            "alpha": 0.5,  # EMA smoothing factor
         }
         run(**kwargs)
