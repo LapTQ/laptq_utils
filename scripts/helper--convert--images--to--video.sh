@@ -1,9 +1,9 @@
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/STGCN/prj54/STGCN--nturgbd--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/STGCN/prj54/STGCN--nturgbd--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick--Le2i
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v1__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick
-PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i--10fps
+# PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i--10fps
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-speed/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i
-# PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/send_telemetry/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i
+PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/send_telemetry/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i--10fps
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/generate_background_images
 POSTFIX__DIR__IMAGE=""
 # POSTFIX__DIR__IMAGE="--voting"
@@ -25,10 +25,10 @@ declare -A MAP__NAME_VIDEO__TO__=(
     # ["fall_violence/test/fall/Fall_2.mp4"]=""
     # ["fall_violence/test/violence/Violence_1.mp4"]=""
     # ["fall_violence/test/fall/Falling_and_Slow_Falling.mp4"]=""
-    # ["fall_violence/test/violence/Fighting_1.mp4"]=""
+    ["fall_violence/test/violence/Fighting_1.mp4"]=""
     # ["fall_violence/test/violence/Fighting_2.mp4"]=""
     # ["fall_violence/test/violence/Fighting_3.mp4"]=""
-    ["fall_violence/test/violence/Fighting_4.mp4"]=""
+    # ["fall_violence/test/violence/Fighting_4.mp4"]=""
 )
 
 # [[ -d "${PATH__DIR__VIDEO__OUTPUT}" ]] && rm -r "${PATH__DIR__VIDEO__OUTPUT}"
