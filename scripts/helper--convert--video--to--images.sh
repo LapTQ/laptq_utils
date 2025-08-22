@@ -16,9 +16,9 @@ declare -A MAP__SUBPATH_VIDEO__TO__=(
     # ["r9_25min_rotate.mp4"]=""
     # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
     
-    # ["test/fall/Fall_1.mp4"]=""
-    # ["test/fall/Fall_2.mp4"]=""
-    # ["test/violence/Violence_1.mp4"]=""
+    ["test/fall/Fall_1.mp4"]=""
+    ["test/fall/Fall_2.mp4"]=""
+    ["test/violence/Violence_1.mp4"]=""
     ["test/fall/Falling_and_Slow_Falling.mp4"]=""
     ["test/violence/Fighting_1.mp4"]=""
     ["test/violence/Fighting_2.mp4"]=""
@@ -47,7 +47,7 @@ main() {
         helper__convert__video__to__images \
         --path__file__input "${path__file__input}" \
         --path__dir__img__output "${path__dir__img__output}" \
-        --step_size 2 \
+        --step_size 1 \
         --num__pad__0 9
 
     echo -e "${TAG__INFO} Done: ${subpath__video}"

@@ -18,7 +18,7 @@ THRESH__CONF__MIN=0.1
 THRESH__IOU=0.45
 ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN--iou-$THRESH__IOU
 
-DEVICE="cuda:1"
+DEVICE="cuda:0"
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54
 POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--all-keypoints--JSON"
@@ -35,10 +35,10 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["fall_violence/test/fall/Fall_1.mp4"]=""
     # ["fall_violence/test/fall/Fall_2.mp4"]=""
     # ["fall_violence/test/violence/Violence_1.mp4"]=""
-    ["fall_violence/test/fall/Falling_and_Slow_Falling.mp4"]=""
-    ["fall_violence/test/violence/Fighting_1.mp4"]=""
-    ["fall_violence/test/violence/Fighting_2.mp4"]=""
-    ["fall_violence/test/violence/Fighting_3.mp4"]=""
+    # ["fall_violence/test/fall/Falling_and_Slow_Falling.mp4"]=""
+    # ["fall_violence/test/violence/Fighting_1.mp4"]=""
+    # ["fall_violence/test/violence/Fighting_2.mp4"]=""
+    # ["fall_violence/test/violence/Fighting_3.mp4"]=""
     ["fall_violence/test/violence/Fighting_4.mp4"]=""
 )
 # source /home/laptq/laptq-fs26-shoplifting-detection/data/mnit-video-paths.sh
