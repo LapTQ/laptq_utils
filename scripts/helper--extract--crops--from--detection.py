@@ -2,19 +2,20 @@
 PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26/mnit"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/fs26/mnit"
-POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--all-keypoints--JSON"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54"
+POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26/mnit"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/prj54"
 POSTFIX__DIR__OUTPUT = ""
 
 # Define the map of subpaths
-# MAP__SUBPATH_VIDEO__TO__ = {
-# }
-import sys
+MAP__SUBPATH_VIDEO__TO__ = {
+    "fall_violence/train/violence/punch_03-12-09-21-27-876": None,
+}
+# import sys
 
-sys.path.append("/home/laptq/laptq-fs26-shoplifting-detection/data")
-from mnit_video_paths import MAP__SUBPATHF__TO__ as MAP__SUBPATH_VIDEO__TO__
+# sys.path.append("/home/laptq/laptq-fs26-shoplifting-detection/data")
+# from mnit_video_paths import MAP__SUBPATHF__TO__ as MAP__SUBPATH_VIDEO__TO__
 
 # =============================================================
 import os
