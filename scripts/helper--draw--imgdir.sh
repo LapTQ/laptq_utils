@@ -5,9 +5,9 @@ POSTFIX__DIR__IMAGE=""
 # POSTFIX__DIR__IMAGE="--erase-ignored"
 
 
-PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9
+# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-speed/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/send_telemetry/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i--10fps
+PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/send_telemetry/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9
 POSTFIX__DIR__LABEL=""
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--None--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 # POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
@@ -25,9 +25,9 @@ POSTFIX__DIR__LABEL=""
 
 NUM__MAX__IMG__TO__VISUALIZE=None
 IS_OK__LBL_NOT_FOUND=False
-PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9
+# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-speed/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/send_telemetry/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i--10fps
+PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/send_telemetry/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/trivials
 
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/class_name.yaml
@@ -83,10 +83,10 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --path__dir__output "${path__dir__output}" \
         --to_concat__original_img False \
         --concat__axis 1 \
-        --to_draw__id_frame False \
+        --to_draw__id_frame True \
         --id_frame__from "filename" \
         --lambda__id_frame__from "lambda x: x.split('.')[0]" \
-        --to_draw__id_track False \
+        --to_draw__id_track True \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
         --to_draw__box_conf False \

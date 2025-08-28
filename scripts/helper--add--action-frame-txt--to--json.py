@@ -21,27 +21,30 @@ import glob
 
 # ===========================================================
 
-PATHD_LBL_INPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/fall_violence"
-POSTFIX_LBL_INPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
+PATHD_LBL_INPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/fs26"
+POSTFIX_LBL_INPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 
 MAP__SUBPTHD__TO__DICT_PATHF_ACTION_FRAMES = {
-    # "shoplifting-25min.mp4": {
-    #     "1": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--customer-video/shoplifting-frames.txt"
-    # },
+    # ====== fs26 ======
+    "shoplifting-25min.mp4": {
+        "1": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--customer-video/shoplifting-frames.txt"
+    },
     # "r9_25min_rotate.mp4": {
     #     "1": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--satudora/shoplifting-frames.txt"
     # },
-    p[len(PATHD_LBL_INPUT) + 1 :]: {
-        "fall_down": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/fall_down-frames.txt",
-        "lying_down": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/lying_down-frames.txt",
-        "sitting": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/sitting-frames.txt",
-        "sitting_down": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/sitting_down-frames.txt",
-        "standing": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/standing-frames.txt",
-        "standing_up": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/standing_up-frames.txt",
-        "walking": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/walking-frames.txt",
-    }
-    for p in glob.glob(f"{PATHD_LBL_INPUT}/*/*/*/*/*/*.avi")
-    if os.path.isdir(p)
+    # ====== prj54 ======
+    # p[len(PATHD_LBL_INPUT) + 1 :]: {
+    #     "fall_down": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/fall_down-frames.txt",
+    #     "lying_down": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/lying_down-frames.txt",
+    #     "sitting": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/sitting-frames.txt",
+    #     "sitting_down": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/sitting_down-frames.txt",
+    #     "standing": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/standing-frames.txt",
+    #     "standing_up": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/standing_up-frames.txt",
+    #     "walking": "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--fall-violence/walking-frames.txt",
+    # }
+    # for p in glob.glob(f"{PATHD_LBL_INPUT}/*/*/*/*/*/*.avi")
+    # if os.path.isdir(p)
+    # ===================
 }
 
 
@@ -57,46 +60,46 @@ def parse_action_frame(line):
     }
 
 
-# # fs26, when only shoplifting-frames.txt is available, normal-frames.txt is not available
-# def process_condition(**kwargs):
-#     id_action = kwargs["id_action"]
-#     condition = kwargs["condition"]
-#     dict_result = kwargs["dict_result"]
-
-#     assert id_action == "1"
-
-#     for other_id_action in ["0"]:
-#         if other_id_action not in dict_result["list__obj__action_conf"]:
-#             dict_result["list__obj__action_conf"][other_id_action] = []
-#             dict_result["list__obj__action_status"][other_id_action] = []
-
-#     if condition is True:
-#         dict_result["list__obj__action_conf"]["0"].append(0.0)
-#         dict_result["list__obj__action_conf"]["1"].append(1.0)
-#         dict_result["list__obj__action_status"]["0"].append(False)
-#         dict_result["list__obj__action_status"]["1"].append(True)
-#     else:
-#         dict_result["list__obj__action_conf"]["0"].append(1.0)
-#         dict_result["list__obj__action_conf"]["1"].append(0.0)
-#         dict_result["list__obj__action_status"]["0"].append(True)
-#         dict_result["list__obj__action_status"]["1"].append(False)
-
-
-# general, when .txt for all actions are available
+# fs26, when only shoplifting-frames.txt is available, normal-frames.txt is not available
 def process_condition(**kwargs):
     id_action = kwargs["id_action"]
     condition = kwargs["condition"]
     dict_result = kwargs["dict_result"]
 
+    assert id_action == "1"
+
+    for other_id_action in ["0"]:
+        if other_id_action not in dict_result["list__obj__action_conf"]:
+            dict_result["list__obj__action_conf"][other_id_action] = []
+            dict_result["list__obj__action_status"][other_id_action] = []
+
     if condition is True:
-        dict_result["list__obj__action_conf"][id_action].append(1.0)
-        dict_result["list__obj__action_status"][id_action].append(True)
+        dict_result["list__obj__action_conf"]["0"].append(0.0)
+        dict_result["list__obj__action_conf"]["1"].append(1.0)
+        dict_result["list__obj__action_status"]["0"].append(False)
+        dict_result["list__obj__action_status"]["1"].append(True)
     else:
-        dict_result["list__obj__action_conf"][id_action].append(0.0)
-        dict_result["list__obj__action_status"][id_action].append(False)
+        dict_result["list__obj__action_conf"]["0"].append(1.0)
+        dict_result["list__obj__action_conf"]["1"].append(0.0)
+        dict_result["list__obj__action_status"]["0"].append(True)
+        dict_result["list__obj__action_status"]["1"].append(False)
 
 
-PATHD_LBL_OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/data/ground-truth/fall_violence"
+# # general, when .txt for all actions are available
+# def process_condition(**kwargs):
+#     id_action = kwargs["id_action"]
+#     condition = kwargs["condition"]
+#     dict_result = kwargs["dict_result"]
+
+#     if condition is True:
+#         dict_result["list__obj__action_conf"][id_action].append(1.0)
+#         dict_result["list__obj__action_status"][id_action].append(True)
+#     else:
+#         dict_result["list__obj__action_conf"][id_action].append(0.0)
+#         dict_result["list__obj__action_status"][id_action].append(False)
+
+
+PATHD_LBL_OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/data/ground-truth/fs26"
 POSTFIX_LBL_OUTPUT = ""
 
 # ===========================================================

@@ -3,24 +3,25 @@ PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-
 POSTFIX__DIR__IMAGE = ""
 
 PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/fs26"
-POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
+POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+# POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
 
 PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
 POSTFIX__DIR__OUTPUT = ""
 
 # Define the map of subpaths
-# MAP__SUBPATH_VIDEO__TO__ = {
-#     "fall_violence/train/violence/punch_03-12-09-21-27-876": None,
-# }
-# -----
-import os
-import glob
-
 MAP__SUBPATH_VIDEO__TO__ = {
-    p[len(PATH__DIR__LABEL) + 1 :]: None
-    for p in glob.glob(f"{PATH__DIR__LABEL}/shoplifting-gen-videos/veo3/*/*")
-    if os.path.isdir(p)
+    "shoplifting-25min.mp4": None,
 }
+# -----
+# import os
+# import glob
+
+# MAP__SUBPATH_VIDEO__TO__ = {
+#     p[len(PATH__DIR__LABEL) + 1 :]: None
+#     for p in glob.glob(f"{PATH__DIR__LABEL}/shoplifting-gen-videos/veo3/*/*")
+#     if os.path.isdir(p)
+# }
 
 # =============================================================
 import os
