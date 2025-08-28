@@ -1,4 +1,4 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
+PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26
 POSTFIX__DIR__IMAGE=""
 
 TO_USE__YOLOv5_COMPAT=False
@@ -20,29 +20,30 @@ ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN--iou-$THRESH__IOU
 
 DEVICE="cuda:0"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/fs26
+# PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54
 POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--all-keypoints--JSON"
 # POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--${ID__DATA}--MODEL--${ID__MODEL}--TRAIN--${ID__TRAIN}--PREDICT--${ID__PREDICT}--JSON"
 
-declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["shoplifting-25min.mp4"]=""
-    # ["r9_25min_rotate.mp4"]=""
-    # ["satudora-1min.mp4"]=""
-    # ["1568080723085_67014_fix.mkv"]=""
-    # ["r10_10min_rotate.mp4"]=""
-    # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
+# declare -A MAP__SUBPATH_DIR__TO__=(
+#     # ["shoplifting-25min.mp4"]=""
+#     # ["r9_25min_rotate.mp4"]=""
+#     # ["satudora-1min.mp4"]=""
+#     # ["1568080723085_67014_fix.mkv"]=""
+#     # ["r10_10min_rotate.mp4"]=""
+#     # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
 
-    # ["fall_violence/test/fall/Fall_1.mp4"]=""
-    # ["fall_violence/test/fall/Fall_2.mp4"]=""
-    # ["fall_violence/test/violence/Violence_1.mp4"]=""
-    # ["fall_violence/test/fall/Falling_and_Slow_Falling.mp4"]=""
-    # ["fall_violence/test/violence/Fighting_1.mp4"]=""
-    # ["fall_violence/test/violence/Fighting_2.mp4"]=""
-    # ["fall_violence/test/violence/Fighting_3.mp4"]=""
-    ["fall_violence/test/violence/Fighting_4.mp4"]=""
-)
+#     # ["fall_violence/test/fall/Fall_1.mp4"]=""
+#     # ["fall_violence/test/fall/Fall_2.mp4"]=""
+#     # ["fall_violence/test/violence/Violence_1.mp4"]=""
+#     # ["fall_violence/test/fall/Falling_and_Slow_Falling.mp4"]=""
+#     # ["fall_violence/test/violence/Fighting_1.mp4"]=""
+#     # ["fall_violence/test/violence/Fighting_2.mp4"]=""
+#     # ["fall_violence/test/violence/Fighting_3.mp4"]=""
+#     ["fall_violence/test/violence/Fighting_4.mp4"]=""
+# )
 # source /home/laptq/laptq-fs26-shoplifting-detection/data/mnit-video-paths.sh
-# source /home/laptq/laptq-fs26-shoplifting-detection/data/shoplifting-gen-video-paths.sh
+source /home/laptq/laptq-fs26-shoplifting-detection/data/shoplifting-gen-video-paths.sh
 
 IFS=$'\n'
 TAG__FAILED="\033[31m[FAILED]\033[0m"
@@ -51,7 +52,7 @@ TAG__INFO="\033[94m[INFO]\033[0m"
 TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 
-for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
+for subpath__dir in "${!MAP__SUBPATH_VIDEO__TO__[@]}"; do
     path__dir__img__input="${PATH__DIR__IMAGE}/${subpath__dir}/images${POSTFIX__DIR__IMAGE}"
     path__dir__lbl__output="${PATH__DIR__LABEL__OUTPUT}/${subpath__dir}/labels${POSTFIX__DIR__LABEL__OUTPUT}"
 

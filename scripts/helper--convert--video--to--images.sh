@@ -1,10 +1,10 @@
-# PATH__DIR__VIDEO=/home/laptq/laptq-fs26-shoplifting-detection/data
+PATH__DIR__VIDEO=/home/laptq/laptq-fs26-shoplifting-detection/data
 # PATH__DIR__VIDEO=/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516
 # PATH__DIR__VIDEO=/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate
-PATH__DIR__VIDEO=/mnt/ssd2/shared_workspace/prj54_fall_violence_detection/dataset
+# PATH__DIR__VIDEO=/mnt/ssd2/shared_workspace/prj54_fall_violence_detection/dataset
 
-# PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images
-PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fall_violence
+PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26
+# PATH__DIR__IMAGE__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/prj54/fall_violence
 
 
 declare -A MAP__SUBPATH_VIDEO__TO__=(
@@ -16,16 +16,16 @@ declare -A MAP__SUBPATH_VIDEO__TO__=(
     # ["r9_25min_rotate.mp4"]=""
     # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
     
-    ["test/fall/Fall_1.mp4"]=""
-    ["test/fall/Fall_2.mp4"]=""
-    ["test/violence/Violence_1.mp4"]=""
-    ["test/fall/Falling_and_Slow_Falling.mp4"]=""
-    ["test/violence/Fighting_1.mp4"]=""
-    ["test/violence/Fighting_2.mp4"]=""
-    ["test/violence/Fighting_3.mp4"]=""
-    ["test/violence/Fighting_4.mp4"]=""
+    # ["test/fall/Fall_1.mp4"]=""
+    # ["test/fall/Fall_2.mp4"]=""
+    # ["test/violence/Violence_1.mp4"]=""
+    # ["test/fall/Falling_and_Slow_Falling.mp4"]=""
+    # ["test/violence/Fighting_1.mp4"]=""
+    # ["test/violence/Fighting_2.mp4"]=""
+    # ["test/violence/Fighting_3.mp4"]=""
+    # ["test/violence/Fighting_4.mp4"]=""
 )
-# source /home/laptq/laptq-fs26-shoplifting-detection/data/shoplifting-gen-video-paths.sh
+source /home/laptq/laptq-fs26-shoplifting-detection/data/shoplifting-gen-video-paths.sh
 
 IFS=$'\n'
 TAG__FAILED="\033[31m[FAILED]\033[0m"

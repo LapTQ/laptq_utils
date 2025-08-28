@@ -1,21 +1,26 @@
 # Define paths and postfixes
-PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26/mnit"
+PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/fs26"
 POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/prj54"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
 POSTFIX__DIR__OUTPUT = ""
 
 # Define the map of subpaths
-MAP__SUBPATH_VIDEO__TO__ = {
-    "fall_violence/train/violence/punch_03-12-09-21-27-876": None,
-}
-# import sys
+# MAP__SUBPATH_VIDEO__TO__ = {
+#     "fall_violence/train/violence/punch_03-12-09-21-27-876": None,
+# }
+# -----
+import os
+import glob
 
-# sys.path.append("/home/laptq/laptq-fs26-shoplifting-detection/data")
-# from mnit_video_paths import MAP__SUBPATHF__TO__ as MAP__SUBPATH_VIDEO__TO__
+MAP__SUBPATH_VIDEO__TO__ = {
+    p[len(PATH__DIR__LABEL) + 1 :]: None
+    for p in glob.glob(f"{PATH__DIR__LABEL}/shoplifting-gen-videos/veo3/*/*")
+    if os.path.isdir(p)
+}
 
 # =============================================================
 import os
@@ -66,7 +71,7 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
         num__pad__0=6,
         to_resize_box__wrt__pose=True,
         to_shift__coords__wrt__box=True,
-        to_save__img=False,
+        to_save__img=True,
         split_by="id__track",  # "id__track" # if not None, please add a "/{}" before /images and /labels assuming there's an /images and /labels in path__dir__crop__img__output and path__dir__crop__lbl__output
     )
 

@@ -5,10 +5,7 @@ POSTFIX__DIR__IMAGE=""
 # POSTFIX__DIR__IMAGE="--erase-ignored"
 
 
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/STGCN/prj54/STGCN--nturgbd--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/STGCN/prj54/STGCN--nturgbd--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick--Le2i
-# PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i
-PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312
+PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-speed/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i
 # PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/send_telemetry/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i--10fps
 POSTFIX__DIR__LABEL=""
@@ -28,10 +25,7 @@ POSTFIX__DIR__LABEL=""
 
 NUM__MAX__IMG__TO__VISUALIZE=None
 IS_OK__LBL_NOT_FOUND=False
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/STGCN/prj54/STGCN--nturgbd--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/STGCN/prj54/STGCN--nturgbd--most-variant--left-strip-0.3--no-kickback-kicksth-sidekick--Le2i
-# PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i
-PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312
+PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-speed/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/send_telemetry/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i--10fps
 # PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/trivials
@@ -58,14 +52,11 @@ declare -A MAP__SUBPATH_DIR__TO__=(
     # ["split-1"]=""
     # ["split-2"]=""
 
-    # ["fall_violence/test/fall/Fall_1.mp4"]=""
-    # ["fall_violence/test/fall/Fall_2.mp4"]=""
-    # ["fall_violence/test/violence/Violence_1.mp4"]=""
     # ["fall_violence/test/fall/Falling_and_Slow_Falling.mp4"]=""
-    ["fall_violence/test/violence/Fighting_1.mp4"]=""
+    # ["fall_violence/test/violence/Fighting_1.mp4"]=""
     # ["fall_violence/test/violence/Fighting_2.mp4"]=""
     # ["fall_violence/test/violence/Fighting_3.mp4"]=""
-    # ["fall_violence/test/violence/Fighting_4.mp4"]=""
+    ["fall_violence/test/violence/Fighting_4.mp4"]=""
 )
 # source /home/laptq/laptq-fs26-shoplifting-detection/data/shoplifting-gen-video-paths.sh
 
