@@ -91,8 +91,6 @@ def run(**kwargs):
                         kpts_speed_relative[kpt] = speed / avg_anchor_speed
             list__obj__kpts_speed_relative.append(kpts_speed_relative)
 
-            # pred_data["list__obj__kpts_conf"][i_obj] = kpts_speed_relative   # TODO: remove or commen out, just to visualize
-
         pred_data["list__obj__kpts_speed_relative"] = list__obj__kpts_speed_relative
 
     for json_file, pred_data in predictions.items():
@@ -103,17 +101,17 @@ def run(**kwargs):
 if __name__ == "__main__":
 
     for subpathf in [
-        # "shoplifting-25min.mp4",
-        # "r9_25min_rotate.mp4",
-        "fall_violence/test/fall/Fall_1.mp4",
-        "fall_violence/test/fall/Fall_2.mp4",
-        "fall_violence/test/violence/Violence_1.mp4",
+        "fall_violence/test/fall/Falling_and_Slow_Falling.mp4",
+        "fall_violence/test/violence/Fighting_1.mp4",
+        "fall_violence/test/violence/Fighting_2.mp4",
+        "fall_violence/test/violence/Fighting_3.mp4",
+        "fall_violence/test/violence/Fighting_4.mp4",
     ]:
         kwargs = {
-            "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i/{}/labels".format(
+            "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9/{}/labels".format(
                 subpathf
             ),
-            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-speed/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i/{}/labels".format(
+            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-speed/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9/{}/labels".format(
                 subpathf
             ),
             "displacement_key": "list__obj__kpts_displacement_average",  # list__obj__kpts_displacement, list__obj__kpts_displacement_ema, list__obj__kpts_displacement_average
