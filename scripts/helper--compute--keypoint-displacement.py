@@ -31,6 +31,7 @@ def compute_displacement(kpts1_dict, kpts2_dict):
 def run(**kwargs):
     input_dir = kwargs["input_dir"]
     output_dir = kwargs["output_dir"]
+    step_size = kwargs["step_size"]
     left_window = kwargs["left_window"]
     right_window = kwargs["right_window"]
     alpha = kwargs["alpha"]
@@ -66,11 +67,11 @@ def run(**kwargs):
             zip(list__obj__id_track, list__obj__kpts_xyn)
         ):
             # For first frame or if track doesn't exist in previous frame
-            if frame_idx == 0:
+            if frame_idx < step_size:
                 curr_displacement = {kpt: None for kpt in kpts_dict}
             else:
                 # Get keypoints from previous frame
-                prev_file = json_files[frame_idx - 1]
+                prev_file = json_files[frame_idx - step_size]
                 prev_data = predictions[prev_file]
                 prev_tracks = prev_data.get(
                     "list__obj__id_track",
@@ -139,13 +140,13 @@ def run(**kwargs):
         list__obj__kpts_displacement_average = []
         for i_obj, id_track in enumerate(list__obj__id_track):
             # Get window bounds
-            window_start = max(0, frame_idx - left_window)
-            window_end = min(len(json_files) - 1, frame_idx + right_window)
+            window_start = max(0, frame_idx - left_window * step_size)
+            window_end = min(len(json_files) - 1, frame_idx + right_window * step_size)
 
             # Collect displacements within the window
             window_displacements = []
 
-            for win_idx in range(window_start, window_end + 1):
+            for win_idx in range(window_start, window_end + 1, step_size):
                 win_file = json_files[win_idx]
                 win_data = predictions[win_file]
 
@@ -183,22 +184,25 @@ def run(**kwargs):
 
 if __name__ == "__main__":
 
-    for subpathf in [
-        # "shoplifting-25min.mp4",
-        # "r9_25min_rotate.mp4",
-        "fall_violence/test/fall/Fall_1.mp4",
-        "fall_violence/test/fall/Fall_2.mp4",
-        "fall_violence/test/violence/Violence_1.mp4",
-    ]:
+    for subpathf, params in {
+        "fall_violence/test/fall/Falling_and_Slow_Falling.mp4": {
+            "step_size": 2
+        },  # 30 fps
+        "fall_violence/test/violence/Fighting_1.mp4": {"step_size": 2},
+        "fall_violence/test/violence/Fighting_2.mp4": {"step_size": 2},
+        "fall_violence/test/violence/Fighting_3.mp4": {"step_size": 2},
+        "fall_violence/test/violence/Fighting_4.mp4": {"step_size": 2},
+    }.items():
         kwargs = {
-            "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i/{}/labels".format(
+            "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9/{}/labels".format(
                 subpathf
             ),
-            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/prj54/v2__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i/{}/labels--speed".format(
+            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9/{}/labels".format(
                 subpathf
             ),
-            "left_window": 5,
-            "right_window": 5,
-            "alpha": 0.3,  # EMA smoothing factor
+            "step_size": params["step_size"],  # currently not apply for EMA
+            "left_window": 7,
+            "right_window": 0,
+            "alpha": 0.5,  # EMA smoothing factor
         }
         run(**kwargs)

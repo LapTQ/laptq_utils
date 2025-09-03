@@ -377,6 +377,7 @@ def helper__draw__imgdir(**kwargs):
     to_concat__original_img = kwargs["to_concat__original_img"]
     concat__axis = kwargs["concat__axis"]
     displacement_key = kwargs["displacement_key"]
+    speed_key = kwargs["speed_key"]
 
     assert id_frame__from in [
         "filename"
@@ -460,6 +461,10 @@ def helper__draw__imgdir(**kwargs):
                 "list__obj__kpts_displacement": dict__result.get(
                     displacement_key, None
                 ),
+                "list__obj__kpts_speed": dict__result.get(speed_key, None),
+                "list__obj__event_info": dict__result.get(
+                    "list__obj__event_info", None
+                ),
             },
             map__id_class__to__name_class=map__id_class__to__name_class,
             map__id_action__to__name_action=map__id_action__to__name_action,
@@ -498,6 +503,7 @@ def helper__draw__video(**kwargs):
     ]
     to_concat__original_img = kwargs["to_concat__original_img"]
     displacement_key = kwargs["displacement_key"]
+    speed_key = kwargs["speed_key"]
 
     if to_draw__name_class:
         with open(path__file__map__id_class__to__name_class, "r") as f:
@@ -565,6 +571,10 @@ def helper__draw__video(**kwargs):
                 ),
                 "list__obj__kpts_displacement": dict__result.get(
                     displacement_key, None
+                ),
+                "list__obj__kpts_speed": dict__result.get(speed_key, None),
+                "list__obj__event_info": dict__result.get(
+                    "list__obj__event_info", None
                 ),
             },
             map__id_class__to__name_class=map__id_class__to__name_class,
