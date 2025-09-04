@@ -1,11 +1,15 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-POSTFIX__DIR__LABEL__INPUT="--PRED--DATA--None--MODEL--yolov8x--TRAIN--exp--PREDICT--imgsz-960--conf-0.01--iou-0.45--backpack-handbag--JSON"
+PATH__DIR__LABEL__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54
+POSTFIX__DIR__LABEL__INPUT="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir
-POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--None--MODEL--yolov8x--TRAIN--exp--PREDICT--imgsz-960--conf-0.25--iou-0.45--backpack-handbag--JSON"
+PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54
+POSTFIX__DIR__LABEL__OUTPUT="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--filterby-conf-0.1--JSON"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
+    ["fall_violence/test/fall/Falling_and_Slow_Falling.mp4"]=""
+    ["fall_violence/test/violence/Fighting_1.mp4"]=""
+    ["fall_violence/test/violence/Fighting_2.mp4"]=""
+    ["fall_violence/test/violence/Fighting_3.mp4"]=""
+    ["fall_violence/test/violence/Fighting_4.mp4"]=""
 )
 
 IFS=$'\n'
@@ -26,7 +30,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         helper__filter__detection__result__by__conf \
         --path__dir__lbl__input "${path__dir__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \
-        --map__id_class__to__thresh_conf "{24:0.25, 26:0.25}"
+        --map__id_class__to__thresh_conf "{0:0.1}"
 
 
     num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
