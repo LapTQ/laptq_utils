@@ -84,6 +84,9 @@ def parse_args():
     ap.add_argument("--to_draw__id_action", choices=["True", "False"])
     ap.add_argument("--to_draw__name_action", choices=["True", "False"])
     ap.add_argument("--to_draw__action_conf", choices=["True", "False"])
+    ap.add_argument("--to_draw__keypoints_displacement", choices=["True", "False"])
+    ap.add_argument("--to_draw__keypoints_speed", choices=["True", "False"])
+    ap.add_argument("--to_draw__event_info", choices=["True", "False"])
     ap.add_argument("--to_save__img", type=str)
     ap.add_argument("--fontScale", type=float)
     ap.add_argument("--thickness", type=int)
@@ -137,6 +140,8 @@ def parse_args():
     ap.add_argument("--lambda__id_frame__from", type=str)
     ap.add_argument("--step_size", type=int)
     ap.add_argument("--color", type=str)
+    ap.add_argument("--displacement_key", type=str)
+    ap.add_argument("--speed_key", type=str)
 
     ap.add_argument("--max_distance_threshold", type=int)
     ap.add_argument("--to__plot", choices=["True", "False"])
@@ -308,6 +313,21 @@ def parse_args():
     args.list__keypoints_to_exclude = (
         eval(args.list__keypoints_to_exclude)
         if args.list__keypoints_to_exclude is not None
+        else None
+    )
+    args.to_draw__keypoints_displacement = (
+        eval(args.to_draw__keypoints_displacement)
+        if args.to_draw__keypoints_displacement is not None
+        else None
+    )
+    args.to_draw__keypoints_speed = (
+        eval(args.to_draw__keypoints_speed)
+        if args.to_draw__keypoints_speed is not None
+        else None
+    )
+    args.to_draw__event_info = (
+        eval(args.to_draw__event_info)
+        if args.to_draw__event_info is not None
         else None
     )
 

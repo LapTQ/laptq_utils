@@ -70,10 +70,15 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__connected_keypoints True \
         --to_draw__id_action False \
         --to_draw__name_action True \
-        --to_draw__action_conf True \
-        --fontScale 1 \
+        --to_draw__action_conf False \
+        --to_draw__keypoints_displacement True \
+        --to_draw__keypoints_speed True \
+        --to_draw__event_info False \
+        --fontScale 2 \
         --thickness 2 \
         --box_color_by id__class \
+        --displacement_key "list__obj__kpts_displacement" \
+        --speed_key "list__obj__kpts_speed_relative" \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
         --path__file__map__id_action__to__name_action $PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION \
         --num__max__img $NUM__MAX__IMG__TO__VISUALIZE \
