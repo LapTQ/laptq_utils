@@ -1,18 +1,12 @@
 # convert ultralytics .txt to COCO json
 
 LS__PATHF_INPUT = [
-    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/train_d1_90k.txt",
-    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/valid_d1_90k.txt",
-    # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/train_d2_110k.txt",
-    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch1/data/valid_d2_110k.txt",
+    # "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/create--ultralytics-txt/20241122--phase-2--annotation-ver2--train.txt",
+    "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/create--ultralytics-txt/20241122--phase-2--annotation-ver2--val.txt"
 ]
 PATHF_OUTPUT = (
-    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d1_90k.json"
-    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/valid_d1_90k.json"
-    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d2_110k.json"
-    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/valid_d2_110k.json"
-    # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d1_90k--train_d2_110k.json"
-    "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/valid_d1_90k--valid_d2_110k.json"
+    # "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/helper--convert--ultralytics-txt--to--coco/20241122--phase-2--annotation-ver2--train.json"
+    "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/helper--convert--ultralytics-txt--to--coco/20241122--phase-2--annotation-ver2--val.json"
 )
 
 
@@ -25,7 +19,9 @@ import os
 images = []
 annotations = []
 categories = [
-    {"supercategory": "person", "id": 0, "name": "person"},
+    {"supercategory": "Pothole", "id": 0, "name": "Pothole"},
+    {"supercategory": "Manhole", "id": 1, "name": "Manhole"},
+    {"supercategory": "Drainage", "id": 2, "name": "Drainage"},
 ]
 
 count_img = 0
