@@ -108,10 +108,10 @@ if __name__ == "__main__":
         "fall_violence/test/violence/Fighting_4.mp4",
     ]:
         kwargs = {
-            "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9/{}/labels".format(
+            "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--filter-punch-distance-0.25/{}/labels".format(
                 subpathf
             ),
-            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-speed/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9/{}/labels".format(
+            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-speed/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--filter-punch-distance-0.25/{}/labels".format(
                 subpathf
             ),
             "displacement_key": "list__obj__kpts_displacement_average",  # list__obj__kpts_displacement, list__obj__kpts_displacement_ema, list__obj__kpts_displacement_average

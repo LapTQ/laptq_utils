@@ -194,10 +194,10 @@ if __name__ == "__main__":
         "fall_violence/test/violence/Fighting_4.mp4": {"step_size": 2},
     }.items():
         kwargs = {
-            "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9/{}/labels".format(
+            "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/filter_action_by_keypoint_distance/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--filter-punch-distance-0.25/{}/labels".format(
                 subpathf
             ),
-            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9/{}/labels".format(
+            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--filter-punch-distance-0.25/{}/labels".format(
                 subpathf
             ),
             "step_size": params["step_size"],  # currently not apply for EMA
