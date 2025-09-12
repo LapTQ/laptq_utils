@@ -33,7 +33,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --mode__box "${MODE__BOX}"
 
 
-    num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
+    num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l)
     num__lbl__output=$(find "${path__dir__lbl__output}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
     if [ $num__lbl__output -ne $num__lbl__input ]; then
         echo -e "${TAG__FAILED} Number of labels mismatched: ${subpath__dir}"
