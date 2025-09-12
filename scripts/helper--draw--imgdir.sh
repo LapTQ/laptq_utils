@@ -1,36 +1,40 @@
-PATH__DIR__IMAGE=/home/laptq/laptq-fs26-shoplifting-detection/outputs/sample_frames_by_skipping/full
+PATH__DIR__IMAGE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection
 POSTFIX__DIR__IMAGE=""
 # POSTFIX__DIR__IMAGE="--erase-ignored"
 
+PATH__DIR__LABEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/helper--convert--detection--txt--to--json
+POSTFIX__DIR__LABEL=""
 
-PATH__DIR__LABEL=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict2/20250428-152326--TSSTG_HO--2-kpt-channels
-POSTFIX__DIR__LABEL="--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--STGCN--JSON"
-
-NUM__MAX__IMG__TO__VISUALIZE=None
+NUM__MAX__IMG__TO__VISUALIZE=100
 IS_OK__LBL_NOT_FOUND=False
-PATH__DIR__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/STGCN/predict2/20250428-152326--TSSTG_HO--2-kpt-channels
+PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/helper--convert--detection--txt--to--json
 
-PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/class_name.yaml
+PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/mnt/hdd10tb/Users/laptq/laptq-prj-46/src/configs/class_id_to_label.yaml
 PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/action_names.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    
-    # ["shoplifting-25min.mp4"]=""
-    # ["satudora-1min.mp4"]=""
-    # ["r10_10min_rotate.mp4"]=""
-    ["r9_25min_rotate.mp4"]=""
-    # ["1568080723085_67014_fix.mkv"]=""
-    # ["R10_2025_05_15_23_40_32_rotate.mp4"]=""
+    ["APTO_v2/day1_330"]=""
+    ["APTO_v2/night1_190"]=""
+    ["APTO_v2/night3_44"]=""
+    ["APTO_v2/night4_239"]=""
+    ["dataset-ninja/ds1_simplex-test"]=""
+    ["dataset-ninja/ds1_simplex-train"]=""
+    ["dataset-ninja/ds2_complex-test"]=""
+    ["dataset-ninja/ds2_complex-train"]=""
+    ["pot_det_1240"]=""
 
-    # ["shoplifting-1min_anonymized.mp4"]=""
-    # ["Shoplifting/Shoplifting__30_.mp4"]=""
-    # ["Shoplifting/Shoplifting__68_.mp4"]=""
+    # # ["pothole_dataset_v8/only_rainy_frames/train"]=""
 
-    # ["train"]=""
-    # ["val"]=""
-    # ["test"]=""
-    # ["split-1"]=""
-    # ["split-2"]=""
+    ["pothole_dataset_v8/train"]=""
+    ["pothole_dataset_v8/train_to_valid"]=""
+    ["pothole_dataset_v8/valid"]=""
+    ["Pothole_detection_yolo/train_original"]=""
+    ["Pothole_Maeda/first_shot"]=""
+    ["Pothole_Maeda/second_shot"]=""
+    ["RDD2022_JAPAN/only_pothole/train"]=""
+
+    ["Pothole_235/train"]=""
+    ["Pothole_Maeda/first_shot_eval"]=""
 )
 # source /home/laptq/laptq-fs26-shoplifting-detection/data/shoplifting-gen-video-paths.sh
 
@@ -60,22 +64,22 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         --to_draw__id_frame False \
         --id_frame__from "filename" \
         --lambda__id_frame__from "lambda x: x.split('.')[0]" \
-        --to_draw__id_track True \
+        --to_draw__id_track False \
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
-        --to_draw__box_conf True \
+        --to_draw__box_conf False \
         --to_draw__id_class False \
         --to_draw__name_class True \
-        --to_draw__pose True \
-        --to_draw__connected_keypoints True \
+        --to_draw__pose False \
+        --to_draw__connected_keypoints False \
         --to_draw__id_action False \
-        --to_draw__name_action True \
+        --to_draw__name_action False \
         --to_draw__action_conf False \
-        --to_draw__keypoints_displacement True \
-        --to_draw__keypoints_speed True \
+        --to_draw__keypoints_displacement False \
+        --to_draw__keypoints_speed False \
         --to_draw__event_info False \
-        --fontScale 2 \
-        --thickness 2 \
+        --fontScale 1 \
+        --thickness 1 \
         --box_color_by id__class \
         --displacement_key "list__obj__kpts_displacement" \
         --speed_key "list__obj__kpts_speed_relative" \

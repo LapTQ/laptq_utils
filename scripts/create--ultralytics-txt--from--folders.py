@@ -3,7 +3,7 @@
 PATHD_INPUT = '/mnt/hdd10tb/Datasets/road-issues-detection'
 
 LS__SUBPATHD = [
-    # train
+    # # train
     # "APTO_v2/day1_330/images",
     # "APTO_v2/night1_190/images",
     # "APTO_v2/night3_44/images",
@@ -21,8 +21,32 @@ LS__SUBPATHD = [
     # "Pothole_Maeda/second_shot/images",
     # "RDD2022_JAPAN/only_pothole/train/images"
 
-    # val
+    # # val
+    # "Pothole_235/train/images",
+    # "Pothole_Maeda/first_shot_eval/images"
+
+    # train
+    "APTO_v2/day1_330/images",
+    "APTO_v2/night3_44/images",
+    "APTO_v2/night4_239/images",
     "Pothole_235/train/images",
+    "dataset-ninja/ds1_simplex-train/images",
+    "dataset-ninja/ds2_complex-train/images",
+    "pothole_dataset_v8/train/images",
+    "pothole_dataset_v8/train_to_valid/images",
+
+    "pot_det_1240/images",
+    "Pothole_detection_yolo/train_original/images",
+    "Pothole_Maeda/first_shot/images",
+    "Pothole_Maeda/second_shot/images",
+    "RDD2022_JAPAN/only_pothole/train/images"
+
+    # val
+    "APTO_v2/night1_190/images",
+    "dataset-ninja/ds1_simplex-test/images",
+    "dataset-ninja/ds2_complex-test/images",
+    "pothole_dataset_v8/valid/images",
+
     "Pothole_Maeda/first_shot_eval/images"
 ]
 
