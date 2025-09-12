@@ -132,6 +132,10 @@ def helper__extract__image__embedding(**kwargs):
         pathf_img = os.path.join(path__dir__input, namef_img)
 
         img__bgr = cv2.imread(pathf_img)
+        
+        if img__bgr is None:
+            continue
+
         _ = model.predict(img__bgr=img__bgr)
         image_feature = _['image_feature']
 
