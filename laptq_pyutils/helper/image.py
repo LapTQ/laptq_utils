@@ -2,6 +2,8 @@ import os
 import json
 import csv
 
+from laptq_pyutils.objects import CLIPFeatureExtractor
+
 
 def helper__check__duplicate__images(**kwargs):
     from imagededup.methods import PHash, DHash, WHash, AHash
@@ -110,3 +112,39 @@ def helper__convert__video__to__images(**kwargs):
         cv2.imwrite(path__file__img, img__bgr)
 
         pbar.update(1)
+
+
+def helper__extract__image__embedding(**kwargs):
+    import os
+    from tqdm import tqdm
+    import cv2
+    import numpy as np
+
+    path__dir__input = kwargs["path__dir__input"]
+    path__dir__output = kwargs["path__dir__output"]
+    to_normalize = kwargs["to_normalize"]
+
+    os.makedirs(path__dir__output, exist_ok=True)
+
+    model = CLIPFeatureExtractor(**kwargs)
+
+    for namef_img in tqdm(sorted(os.listdir(path__dir__input))):
+        pathf_img = os.path.join(path__dir__input, namef_img)
+
+        img__bgr = cv2.imread(pathf_img)
+        _ = model.predict(img__bgr=img__bgr)
+        image_feature = _['image_feature']
+
+        # normalize
+        if to_normalize:
+            image_feature = image_feature / np.linalg.norm(image_feature)
+
+        namef_output = os.path.splitext(namef_img)[0] + ".npy"
+        np.save(os.path.join(path__dir__output, namef_output), image_feature)
+
+
+def helper__cluster__images__by__embeddings(**kwargs):
+    path__dir__input__img = kwargs['path__dir__input__img']
+    path__dir__input__emb = kwargs['path__dir__input__emb']
+    path__dir__output = kwargs['path__dir__output']
+    list__subpathd = kwargs['list__subpathd']

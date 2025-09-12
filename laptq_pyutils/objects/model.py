@@ -1,5 +1,9 @@
 from abc import ABC, abstractmethod
 import numpy as np
+from PIL import Image
+import cv2
+import torch
+
 # import tensorrt as trt
 # import pycuda.driver as cuda
 # import pycuda.autoinit
@@ -315,3 +319,33 @@ class ONNXPredictor:
         inputs = {name: np.array(inputs[name], dtype=np.float32) for name in inputs}
         outputs = self.session.run(output_names, inputs)
         return {name: outputs[i] for i, name in enumerate(output_names)}
+
+
+class CLIPFeatureExtractor(BaseModel):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        try:
+            import clip
+        except:
+            raise ImportError("Please install clip by `pip install git+https://github.com/openai/CLIP.git`")
+
+        model = kwargs['model']
+        device = kwargs['device']
+
+        self.model, self.preprocess = clip.load("ViT-B/32", device=device)
+        self.device = device
+
+    def predict(self, **kwargs):
+        img__bgr = kwargs["img__bgr"]
+
+        img__pil = Image.fromarray(cv2.cvtColor(img__bgr, cv2.COLOR_BGR2RGB))
+        input_ = self.preprocess(img__pil).unsqueeze(0).to(self.device)
+        with torch.no_grad():
+            image_feature = self.model.encode_image(input_)[0]
+        
+        image_feature = image_feature.cpu().numpy()
+
+        return {"image_feature": image_feature}
+
