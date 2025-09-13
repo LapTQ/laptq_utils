@@ -57,6 +57,8 @@ def parse_args():
     ap.add_argument("--path__file__output", type=str)
     ap.add_argument("--path__file__model", type=str)
     ap.add_argument("--path__file__config", type=str)
+    ap.add_argument("--list__path__dir__img__input", type=str)  # sep by ,
+    ap.add_argument("--list__path__dir__emb__input", type=str)  # sep by ,
     ap.add_argument("--list__path__dir__lbl__input", type=str)  # sep by ,
     ap.add_argument("--device", type=str)
     ap.add_argument("--imgsz", type=int)
@@ -235,6 +237,16 @@ def parse_args():
         if args.is_ok__key_not_exist is not None
         else None
     )
+    args.list__path__dir__img__input = (
+        args.list__path__dir__img__input.split(",")
+        if args.list__path__dir__img__input is not None
+        else None
+    )
+    args.list__path__dir__emb__input = (
+        args.list__path__dir__emb__input.split(",")
+        if args.list__path__dir__emb__input is not None
+        else None
+    )
     args.list__path__dir__lbl__input = (
         args.list__path__dir__lbl__input.split(",")
         if args.list__path__dir__lbl__input is not None
@@ -326,9 +338,7 @@ def parse_args():
         else None
     )
     args.to_draw__event_info = (
-        eval(args.to_draw__event_info)
-        if args.to_draw__event_info is not None
-        else None
+        eval(args.to_draw__event_info) if args.to_draw__event_info is not None else None
     )
 
     return args
