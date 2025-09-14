@@ -20,7 +20,6 @@ from laptq_pyutils.helper import (
     helper__draw__video,
     helper__rescale__detection__box,
     helper__erase__classes__on__images,
-    helper__check__duplicate__images,
     helper__cluster__detection__bboxes,
     helper__extract__crops__with__mask__from__segmentation,
     helper__paste__seg_crops__over__det_boxes,
