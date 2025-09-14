@@ -51,7 +51,6 @@ for group in MAP__GROUP__TO__LS_SUBDPATHD:
         device="cuda:0",
         batch_size=256,
         thresh__similarity=0.97,
-        num__pad__0=9,
     )
 
     print(f"{TAG__INFO} Done: {group}")
