@@ -1,9 +1,8 @@
 # Define paths and postfixes
-PATHD_INPUT = "/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection"
-# PATHD_INPUT = "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs"
+PATHD_INPUT = "/home/laptq/datasets/COCO--reformated"
 POSTFIXD_IMAGE = ""
 
-PATHD_OUTPUT = "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/helper--extract--image--embedding/prj46"
+PATHD_OUTPUT = "/home/laptq/Downloads/helper--extract--image--embedding/prj46"
 POSTFIXD_OUTPUT = ""
 
 MAP__SUBPATHD__TO__ = {

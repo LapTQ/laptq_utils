@@ -1,51 +1,16 @@
 # Define paths and postfixes
-PATHD_INPUT_IMAGE = "/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection"
+PATHD_INPUT_IMAGE = "/home/laptq/datasets/COCO--reformated"
 POSTFIXD_IMAGE = ""
 
-PATHD_INPUT_EMBEDDING = "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/helper--extract--image--embedding/prj46"
+PATHD_INPUT_EMBEDDING = "/home/laptq/Downloads/helper--extract--image--embedding/prj46"
 POSTFIXD_EMBEDDING = ""
 
-PATHD_OUTPUT = "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/helper--cluster--images--by--embeddings/fs"
+PATHD_OUTPUT = "/home/laptq/Downloads/helper--cluster--images--by--embeddings"
 
 MAP__GROUP__TO__LS_SUBDPATHD = {
     "fs": [
-        "APTO_v2/day1_330",
-        "APTO_v2/night1_190",
-        "APTO_v2/night3_44",
-        "APTO_v2/night4_239",
-        "dataset-ninja/ds1_simplex-test",
-        "dataset-ninja/ds1_simplex-train",
-        "dataset-ninja/ds2_complex-test",
-        "dataset-ninja/ds2_complex-train",
-        "pot_det_1240",
-        "pothole_dataset_v8/train",
-        "pothole_dataset_v8/train_to_valid",
-        "pothole_dataset_v8/valid",
-        "Pothole_detection_yolo/train_original",
-        "RDD2022_JAPAN/only_pothole/train",
-        "roboflow/pot01",
-        "roboflow/pot02",
-        "roboflow/pot03",
-        "roboflow/pot04",
-        "roboflow/pot05",
-        "roboflow/pot06",
-        "roboflow/pot07",
-        "roboflow/pot08",
-        "roboflow/pot09",
-        "roboflow/pot10",
-        "roboflow/pot11",
-        "roboflow/pot12",
-        "roboflow/pot13",
-        "roboflow/pot14",
-        "roboflow/pot15",
-        "roboflow/pot16",
-        "roboflow/pot17",
-        "roboflow/pot18",
-        "roboflow/pot19",
-        "roboflow/pot20",
-        "roboflow/pot21",
+        "parrot",
     ]
-    
 }
 
 # =============================================================
@@ -62,27 +27,31 @@ TAG__INFO = "\033[94m[INFO]\033[0m"
 TAG__WARNING = "\033[33m[WARNING]\033[0m"
 
 # Iterate over the subpaths
-for group, list__subpathd in MAP__GROUP__TO__LS_SUBDPATHD:
-    path__dir__input__img = (
-        f"{PATHD_INPUT_IMAGE}/{group}/images{POSTFIXD_IMAGE}"
-    )
-    path__dir__input__emb = (
-        f"{PATHD_INPUT_EMBEDDING}/{group}/embeddings{POSTFIXD_EMBEDDING}"
-    )
-    path__dir__output = (
-        f"{PATHD_OUTPUT}/{group}"
-    )
+for group in MAP__GROUP__TO__LS_SUBDPATHD:
+    list__subpathd = MAP__GROUP__TO__LS_SUBDPATHD[group]
+    list__path__dir__img__input = [
+        f"{PATHD_INPUT_IMAGE}/{subpathd}/images{POSTFIXD_IMAGE}"
+        for subpathd in list__subpathd
+    ]
+    list__path__dir__emb__input = [
+        f"{PATHD_INPUT_EMBEDDING}/{subpathd}/embeddings{POSTFIXD_EMBEDDING}"
+        for subpathd in list__subpathd
+    ]
+    path__dir__output = f"{PATHD_OUTPUT}/{group}"
 
     # Remove existing directories if they exist
     if os.path.exists(path__dir__output):
         shutil.rmtree(path__dir__output)
 
     # Call the helper function
-    helper__extract__image__embedding(
-        path__dir__input__img=path__dir__input__img,
-        path__dir__input__emb=path__dir__input__emb,
+    helper__cluster__images__by__embeddings(
+        list__path__dir__img__input=list__path__dir__img__input,
+        list__path__dir__emb__input=list__path__dir__emb__input,
         path__dir__output=path__dir__output,
-        list__subpathd=list__subpathd,
+        device="cuda:0",
+        batch_size=256,
+        thresh__similarity=0.97,
+        num__pad__0=9,
     )
 
     print(f"{TAG__INFO} Done: {group}")

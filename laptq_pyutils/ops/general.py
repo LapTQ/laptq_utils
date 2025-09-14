@@ -177,3 +177,35 @@ def cluster__detection__boxes(**kwargs):
     list__anchor_box__wh = cluster_centers_[:, 2:].astype(int).tolist()
 
     return list__anchor_box__wh
+
+
+def compute_batched_pairwise_torch(**kwargs):
+    import torch
+    from tqdm import tqdm
+
+    input_1 = kwargs["input_1"]
+    input_2 = kwargs["input_2"]
+    op = kwargs["op"]
+    op_kwargs = kwargs["op_kwargs"]
+    batch_size = kwargs["batch_size"]
+
+    n_rows = len(input_1)
+    n_cols = len(input_2)
+
+    mat = torch.zeros(n_rows, n_cols, device=input_1.device)
+
+    for i in tqdm(range(0, n_rows, batch_size), desc="Computing cosine similarities"):
+        end_i = min(i + batch_size, n_rows)
+        row_embeddings = input_1[i:end_i]
+
+        for j in range(0, n_cols, batch_size):
+            end_j = min(j + batch_size, n_cols)
+            col_embeddings = input_2[j:end_j]
+
+            # Expand dimensions for broadcasting
+            row_expanded = row_embeddings.unsqueeze(1)  # (batch_i, 1, embedding_dim)
+            col_expanded = col_embeddings.unsqueeze(0)  # (1, batch_j, embedding_dim)
+
+            mat[i:end_i, j:end_j] = op(row_expanded, col_expanded, **op_kwargs)
+
+    return mat
