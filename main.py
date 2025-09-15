@@ -27,6 +27,7 @@ from laptq_pyutils.helper import (
     helper__merge__detection__result,
     helper__extract__crops__from__detection,
     helper__extract__topdown__pose,
+    helper__depth__estimation,
 )
 import argparse
 
@@ -53,6 +54,7 @@ def parse_args():
     ap.add_argument("--path__file__video__input", type=str)
     ap.add_argument("--path__file__lbl__input", type=str)
     ap.add_argument("--path__file__lbl__output", type=str)
+    ap.add_argument("--path__dir__np__output", type=str)
     ap.add_argument("--path__file__output", type=str)
     ap.add_argument("--path__file__model", type=str)
     ap.add_argument("--path__file__config", type=str)

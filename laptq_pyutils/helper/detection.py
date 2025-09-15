@@ -1559,23 +1559,25 @@ def helper__extract__topdown__pose(**kwargs):
         )
 
         list_keypoints = pose_estimator.predict(img, list__obj__box_x1y1x2y2)
+        
         list__obj__kpts_xyn = []
         list__obj__kpts_conf = []
-        for i_obj, kpts in enumerate(list_keypoints):
-            kpts_xyn = kpts[:, :2] / [W, H]
-            kpts_conf = kpts[:, 2]
-            list__obj__kpts_xyn.append(
-                {
-                    name: kpt.tolist()
-                    for name, kpt in zip(list__name_keypoints, kpts_xyn)
-                }
-            )
-            list__obj__kpts_conf.append(
-                {
-                    name: conf.item()
-                    for name, conf in zip(list__name_keypoints, kpts_conf)
-                }
-            )
+        if len(list__obj__box_xcycwhn) > 0:
+            for i_obj, kpts in enumerate(list_keypoints):
+                kpts_xyn = kpts[:, :2] / [W, H]
+                kpts_conf = kpts[:, 2]
+                list__obj__kpts_xyn.append(
+                    {
+                        name: kpt.tolist()
+                        for name, kpt in zip(list__name_keypoints, kpts_xyn)
+                    }
+                )
+                list__obj__kpts_conf.append(
+                    {
+                        name: conf.item()
+                        for name, conf in zip(list__name_keypoints, kpts_conf)
+                    }
+                )
 
         dict__result["list__obj__kpts_xyn"] = list__obj__kpts_xyn
         dict__result["list__obj__kpts_conf"] = list__obj__kpts_conf
