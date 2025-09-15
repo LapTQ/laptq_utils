@@ -35,7 +35,7 @@ for pathf_input in LS__PATHF_INPUT:
         for pathf_img in tqdm(f):
             count_img += 1
             pathf_img = pathf_img.strip()
-            pathf_lbl = pathf_img.replace("images/", "labels/").replace(".jpg", ".txt")
+            pathf_lbl = pathf_img.replace("images/", "labels/").replace(os.path.splitext(pathf_img)[1], ".txt")
             W, H = Image.open(pathf_img).size
 
             image_id = count_img

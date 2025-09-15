@@ -20,7 +20,6 @@ from laptq_pyutils.helper import (
     helper__draw__video,
     helper__rescale__detection__box,
     helper__erase__classes__on__images,
-    helper__check__duplicate__images,
     helper__cluster__detection__bboxes,
     helper__extract__crops__with__mask__from__segmentation,
     helper__paste__seg_crops__over__det_boxes,
@@ -28,6 +27,7 @@ from laptq_pyutils.helper import (
     helper__merge__detection__result,
     helper__extract__crops__from__detection,
     helper__extract__topdown__pose,
+    helper__depth__estimation,
 )
 import argparse
 
@@ -54,9 +54,12 @@ def parse_args():
     ap.add_argument("--path__file__video__input", type=str)
     ap.add_argument("--path__file__lbl__input", type=str)
     ap.add_argument("--path__file__lbl__output", type=str)
+    ap.add_argument("--path__dir__np__output", type=str)
     ap.add_argument("--path__file__output", type=str)
     ap.add_argument("--path__file__model", type=str)
     ap.add_argument("--path__file__config", type=str)
+    ap.add_argument("--list__path__dir__img__input", type=str)  # sep by ,
+    ap.add_argument("--list__path__dir__emb__input", type=str)  # sep by ,
     ap.add_argument("--list__path__dir__lbl__input", type=str)  # sep by ,
     ap.add_argument("--device", type=str)
     ap.add_argument("--imgsz", type=int)
@@ -235,6 +238,16 @@ def parse_args():
         if args.is_ok__key_not_exist is not None
         else None
     )
+    args.list__path__dir__img__input = (
+        args.list__path__dir__img__input.split(",")
+        if args.list__path__dir__img__input is not None
+        else None
+    )
+    args.list__path__dir__emb__input = (
+        args.list__path__dir__emb__input.split(",")
+        if args.list__path__dir__emb__input is not None
+        else None
+    )
     args.list__path__dir__lbl__input = (
         args.list__path__dir__lbl__input.split(",")
         if args.list__path__dir__lbl__input is not None
@@ -326,9 +339,7 @@ def parse_args():
         else None
     )
     args.to_draw__event_info = (
-        eval(args.to_draw__event_info)
-        if args.to_draw__event_info is not None
-        else None
+        eval(args.to_draw__event_info) if args.to_draw__event_info is not None else None
     )
 
     return args

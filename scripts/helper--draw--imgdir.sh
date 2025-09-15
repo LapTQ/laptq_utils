@@ -69,7 +69,9 @@ TAG__INFO="\033[94m[INFO]\033[0m"
 TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 
-for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
+main() {
+    local subpath__dir=$1
+    
     path__dir__img="${PATH__DIR__IMAGE}/${subpath__dir}/images${POSTFIX__DIR__IMAGE}"
     path__dir__lbl="${PATH__DIR__LABEL}/${subpath__dir}/labels${POSTFIX__DIR__LABEL}"
 
@@ -134,4 +136,31 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         # exit 1
     fi
     echo -e "${TAG__PASSED} ${num__lbl} labels == ${num__img_vis} visualized images: ${subpath__dir}"
+}
+
+
+# ============= if parallel ================
+export -f main
+
+cleanup() {
+    echo "Cleaning up..."
+    # Kill background processes if they are still running
+    kill $(jobs -p) 2>/dev/null
+    echo "All background processes terminated."
+}
+
+trap cleanup SIGINT
+
+for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
+    main "$subpath__dir" &
 done
+
+wait
+
+# ==========================================
+
+# ============= if sequentially ============
+# for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
+#     main "${subpath__dir}"
+# done
+# ==========================================
