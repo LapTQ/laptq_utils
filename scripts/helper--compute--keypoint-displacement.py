@@ -194,10 +194,10 @@ if __name__ == "__main__":
         "fall_violence/test/violence/Fighting_4.mp4": {"step_size": 2},
     }.items():
         kwargs = {
-            "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/filter_action_by_keypoint_distance/ProtoGCN/prj54/v9__nturubg_mostvariant_leftstrip03_no_kickback_kicksth__le2i__punch0312__j--filter-punch-push-distance-nose-0.25-hip-0.2-extend-wrist/{}/labels".format(
+            "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/filter_action_by_keypoint_distance/ProtoGCN/prj54/v9__nturubg_mostvariant_leftstrip03_no_kickback_kicksth__le2i__punch0312__j--filter-punch-push-distance-nose-0.25-hip-0.2-leg-0.95/{}/labels".format(
                 subpathf
             ),
-            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v9__nturubg_mostvariant_leftstrip03_no_kickback_kicksth__le2i__punch0312__j--filter-punch-push-distance-nose-0.25-hip-0.2-extend-wrist/{}/labels".format(
+            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v9__nturubg_mostvariant_leftstrip03_no_kickback_kicksth__le2i__punch0312__j--filter-punch-push-distance-nose-0.25-hip-0.2-leg-0.95/{}/labels".format(
                 subpathf
             ),
             "step_size": params["step_size"],  # currently not apply for EMA
