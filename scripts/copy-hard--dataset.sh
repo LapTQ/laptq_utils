@@ -12,16 +12,16 @@ POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["APTO_v2/day1_330"]=""
-    ["APTO_v2/night1_190"]=""
-    ["APTO_v2/night3_44"]=""
-    ["APTO_v2/night4_239"]=""
-    ["Pothole_235/train"]=""
-    ["dataset-ninja/ds1_simplex-test"]=""
-    ["dataset-ninja/ds1_simplex-train"]=""
-    ["dataset-ninja/ds2_complex-test"]=""
-    ["dataset-ninja/ds2_complex-train"]=""
-    ["pot_det_1240"]=""
+    # ["APTO_v2/day1_330"]=""
+    # ["APTO_v2/night1_190"]=""
+    # ["APTO_v2/night3_44"]=""
+    # ["APTO_v2/night4_239"]=""
+    # ["Pothole_235/train"]=""
+    # ["dataset-ninja/ds1_simplex-test"]=""
+    # ["dataset-ninja/ds1_simplex-train"]=""
+    # ["dataset-ninja/ds2_complex-test"]=""
+    # ["dataset-ninja/ds2_complex-train"]=""
+    # ["pot_det_1240"]=""
 
     # ["pothole_dataset_v8/only_rainy_frames/train"]=""
 
@@ -54,7 +54,7 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     path__dir__img__output="${PATH__DIR__DATASETS__OUTPUT}/${subpath_dir}/images${POSTFIX__DIR__VERSION__TARGET}"
     path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${subpath_dir}/labels${POSTFIX__DIR__LABEL__SOURCE}"
     path__dir__lbl__output="${PATH__DIR__DATASETS__OUTPUT}/${subpath_dir}/labels${POSTFIX__DIR__VERSION__TARGET}"
-
+    
     [[ -d "$path__dir__img__output" ]] && rm -r "$path__dir__img__output"
     [[ -d "$path__dir__lbl__output" ]] && rm -r "$path__dir__lbl__output"
     mkdir -p "$path__dir__img__output"
@@ -70,7 +70,7 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         cp $( realpath "$path__dir__img__input/$name__file__img" ) "$path__dir__img__output"
     done
 
-    num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
+    num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l)
     num__lbl__output=$(find "${path__dir__lbl__output}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
     if [ $num__lbl__input -lt $num__lbl__output ]; then
         echo -e "${TAG__FAILED} Number of labels mismatched: ${subpath_dir}"

@@ -28,3 +28,4 @@ from .generation import (
     helper__paste__seg_crops__over__det_boxes,
     helper__paste__seg_crops__over__background,
 )
+from .depth import helper__depth__estimation

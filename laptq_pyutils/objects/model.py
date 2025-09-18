@@ -349,3 +349,52 @@ class CLIPFeatureExtractor(BaseModel):
 
         return {"image_feature": image_feature}
 
+
+
+class Midas(BaseModel):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        model = kwargs["model"]
+        device = kwargs["device"]
+
+        assert model in [
+            "MiDaS_small",
+            "DPT_Hybrid",
+            "DPT_Large",
+        ], f"Unsupported model: {model}"
+
+        self.model = torch.hub.load("intel-isl/MiDaS", model)
+        self.model.to(device)
+        self.model.eval()
+
+        midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms")
+        if model == "DPT_Large" or model == "DPT_Hybrid":
+            self.transform = midas_transforms.dpt_transform
+        else:
+            self.transform = midas_transforms.small_transform
+
+        self.device = device
+
+    def predict(self, **kwargs):
+
+        img__bgr = kwargs["img__bgr"]
+
+        img__rgb = cv2.cvtColor(img__bgr, cv2.COLOR_BGR2RGB)
+
+        input_batch = self.transform(img__rgb).to(self.device)
+        preds = self.model(input_batch)
+
+        depth_map = preds[0].detach().cpu().numpy()
+        depth_map = (depth_map - depth_map.min()) / (depth_map.max() - depth_map.min())
+
+        depth_map = cv2.resize(
+            depth_map,
+            (img__bgr.shape[1], img__bgr.shape[0]),
+            interpolation=cv2.INTER_CUBIC,
+        )
+
+        return {
+            "depth_map": depth_map,
+        }

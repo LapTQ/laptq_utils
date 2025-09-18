@@ -4,4 +4,5 @@ from .model import (
     YOLOv5CompatDetectPredictor,
     TensorRTPredictor,
     CLIPFeatureExtractor,
+    Midas,
 )
