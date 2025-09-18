@@ -1,16 +1,110 @@
 # Define paths and postfixes
-PATHD_INPUT_IMAGE = "/home/laptq/datasets/COCO--reformated"
+PATHD_INPUT_IMAGE = "/home/laptq/laptq-prj-46/outputs/copy-hard--dataset"
 POSTFIXD_IMAGE = ""
 
-PATHD_INPUT_EMBEDDING = "/home/laptq/Downloads/helper--extract--image--embedding/prj46"
+PATHD_INPUT_EMBEDDING = "/home/laptq/laptq-prj-46/outputs/helper--extract--image--embedding/fs-gray"
 POSTFIXD_EMBEDDING = ""
 
-PATHD_OUTPUT = "/home/laptq/Downloads/helper--cluster--images--by--embeddings"
+PATHD_OUTPUT = "/home/laptq/laptq-prj-46/outputs/helper--cluster--images--by--embeddings"
 
 MAP__GROUP__TO__LS_SUBDPATHD = {
-    "fs": [
-        "parrot",
-    ]
+    # "fs-1": [
+        # "roboflow/pot01/images/train",
+        # "roboflow/pot02/images/train",
+        # "roboflow/pot03/images/train",
+        # "roboflow/pot04/images/train",
+        # "roboflow/pot05/images/train",
+        # "roboflow/pot06/images/train",
+        # "roboflow/pot07/images/train",
+        # "roboflow/pot08/images/train",
+        # "roboflow/pot09/images/train",
+        # "roboflow/pot10/images/train",
+    # ],
+    # "fs-2": [
+    #     "roboflow/pot11/images/train",
+    #     "roboflow/pot12/images/train",
+    #     "roboflow/pot13/images/train",
+    #     "roboflow/pot14/images/train",
+    #     "roboflow/pot15/images/train",
+    #     "roboflow/pot16/images/train",
+    #     "roboflow/pot17/images/train",
+    #     "roboflow/pot18/images/train",
+    #     "roboflow/pot19/images/train",
+    # ],
+    # "fs-3": [
+    #     "roboflow/pot20/images/train",
+    #     "roboflow/pot21/images/train",
+    # ]
+    # "fs-4": [
+    #     "fs-1/images",
+    #     "fs-2/images",
+    #     "fs-3/images",
+    # ],
+    # "fs-v1": [
+    #     "roboflow/pot02/images/valid",
+    #     "roboflow/pot03/images/valid",
+    #     "roboflow/pot04/images/valid",
+    #     "roboflow/pot06/images/valid",
+    #     "roboflow/pot07/images/valid",
+    #     "roboflow/pot08/images/valid",
+    #     "roboflow/pot09/images/valid",
+    #     "roboflow/pot10/images/valid",
+    #     "roboflow/pot11/images/valid",
+    #     "roboflow/pot12/images/valid",
+    #     "roboflow/pot13/images/valid",
+    #     "roboflow/pot14/images/valid",
+    #     "roboflow/pot15/images/valid",
+    #     "roboflow/pot16/images/valid",
+    #     "roboflow/pot17/images/valid",
+    #     "roboflow/pot18/images/valid",
+    #     "roboflow/pot19/images/valid",
+    #     "roboflow/pot20/images/valid",
+    #     "roboflow/pot21/images/valid",
+    # ],
+    # "fs-t1": [
+    #     "roboflow/pot02/images/test",
+    #     "roboflow/pot03/images/test",
+    #     "roboflow/pot04/images/test",
+    #     "roboflow/pot07/images/test",
+    #     "roboflow/pot08/images/test",
+    #     "roboflow/pot09/images/test",
+    #     "roboflow/pot10/images/test",
+    #     "roboflow/pot11/images/test",
+    #     "roboflow/pot12/images/test",
+    #     "roboflow/pot13/images/test",
+    #     "roboflow/pot14/images/test",
+    #     "roboflow/pot15/images/test",
+    #     "roboflow/pot16/images/test",
+    #     "roboflow/pot17/images/test",
+    #     "roboflow/pot18/images/test",
+    #     "roboflow/pot19/images/test",
+    #     "roboflow/pot20/images/test",
+    #     "roboflow/pot21/images/test",
+    # ],
+    # "fs-6": [
+    #     "fs-4/images",
+    #     "fs-v1/images",
+    #     "fs-t1/images",
+    # ],
+    # "fs-7": [
+    #     "dataset-ninja/ds1_simplex-test/images",
+    #     "dataset-ninja/ds1_simplex-train/images",
+    #     "dataset-ninja/ds2_complex-test/images",
+    #     "dataset-ninja/ds2_complex-train/images",
+    #     "pothole_dataset_v8/train/images",
+    #     "pothole_dataset_v8/train_to_valid/images",
+    #     "pothole_dataset_v8/valid/images",
+    #     "pot_det_1240/images",
+    # ],
+    "fs-9": [
+        "APTO_v2/day1_330/images",
+        "APTO_v2/night1_190/images",
+        "APTO_v2/night3_44/images",
+        "APTO_v2/night4_239/images",
+        "Pothole_detection_yolo/train_original/images",
+        "RDD2022_JAPAN/only_pothole/train/images",
+        "fs-6/images",
+    ],
 }
 
 # =============================================================

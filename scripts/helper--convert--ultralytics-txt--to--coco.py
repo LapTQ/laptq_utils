@@ -1,12 +1,12 @@
 # convert ultralytics .txt to COCO json
 
 LS__PATHF_INPUT = [
-    # "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/create--ultralytics-txt/20241122--phase-2--annotation-ver2--train.txt",
-    "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/create--ultralytics-txt/20241122--phase-2--annotation-ver2--val.txt"
+    # "/home/laptq/laptq-prj-46/outputs/create--ultralytics-txt/prj57-v1--train.txt",
+    "/home/laptq/laptq-prj-46/outputs/create--ultralytics-txt/prj57-v1--val.txt"
 ]
 PATHF_OUTPUT = (
-    # "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/helper--convert--ultralytics-txt--to--coco/20241122--phase-2--annotation-ver2--train.json"
-    "/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/helper--convert--ultralytics-txt--to--coco/20241122--phase-2--annotation-ver2--val.json"
+    # "/home/laptq/laptq-prj-46/outputs/helper--convert--ultralytics-txt--to--coco/prj57-v1--train.json"
+    "/home/laptq/laptq-prj-46/outputs/helper--convert--ultralytics-txt--to--coco/prj57-v1--val.json"
 )
 
 
