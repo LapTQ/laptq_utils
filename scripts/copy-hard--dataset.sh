@@ -1,14 +1,13 @@
-PATH__DIR__DATASETS__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-20
+# PATH__DIR__DATASETS__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
+PATH__DIR__DATASETS__SOURCE=/home/laptq/laptq-prj-46/outputs/drafts/d2
+POSTFIX__DIR__IMG__SOURCE=""
 
-PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__LABEL__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-20
+# PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
+PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-prj-46/outputs/drafts/d2
+POSTFIX__DIR__LABEL__SOURCE=""
 
-PATH__DIR__DATASETS__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241130--copy-hard--dataset
-POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--crop-top50-side20-botom0--rescaled-20
-
-
-[[ -d "$PATH__DIR__DATASETS__OUTPUT" ]] && rm -r "$PATH__DIR__DATASETS__OUTPUT"
+PATH__DIR__DATASETS__OUTPUT=/home/laptq/laptq-prj-46/outputs/copy-hard--dataset
+POSTFIX__DIR__VERSION__TARGET=""
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
@@ -25,17 +24,19 @@ declare -A MAP__SUBPATH_DIR__TO__=(
 
     # ["pothole_dataset_v8/only_rainy_frames/train"]=""
 
-    ["pothole_dataset_v8/train"]=""
-    ["pothole_dataset_v8/train_to_valid"]=""
-    ["pothole_dataset_v8/valid"]=""
-    ["Pothole_detection_yolo/train_original"]=""
-    ["Pothole_Maeda/first_shot"]=""
-    ["Pothole_Maeda/first_shot_eval"]=""
-    ["Pothole_Maeda/second_shot"]=""
-    ["RDD2022_JAPAN/only_pothole/train"]=""
+    # ["pothole_dataset_v8/train"]=""
+    # ["pothole_dataset_v8/train_to_valid"]=""
+    # ["pothole_dataset_v8/valid"]=""
+    # ["Pothole_detection_yolo/train_original"]=""
+    # ["Pothole_Maeda/first_shot"]=""
+    # ["Pothole_Maeda/first_shot_eval"]=""
+    # ["Pothole_Maeda/second_shot"]=""
+    # ["RDD2022_JAPAN/only_pothole/train"]=""
 
-    ["20241121--syn--selected/Pothole_Maeda/first_shot"]=""
-    ["20241121--syn--selected/Pothole_Maeda/second_shot"]=""
+    # ["20241121--syn--selected/Pothole_Maeda/first_shot"]=""
+    # ["20241121--syn--selected/Pothole_Maeda/second_shot"]=""
+
+    ["fs-10"]=""
 )
 
 

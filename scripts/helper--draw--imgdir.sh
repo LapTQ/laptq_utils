@@ -1,40 +1,46 @@
-PATH__DIR__IMAGE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection
+PATH__DIR__IMAGE=/home/laptq/laptq-prj-46/data
 POSTFIX__DIR__IMAGE=""
 # POSTFIX__DIR__IMAGE="--erase-ignored"
 
-PATH__DIR__LABEL=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/helper--convert--detection--txt--to--json
+PATH__DIR__LABEL=/home/laptq/laptq-prj-46/outputs/helper--convert--detection--txt--to--json
 POSTFIX__DIR__LABEL=""
 
-NUM__MAX__IMG__TO__VISUALIZE=100
+NUM__MAX__IMG__TO__VISUALIZE=None
 IS_OK__LBL_NOT_FOUND=False
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/helper--convert--detection--txt--to--json
+PATH__DIR__OUTPUT=/home/laptq/laptq-prj-46/outputs/helper--convert--detection--txt--to--json
 
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS=/mnt/hdd10tb/Users/laptq/laptq-prj-46/src/configs/class_id_to_label.yaml
 PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION=/home/laptq/laptq-fs26-shoplifting-detection/src/configs/action_names.yaml
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["APTO_v2/day1_330"]=""
-    ["APTO_v2/night1_190"]=""
-    ["APTO_v2/night3_44"]=""
-    ["APTO_v2/night4_239"]=""
-    ["dataset-ninja/ds1_simplex-test"]=""
-    ["dataset-ninja/ds1_simplex-train"]=""
-    ["dataset-ninja/ds2_complex-test"]=""
-    ["dataset-ninja/ds2_complex-train"]=""
-    ["pot_det_1240"]=""
+    # ["APTO_v2/day1_330"]=""
+    # ["APTO_v2/night1_190"]=""
+    # ["APTO_v2/night3_44"]=""
+    # ["APTO_v2/night4_239"]=""
+    # ["dataset-ninja/ds1_simplex-test"]=""
+    # ["dataset-ninja/ds1_simplex-train"]=""
+    # ["dataset-ninja/ds2_complex-test"]=""
+    # ["dataset-ninja/ds2_complex-train"]=""
+    # ["pot_det_1240"]=""
 
     # # ["pothole_dataset_v8/only_rainy_frames/train"]=""
 
-    ["pothole_dataset_v8/train"]=""
-    ["pothole_dataset_v8/train_to_valid"]=""
-    ["pothole_dataset_v8/valid"]=""
-    ["Pothole_detection_yolo/train_original"]=""
-    ["Pothole_Maeda/first_shot"]=""
-    ["Pothole_Maeda/second_shot"]=""
-    ["RDD2022_JAPAN/only_pothole/train"]=""
+    # ["pothole_dataset_v8/train"]=""
+    # ["pothole_dataset_v8/train_to_valid"]=""
+    # ["pothole_dataset_v8/valid"]=""
+    # ["Pothole_detection_yolo/train_original"]=""
+    # ["Pothole_Maeda/first_shot"]=""
+    # ["Pothole_Maeda/second_shot"]=""
+    # ["RDD2022_JAPAN/only_pothole/train"]=""
 
-    ["Pothole_235/train"]=""
-    ["Pothole_Maeda/first_shot_eval"]=""
+    # ["Pothole_235/train"]=""
+    # ["Pothole_Maeda/first_shot_eval"]=""
+
+    ["prj57-dedup-detection/prj57-v1-batch-1"]=""
+    ["prj57-dedup-detection/prj57-v1-batch-2"]=""
+    ["prj57-dedup-detection/prj57-v1-batch-3"]=""
+    ["prj57-dedup-detection/prj57-v1-batch-4"]=""
+    ["prj57-dedup-detection/prj57-v1-batch-5"]=""
 )
 # source /home/laptq/laptq-fs26-shoplifting-detection/data/shoplifting-gen-video-paths.sh
 
@@ -70,8 +76,8 @@ main() {
         --to_draw__box_x1y1whn True \
         --to_draw__box_polygonn False \
         --to_draw__box_conf False \
-        --to_draw__id_class False \
-        --to_draw__name_class True \
+        --to_draw__id_class True \
+        --to_draw__name_class False \
         --to_draw__pose False \
         --to_draw__connected_keypoints False \
         --to_draw__id_action False \
@@ -80,8 +86,8 @@ main() {
         --to_draw__keypoints_displacement False \
         --to_draw__keypoints_speed False \
         --to_draw__event_info False \
-        --fontScale 1 \
-        --thickness 1 \
+        --fontScale 1.5 \
+        --thickness 2 \
         --box_color_by id__class \
         --displacement_key "list__obj__kpts_displacement" \
         --speed_key "list__obj__kpts_speed_relative" \

@@ -1,15 +1,19 @@
-PATH__DIR__IMG__SOURCE=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__IMG__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked
+PATH__DIR__IMG__SOURCE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection/prj57-dedup-detection
+POSTFIX__DIR__IMG__SOURCE=""
 
-PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/20241208--true-labels--json--to-txt
-POSTFIX__DIR__LABEL__SOURCE=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--only-pot
+PATH__DIR__LABEL__SOURCE=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection/prj57-dedup-detection
+POSTFIX__DIR__LABEL__SOURCE="_seg"
 
-PATH__DIR__OUTPUT=/mnt/hdd10tb/Datasets/road-issues-detection
-POSTFIX__DIR__VERSION__TARGET=--20241128--phase-2--annotated-ver2--pot-man-drain--checked--only-pot
+PATH__DIR__OUTPUT=/mnt/hdd10tb/Users/laptq/laptq-prj-46/data/road-issues-detection/prj57-dedup-segmentation
+POSTFIX__DIR__VERSION__TARGET=""
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    
+    ["prj57-v1-batch-1"]=""
+    ["prj57-v1-batch-2"]=""
+    ["prj57-v1-batch-3"]=""
+    ["prj57-v1-batch-4"]=""
+    ["prj57-v1-batch-5"]=""
 )
 
 
