@@ -1,27 +1,33 @@
 # Define paths and postfixes
-PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
+# PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
+PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
+# PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--mendeley"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/fs26"
-POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/fs26"
+# POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
+# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/data/crops--single-person--mendeley"
+POSTFIX__DIR__LABEL = ""
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--depth--estimation/fs26/midas"
+# PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--depth--estimation/fs26/midas-large/full-frame"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--depth--estimation/fs26/midas-large/single-person"
 POSTFIX__DIR__OUTPUT = ""
 
 # Define the map of subpaths
-MAP__SUBPATH_VIDEO__TO__ = {
-    "shoplifting-25min.mp4": None,
-    "r9_25min_rotate.mp4": None,
-}
-# -----
-# import os
-# import glob
-
 # MAP__SUBPATH_VIDEO__TO__ = {
-#     p[len(PATH__DIR__IMAGE) + 1 :]: None
-#     for p in glob.glob(f"{PATH__DIR__IMAGE}/*/*/*/*")
-#     if os.path.isdir(p)
+#     "shoplifting-25min.mp4": None,
+#     "r9_25min_rotate.mp4": None,
 # }
+# -----
+import os
+import glob
+
+MAP__SUBPATH_VIDEO__TO__ = {
+    p[len(PATH__DIR__IMAGE) + 1 :]: None
+    for p in glob.glob(f"{PATH__DIR__IMAGE}/shoplifting-gen-videos/*/*/*/*")
+    if os.path.isdir(p) and "A_fixedposition_surveillance_202508261716_h8.mp4" in p
+}
 
 # =============================================================
 import os
