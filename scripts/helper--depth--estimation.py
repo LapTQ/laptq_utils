@@ -28,6 +28,10 @@ import os
 import shutil
 import subprocess
 from laptq_pyutils.helper import helper__depth__estimation
+from multiprocessing import Pool
+import multiprocessing as mp
+import torch
+import gc
 
 
 # Define tags for logging
@@ -35,6 +39,21 @@ TAG__FAILED = "\033[31m[FAILED]\033[0m"
 TAG__PASSED = "\033[92m[PASSED]\033[0m"
 TAG__INFO = "\033[94m[INFO]\033[0m"
 TAG__WARNING = "\033[33m[WARNING]\033[0m"
+
+
+def run_wrapper(kwargs):
+    print(f"{TAG__INFO} Processing: {kwargs['path__dir__img__input']}")
+
+    helper__depth__estimation(**kwargs)
+
+    gc.collect()
+    torch.cuda.empty_cache()
+    torch.cuda.synchronize()
+
+    print(f"{TAG__PASSED} Done: {kwargs['path__dir__img__input']}")
+
+
+ls_kwargs = []
 
 # Iterate over the subpaths
 for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
@@ -57,16 +76,26 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
     if os.path.exists(path__dir__img__output):
         shutil.rmtree(path__dir__img__output)
 
-    # Call the helper function
-    helper__depth__estimation(
+    kwargs = dict(
         path__dir__img__input=path__dir__img__input,
         path__dir__lbl__input=path__dir__lbl__input,
         path__dir__np__output=path__dir__np__output,
         to_save__img=True,
         path__dir__img__output=path__dir__img__output,
         is_ok__lbl_not_exist=False,
-        model="MiDaS_small",  # MiDaS_small, DPT_Hybrid, DPT_Large
-        device="cuda:5",
+        model="DPT_Large",  # MiDaS_small, DPT_Hybrid, DPT_Large
+        device="cuda:0",
     )
 
-    print(f"{TAG__INFO} Done: {subpath__dir}")
+    ls_kwargs.append(kwargs)
+
+
+# ============ sequential =============
+for kwargs in ls_kwargs:
+    run_wrapper(kwargs)
+# # ============ multi-process run ============
+# # mp.set_start_method("spawn", force=True)
+
+# with Pool(2) as p:
+#     p.map(run_wrapper, ls_kwargs)
+# # ===================================

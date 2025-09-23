@@ -10,17 +10,25 @@ POSTFIX__DIR__OUTPUT = ""
 
 # # Define the map of subpaths
 # MAP__SUBPATH_VIDEO__TO__ = {
-#     "r9_25min_rotate.mp4": ""
+#     "shoplifting-25min.mp4": None,
+#     "r9_25min_rotate.mp4": None,
 # }
-import sys
+# -----
+import os
+import glob
 
-sys.path.append("/home/laptq/laptq-fs26-shoplifting-detection/data")
-from fall_violence_subpaths import MAP__SUBPATHF__TO__ as MAP__SUBPATH_VIDEO__TO__
+MAP__SUBPATH_VIDEO__TO__ = {
+    p[len(PATH__DIR__LABEL) + 1 :]: None
+    for p in glob.glob(f"{PATH__DIR__LABEL}/shoplifting-awlrecord-videos/*/*.mp4")
+    if os.path.isdir(p)
+}
 
 # =============================================================
 import os
 import subprocess
 from laptq_pyutils.helper import helper__extract__crops__from__detection
+from multiprocessing import Pool
+import multiprocessing as mp
 
 
 # Define tags for logging
@@ -28,6 +36,17 @@ TAG__FAILED = "\033[31m[FAILED]\033[0m"
 TAG__PASSED = "\033[92m[PASSED]\033[0m"
 TAG__INFO = "\033[94m[INFO]\033[0m"
 TAG__WARNING = "\033[33m[WARNING]\033[0m"
+
+
+def run_wrapper(kwargs):
+    print(f"{TAG__INFO} Processing: {kwargs['path__dir__img__input']}")
+
+    helper__extract__crops__from__detection(**kwargs)
+
+    print(f"{TAG__PASSED} Done: {kwargs['path__dir__img__input']}")
+
+
+ls_kwargs = []
 
 # Iterate over the subpaths
 for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
@@ -56,8 +75,7 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
     if "{}" not in path__dir__crop__lbl__output:
         os.makedirs(path__dir__crop__lbl__output, exist_ok=True)
 
-    # Call the helper function
-    helper__extract__crops__from__detection(
+    kwargs = dict(
         path__dir__img__input=path__dir__img__input,
         path__dir__lbl__input=path__dir__lbl__input,
         path__dir__crop__img__output=path__dir__crop__img__output,
@@ -66,8 +84,19 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
         num__pad__0=6,
         to_resize_box__wrt__pose=True,
         to_shift__coords__wrt__box=True,
-        to_save__img=False,
+        to_save__img=True,
         split_by="id__track",  # "id__track" # if not None, please add a "/{}" before /images and /labels assuming there's an /images and /labels in path__dir__crop__img__output and path__dir__crop__lbl__output
     )
 
-    print(f"{TAG__INFO} Done: {subpath__dir}")
+    ls_kwargs.append(kwargs)
+
+
+# ============ sequential =============
+# for kwargs in ls_kwargs:
+#     run_wrapper(kwargs)
+# ============ multi-process run ============
+# mp.set_start_method("spawn", force=True)
+
+with Pool(10) as p:
+    p.map(run_wrapper, ls_kwargs)
+# ===================================
