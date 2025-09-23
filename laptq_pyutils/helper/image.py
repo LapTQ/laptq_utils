@@ -44,6 +44,7 @@ def helper__extract__image__embedding(**kwargs):
 
     path__dir__input = kwargs["path__dir__input"]
     path__dir__output = kwargs["path__dir__output"]
+    to_gray = kwargs["to_gray"]
     to_normalize = kwargs["to_normalize"]
 
     os.makedirs(path__dir__output, exist_ok=True)
@@ -59,6 +60,10 @@ def helper__extract__image__embedding(**kwargs):
 
         if img__bgr is None:
             continue
+
+        if to_gray:
+            img__bgr = cv2.cvtColor(img__bgr, cv2.COLOR_BGR2GRAY)
+            img__bgr = cv2.cvtColor(img__bgr, cv2.COLOR_GRAY2BGR)  # Convert back
 
         _ = model.predict(img__bgr=img__bgr)
         image_feature = _["image_feature"]
@@ -85,8 +90,8 @@ def helper__cluster__images__by__embeddings(**kwargs):
     path__dir__output = kwargs["path__dir__output"]
     device = kwargs["device"]
     batch_size = kwargs["batch_size"]
+    linkage = kwargs["linkage"]
     thresh__similarity = kwargs["thresh__similarity"]
-    num__pad__0 = kwargs["num__pad__0"]
 
     assert len(list__path__dir__img__input) == len(
         list__path__dir__emb__input
@@ -133,7 +138,7 @@ def helper__cluster__images__by__embeddings(**kwargs):
     hac = AgglomerativeClustering(
         n_clusters=None,
         metric="precomputed",
-        linkage="average",
+        linkage=linkage,
         distance_threshold=1 - thresh__similarity,
     )
 

@@ -48,9 +48,10 @@ for group in MAP__GROUP__TO__LS_SUBDPATHD:
         list__path__dir__img__input=list__path__dir__img__input,
         list__path__dir__emb__input=list__path__dir__emb__input,
         path__dir__output=path__dir__output,
-        device="cuda:0",
-        batch_size=256,
-        thresh__similarity=0.97,
+        device="cuda:3",
+        batch_size=512,
+        linkage="single",
+        thresh__similarity=0.97,    # 0.97/0.98 OK
     )
 
     print(f"{TAG__INFO} Done: {group}")

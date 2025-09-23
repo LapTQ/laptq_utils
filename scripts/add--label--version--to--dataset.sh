@@ -9,8 +9,7 @@ POSTFIX__DIR__VERSION__TARGET=""
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["split-1"]=""
-    ["split-2"]=""
+    
 )
 
 

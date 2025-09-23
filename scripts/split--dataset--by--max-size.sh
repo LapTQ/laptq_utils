@@ -85,7 +85,7 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
 
             # choose either
             # touch "${path__dir__lbl__output}/${name__file__lbl}"
-            cp "$path__file__lbl__input" "$path__dir__lbl__output"/$name__file__img
+            cp "$path__file__lbl__input" "$path__dir__lbl__output"/$name__file__lbl
         done
         # cp "${PATH__DIR__DATASETS__SOURCE}/${subpath_dir}/classes.txt" "${PATH__DIR__DATASETS__OUTPUT}/${subpath_dir}${postfix}/"
 

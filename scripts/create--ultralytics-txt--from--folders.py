@@ -1,21 +1,19 @@
 # create ultralytics .txt from by iterating through folders
 
-PATHD_INPUT = '/mnt/hdd10tb/Datasets/road-issues-detection'
+PATHD_INPUT = '/home/laptq/laptq-prj-46/data/prj57-dedup-detection'
 
 LS__SUBPATHD = [
     # train
     # "APTO_v2/day1_330/images",
-    # "APTO_v2/night1_190/images",
     # "APTO_v2/night3_44/images",
     # "APTO_v2/night4_239/images",
-    # "dataset-ninja/ds1_simplex-test/images",
+    # "Pothole_235/train/images",
     # "dataset-ninja/ds1_simplex-train/images",
-    # "dataset-ninja/ds2_complex-test/images",
     # "dataset-ninja/ds2_complex-train/images",
-    # "pot_det_1240/images",
     # "pothole_dataset_v8/train/images",
     # "pothole_dataset_v8/train_to_valid/images",
-    # "pothole_dataset_v8/valid/images",
+
+    # "pot_det_1240/images",
     # "Pothole_detection_yolo/train_original/images",
     # "Pothole_Maeda/first_shot/images",
     # "Pothole_Maeda/second_shot/images",
@@ -27,8 +25,8 @@ LS__SUBPATHD = [
 ]
 
 PATHF_OUTPUT = (
-    # '/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/create--ultralytics-txt/20241122--phase-2--annotation-ver2--train.txt'
-    '/mnt/hdd10tb/Users/laptq/laptq-prj-46/outputs/create--ultralytics-txt/20241122--phase-2--annotation-ver2--val.txt'
+    '/home/laptq/laptq-prj-46/outputs/create--ultralytics-txt/prj57-v1--train.txt'
+    # '/home/laptq/laptq-prj-46/outputs/create--ultralytics-txt/prj57-v1--val.txt'
 )
 
 

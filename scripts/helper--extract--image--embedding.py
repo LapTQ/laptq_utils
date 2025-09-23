@@ -1,8 +1,8 @@
 # Define paths and postfixes
-PATHD_INPUT = "/home/laptq/datasets/COCO--reformated"
+PATHD_INPUT = "/home/laptq/laptq-prj-46/outputs/copy-hard--dataset"
 POSTFIXD_IMAGE = ""
 
-PATHD_OUTPUT = "/home/laptq/Downloads/helper--extract--image--embedding/prj46"
+PATHD_OUTPUT = "/home/laptq/laptq-prj-46/outputs/helper--extract--image--embedding/fs-gray"
 POSTFIXD_OUTPUT = ""
 
 MAP__SUBPATHD__TO__ = {
@@ -36,7 +36,8 @@ for subpathd in MAP__SUBPATHD__TO__:
         path__dir__input=path__dir__input,
         path__dir__output=path__dir__output,
         model="ViT-B/32",
-        device="cuda:0",
+        device="cuda:3",
+        to_gray=True,
         to_normalize=True,
     )
 
