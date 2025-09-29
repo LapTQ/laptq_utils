@@ -23,7 +23,7 @@ PATHD_LABEL_OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helpe
 # PATHD_LABEL_OUTPUT='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54'
 POSTFIX_LABEL_OUTPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
 
-DEVICE = "cuda:5"
+DEVICE = "cuda:0"
 
 # Define the map of subpaths
 # MAP__SUBPATH_DIR__TO__={
@@ -37,7 +37,7 @@ import glob
 
 MAP__SUBPATH_DIR__TO__ = {
     p[len(PATHD_IMAGE) + 1 :]: None
-    for p in glob.glob(f"{PATHD_IMAGE}/shoplifting-awlrecord-videos/*/*.mp4")
+    for p in glob.glob(f"{PATHD_IMAGE}/shoplifting-gen-videos/veo3/v1/*.mp4")
     if os.path.isdir(p)
 }
 

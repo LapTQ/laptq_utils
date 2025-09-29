@@ -20,7 +20,7 @@ import glob
 
 MAP__SUBPATH_VIDEO__TO__ = {
     p[len(PATH__DIR__LABEL) + 1 :]: None
-    for p in glob.glob(f"{PATH__DIR__LABEL}/shoplifting-awlrecord-videos/*/*.mp4")
+    for p in glob.glob(f"{PATH__DIR__LABEL}/shoplifting-gen-videos/veo3/v1/*.mp4")
     if os.path.isdir(p)
 }
 
