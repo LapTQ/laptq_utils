@@ -34,7 +34,7 @@ TAG__WARNING = "\033[33m[WARNING]\033[0m"
 
 
 def run_wrapper(kwargs):
-    print(f"{TAG__INFO} Done: {kwargs['path__file__input']}")
+    print(f"{TAG__INFO} Processing: {kwargs['path__file__input']}")
 
     helper__convert__video__to__images(**kwargs)
 
