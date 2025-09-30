@@ -1,13 +1,13 @@
-PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
+PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/data"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/data"
 POSTFIX__DIR__LABEL = ""
 
 NUM__MAX__IMG__TO__VISUALIZE = None
 IS_OK__LBL_NOT_FOUND = False
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw--imgdir/fs26"
 
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS = (
     "/home/laptq/laptq-fs26-shoplifting-detection/src/configs/class_name.yaml"
@@ -28,7 +28,7 @@ import glob
 MAP__SUBPATH_DIR__TO__ = {
     p[len(PATH__DIR__LABEL) + 1 :]: None
     for p in glob.glob(
-        f"{PATH__DIR__LABEL}/shoplifting-gen-videos/veo3/v1/A_fixedposition_surveillance_202509261747_bh.mp4/*"
+        f"{PATH__DIR__LABEL}/crops--single-person--shoplifting-awlrecord-videos/day1/cuongdh--Basket_carry_by_hand--Back_pant_pocket--front--standing.mp4/*"
     )
     if os.path.isdir(p)
 }
