@@ -3,6 +3,7 @@ from laptq_pyutils.objects import (
     ListAligner,
     UltralyticsPredictor,
     YOLOv5CompatDetectPredictor,
+    RTMPosePredictor,
 )
 from laptq_pyutils.log import load_logger
 from laptq_pyutils.common import LIST__MODE__BOX
@@ -65,11 +66,10 @@ def helper__extract__ultralytics__imgdir(**kwargs):
         img__bgr = cv2.imread(path__file__img)
 
         mtime_1 = time.time()
-        _ = model.predict(
+        dict__result = model.predict(
             img__bgr=img__bgr,
             **kwargs,
         )
-        dict__result = _["dict__result"]
         mtime_2 = time.time()
 
         name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
@@ -117,11 +117,10 @@ def helper__extract__ultralytics__video(**kwargs):
         id__frame += 1
 
         mtime_1 = time.time()
-        _ = model.predict(
+        dict__result = model.predict(
             img__bgr=img__bgr,
             **kwargs,
         )
-        dict__result = _["dict__result"]
         mtime_2 = time.time()
 
         name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
@@ -1499,45 +1498,15 @@ def helper__extract__topdown__pose(**kwargs):
     import json
     from tqdm import tqdm
     import os
-    import numpy as np
     import cv2
-    from mmpose.apis import inference_topdown
-    from mmpose.apis import init_model
-    from mmpose.structures.pose_data_sample import PoseDataSample
 
     path__dir__img = kwargs["path__dir__img"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
-    path__file__model = kwargs["path__file__model"]
-    path__file__config = kwargs["path__file__config"]
-    device = kwargs["device"]
-    list__name_keypoints = kwargs["list__name_keypoints"]
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    class RTMPOSE:
-        def __init__(self):
-            self.pose_estimator = init_model(
-                path__file__config, path__file__model, device
-            )
-
-        def predict(self, image: np.ndarray, boxes):
-            poses = inference_topdown(
-                self.pose_estimator, image, boxes, bbox_format="xyxy"
-            )
-            list_keypoints = []
-            for pose in poses:
-                keypoints: np.ndarray = pose.get("pred_instances").get("keypoints")[0]
-                scores: np.ndarray = (
-                    pose.get("pred_instances").get("keypoint_scores")[0].reshape(-1, 1)
-                )
-                pose_result = np.concatenate((keypoints, scores), axis=1)
-                # print(keypoints.shape, scores.shape, pose_result.shape)
-                list_keypoints.append(pose_result)
-
-            return list_keypoints
-
-    pose_estimator = RTMPOSE()
+    pose_estimator = RTMPosePredictor(**kwargs)
 
     for name__file__img in tqdm(sorted(os.listdir(path__dir__img))):
         name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
@@ -1545,42 +1514,17 @@ def helper__extract__topdown__pose(**kwargs):
         path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
         path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
 
-        img = cv2.imread(path__file__img__input)
-        H, W = img.shape[:2]
+        img__bgr = cv2.imread(path__file__img__input)
 
         with open(path__file__lbl__input, "r") as f:
             dict__result = json.load(f)
 
-        list__obj__box_xcycwhn = np.array(
-            dict__result["list__obj__box_xcycwhn"]
-        ).reshape(-1, 4)
-        list__obj__box_x1y1x2y2 = box_normalized__to__box_pixels(
-            xcycwh__to__x1y1x2y2(list__obj__box_xcycwhn), (W, H)
+        # write dict__result in-place
+        pose_estimator.predict(
+            img__bgr=img__bgr,
+            dict__result=dict__result,
+            **kwargs,
         )
-
-        list_keypoints = pose_estimator.predict(img, list__obj__box_x1y1x2y2)
-        
-        list__obj__kpts_xyn = []
-        list__obj__kpts_conf = []
-        if len(list__obj__box_xcycwhn) > 0:
-            for i_obj, kpts in enumerate(list_keypoints):
-                kpts_xyn = kpts[:, :2] / [W, H]
-                kpts_conf = kpts[:, 2]
-                list__obj__kpts_xyn.append(
-                    {
-                        name: kpt.tolist()
-                        for name, kpt in zip(list__name_keypoints, kpts_xyn)
-                    }
-                )
-                list__obj__kpts_conf.append(
-                    {
-                        name: conf.item()
-                        for name, conf in zip(list__name_keypoints, kpts_conf)
-                    }
-                )
-
-        dict__result["list__obj__kpts_xyn"] = list__obj__kpts_xyn
-        dict__result["list__obj__kpts_conf"] = list__obj__kpts_conf
 
         with open(path__file__lbl__output, "w") as f:
             json.dump(dict__result, f, indent=4)
