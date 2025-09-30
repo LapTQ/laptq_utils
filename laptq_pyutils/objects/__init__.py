@@ -5,4 +5,5 @@ from .model import (
     TensorRTPredictor,
     CLIPFeatureExtractor,
     Midas,
+    RTMPosePredictor,
 )

@@ -11,6 +11,10 @@ import torch
 # import onnx
 
 from laptq_pyutils.objects import ListAligner
+from laptq_pyutils.ops import (
+    box_normalized__to__box_pixels,
+    xcycwh__to__x1y1x2y2,
+)
 
 
 class BaseModel(ABC):
@@ -24,7 +28,7 @@ class BaseModel(ABC):
         pass
 
 
-class UltralyticsBasePredictor(BaseModel):
+class UltralyticsPredictor(BaseModel):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -35,13 +39,6 @@ class UltralyticsBasePredictor(BaseModel):
         self.device = kwargs["device"]
 
         self.model = YOLO(self.path__file__model).to(self.device)
-
-    @abstractmethod
-    def predict(self, **kwargs):
-        pass
-
-
-class UltralyticsPredictor(UltralyticsBasePredictor):
 
     def predict(self, **kwargs):
 
@@ -143,9 +140,7 @@ class UltralyticsPredictor(UltralyticsBasePredictor):
 
         dict__result = list_aligner__result.item()
 
-        return {
-            "dict__result": dict__result,
-        }
+        return dict__result
 
 
 class YOLOv5CompatDetectPredictor(BaseModel):
@@ -218,9 +213,7 @@ class YOLOv5CompatDetectPredictor(BaseModel):
 
         dict__result = list_aligner__result.item()
 
-        return {
-            "dict__result": dict__result,
-        }
+        return dict__result
 
 
 class TensorRTPredictor:
@@ -329,10 +322,12 @@ class CLIPFeatureExtractor(BaseModel):
         try:
             import clip
         except:
-            raise ImportError("Please install clip by `pip install git+https://github.com/openai/CLIP.git`")
+            raise ImportError(
+                "Please install clip by `pip install git+https://github.com/openai/CLIP.git`"
+            )
 
-        model = kwargs['model']
-        device = kwargs['device']
+        model = kwargs["model"]
+        device = kwargs["device"]
 
         self.model, self.preprocess = clip.load("ViT-B/32", device=device)
         self.device = device
@@ -344,11 +339,10 @@ class CLIPFeatureExtractor(BaseModel):
         input_ = self.preprocess(img__pil).unsqueeze(0).to(self.device)
         with torch.no_grad():
             image_feature = self.model.encode_image(input_)[0]
-        
+
         image_feature = image_feature.cpu().numpy()
 
         return {"image_feature": image_feature}
-
 
 
 class Midas(BaseModel):
@@ -398,3 +392,69 @@ class Midas(BaseModel):
         return {
             "depth_map": depth_map,
         }
+
+
+class RTMPosePredictor:
+    def __init__(self, **kwargs):
+        from mmpose.apis import init_model
+        from mmpose.apis import inference_topdown
+
+        path__file__config = kwargs["path__file__config"]
+        path__file__model = kwargs["path__file__model"]
+        device = kwargs["device"]
+
+        self.pose_estimator = init_model(path__file__config, path__file__model, device)
+
+        self.inference_topdown = inference_topdown
+
+    def predict(self, **kwargs):
+        img__bgr = kwargs["img__bgr"]
+        dict__result = kwargs["dict__result"]
+        list__name_keypoints = kwargs["list__name_keypoints"]
+
+        H, W = img__bgr.shape[:2]
+
+        list__obj__box_xcycwhn = np.array(
+            dict__result["list__obj__box_xcycwhn"]
+        ).reshape(-1, 4)
+        list__obj__box_x1y1x2y2 = box_normalized__to__box_pixels(
+            xcycwh__to__x1y1x2y2(list__obj__box_xcycwhn), (W, H)
+        )
+
+        poses = self.inference_topdown(
+            self.pose_estimator,
+            img__bgr,
+            list__obj__box_x1y1x2y2,
+            bbox_format="xyxy",
+        )
+        list_keypoints = []
+        for pose in poses:
+            keypoints = pose.get("pred_instances").get("keypoints")[0]
+            scores = pose.get("pred_instances").get("keypoint_scores")[0].reshape(-1, 1)
+            pose_result = np.concatenate((keypoints, scores), axis=1)
+            # print(keypoints.shape, scores.shape, pose_result.shape)
+            list_keypoints.append(pose_result)
+
+        list__obj__kpts_xyn = []
+        list__obj__kpts_conf = []
+        if len(list__obj__box_xcycwhn) > 0:
+            for i_obj, kpts in enumerate(list_keypoints):
+                kpts_xyn = kpts[:, :2] / [W, H]
+                kpts_conf = kpts[:, 2]
+                list__obj__kpts_xyn.append(
+                    {
+                        name: kpt.tolist()
+                        for name, kpt in zip(list__name_keypoints, kpts_xyn)
+                    }
+                )
+                list__obj__kpts_conf.append(
+                    {
+                        name: conf.item()
+                        for name, conf in zip(list__name_keypoints, kpts_conf)
+                    }
+                )
+
+        dict__result["list__obj__kpts_xyn"] = list__obj__kpts_xyn
+        dict__result["list__obj__kpts_conf"] = list__obj__kpts_conf
+
+        return list_keypoints
