@@ -37,7 +37,7 @@ import glob
 
 MAP__SUBPATH_DIR__TO__ = {
     p[len(PATHD_IMAGE) + 1 :]: None
-    for p in glob.glob(f"{PATHD_IMAGE}/shoplifting-gen-videos/veo3/v1/*.mp4")
+    for p in glob.glob(f"{PATHD_IMAGE}/shoplifting-awljp-demo-videos/demo_room/*.mp4")
     if os.path.isdir(p)
 }
 
