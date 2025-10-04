@@ -1,3 +1,5 @@
+import os
+
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import (
     ListAligner,
@@ -1305,56 +1307,24 @@ def helper__merge__detection__result(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
-def helper__extract__crops__from__detection(**kwargs):
+class ExtractCropsFromDetectionCore:
+    def __init__(self, **kwargs):
+        pass
 
-    LOGGER.warning(
-        "Please consider generalize this function with helper__extract__crops__with__mask__from__segmentation. These functions have something in common."
-    )
-
-    import os
-    import json
-    from tqdm import tqdm
-    import cv2
-    import numpy as np
-
-    path__dir__img__input = kwargs["path__dir__img__input"]
-    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
-    path__dir__crop__img__output = kwargs["path__dir__crop__img__output"]
-    path__dir__crop__lbl__output = kwargs["path__dir__crop__lbl__output"]
-    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
-    num__pad__0 = kwargs["num__pad__0"]
-    split_by = kwargs["split_by"]
-    to_resize_box__wrt__pose = kwargs["to_resize_box__wrt__pose"]
-    to_shift__coords__wrt__box = kwargs["to_shift__coords__wrt__box"]
-    to_save__img = kwargs["to_save__img"]
-
-    assert split_by in [None, "id__track", "id__class"]
-
-    if to_save__img:
-        list__name__file = sorted(os.listdir(path__dir__img__input))
-    else:
-        list__name__file = sorted(os.listdir(path__dir__lbl__input))
-    for name__file in tqdm(list__name__file):
-        if to_save__img:
-            name__file__img = name__file
-            name__file__lbl = os.path.splitext(name__file)[0] + ".json"
-            path__file__img = os.path.join(path__dir__img__input, name__file__img)
-        else:
-            name__file__lbl = name__file
-        path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
-
-        if not os.path.exists(path__file__lbl):
-            if is_ok__lbl_not_exist:
-                continue
-            else:
-                raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
-
-        with open(path__file__lbl, "r") as f:
-            dict__result = json.load(f)
+    def predict(self, **kwargs):
+        img__bgr = kwargs["img__bgr"]
+        dict__result = kwargs["dict__result"]
+        name__file__lbl = kwargs["name__file__lbl"]
+        to_save__img = kwargs["to_save__img"]
+        to_resize_box__wrt__pose = kwargs["to_resize_box__wrt__pose"]
+        to_shift__coords__wrt__box = kwargs["to_shift__coords__wrt__box"]
+        split_by = kwargs["split_by"]
+        path__dir__crop__img__output = kwargs["path__dir__crop__img__output"]
+        path__dir__crop__lbl__output = kwargs["path__dir__crop__lbl__output"]
+        num__pad__0__crop = kwargs["num__pad__0__crop"]
 
         if to_save__img:
-            img = cv2.imread(path__file__img)
-            H, W = img.shape[:2]
+            H, W = img__bgr.shape[:2]
 
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
         list__obj__id_track = dict__result.get(
@@ -1366,6 +1336,8 @@ def helper__extract__crops__from__detection(**kwargs):
         list__obj__kpts_xyn = dict__result.get(
             "list__obj__kpts_xyn", [None] * len(list__obj__box_xcycwhn)
         )
+
+        ret = []
         for i_obj, (id__track, id__class, box_xcycwhn, kpts_xyn) in enumerate(
             zip(
                 list__obj__id_track,
@@ -1428,7 +1400,7 @@ def helper__extract__crops__from__detection(**kwargs):
                 b_y1 = int(b_y1n * H)
                 b_x2 = int(b_x2n * W)
                 b_y2 = int(b_y2n * H)
-                crop_img = img[b_y1:b_y2, b_x1:b_x2]
+                crop_img = img__bgr[b_y1:b_y2, b_x1:b_x2]
 
             if to_shift__coords__wrt__box:
                 # shift keypoints
@@ -1445,6 +1417,15 @@ def helper__extract__crops__from__detection(**kwargs):
                 box_xcycwhn[1] = 0.5
                 box_xcycwhn[2] = 1
                 box_xcycwhn[3] = 1
+
+            dict__result__crop = {
+                k: (
+                    v[i_obj : i_obj + 1]
+                    if not isinstance(v, dict)
+                    else ({vk: [vv[i_obj]] for vk, vv in v.items()})
+                )
+                for k, v in dict__result.items()
+            }
 
             if split_by is not None:
                 if split_by == "id__track":
@@ -1463,34 +1444,179 @@ def helper__extract__crops__from__detection(**kwargs):
                 __path__dir__crop__img__output = path__dir__crop__img__output
                 __path__dir__crop__lbl__output = path__dir__crop__lbl__output
 
-            os.makedirs(__path__dir__crop__img__output, exist_ok=True)
-            os.makedirs(__path__dir__crop__lbl__output, exist_ok=True)
-
-            if to_save__img:
-                path__file__crop__img__output = os.path.join(
+            path__file__crop__img__output = (
+                os.path.join(
                     __path__dir__crop__img__output,
                     "{}--crop-{:0{}}.jpg".format(
-                        os.path.splitext(name__file__img)[0], i_obj, num__pad__0
+                        os.path.splitext(name__file__lbl)[0], i_obj, num__pad__0__crop
                     ),
                 )
-                cv2.imwrite(path__file__crop__img__output, crop_img)
+                if to_save__img
+                else None
+            )
 
-            dict__result__crop = {
-                k: (
-                    v[i_obj : i_obj + 1]
-                    if not isinstance(v, dict)
-                    else ({vk: [vv[i_obj]] for vk, vv in v.items()})
-                )
-                for k, v in dict__result.items()
-            }
             path__file__crop__lbl__output = os.path.join(
                 __path__dir__crop__lbl__output,
                 "{}--crop-{:0{}}.json".format(
-                    os.path.splitext(name__file__lbl)[0], i_obj, num__pad__0
+                    os.path.splitext(name__file__lbl)[0], i_obj, num__pad__0__crop
                 ),
             )
+
+            ret.append(
+                {
+                    "crop_img": crop_img if to_save__img else None,
+                    "dict__result__crop": dict__result__crop,
+                    "path__file__crop__img__output": path__file__crop__img__output,
+                    "path__file__crop__lbl__output": path__file__crop__lbl__output,
+                }
+            )
+
+        return ret
+
+
+def helper__extract__crops__from__detection__imgdir(**kwargs):
+
+    LOGGER.warning(
+        "Please consider generalize this function with helper__extract__crops__with__mask__from__segmentation. These functions have something in common."
+    )
+
+    import os
+    import json
+    from tqdm import tqdm
+    import cv2
+    import numpy as np
+
+    path__dir__img__input = kwargs["path__dir__img__input"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    split_by = kwargs["split_by"]
+    to_save__img = kwargs["to_save__img"]
+
+    assert split_by in [None, "id__track", "id__class"]
+
+    if to_save__img:
+        list__name__file = sorted(os.listdir(path__dir__img__input))
+    else:
+        list__name__file = sorted(os.listdir(path__dir__lbl__input))
+
+    predictor = ExtractCropsFromDetectionCore(**kwargs)
+
+    for name__file in tqdm(list__name__file):
+        if to_save__img:
+            name__file__img = name__file
+            name__file__lbl = os.path.splitext(name__file)[0] + ".json"
+            path__file__img = os.path.join(path__dir__img__input, name__file__img)
+        else:
+            name__file__lbl = name__file
+        path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
+
+        if not os.path.exists(path__file__lbl):
+            if is_ok__lbl_not_exist:
+                continue
+            else:
+                raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
+
+        with open(path__file__lbl, "r") as f:
+            dict__result = json.load(f)
+
+        if to_save__img:
+            img__bgr = cv2.imread(path__file__img)
+
+        ret = predictor.predict(
+            img__bgr=img__bgr,
+            dict__result=dict__result,
+            name__file__lbl=name__file__lbl,
+            **kwargs,
+        )
+
+        for i_obj, crop_data in enumerate(ret):
+            crop_img = crop_data["crop_img"]
+            dict__result__crop = crop_data["dict__result__crop"]
+            path__file__crop__img__output = crop_data["path__file__crop__img__output"]
+            path__file__crop__lbl__output = crop_data["path__file__crop__lbl__output"]
+
+            if to_save__img:
+                os.makedirs(
+                    os.path.dirname(path__file__crop__img__output), exist_ok=True
+                )
+                cv2.imwrite(path__file__crop__img__output, crop_img)
+
+            os.makedirs(os.path.dirname(path__file__crop__lbl__output), exist_ok=True)
             with open(path__file__crop__lbl__output, "w") as f:
                 json.dump(dict__result__crop, f, indent=4)
+
+
+def helper__extract__crops__from__detection__video(**kwargs):
+
+    LOGGER.warning(
+        "Please consider generalize this function with helper__extract__crops__with__mask__from__segmentation. These functions have something in common."
+    )
+
+    import os
+    import json
+    from tqdm import tqdm
+    import cv2
+    import numpy as np
+
+    path__file__video__input = kwargs["path__file__video__input"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    split_by = kwargs["split_by"]
+    to_save__img = kwargs["to_save__img"]
+    num__pad__0__frame = kwargs["num__pad__0__frame"]
+
+    assert split_by in [None, "id__track", "id__class"]
+
+    cap = cv2.VideoCapture(path__file__video__input)
+
+    predictor = ExtractCropsFromDetectionCore(**kwargs)
+
+    pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
+    id__frame = 0
+    while True:
+        success, img__bgr = cap.read()
+        if not success:
+            break
+
+        name__file__lbl = f"{id__frame:0{num__pad__0__frame}d}.json"
+        path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
+
+        if not os.path.exists(path__file__lbl):
+            if is_ok__lbl_not_exist:
+                continue
+            else:
+                raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
+
+        with open(path__file__lbl, "r") as f:
+            dict__result = json.load(f)
+
+        ret = predictor.predict(
+            img__bgr=img__bgr,
+            dict__result=dict__result,
+            name__file__lbl=name__file__lbl,
+            **kwargs,
+        )
+
+        for i_obj, crop_data in enumerate(ret):
+            crop_img = crop_data["crop_img"]
+            dict__result__crop = crop_data["dict__result__crop"]
+            path__file__crop__img__output = crop_data["path__file__crop__img__output"]
+            path__file__crop__lbl__output = crop_data["path__file__crop__lbl__output"]
+
+            if to_save__img:
+                os.makedirs(
+                    os.path.dirname(path__file__crop__img__output), exist_ok=True
+                )
+                cv2.imwrite(path__file__crop__img__output, crop_img)
+
+            os.makedirs(os.path.dirname(path__file__crop__lbl__output), exist_ok=True)
+            with open(path__file__crop__lbl__output, "w") as f:
+                json.dump(dict__result__crop, f, indent=4)
+
+        id__frame += 1
+        pbar.update(1)
+
+    cap.release()
 
 
 def helper__extract__topdown__pose(**kwargs):

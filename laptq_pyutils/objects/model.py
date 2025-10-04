@@ -7,8 +7,6 @@ import torch
 # import tensorrt as trt
 # import pycuda.driver as cuda
 # import pycuda.autoinit
-# import onnxruntime as ort
-# import onnx
 
 from laptq_pyutils.objects import ListAligner
 from laptq_pyutils.ops import (
@@ -80,16 +78,14 @@ class UltralyticsPredictor(BaseModel):
             else [None] * len(boxes)
         )
 
-        list_aligner__result = ListAligner(
-            list__key=[
-                "list__obj__id_class",
-                "list__obj__box_xcycwhn",
-                "list__obj__box_conf",
-                "list__obj__kpts_xyn",
-                "list__obj__kpts_conf",
-                "list__obj__id_track",
-            ]
-        )
+        dict__result = {
+            "list__obj__id_class": [],
+            "list__obj__box_xcycwhn": [],
+            "list__obj__box_conf": [],
+            "list__obj__kpts_xyn": [],
+            "list__obj__kpts_conf": [],
+            "list__obj__id_track": [],
+        }
 
         for i_b, (id_track, box, kpts) in enumerate(zip(track_ids, boxes, keypoints)):
             id_track = int(id_track) if id_track is not None else None
@@ -109,36 +105,20 @@ class UltralyticsPredictor(BaseModel):
                     kpts_xyn
                 ), f"len(list__name_keypoints)={len(list__name_keypoints)} != len(kpts_xyn)={len(kpts_xyn)}"
 
-            list_aligner__result.extend(
-                {
-                    "list__obj__id_class": [id_class],
-                    "list__obj__box_xcycwhn": [[b_xcn, b_ycn, b_wn, b_hn]],
-                    "list__obj__box_conf": [b_conf],
-                    "list__obj__kpts_xyn": [
-                        (
-                            {
-                                name: [kpts_xyn[i]][0]
-                                for i, name in enumerate(list__name_keypoints)
-                            }
-                            if kpts_xyn is not None
-                            else None
-                        )
-                    ],
-                    "list__obj__kpts_conf": [
-                        (
-                            {
-                                name: [kpts_conf[i]][0]
-                                for i, name in enumerate(list__name_keypoints)
-                            }
-                            if kpts_conf is not None
-                            else None
-                        )
-                    ],
-                    "list__obj__id_track": [id_track],
-                }
+            dict__result["list__obj__id_class"].append(id_class)
+            dict__result["list__obj__box_xcycwhn"].append([b_xcn, b_ycn, b_wn, b_hn])
+            dict__result["list__obj__box_conf"].append(b_conf)
+            dict__result["list__obj__kpts_xyn"].append(
+                {name: [kpts_xyn[i]][0] for i, name in enumerate(list__name_keypoints)}
+                if kpts_xyn is not None
+                else None
             )
-
-        dict__result = list_aligner__result.item()
+            dict__result["list__obj__kpts_conf"].append(
+                {name: [kpts_conf[i]][0] for i, name in enumerate(list__name_keypoints)}
+                if kpts_conf is not None
+                else None
+            )
+            dict__result["list__obj__id_track"].append(id_track)
 
         return dict__result
 
@@ -296,14 +276,24 @@ class TensorRTPredictor:
 
 class ONNXPredictor:
 
-    def __init__(self, model_path):
+    def __init__(self, **kwargs):
+        import onnxruntime as ort
+        import onnx
+
+        model_path = kwargs["model_path"]
+        enable_CUDAExecutionProvider = kwargs["enable_CUDAExecutionProvider"]
+        enable_CPUExecutionProvider = kwargs["enable_CPUExecutionProvider"]
+
+        providers = []
+        if enable_CUDAExecutionProvider:
+            providers.append("CUDAExecutionProvider")
+        if enable_CPUExecutionProvider:
+            providers.append("CPUExecutionProvider")
+        
         self.model = onnx.load(model_path)
         self.session = ort.InferenceSession(
             model_path,
-            providers=[
-                "CUDAExecutionProvider",
-                "CPUExecutionProvider",
-            ],
+            providers=providers,
         )
 
         onnx.checker.check_model(self.model)
