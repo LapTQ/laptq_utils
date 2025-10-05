@@ -5,14 +5,14 @@ TO_USE__YOLOv5_COMPAT=False
 PATH__FILE__MODEL=yolov8x-pose.pt
 ID__DATA=None
 ID__MODEL=yolov8x-pose
-ID__TRAIN=None
+ID__TRAIN=exp
 
 IMGSZ=640
 THRESH__CONF__MIN=0.1
 THRESH__IOU=0.45
 ID__PREDICT=imgsz-$IMGSZ--conf-$THRESH__CONF__MIN--iou-$THRESH__IOU
 
-DEVICE="cuda:1"
+DEVICE="cuda:0"
 NUM__PAD__0=9
 
 PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video
