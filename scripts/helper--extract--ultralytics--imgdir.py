@@ -3,18 +3,12 @@ POSTFIX__DIR__IMAGE = ""
 
 TO_USE__YOLOv5_COMPAT = False
 PATH__FILE__MODEL = "yolov8x-pose.pt"
-# PATH__FILE__MODEL='/home/laptq/laptq-fs26-shoplifting-detection/runs/bag-detection/yolov8s--640/train/weights/best.pt'
 ID__DATA = None
-# ID__DATA='bag-detection'
 ID__MODEL = "yolov8x-pose"
-# ID__MODEL='yolov8s'
-# ID__TRAIN='train'
 ID__TRAIN = "exp"
 
 IMGSZ = 640
-# IMGSZ=960
 THRESH__CONF__MIN = 0.1
-# THRESH__CONF__MIN=0.01
 THRESH__IOU = 0.45
 ID__PREDICT = f"imgsz-{IMGSZ}--conf-{THRESH__CONF__MIN}--iou-{THRESH__IOU}"
 
