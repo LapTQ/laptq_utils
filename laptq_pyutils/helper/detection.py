@@ -44,7 +44,6 @@ def parse__ultralytics_model(**kwargs):
 
 def helper__extract__ultralytics__imgdir(**kwargs):
 
-    from ultralytics import YOLO
     import os
     from tqdm import tqdm
     import cv2
@@ -91,7 +90,6 @@ def helper__extract__ultralytics__imgdir(**kwargs):
 
 def helper__extract__ultralytics__video(**kwargs):
 
-    from ultralytics import YOLO
     import cv2
     import json
     import os
@@ -99,24 +97,22 @@ def helper__extract__ultralytics__video(**kwargs):
     import time
 
     path__file__input = kwargs["path__file__input"]
-    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    path__dir__output = kwargs["path__dir__output"]
     num__pad__0 = kwargs["num__pad__0"]
 
     model = parse__ultralytics_model(**kwargs)
 
     cap = cv2.VideoCapture(path__file__input)
-    os.makedirs(path__dir__lbl__output, exist_ok=True)
+    os.makedirs(path__dir__output, exist_ok=True)
 
-    pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
-    id__frame = -1
+    pbar = tqdm(range(int(cap.get(cv2.CAP_PROP_FRAME_COUNT))))
     log__time = {
         "time__inference": None,
     }
-    while True:
+    for id__frame in pbar:
         success, img__bgr = cap.read()
         if not success:
             break
-        id__frame += 1
 
         mtime_1 = time.time()
         dict__result = model.predict(
@@ -126,7 +122,7 @@ def helper__extract__ultralytics__video(**kwargs):
         mtime_2 = time.time()
 
         name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
-        path__file__lbl = os.path.join(path__dir__lbl__output, name__file__lbl)
+        path__file__lbl = os.path.join(path__dir__output, name__file__lbl)
 
         with open(path__file__lbl, "w") as f:
             json.dump(dict__result, f, indent=4)
@@ -138,7 +134,6 @@ def helper__extract__ultralytics__video(**kwargs):
                 mtime_2 - mtime_1
             )
         pbar.set_postfix(time__inference=log__time["time__inference"])
-        pbar.update(1)
 
 
 def helper__filter__detection__result__by__id_class(**kwargs):
