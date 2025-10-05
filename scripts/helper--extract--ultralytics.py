@@ -15,8 +15,8 @@ ID__PREDICT = f"imgsz-{IMGSZ}--conf-{THRESH__CONF__MIN}--iou-{THRESH__IOU}"
 
 DEVICE = "cuda:0"
 
-PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/fs26"
-# PATH__DIR__LABEL__OUTPUT='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54'
+PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
+# PATH__DIR__LABEL__OUTPUT='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/prj54'
 POSTFIX__DIR__LABEL__OUTPUT = f"--PRED--DATA--{ID__DATA}--MODEL--{ID__MODEL}--TRAIN--{ID__TRAIN}--PREDICT--{ID__PREDICT}--all-keypoints--JSON"
 # POSTFIX__DIR__LABEL__OUTPUT=f"--PRED--DATA--{ID__DATA}--MODEL--{ID__MODEL}--TRAIN--{ID__TRAIN}--PREDICT--{ID__PREDICT}--JSON"
 
