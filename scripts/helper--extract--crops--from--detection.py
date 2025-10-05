@@ -33,6 +33,7 @@ from laptq_pyutils.helper import (
     helper__extract__crops__from__detection__imgdir,
     helper__extract__crops__from__detection__video,
 )
+import shutil
 from multiprocessing import Pool
 import multiprocessing as mp
 
@@ -73,10 +74,8 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
     )
 
     # Remove existing directories if they exist
-    if os.path.exists(path__dir__crop__img__output):
-        os.rmdir(path__dir__crop__img__output)
-    if os.path.exists(path__dir__crop__lbl__output):
-        os.rmdir(path__dir__crop__lbl__output)
+    if os.path.exists(f"{PATH__DIR__OUTPUT}/{subpath__dir}"):
+        shutil.rmtree(f"{PATH__DIR__OUTPUT}/{subpath__dir}")
 
     # Create directories if they don't contain "{}"
     if "{}" not in path__dir__crop__img__output:
