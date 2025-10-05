@@ -1,4 +1,5 @@
-PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
+PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
+# PATH__DIR__MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
 POSTFIX__DIR__IMAGE = ""
 
 TO_USE__YOLOv5_COMPAT = False
@@ -23,14 +24,23 @@ POSTFIX__DIR__LABEL__OUTPUT = f"--PRED--DATA--{ID__DATA}--MODEL--{ID__MODEL}--TR
 # MAP__SUBPATH_DIR__TO__ = {
 #     "shoplifting-25min.mp4": None,
 #     "r9_25min_rotate.mp4": None,
+
+#     "R7_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R8_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R3_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R4_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R9_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R10_2025_05_15_23_40_32_rotate.mp4": None,
 # }
 # -----
 import os
 import glob
 
 MAP__SUBPATH_DIR__TO__ = {
-    p[len(PATH__DIR__IMAGE) + 1 :]: None
-    for p in glob.glob(f"{PATH__DIR__IMAGE}/shoplifting-awlrecord-videos/*/*.mp4")
+    p[len(PATH__DIR__MEDIA) + 1 :]: None
+    for p in glob.glob(
+        f"{PATH__DIR__MEDIA}/shoplifting-awljp-demo-videos/demo_room/*.mp4"
+    )
     if os.path.isdir(p)
 }
 
@@ -38,7 +48,10 @@ MAP__SUBPATH_DIR__TO__ = {
 import os
 import shutil
 import subprocess
-from laptq_pyutils.helper import helper__extract__ultralytics__imgdir
+from laptq_pyutils.helper import (
+    helper__extract__ultralytics__imgdir,
+    helper__extract__ultralytics__video,
+)
 from multiprocessing import Pool
 import multiprocessing as mp
 import torch
@@ -54,26 +67,25 @@ TAG__WARNING = "\033[33m[WARNING]\033[0m"
 
 def run_wrapper(kwargs):
     print(f"{TAG__INFO} Processing: {kwargs['path__dir__img']}")
-
     helper__extract__ultralytics__imgdir(**kwargs)
+    print(f"{TAG__PASSED} Done: {kwargs['path__dir__img']}")
+    # print(f"{TAG__INFO} Processing: {kwargs['path__file__input']}")
+    # helper__extract__ultralytics__video(**kwargs)
+    # print(f"{TAG__PASSED} Done: {kwargs['path__file__input']}")
 
     gc.collect()
     torch.cuda.empty_cache()
     torch.cuda.synchronize()
 
-    print(f"{TAG__PASSED} Done: {kwargs['path__dir__img']}")
-
-
 
 ls_kwargs = []
 
-for subpath__dir in MAP__SUBPATH_DIR__TO__:
+for subpath__media in MAP__SUBPATH_DIR__TO__:
     path__dir__img__input = (
-        f"{PATH__DIR__IMAGE}/{subpath__dir}/images{POSTFIX__DIR__IMAGE}"
+        f"{PATH__DIR__MEDIA}/{subpath__media}/images{POSTFIX__DIR__IMAGE}"
     )
-    path__dir__lbl__output = (
-        f"{PATH__DIR__LABEL__OUTPUT}/{subpath__dir}/labels{POSTFIX__DIR__LABEL__OUTPUT}"
-    )
+    # path__file__input = f"{PATH__DIR__MEDIA}/{subpath__media}"
+    path__dir__lbl__output = f"{PATH__DIR__LABEL__OUTPUT}/{subpath__media}/labels{POSTFIX__DIR__LABEL__OUTPUT}"
 
     if os.path.exists(path__dir__lbl__output):
         shutil.rmtree(path__dir__lbl__output)
@@ -81,8 +93,10 @@ for subpath__dir in MAP__SUBPATH_DIR__TO__:
 
     kwargs = dict(
         path__dir__img=path__dir__img__input,
+        # path__file__input=path__file__input,
         path__dir__output=path__dir__lbl__output,
         path__file__model=PATH__FILE__MODEL,
+        num__pad__0=9,
         device=DEVICE,
         imgsz=IMGSZ,
         thresh__conf__min=THRESH__CONF__MIN,
