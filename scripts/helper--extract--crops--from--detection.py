@@ -3,7 +3,7 @@
 PATH__DIR__MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--video/fs26"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26/satudora"
 POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 # POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
 
@@ -23,7 +23,7 @@ MAP__SUBPATH_VIDEO__TO__ = {
     p[len(PATH__DIR__MEDIA) + 1 :]: None
     for p in glob.glob(f"{PATH__DIR__MEDIA}/*.mp4")
     # if os.path.isdir(p)
-    if os.path.isfile(p) and "R10_2025_05_15_23_40_32_rotate.mp4" in p
+    if os.path.isfile(p)
 }
 
 # =============================================================
@@ -95,6 +95,9 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
         to_resize_box__wrt__pose=True,
         to_shift__coords__wrt__box=True,
         to_save__img=True,
+        ratio_pad_w=0.25,
+        ratio_pad_h=0.25,
+        pad_for_image_only=True,    # WARN: this padding is serverd mainly for better crop visualization purpose. You must inspect source code for other purpose
         split_by="id__track",  # "id__track" # if not None, please add a "/{}" before /images and /labels assuming there's an /images and /labels in path__dir__crop__img__output and path__dir__crop__lbl__output
     )
 
