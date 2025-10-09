@@ -4,6 +4,7 @@ from laptq_pyutils.draw import (
     cv2_circle,
     COLORS,
     cv2_polylines,
+    cv2_arrowedLine,
 )
 from laptq_pyutils.common import LIST__MODE__BOX
 
@@ -30,11 +31,18 @@ def draw__image(**kwargs):
     to_draw__pose = kwargs.get("to_draw__pose", False)
     to_draw__index_pose = kwargs.get("to_draw__index_pose", False)
     to_draw__connected_keypoints = kwargs.get("to_draw__connected_keypoints", False)
+    to_draw__keypoints_displacement = kwargs.get(
+        "to_draw__keypoints_displacement", False
+    )
+    to_draw__keypoints_speed = kwargs.get("to_draw__keypoints_speed", False)
+    to_draw__event_info = kwargs.get("to_draw__event_info", False)
     box_color_by = kwargs.get("box_color_by", None)
     fontScale = kwargs.get("fontScale", 1)
     thickness = kwargs.get("thickness", 1)
     map__id_class__to__name_class = kwargs.get("map__id_class__to__name_class", {})
     map__id_action__to__name_action = kwargs.get("map__id_action__to__name_action", {})
+    list__keypoints_to_include = kwargs.get("list__keypoints_to_include", None)
+    list__keypoints_to_exclude = kwargs.get("list__keypoints_to_exclude", [])
     list__keypoints_same_color = kwargs.get("list__keypoints_same_color", None)
     list__keypoints_edge = kwargs.get("list__keypoints_edge", None)
     list__edges_same_color = kwargs.get("list__edges_same_color", None)
@@ -55,6 +63,9 @@ def draw__image(**kwargs):
     list__obj__kpts_conf = data.get("list__obj__kpts_conf", None)
     list__obj__box_x1y1whn_refined = data.get("list__obj__box_x1y1whn_refined", None)
     list__obj__confirmed_status = data.get("list__obj__confirmed_status", None)
+    list__obj__kpts_displacement = data.get("list__obj__kpts_displacement", None)
+    list__obj__kpts_speed = data.get("list__obj__kpts_speed", None)
+    list__obj__event_info = data.get("list__obj__event_info", None)
 
     # preprocesss arguments
     if list__obj__box_x1y1whn is None and list__obj__box_polygonn is None:
@@ -80,6 +91,10 @@ def draw__image(**kwargs):
         list__obj__box_x1y1whn_refined = [None] * len(list__obj__box_x1y1whn)
     if list__obj__confirmed_status is None:
         list__obj__confirmed_status = [None] * len(list__obj__box_x1y1whn)
+    if list__obj__kpts_displacement is None:
+        list__obj__kpts_displacement = [None] * len(list__obj__box_x1y1whn)
+    if list__obj__kpts_speed is None:
+        list__obj__kpts_speed = [None] * len(list__obj__box_x1y1whn)
     if list__obj__action_conf is None:
         list__obj__action_conf = {
             id__action: [None] * len(list__obj__box_x1y1whn)
@@ -90,6 +105,8 @@ def draw__image(**kwargs):
             id__action: [False] * len(list__obj__box_x1y1whn)
             for id__action in list__obj__action_conf
         }
+    if list__obj__event_info is None:
+        list__obj__event_info = {}
     map__keypoints__to__idx_color = {}
     if list__keypoints_same_color is not None:
         for i_c, list__name_kpt in enumerate(list__keypoints_same_color):
@@ -139,6 +156,8 @@ def draw__image(**kwargs):
         is__confirmed,
         kpts__xyn,
         kpts__conf,
+        kpts__displacement,
+        kpts__speed,
     ) in enumerate(
         zip(
             list__obj__box_x1y1whn,
@@ -151,6 +170,8 @@ def draw__image(**kwargs):
             list__obj__confirmed_status,
             list__obj__kpts_xyn,
             list__obj__kpts_conf,
+            list__obj__kpts_displacement,
+            list__obj__kpts_speed,
         )
     ):
         if id__track is None:
@@ -294,18 +315,33 @@ def draw__image(**kwargs):
                         fontScale=fontScale,
                         thickness=thickness,
                     )
+
         if to_draw__pose and kpts__xyn is not None:
             if to_draw__connected_keypoints:
                 for i_e, (name_kpt1, name_kpt2) in enumerate(list__keypoints_edge):
+
+                    if (
+                        (
+                            list__keypoints_to_include is not None
+                            and (
+                                name_kpt1 not in list__keypoints_to_include
+                                or name_kpt2 not in list__keypoints_to_include
+                            )
+                        )
+                        or name_kpt1 in list__keypoints_to_exclude
+                        or name_kpt2 in list__keypoints_to_exclude
+                    ):
+                        continue
+
                     xn1 = kpts__xyn[name_kpt1][0]
                     yn1 = kpts__xyn[name_kpt1][1]
                     xn2 = kpts__xyn[name_kpt2][0]
                     yn2 = kpts__xyn[name_kpt2][1]
-                    x1 = int(xn1 * W)
-                    y1 = int(yn1 * H)
-                    x2 = int(xn2 * W)
-                    y2 = int(yn2 * H)
-                    if (x1 == 0 and y1 == 0) or (x2 == 0 and y2 == 0):
+                    k_x1 = int(xn1 * W)
+                    k_y1 = int(yn1 * H)
+                    k_x2 = int(xn2 * W)
+                    k_y2 = int(yn2 * H)
+                    if (k_x1 == 0 and k_y1 == 0) or (k_x2 == 0 and k_y2 == 0):
                         continue
                     if (
                         tuple(sorted([name_kpt1, name_kpt2]))
@@ -318,13 +354,20 @@ def draw__image(**kwargs):
                         i_c = i_e % len(COLORS)
                     cv2_polylines(
                         img__bgr,
-                        [np.array([[x1, y1], [x2, y2]], dtype="int32")],
+                        [np.array([[k_x1, k_y1], [k_x2, k_y2]], dtype="int32")],
                         isClosed=False,
                         color=COLORS[i_c],
                         thickness=max(1, thickness - 1),
                     )
 
             for i, (name_kpt, (xn, yn)) in enumerate(kpts__xyn.items()):
+
+                if (
+                    list__keypoints_to_include is not None
+                    and name_kpt not in list__keypoints_to_include
+                ) or name_kpt in list__keypoints_to_exclude:
+                    continue
+
                 x = int(xn * W)
                 y = int(yn * H)
                 if x == 0 and y == 0:
@@ -339,7 +382,54 @@ def draw__image(**kwargs):
                         img__bgr,
                         str(i),
                         (x, y - thickness - 3),
-                        color=COLORS[i % len(COLORS)],
+                        color=COLORS[i_c],
+                        fontScale=fontScale,
+                        thickness=thickness,
+                    )
+
+                if to_draw__keypoints_displacement and kpts__displacement is not None:
+                    if kpts__displacement[name_kpt] is not None:
+                        dxn, dyn = kpts__displacement[name_kpt]
+                        dx = int(dxn * W)
+                        dy = int(dyn * H)
+                        cv2_arrowedLine(
+                            img__bgr,
+                            (x - dx, y - dy),
+                            (x, y),
+                            color=COLORS[i_c],
+                            thickness=max(1, thickness - 1),
+                        )
+
+                if to_draw__keypoints_speed and kpts__speed is not None:
+                    cv2_putText(
+                        img__bgr,
+                        (
+                            "{:.1f}".format(kpts__speed[name_kpt])
+                            if kpts__speed is not None
+                            and kpts__speed[name_kpt] is not None
+                            else ""
+                        ),
+                        (x, y - thickness - 3),
+                        color=COLORS[i_c],
+                        fontScale=fontScale / 2.5,
+                        thickness=thickness - 1,
+                    )
+
+        if to_draw__event_info:
+            event_counter = 0
+            for id__event in list__obj__event_info:
+                event_infos = list__obj__event_info[id__event]
+                einfo = event_infos[i_obj]
+                if einfo is not None:
+                    event_counter += 1
+                    org = (x1 + 3, y2 + 50 * event_counter)
+                    # org = (x1 + 30, y1 - 10)
+                    msg = einfo
+                    cv2_putText(
+                        img__bgr,
+                        msg,
+                        org,
+                        color=color_box,
                         fontScale=fontScale,
                         thickness=thickness,
                     )

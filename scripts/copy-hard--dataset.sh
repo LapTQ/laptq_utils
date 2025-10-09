@@ -36,7 +36,7 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     path__dir__img__output="${PATH__DIR__DATASETS__OUTPUT}/${subpath_dir}/images${POSTFIX__DIR__VERSION__TARGET}"
     path__dir__lbl__input="${PATH__DIR__LABEL__SOURCE}/${subpath_dir}/labels${POSTFIX__DIR__LABEL__SOURCE}"
     path__dir__lbl__output="${PATH__DIR__DATASETS__OUTPUT}/${subpath_dir}/labels${POSTFIX__DIR__VERSION__TARGET}"
-
+    
     [[ -d "$path__dir__img__output" ]] && rm -r "$path__dir__img__output"
     [[ -d "$path__dir__lbl__output" ]] && rm -r "$path__dir__lbl__output"
     mkdir -p "$path__dir__img__output"
@@ -52,7 +52,7 @@ for subpath_dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
         cp $( realpath "$path__dir__img__input/$name__file__img" ) "$path__dir__img__output"
     done
 
-    num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
+    num__lbl__input=$(find "${path__dir__lbl__input}/" -mindepth 1 -maxdepth 1 \( -type f -o -type l \) | wc -l)
     num__lbl__output=$(find "${path__dir__lbl__output}/" -mindepth 1 -maxdepth 1 -type f | wc -l)
     if [ $num__lbl__input -lt $num__lbl__output ]; then
         echo -e "${TAG__FAILED} Number of labels mismatched: ${subpath_dir}"

@@ -2,7 +2,7 @@ class ListAligner:
 
     def __init__(self, list__key: list):
 
-        self._dict__result = {key: [] for key in list__key}
+        self._dict__result = {key: None for key in list__key}
         self._num = 0
 
     def __len__(self):
@@ -31,12 +31,27 @@ class ListAligner:
 
         # assert
         self._check__keys(dict__result)
-        assert (
-            len(set(len(_) for _ in dict__result.values())) == 1
-        ), "Number of elements between fields must be the same"
 
+        n_elements_repr = None
         for key, value in dict__result.items():
-            self._dict__result[key].extend(value)
+            if self._dict__result[key] is None:
+                self._dict__result[key] = type(value)()
+            if isinstance(value, list):
+                n_elements = len(value)
+                self._dict__result[key].extend(value)
+            elif isinstance(value, dict):
+                for key2 in value:
+                    n_elements = len(value[key2])
+                    self._dict__result[key].setdefault(key2, []).extend(value[key2])
+            else:
+                raise ValueError("Not supported yet!!!")
+
+            if n_elements_repr is None:
+                n_elements_repr = n_elements
+            else:
+                assert (
+                    n_elements_repr == n_elements
+                ), "Number of elements between fields must be the same"
 
         self._num += len(value)
 
@@ -53,7 +68,11 @@ class ListAligner:
             _ for _ in range(self._num) if _ not in list__index__to_pop
         ]
         for key, value in self._dict__result.items():
-            self._dict__result[key] = [value[_] for _ in list__index__to_keep]
+            if isinstance(value, list):
+                self._dict__result[key] = [value[_] for _ in list__index__to_keep]
+            elif isinstance(value, dict):
+                for key2, value2 in value.items():
+                    value[key2] = [value2[_] for _ in list__index__to_keep]
 
         self._num = len(list__index__to_keep)
 

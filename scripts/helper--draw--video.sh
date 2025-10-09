@@ -54,14 +54,22 @@ for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
         --to_draw__id_action False \
         --to_draw__name_action True \
         --to_draw__action_conf True \
+        --to_draw__keypoints_displacement True \
+        --to_draw__keypoints_speed True \
+        --to_draw__event_info False \
         --fontScale 1 \
         --thickness 2 \
         --box_color_by id__class \
+        --displacement_key "list__obj__kpts_displacement" \
+        --speed_key "list__obj__kpts_speed_relative" \
         --path__file__map__id_class__to__name_class $PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS \
         --path__file__map__id_action__to__name_action $PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION \
         --list__keypoints_same_color "[['left_eye', 'right_eye', 'left_ear', 'right_ear'],['left_shoulder', 'right_shoulder', 'left_hip', 'right_hip'],['left_elbow', 'right_elbow', 'left_wrist', 'right_wrist'],['left_knee', 'right_knee', 'left_ankle', 'right_ankle']]" \
         --list__keypoints_edge "[['nose', 'left_eye'],['nose', 'right_eye'],['left_eye', 'left_ear'],['right_eye', 'right_ear'],['left_shoulder', 'right_shoulder'],['left_hip', 'right_hip'],['left_shoulder', 'left_hip'],['right_shoulder', 'right_hip'],['left_shoulder', 'left_elbow'],['right_shoulder', 'right_elbow'],['left_elbow', 'left_wrist'],['right_elbow', 'right_wrist'],['left_hip', 'left_knee'],['right_hip', 'right_knee'],['left_knee', 'left_ankle'],['right_knee', 'right_ankle']]" \
         --list__edges_same_color "[[['nose', 'left_eye'],['nose', 'right_eye'],['left_eye', 'left_ear'],['right_eye', 'right_ear']], [['left_shoulder', 'right_shoulder'],['left_hip', 'right_hip'],['left_shoulder', 'left_hip'],['right_shoulder', 'right_hip']], [['left_shoulder', 'left_elbow'],['right_shoulder', 'right_elbow'],['left_elbow', 'left_wrist'],['right_elbow', 'right_wrist']], [['left_hip', 'left_knee'],['right_hip', 'right_knee'],['left_knee', 'left_ankle'],['right_knee', 'right_ankle']]]" \
+        --list__keypoints_to_include "['nose', 'left_eye', 'right_eye', 'left_ear', 'right_ear', 'left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow', 'left_wrist', 'right_wrist', 'left_hip', 'right_hip', 'left_knee', 'right_knee', 'left_ankle', 'right_ankle']" \
+        --list__keypoints_to_exclude "[]" \
+
 
     echo -e "${TAG__INFO} Done: ${name__video}"
 done

@@ -1,12 +1,18 @@
 from abc import ABC, abstractmethod
 import numpy as np
+from PIL import Image
+import cv2
+import torch
+
 # import tensorrt as trt
 # import pycuda.driver as cuda
 # import pycuda.autoinit
-# import onnxruntime as ort
-# import onnx
 
 from laptq_pyutils.objects import ListAligner
+from laptq_pyutils.ops import (
+    box_normalized__to__box_pixels,
+    xcycwh__to__x1y1x2y2,
+)
 
 
 class BaseModel(ABC):
@@ -20,7 +26,7 @@ class BaseModel(ABC):
         pass
 
 
-class UltralyticsBasePredictor(BaseModel):
+class UltralyticsPredictor(BaseModel):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -31,13 +37,6 @@ class UltralyticsBasePredictor(BaseModel):
         self.device = kwargs["device"]
 
         self.model = YOLO(self.path__file__model).to(self.device)
-
-    @abstractmethod
-    def predict(self, **kwargs):
-        pass
-
-
-class UltralyticsPredictor(UltralyticsBasePredictor):
 
     def predict(self, **kwargs):
 
@@ -79,16 +78,14 @@ class UltralyticsPredictor(UltralyticsBasePredictor):
             else [None] * len(boxes)
         )
 
-        list_aligner__result = ListAligner(
-            list__key=[
-                "list__obj__id_class",
-                "list__obj__box_xcycwhn",
-                "list__obj__box_conf",
-                "list__obj__kpts_xyn",
-                "list__obj__kpts_conf",
-                "list__obj__id_track",
-            ]
-        )
+        dict__result = {
+            "list__obj__id_class": [],
+            "list__obj__box_xcycwhn": [],
+            "list__obj__box_conf": [],
+            "list__obj__kpts_xyn": [],
+            "list__obj__kpts_conf": [],
+            "list__obj__id_track": [],
+        }
 
         for i_b, (id_track, box, kpts) in enumerate(zip(track_ids, boxes, keypoints)):
             id_track = int(id_track) if id_track is not None else None
@@ -108,40 +105,22 @@ class UltralyticsPredictor(UltralyticsBasePredictor):
                     kpts_xyn
                 ), f"len(list__name_keypoints)={len(list__name_keypoints)} != len(kpts_xyn)={len(kpts_xyn)}"
 
-            list_aligner__result.extend(
-                {
-                    "list__obj__id_class": [id_class],
-                    "list__obj__box_xcycwhn": [[b_xcn, b_ycn, b_wn, b_hn]],
-                    "list__obj__box_conf": [b_conf],
-                    "list__obj__kpts_xyn": [
-                        (
-                            {
-                                name: [kpts_xyn[i]][0]
-                                for i, name in enumerate(list__name_keypoints)
-                            }
-                            if kpts_xyn is not None
-                            else None
-                        )
-                    ],
-                    "list__obj__kpts_conf": [
-                        (
-                            {
-                                name: [kpts_conf[i]][0]
-                                for i, name in enumerate(list__name_keypoints)
-                            }
-                            if kpts_conf is not None
-                            else None
-                        )
-                    ],
-                    "list__obj__id_track": [id_track],
-                }
+            dict__result["list__obj__id_class"].append(id_class)
+            dict__result["list__obj__box_xcycwhn"].append([b_xcn, b_ycn, b_wn, b_hn])
+            dict__result["list__obj__box_conf"].append(b_conf)
+            dict__result["list__obj__kpts_xyn"].append(
+                {name: [kpts_xyn[i]][0] for i, name in enumerate(list__name_keypoints)}
+                if kpts_xyn is not None
+                else None
             )
+            dict__result["list__obj__kpts_conf"].append(
+                {name: [kpts_conf[i]][0] for i, name in enumerate(list__name_keypoints)}
+                if kpts_conf is not None
+                else None
+            )
+            dict__result["list__obj__id_track"].append(id_track)
 
-        dict__result = list_aligner__result.item()
-
-        return {
-            "dict__result": dict__result,
-        }
+        return dict__result
 
 
 class YOLOv5CompatDetectPredictor(BaseModel):
@@ -214,9 +193,7 @@ class YOLOv5CompatDetectPredictor(BaseModel):
 
         dict__result = list_aligner__result.item()
 
-        return {
-            "dict__result": dict__result,
-        }
+        return dict__result
 
 
 class TensorRTPredictor:
@@ -299,14 +276,24 @@ class TensorRTPredictor:
 
 class ONNXPredictor:
 
-    def __init__(self, model_path):
+    def __init__(self, **kwargs):
+        import onnxruntime as ort
+        import onnx
+
+        model_path = kwargs["model_path"]
+        enable_CUDAExecutionProvider = kwargs["enable_CUDAExecutionProvider"]
+        enable_CPUExecutionProvider = kwargs["enable_CPUExecutionProvider"]
+
+        providers = []
+        if enable_CUDAExecutionProvider:
+            providers.append("CUDAExecutionProvider")
+        if enable_CPUExecutionProvider:
+            providers.append("CPUExecutionProvider")
+        
         self.model = onnx.load(model_path)
         self.session = ort.InferenceSession(
             model_path,
-            providers=[
-                "CUDAExecutionProvider",
-                "CPUExecutionProvider",
-            ],
+            providers=providers,
         )
 
         onnx.checker.check_model(self.model)
@@ -315,3 +302,149 @@ class ONNXPredictor:
         inputs = {name: np.array(inputs[name], dtype=np.float32) for name in inputs}
         outputs = self.session.run(output_names, inputs)
         return {name: outputs[i] for i, name in enumerate(output_names)}
+
+
+class CLIPFeatureExtractor(BaseModel):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        try:
+            import clip
+        except:
+            raise ImportError(
+                "Please install clip by `pip install git+https://github.com/openai/CLIP.git`"
+            )
+
+        model = kwargs["model"]
+        device = kwargs["device"]
+
+        self.model, self.preprocess = clip.load("ViT-B/32", device=device)
+        self.device = device
+
+    def predict(self, **kwargs):
+        img__bgr = kwargs["img__bgr"]
+
+        img__pil = Image.fromarray(cv2.cvtColor(img__bgr, cv2.COLOR_BGR2RGB))
+        input_ = self.preprocess(img__pil).unsqueeze(0).to(self.device)
+        with torch.no_grad():
+            image_feature = self.model.encode_image(input_)[0]
+
+        image_feature = image_feature.cpu().numpy()
+
+        return {"image_feature": image_feature}
+
+
+class Midas(BaseModel):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        model = kwargs["model"]
+        device = kwargs["device"]
+
+        assert model in [
+            "MiDaS_small",
+            "DPT_Hybrid",
+            "DPT_Large",
+        ], f"Unsupported model: {model}"
+
+        self.model = torch.hub.load("intel-isl/MiDaS", model)
+        self.model.to(device)
+        self.model.eval()
+
+        midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms")
+        if model == "DPT_Large" or model == "DPT_Hybrid":
+            self.transform = midas_transforms.dpt_transform
+        else:
+            self.transform = midas_transforms.small_transform
+
+        self.device = device
+
+    def predict(self, **kwargs):
+
+        img__bgr = kwargs["img__bgr"]
+
+        img__rgb = cv2.cvtColor(img__bgr, cv2.COLOR_BGR2RGB)
+
+        input_batch = self.transform(img__rgb).to(self.device)
+        preds = self.model(input_batch)
+
+        depth_map = preds[0].detach().cpu().numpy()
+        depth_map = (depth_map - depth_map.min()) / (depth_map.max() - depth_map.min())
+
+        depth_map = cv2.resize(
+            depth_map,
+            (img__bgr.shape[1], img__bgr.shape[0]),
+            interpolation=cv2.INTER_CUBIC,
+        )
+
+        return {
+            "depth_map": depth_map,
+        }
+
+
+class RTMPosePredictor:
+    def __init__(self, **kwargs):
+        from mmpose.apis import init_model
+        from mmpose.apis import inference_topdown
+
+        path__file__config = kwargs["path__file__config"]
+        path__file__model = kwargs["path__file__model"]
+        device = kwargs["device"]
+
+        self.pose_estimator = init_model(path__file__config, path__file__model, device)
+
+        self.inference_topdown = inference_topdown
+
+    def predict(self, **kwargs):
+        img__bgr = kwargs["img__bgr"]
+        dict__result = kwargs["dict__result"]
+        list__name_keypoints = kwargs["list__name_keypoints"]
+
+        H, W = img__bgr.shape[:2]
+
+        list__obj__box_xcycwhn = np.array(
+            dict__result["list__obj__box_xcycwhn"]
+        ).reshape(-1, 4)
+        list__obj__box_x1y1x2y2 = box_normalized__to__box_pixels(
+            xcycwh__to__x1y1x2y2(list__obj__box_xcycwhn), (W, H)
+        )
+
+        poses = self.inference_topdown(
+            self.pose_estimator,
+            img__bgr,
+            list__obj__box_x1y1x2y2,
+            bbox_format="xyxy",
+        )
+        list_keypoints = []
+        for pose in poses:
+            keypoints = pose.get("pred_instances").get("keypoints")[0]
+            scores = pose.get("pred_instances").get("keypoint_scores")[0].reshape(-1, 1)
+            pose_result = np.concatenate((keypoints, scores), axis=1)
+            # print(keypoints.shape, scores.shape, pose_result.shape)
+            list_keypoints.append(pose_result)
+
+        list__obj__kpts_xyn = []
+        list__obj__kpts_conf = []
+        if len(list__obj__box_xcycwhn) > 0:
+            for i_obj, kpts in enumerate(list_keypoints):
+                kpts_xyn = kpts[:, :2] / [W, H]
+                kpts_conf = kpts[:, 2]
+                list__obj__kpts_xyn.append(
+                    {
+                        name: kpt.tolist()
+                        for name, kpt in zip(list__name_keypoints, kpts_xyn)
+                    }
+                )
+                list__obj__kpts_conf.append(
+                    {
+                        name: conf.item()
+                        for name, conf in zip(list__name_keypoints, kpts_conf)
+                    }
+                )
+
+        dict__result["list__obj__kpts_xyn"] = list__obj__kpts_xyn
+        dict__result["list__obj__kpts_conf"] = list__obj__kpts_conf
+
+        return list_keypoints

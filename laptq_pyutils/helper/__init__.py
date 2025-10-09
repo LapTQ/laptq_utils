@@ -1,4 +1,8 @@
-from .image import helper__check__duplicate__images, helper__convert__video__to__images
+from .image import (
+    helper__convert__video__to__images,
+    helper__extract__image__embedding,
+    helper__cluster__images__by__embeddings,
+)
 from .detection import (
     helper__extract__ultralytics__imgdir,
     helper__extract__ultralytics__video,
@@ -20,10 +24,13 @@ from .detection import (
     helper__erase__classes__on__images,
     helper__cluster__detection__bboxes,
     helper__merge__detection__result,
-    helper__extract__crops__from__detection,
+    helper__extract__crops__from__detection__imgdir,
+    helper__extract__crops__from__detection__video,
+    helper__extract__topdown__pose,
 )
 from .segmentation import helper__extract__crops__with__mask__from__segmentation
 from .generation import (
     helper__paste__seg_crops__over__det_boxes,
     helper__paste__seg_crops__over__background,
 )
+from .depth import helper__depth__estimation
