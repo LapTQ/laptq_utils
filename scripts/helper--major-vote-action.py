@@ -182,10 +182,10 @@ if __name__ == "__main__":
     }.items():
         kwargs = dict(
             # ======= fs26 ========
-            pathd_lbl="/home/laptq/laptq-fs26-shoplifting-detection/outputs/trivials/predict_general/ProtoGCN/fs26/v103--mnit_poselift_roboflow_satudora_awlrecord--r1.0-0xauto-1x1--no-normal-awlrecord--equal-normal-public-vs-satudora--1s-15frames--fixR10/{}/labels".format(
+            pathd_lbl="/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/fs26/v104--mnit_poselift_roboflow_satudora_awlrecord--r1.9-0xauto-1x1--only-normal-satudora-noR10--1s-15frames/{}/labels".format(
                 subpathf
             ),
-            pathd_output="/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/fs26/v103--mnit_poselift_roboflow_satudora_awlrecord--r1.0-0xauto-1x1--no-normal-awlrecord--equal-normal-public-vs-satudora--1s-15frames--fixR10--left-window-5--right-window-5/{}/labels".format(
+            pathd_output="/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/fs26/v104--mnit_poselift_roboflow_satudora_awlrecord--r1.9-0xauto-1x1--only-normal-satudora-noR10--1s-15frames--left-window-5--right-window-5/{}/labels".format(
                 subpathf
             ),
             left_window=5,  # counted after stepping
