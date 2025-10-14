@@ -1317,9 +1317,9 @@ class ExtractCropsFromDetectionCore:
         path__dir__crop__img__output = kwargs["path__dir__crop__img__output"]
         path__dir__crop__lbl__output = kwargs["path__dir__crop__lbl__output"]
         num__pad__0__crop = kwargs["num__pad__0__crop"]
-        ratio_pad_w = kwargs['ratio_pad_w']
-        ratio_pad_h = kwargs['ratio_pad_h']
-        pad_for_image_only = kwargs['pad_for_image_only']
+        ratio_pad_w = kwargs["ratio_pad_w"]
+        ratio_pad_h = kwargs["ratio_pad_h"]
+        pad_for_image_only = kwargs["pad_for_image_only"]
 
         if pad_for_image_only is False:
             raise NotImplementedError("Please implement for this option")
@@ -1417,7 +1417,7 @@ class ExtractCropsFromDetectionCore:
                 b_y1 = max(0, b_y1)
                 b_x2 = min(W, b_x2)
                 b_y2 = min(H, b_y2)
-                
+
                 crop_img = img__bgr[b_y1:b_y2, b_x1:b_x2]
 
             if to_shift__coords__wrt__box:
@@ -1589,12 +1589,11 @@ def helper__extract__crops__from__detection__video(**kwargs):
 
     predictor = ExtractCropsFromDetectionCore(**kwargs)
 
-    pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
-    id__frame = 0
-    while True:
-        success, img__bgr = cap.read()
-        if not success:
-            break
+    for id__frame in tqdm(range(int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))):
+        if to_save__img:
+            success, img__bgr = cap.read()
+        else:
+            img__bgr = None
 
         name__file__lbl = f"{id__frame:0{num__pad__0__frame}d}.json"
         path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
@@ -1630,9 +1629,6 @@ def helper__extract__crops__from__detection__video(**kwargs):
             os.makedirs(os.path.dirname(path__file__crop__lbl__output), exist_ok=True)
             with open(path__file__crop__lbl__output, "w") as f:
                 json.dump(dict__result__crop, f, indent=4)
-
-        id__frame += 1
-        pbar.update(1)
 
     cap.release()
 
