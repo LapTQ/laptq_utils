@@ -1,7 +1,7 @@
 PATH__DIR__LABEL__INPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26/satudora"
 POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 
-PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--filter--detection--result--by--roi/fs26/satudora-v2"
+PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--filter--detection--result--by--roi/fs26/satudora"
 POSTFIX__DIR__LABEL__OUTPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--all-keypoints--JSON"
 
 MAP__SUBPATH_DIR__TO__ = {
@@ -120,7 +120,6 @@ for subpath__dir in MAP__SUBPATH_DIR__TO__:
         path__dir__lbl__output=path__dir__lbl__output,
         roi__polygonn=MAP__SUBPATH_DIR__TO__[subpath__dir],
         thresh__miniou=0.3,
-        num_workers=5,
     )
 
     ls_kwargs.append(kwargs)
