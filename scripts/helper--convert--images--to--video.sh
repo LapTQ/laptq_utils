@@ -11,8 +11,8 @@ PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/he
 
 
 declare -A MAP__NAME_VIDEO__TO__=(
-    # ["shoplifting-25min.mp4"]=""
-    # ["r9_25min_rotate.mp4"]=""
+    ["shoplifting-25min.mp4"]=30
+    ["r9_25min_rotate.mp4"]=15
     # ["satudora-1min.mp4"]=""
     # ["r10_10min_rotate.mp4"]=""
 
@@ -35,6 +35,7 @@ TAG__WARNING="\033[33m[WARNING]\033[0m"
 
 main() {
     local name__video=$1
+    local fps=$2
 
     path__dir__img__input="${PATH__DIR__IMAGE__INPUT}/${name__video}/vis${POSTFIX__DIR__IMAGE}"
     path__file__output="${PATH__DIR__VIDEO__OUTPUT}/${name__video}"
@@ -43,7 +44,7 @@ main() {
     mkdir -p "$(dirname "$path__file__output")"
 
     ffmpeg \
-        -framerate 30 \
+        -framerate $fps \
         -pattern_type glob -i "${path__dir__img__input}/*.jpg" \
         -c:v libx264 \
         -y \
@@ -68,7 +69,8 @@ cleanup() {
 trap cleanup SIGINT
 
 for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
-    main "$name__video" &
+    fps="${MAP__NAME_VIDEO__TO__[$name__video]}"
+    main "$name__video" $fps &
 done
 
 wait
