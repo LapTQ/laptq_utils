@@ -3,6 +3,9 @@ import numpy as np
 from PIL import Image
 import cv2
 import torch
+import os
+from tqdm import tqdm
+from copy import deepcopy
 
 # import tensorrt as trt
 # import pycuda.driver as cuda
@@ -289,7 +292,7 @@ class ONNXPredictor:
             providers.append("CUDAExecutionProvider")
         if enable_CPUExecutionProvider:
             providers.append("CPUExecutionProvider")
-        
+
         self.model = onnx.load(model_path)
         self.session = ort.InferenceSession(
             model_path,
@@ -448,3 +451,103 @@ class RTMPosePredictor:
         dict__result["list__obj__kpts_conf"] = list__obj__kpts_conf
 
         return list_keypoints
+
+
+class MajorVoteActionPredictor:
+    def __init__(self, **kwargs):
+        self.ls__dict__result__not_voted = []
+        self.ls__dict__result__voted = []
+
+    def append(self, **kwargs):
+        dict__result = kwargs["dict__result"]
+        self.ls__dict__result__not_voted.append(deepcopy(dict__result))
+        self.ls__dict__result__voted.append(dict__result)  # to write in-place
+
+    def predict(self, **kwargs):
+        idx = kwargs["idx"]
+        step_size = kwargs["step_size"]
+        left_window = kwargs["left_window"]
+        right_window = kwargs["right_window"]
+        ls__id_action__prioritized = kwargs["ls__id_action__prioritized"]
+        min_votes_threshold = kwargs["min_votes_threshold"]
+        unconfirmed__id_action = kwargs["unconfirmed__id_action"]
+
+        dict__result__not_voted = self.ls__dict__result__not_voted[idx]
+        dict__result__voted = self.ls__dict__result__voted[idx]
+
+        list__obj__id_track = dict__result__not_voted["list__obj__id_track"]
+
+        list__obj__action_status__voted = dict__result__voted[
+            "list__obj__action_status"
+        ]
+        list__obj__action_conf__voted = dict__result__voted["list__obj__action_conf"]
+
+        # # debug
+        # print("Before voting:", list__obj__action_status__in, list__obj__action_conf__in)
+
+        # For each object in the current frame
+        for i_obj, id_track in enumerate(list__obj__id_track):
+
+            # Get window bounds
+            window_start = max(0, idx - left_window * step_size)
+            window_end = min(
+                len(self.ls__dict__result__not_voted) - 1,
+                idx + right_window * step_size,
+            )
+
+            # Collect votes and confidence values for this track within the window
+            votes = {id_action: 0 for id_action in ls__id_action__prioritized}
+            conf_values = {id_action: [] for id_action in ls__id_action__prioritized}
+
+            for i_w in range(window_start, window_end + 1, step_size):
+                w__dict__result__input = self.ls__dict__result__not_voted[i_w]
+
+                w__list__obj__id_track = w__dict__result__input["list__obj__id_track"]
+
+                if id_track in w__list__obj__id_track:
+                    track_idx = w__list__obj__id_track.index(id_track)
+
+                    # Get action status for this track in this window frame
+                    for id_action in ls__id_action__prioritized:
+                        if (
+                            w__dict__result__input["list__obj__action_status"][
+                                id_action
+                            ][track_idx]
+                            is True
+                        ):
+                            votes[id_action] += 1
+                            conf = w__dict__result__input["list__obj__action_conf"][
+                                id_action
+                            ][track_idx]
+                            if conf is not None:
+                                conf_values[id_action].append(conf)
+
+            # # debug
+            # print(votes)
+
+            # Determine majority action
+            max_votes = max(votes.values())
+            if max_votes > 0:  # If we have any votes
+                # In case of a tie, prioritize
+                for id_action in ls__id_action__prioritized:
+                    if votes[id_action] == max_votes:
+                        if max_votes >= min_votes_threshold:
+                            majority_action = id_action
+                        else:
+                            majority_action = unconfirmed__id_action
+                        break
+
+                # Update action status
+                for id_action in ls__id_action__prioritized:
+                    list__obj__action_status__voted[id_action][i_obj] = (
+                        majority_action == id_action
+                    )
+
+                # Update confidence values based on majority class
+                for id_action in ls__id_action__prioritized:
+                    if len(conf_values[id_action]):
+                        list__obj__action_conf__voted[id_action][i_obj] = float(
+                            np.mean(conf_values[id_action])
+                        )
+                    else:
+                        list__obj__action_conf__voted[id_action][i_obj] = None

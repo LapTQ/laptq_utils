@@ -39,6 +39,7 @@ import subprocess
 from laptq_pyutils.helper import helper__draw__imgdir
 from multiprocessing import Pool
 import multiprocessing as mp
+import shutil
 
 
 # Define tags for logging
@@ -88,7 +89,7 @@ for subpath__dir in MAP__SUBPATH_DIR__TO__:
     path__dir__output = f"{PATH__DIR__OUTPUT}/{subpath__dir}/vis{POSTFIX__DIR__LABEL}"
 
     if os.path.exists(path__dir__output):
-        os.rmdir(path__dir__output)
+        shutil.rmtree(path__dir__output)
     os.makedirs(path__dir__output)
 
     kwargs = dict(
@@ -97,7 +98,7 @@ for subpath__dir in MAP__SUBPATH_DIR__TO__:
         path__dir__output=path__dir__output,
         to_concat__original_img=False,
         concat__axis=1,
-        to_draw__id_frame=False,
+        to_draw__id_frame=True,
         id_frame__from="filename",
         lambda__id_frame__from=lambda__id_frame__from,
         to_draw__id_track=True,
@@ -114,7 +115,7 @@ for subpath__dir in MAP__SUBPATH_DIR__TO__:
         to_draw__keypoints_displacement=False,
         to_draw__keypoints_speed=False,
         to_draw__event_info=False,
-        fontScale=2,
+        fontScale=1,
         thickness=2,
         box_color_by="id__track",
         displacement_key="list__obj__kpts_displacement_average",

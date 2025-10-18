@@ -6,4 +6,5 @@ from .model import (
     CLIPFeatureExtractor,
     Midas,
     RTMPosePredictor,
+    MajorVoteActionPredictor,
 )

@@ -34,3 +34,4 @@ from .generation import (
     helper__paste__seg_crops__over__background,
 )
 from .depth import helper__depth__estimation
+from .action import helper__major_vote_action
