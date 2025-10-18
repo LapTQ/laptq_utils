@@ -1,13 +1,13 @@
-PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/data"
+PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/data"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/fs26/ProtoGCN_v33--left-window-5--right-window-5"
 POSTFIX__DIR__LABEL = ""
 
 NUM__MAX__IMG__TO__VISUALIZE = None
 IS_OK__LBL_NOT_FOUND = False
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw--imgdir/fs26"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw--imgdir/fs26/ProtoGCN_v33--left-window-5--right-window-5"
 
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS = (
     "/home/laptq/laptq-fs26-shoplifting-detection/src/configs/class_name.yaml"
@@ -17,21 +17,21 @@ PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION = (
 )
 
 # Define the map of subpaths
-# MAP__SUBPATH_DIR__TO__ = {
-#     "shoplifting-25min.mp4": None,
-#     "r9_25min_rotate.mp4": None,
-# }
-# -----
-import os
-import glob
-
 MAP__SUBPATH_DIR__TO__ = {
-    p[len(PATH__DIR__LABEL) + 1 :]: None
-    for p in glob.glob(
-        f"{PATH__DIR__LABEL}/crops--single-person--shoplifting-awlrecord-videos/day1/cuongdh--Basket_carry_by_hand--Back_pant_pocket--front--standing.mp4/*"
-    )
-    if os.path.isdir(p)
+    "shoplifting-25min.mp4": None,
+    "r9_25min_rotate.mp4": None,
 }
+# -----
+# import os
+# import glob
+
+# MAP__SUBPATH_DIR__TO__ = {
+#     p[len(PATH__DIR__LABEL) + 1 :]: None
+#     for p in glob.glob(
+#         f"{PATH__DIR__LABEL}/crops--single-person--shoplifting-awlrecord-videos/day1/cuongdh--Basket_carry_by_hand--Back_pant_pocket--front--standing.mp4/*"
+#     )
+#     if os.path.isdir(p)
+# }
 
 # =============================================================
 import os
