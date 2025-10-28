@@ -26,7 +26,8 @@ from .detection import (
     helper__merge__detection__result,
     helper__extract__crops__from__detection__imgdir,
     helper__extract__crops__from__detection__video,
-    helper__extract__topdown__pose,
+    helper__extract__topdown__pose__imgdir,
+    helper__extract__topdown__pose__video,
 )
 from .segmentation import helper__extract__crops__with__mask__from__segmentation
 from .generation import (

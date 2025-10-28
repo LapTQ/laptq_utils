@@ -1633,7 +1633,7 @@ def helper__extract__crops__from__detection__video(**kwargs):
     cap.release()
 
 
-def helper__extract__topdown__pose(**kwargs):
+def helper__extract__topdown__pose__imgdir(**kwargs):
 
     import json
     from tqdm import tqdm
@@ -1643,28 +1643,131 @@ def helper__extract__topdown__pose(**kwargs):
     path__dir__img = kwargs["path__dir__img"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    batch_size = kwargs["batch_size"]
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
     pose_estimator = RTMPosePredictor(**kwargs)
 
-    for name__file__img in tqdm(sorted(os.listdir(path__dir__img))):
+    list_name__file__img = sorted(os.listdir(path__dir__img))
+
+    batch_images = []
+    batch_labels = []
+    batch_paths = []
+    batch_names = []
+
+    for idx, name__file__img in enumerate(tqdm(list_name__file__img)):
         name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
         path__file__img__input = os.path.join(path__dir__img, name__file__img)
         path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
         path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+        if not os.path.exists(path__file__lbl__input):
+            if is_ok__lbl_not_exist:
+                continue
+            else:
+                raise FileNotFoundError(
+                    f"Label file not found: {path__file__lbl__input}"
+                )
 
         img__bgr = cv2.imread(path__file__img__input)
 
         with open(path__file__lbl__input, "r") as f:
             dict__result = json.load(f)
 
-        # write dict__result in-place
-        pose_estimator.predict(
-            img__bgr=img__bgr,
-            dict__result=dict__result,
-            **kwargs,
-        )
+        batch_images.append(img__bgr)
+        batch_labels.append(dict__result)
+        batch_paths.append(path__file__lbl__output)
+        batch_names.append(name__file__img)
 
-        with open(path__file__lbl__output, "w") as f:
-            json.dump(dict__result, f, indent=4)
+        # Process batch when full or at last image
+        if len(batch_images) == batch_size or idx == len(list_name__file__img) - 1:
+            # write each dict__result in-place
+            pose_estimator.predict_batch(
+                list_img__bgr=batch_images,
+                list_dict__result=batch_labels,
+                **kwargs,
+            )
+
+            # Write results
+            for dict__result, path__file__lbl__output in zip(batch_labels, batch_paths):
+                with open(path__file__lbl__output, "w") as f:
+                    json.dump(dict__result, f, indent=4)
+
+            # Clear batch
+            batch_images = []
+            batch_labels = []
+            batch_paths = []
+            batch_names = []
+
+
+def helper__extract__topdown__pose__video(**kwargs):
+
+    import json
+    from tqdm import tqdm
+    import os
+    import cv2
+
+    path__file__video = kwargs["path__file__video"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    num__pad__0 = kwargs["num__pad__0"]
+    batch_size = kwargs["batch_size"]  # Default batch size
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    cap = cv2.VideoCapture(path__file__video)
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    pose_estimator = RTMPosePredictor(**kwargs)
+
+    # Batch processing
+    batch_frames = []
+    batch_labels = []
+    batch_paths = []
+    batch_ids = []
+
+    for id__frame in tqdm(range(total_frames)):
+        success, img__bgr = cap.read()
+        name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+        if not os.path.exists(path__file__lbl__input):
+            if is_ok__lbl_not_exist:
+                continue
+            else:
+                raise FileNotFoundError(
+                    f"Label file not found: {path__file__lbl__input}"
+                )
+
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
+
+        batch_frames.append(img__bgr)
+        batch_labels.append(dict__result)
+        batch_paths.append(path__file__lbl__output)
+        batch_ids.append(id__frame)
+
+        # Process batch when full or at last frame
+        if len(batch_frames) == batch_size or id__frame == total_frames - 1:
+            pose_estimator.predict_batch(
+                list_img__bgr=batch_frames,
+                list_dict__result=batch_labels,
+                **kwargs,
+            )
+
+            # Write results
+            for dict__result, path__file__lbl__output in zip(batch_labels, batch_paths):
+                with open(path__file__lbl__output, "w") as f:
+                    json.dump(dict__result, f, indent=4)
+
+            # Clear batch
+            batch_frames = []
+            batch_labels = []
+            batch_paths = []
+            batch_ids = []
+
+    cap.release()

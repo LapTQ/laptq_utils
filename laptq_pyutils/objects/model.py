@@ -387,10 +387,79 @@ class Midas(BaseModel):
         }
 
 
+def batch_inference_topdown(model, list_img, list_bboxes, bbox_format="xyxy"):
+    """Inference multiple images with a top-down pose estimator.
+
+    Args:
+        model (nn.Module): The top-down pose estimator
+        list_img (List[np.ndarray]): List of loaded images to inference
+        list_bboxes (List[np.ndarray]): List of bboxes for each image.
+            Each element is an array of shape (N, 4) for N objects in that image
+        bbox_format (str): The bbox format indicator. Options are ``'xywh'``
+            and ``'xyxy'``. Defaults to ``'xyxy'``
+
+    Returns:
+        List[List[PoseDataSample]]: The inference results for each image.
+    """
+    from mmpose.structures.bbox import bbox_xywh2xyxy
+    from mmpose.structures import PoseDataSample
+    from mmengine.dataset import Compose, pseudo_collate
+    from mmengine.registry import init_default_scope
+    import torch
+
+    scope = model.cfg.get("default_scope", "mmpose")
+    if scope is not None:
+        init_default_scope(scope)
+    pipeline = Compose(model.cfg.test_dataloader.dataset.pipeline)
+
+    assert bbox_format in {"xyxy", "xywh"}, f'Invalid bbox_format "{bbox_format}".'
+
+    # Construct batch data samples for all images and all bboxes
+    data_list = []
+    frame_bbox_counts = []
+
+    for img, bboxes in zip(list_img, list_bboxes):
+        if bboxes is None or len(bboxes) == 0:
+            # Get bbox from the image size
+            h, w = img.shape[:2]
+            bboxes = np.array([[0, 0, w, h]], dtype=np.float32)
+        else:
+            if isinstance(bboxes, list):
+                bboxes = np.array(bboxes)
+
+            if bbox_format == "xywh":
+                bboxes = bbox_xywh2xyxy(bboxes)
+
+        frame_bbox_counts.append(len(bboxes))
+
+        for bbox in bboxes:
+            data_info = dict(img=img)
+            data_info["bbox"] = bbox[None]  # shape (1, 4)
+            data_info["bbox_score"] = np.ones(1, dtype=np.float32)  # shape (1,)
+            data_info.update(model.dataset_meta)
+            data_list.append(pipeline(data_info))
+
+    if data_list:
+        # Collate data list into a batch
+        batch = pseudo_collate(data_list)
+        with torch.no_grad():
+            results = model.test_step(batch)
+    else:
+        results = []
+
+    # Split results back into per-image lists
+    list_results = []
+    start_idx = 0
+    for count in frame_bbox_counts:
+        list_results.append(results[start_idx : start_idx + count])
+        start_idx += count
+
+    return list_results
+
+
 class RTMPosePredictor:
     def __init__(self, **kwargs):
         from mmpose.apis import init_model
-        from mmpose.apis import inference_topdown
 
         path__file__config = kwargs["path__file__config"]
         path__file__model = kwargs["path__file__model"]
@@ -398,59 +467,86 @@ class RTMPosePredictor:
 
         self.pose_estimator = init_model(path__file__config, path__file__model, device)
 
-        self.inference_topdown = inference_topdown
-
-    def predict(self, **kwargs):
-        img__bgr = kwargs["img__bgr"]
-        dict__result = kwargs["dict__result"]
+    def predict_batch(self, **kwargs):
+        list_img__bgr = kwargs["list_img__bgr"]
+        list_dict__result = kwargs["list_dict__result"]
         list__name_keypoints = kwargs["list__name_keypoints"]
 
-        H, W = img__bgr.shape[:2]
+        # Collect all bboxes for each frame
+        list_bboxes = []
 
-        list__obj__box_xcycwhn = np.array(
-            dict__result["list__obj__box_xcycwhn"]
-        ).reshape(-1, 4)
-        list__obj__box_x1y1x2y2 = box_normalized__to__box_pixels(
-            xcycwh__to__x1y1x2y2(list__obj__box_xcycwhn), (W, H)
-        )
+        for img__bgr, dict__result in zip(list_img__bgr, list_dict__result):
+            H, W = img__bgr.shape[:2]
 
-        poses = self.inference_topdown(
+            list__obj__box_xcycwhn = np.array(
+                dict__result["list__obj__box_xcycwhn"]
+            ).reshape(-1, 4)
+            list__obj__box_x1y1x2y2 = box_normalized__to__box_pixels(
+                xcycwh__to__x1y1x2y2(list__obj__box_xcycwhn), (W, H)
+            )
+
+            list_bboxes.append(list__obj__box_x1y1x2y2)
+
+        # Batch inference on all images
+        list_poses = batch_inference_topdown(
             self.pose_estimator,
-            img__bgr,
-            list__obj__box_x1y1x2y2,
+            list_img__bgr,
+            list_bboxes,
             bbox_format="xyxy",
         )
-        list_keypoints = []
-        for pose in poses:
-            keypoints = pose.get("pred_instances").get("keypoints")[0]
-            scores = pose.get("pred_instances").get("keypoint_scores")[0].reshape(-1, 1)
-            pose_result = np.concatenate((keypoints, scores), axis=1)
-            # print(keypoints.shape, scores.shape, pose_result.shape)
-            list_keypoints.append(pose_result)
 
-        list__obj__kpts_xyn = []
-        list__obj__kpts_conf = []
-        if len(list__obj__box_xcycwhn) > 0:
-            for i_obj, kpts in enumerate(list_keypoints):
-                kpts_xyn = kpts[:, :2] / [W, H]
-                kpts_conf = kpts[:, 2]
-                list__obj__kpts_xyn.append(
-                    {
-                        name: kpt.tolist()
-                        for name, kpt in zip(list__name_keypoints, kpts_xyn)
-                    }
+        # Store keypoints per frame for return value
+        list_list_keypoints = []
+
+        # Process results for each frame
+        for frame_idx, (
+            img__bgr,
+            dict__result,
+            list__obj__box_x1y1x2y2,
+            poses,
+        ) in enumerate(zip(list_img__bgr, list_dict__result, list_bboxes, list_poses)):
+            H, W = img__bgr.shape[:2]
+
+            list_keypoints = []
+            for pose in poses:
+                keypoints = pose.get("pred_instances").get("keypoints")[0]
+                scores = (
+                    pose.get("pred_instances").get("keypoint_scores")[0].reshape(-1, 1)
                 )
-                list__obj__kpts_conf.append(
-                    {
-                        name: conf.item()
-                        for name, conf in zip(list__name_keypoints, kpts_conf)
-                    }
-                )
+                pose_result = np.concatenate((keypoints, scores), axis=1)
+                # print(keypoints.shape, scores.shape, pose_result.shape)
+                list_keypoints.append(pose_result)
 
-        dict__result["list__obj__kpts_xyn"] = list__obj__kpts_xyn
-        dict__result["list__obj__kpts_conf"] = list__obj__kpts_conf
+            list__obj__kpts_xyn = []
+            list__obj__kpts_conf = []
+            if (
+                len(list__obj__box_x1y1x2y2) > 0
+            ):  # the inference function returns at-least 1 pose even if no boxes is provided
+                for i_obj, kpts in enumerate(list_keypoints):
+                    kpts_xyn = kpts[:, :2] / [W, H]
+                    kpts_conf = kpts[:, 2]
+                    list__obj__kpts_xyn.append(
+                        {
+                            name: kpt.tolist()
+                            for name, kpt in zip(list__name_keypoints, kpts_xyn)
+                        }
+                    )
+                    list__obj__kpts_conf.append(
+                        {
+                            name: conf.item()
+                            for name, conf in zip(list__name_keypoints, kpts_conf)
+                        }
+                    )
 
-        return list_keypoints
+            dict__result["list__obj__kpts_xyn"] = list__obj__kpts_xyn
+            dict__result["list__obj__kpts_conf"] = list__obj__kpts_conf
+            list_list_keypoints.append(list_keypoints)
+
+        # Return single list if input was single image, otherwise return list of lists
+        if len(list_img__bgr) == 1:
+            return list_list_keypoints[0]
+        else:
+            return list_list_keypoints
 
 
 class MajorVoteActionPredictor:
