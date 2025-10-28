@@ -26,7 +26,8 @@ from laptq_pyutils.helper import (
     helper__paste__seg_crops__over__background,
     helper__merge__detection__result,
     helper__extract__crops__from__detection__imgdir,
-    helper__extract__topdown__pose,
+    helper__extract__topdown__pose__imgdir,
+    helper__extract__topdown__pose__video,
     helper__depth__estimation,
 )
 import argparse
