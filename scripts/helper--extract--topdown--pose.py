@@ -105,7 +105,7 @@ for subpath__media in MAP__SUBPATH_DIR__TO__:
         path__file__model=PATH__FILE__MODEL,
         path__file__config=PATH__FILE__CONFIG,
         device=device,
-        batch_size=512,
+        batch_size=128,
         is_ok__lbl_not_exist=False,
         num__pad__0=9,
         list__name_keypoints=[

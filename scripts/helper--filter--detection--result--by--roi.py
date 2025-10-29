@@ -1,8 +1,8 @@
 PATH__DIR__LABEL__INPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26/satudora"
-POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
 
 PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--filter--detection--result--by--roi/fs26/satudora"
-POSTFIX__DIR__LABEL__OUTPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--all-keypoints--JSON"
+POSTFIX__DIR__LABEL__OUTPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--all-keypoints--RTMPose--JSON"
 
 MAP__SUBPATH_DIR__TO__ = {
     "R3_2025_05_15_23_40_32_rotate.mp4": [
@@ -120,15 +120,16 @@ for subpath__dir in MAP__SUBPATH_DIR__TO__:
         path__dir__lbl__output=path__dir__lbl__output,
         roi__polygonn=MAP__SUBPATH_DIR__TO__[subpath__dir],
         thresh__miniou=0.3,
+        num_workers=40,
     )
 
     ls_kwargs.append(kwargs)
 
 
 # # ============ sequential =============
-# for kwargs in ls_kwargs:
-#     run_wrapper(kwargs)
+for kwargs in ls_kwargs:
+    run_wrapper(kwargs)
 # ============ parallel =============
-with Pool(15) as p:
-    p.map(run_wrapper, ls_kwargs)
+# with Pool(1) as p:
+#     p.map(run_wrapper, ls_kwargs)
 # ===================================
