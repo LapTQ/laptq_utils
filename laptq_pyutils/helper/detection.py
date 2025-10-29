@@ -1,4 +1,11 @@
 import os
+import os
+import json
+import numpy as np
+import cv2
+from shapely.geometry import Polygon
+from tqdm import tqdm
+from multiprocessing import Pool
 
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import (
@@ -206,42 +213,69 @@ def helper__change__detection__id_class(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
-def helper__filter__detection__result__by__conf(**kwargs):
-
-    import json
-    from tqdm import tqdm
-    import os
-
+def _filter__detection__result__by__conf__core(kwargs):
+    name__file__lbl = kwargs["name__file__lbl"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     map__id_class__to__thresh_conf: dict = kwargs["map__id_class__to__thresh_conf"]
 
+    path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+    path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+    with open(path__file__lbl__input, "r") as f:
+        dict__result = json.load(f)
+
+    list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+
+    list__index__to_pop = []
+    list__obj__id_class = list_aligner__result.get__key("list__obj__id_class")
+    list__obj__box_conf = list_aligner__result.get__key("list__obj__box_conf")
+
+    for i_obj, (id_class, conf) in enumerate(
+        zip(list__obj__id_class, list__obj__box_conf)
+    ):
+        if conf < map__id_class__to__thresh_conf[id_class]:
+            list__index__to_pop.append(i_obj)
+
+    list_aligner__result.pop__indexes(list__index__to_pop)
+
+    dict__result = list_aligner__result.item()
+
+    with open(path__file__lbl__output, "w") as f:
+        json.dump(dict__result, f, indent=4)
+
+
+def helper__filter__detection__result__by__conf(**kwargs):
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    map__id_class__to__thresh_conf: dict = kwargs["map__id_class__to__thresh_conf"]
+    num_workers = kwargs["num_workers"]
+
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
-        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
-        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+    list__name__file__lbl = sorted(os.listdir(path__dir__lbl__input))
 
-        with open(path__file__lbl__input, "r") as f:
-            dict__result = json.load(f)
+    list__kwargs = [
+        dict(
+            name__file__lbl=name__file__lbl,
+            path__dir__lbl__input=path__dir__lbl__input,
+            path__dir__lbl__output=path__dir__lbl__output,
+            map__id_class__to__thresh_conf=map__id_class__to__thresh_conf,
+        )
+        for name__file__lbl in list__name__file__lbl
+    ]
 
-        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
-
-        list__index__to_pop = []
-        list__obj__id_class = list_aligner__result.get__key("list__obj__id_class")
-        list__obj__box_conf = list_aligner__result.get__key("list__obj__box_conf")
-        for i_obj, (id_class, conf) in enumerate(
-            zip(list__obj__id_class, list__obj__box_conf)
-        ):
-            if conf < map__id_class__to__thresh_conf[id_class]:
-                list__index__to_pop.append(i_obj)
-
-        list_aligner__result.pop__indexes(list__index__to_pop)
-
-        dict__result = list_aligner__result.item()
-
-        with open(path__file__lbl__output, "w") as f:
-            json.dump(dict__result, f, indent=4)
+    with Pool(processes=num_workers) as pool:
+        list(
+            tqdm(
+                pool.imap_unordered(
+                    _filter__detection__result__by__conf__core,
+                    list__kwargs,
+                    chunksize=1,
+                ),
+                total=len(list__name__file__lbl),
+            )
+        )
 
 
 def helper__filter__detection__result__by__miniou(**kwargs):
@@ -296,52 +330,81 @@ def helper__filter__detection__result__by__miniou(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
-def helper__filter__detection__result__by__roi(**kwargs):
+def _filter__detection__result__by__roi__core(kwargs):
+    name__file__lbl = kwargs["name__file__lbl"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    roi__polygon = kwargs["roi__polygon"]
+    roi_area = kwargs["roi_area"]
+    thresh__miniou = kwargs["thresh__miniou"]
 
-    import os
-    import json
-    from tqdm import tqdm
-    import numpy as np
-    from shapely.geometry import Polygon
+    path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+    path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+    with open(path__file__lbl__input, "r") as f:
+        dict__result = json.load(f)
+
+    list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+
+    list__obj__box_xcycwhn = list_aligner__result.get__key("list__obj__box_xcycwhn")
+    list__obj__box_polygonn = xcycwh__to__polygon(
+        np.array(list__obj__box_xcycwhn).reshape(-1, 4)
+    )
+
+    list__index__to_pop = []
+    for i_obj, box_polygon in enumerate(list__obj__box_polygonn):
+        box_polygon = Polygon(box_polygon.reshape(-1, 2))
+        box_area = box_polygon.area
+        inter_area = roi__polygon.intersection(box_polygon).area
+        miniou = inter_area / min(box_area, roi_area)
+        if miniou < thresh__miniou:
+            list__index__to_pop.append(i_obj)
+
+    list_aligner__result.pop__indexes(list__index__to_pop)
+
+    dict__result = list_aligner__result.item()
+    with open(path__file__lbl__output, "w") as f:
+        json.dump(dict__result, f, indent=4)
+
+
+def helper__filter__detection__result__by__roi(**kwargs):
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     roi__polygonn = np.array(kwargs["roi__polygonn"]).reshape(-1, 2)
     thresh__miniou = kwargs["thresh__miniou"]
+    num_workers = kwargs["num_workers"]
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
     roi__polygon = Polygon(roi__polygonn)
     roi_area = roi__polygon.area
 
-    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
-        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
-        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+    list__name__file__lbl = sorted(os.listdir(path__dir__lbl__input))
 
-        with open(path__file__lbl__input, "r") as f:
-            dict__result = json.load(f)
-
-        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
-
-        list__obj__box_xcycwhn = list_aligner__result.get__key("list__obj__box_xcycwhn")
-        list__obj__box_polygonn = xcycwh__to__polygon(
-            np.array(list__obj__box_xcycwhn).reshape(-1, 4)
+    list__kwargs = [
+        dict(
+            name__file__lbl=name__file__lbl,
+            path__dir__lbl__input=path__dir__lbl__input,
+            path__dir__lbl__output=path__dir__lbl__output,
+            roi__polygon=roi__polygon,
+            roi_area=roi_area,
+            thresh__miniou=thresh__miniou,
         )
+        for name__file__lbl in list__name__file__lbl
+    ]
 
-        list__index__to_pop = []
-        for i_obj, box_polygon in enumerate(list__obj__box_polygonn):
-            box_polygon = Polygon(box_polygon.reshape(-1, 2))
-            box_area = box_polygon.area
-            inter_area = roi__polygon.intersection(box_polygon).area
-            miniou = inter_area / min(box_area, roi_area)
-            if miniou < thresh__miniou:
-                list__index__to_pop.append(i_obj)
-
-        list_aligner__result.pop__indexes(list__index__to_pop)
-
-        dict__result = list_aligner__result.item()
-        with open(path__file__lbl__output, "w") as f:
-            json.dump(dict__result, f, indent=4)
+    with Pool(processes=num_workers) as pool:
+        list(
+            tqdm(
+                pool.imap_unordered(
+                    _filter__detection__result__by__roi__core,
+                    list__kwargs,
+                    chunksize=1,
+                ),
+                total=len(list__name__file__lbl),
+            )
+        )
 
 
 def helper__draw__imgdir(**kwargs):
@@ -1321,6 +1384,8 @@ class ExtractCropsFromDetectionCore:
         ratio_pad_h = kwargs["ratio_pad_h"]
         pad_for_image_only = kwargs["pad_for_image_only"]
 
+        assert split_by in [None, "id__track", "id__class"]
+
         if pad_for_image_only is False:
             raise NotImplementedError("Please implement for this option")
 
@@ -1492,76 +1557,90 @@ class ExtractCropsFromDetectionCore:
         return ret
 
 
+def _extract__crops__from__detection__core(kwargs):
+    path__file__lbl = kwargs["path__file__lbl"]
+    to_save__img = kwargs["to_save__img"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+
+    predictor = ExtractCropsFromDetectionCore(**kwargs)
+
+    if not os.path.exists(path__file__lbl):
+        if is_ok__lbl_not_exist:
+            return
+        else:
+            raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
+
+    with open(path__file__lbl, "r") as f:
+        dict__result = json.load(f)
+
+    ret = predictor.predict(
+        dict__result=dict__result,
+        **kwargs,
+    )
+
+    for i_obj, crop_data in enumerate(ret):
+        crop_img = crop_data["crop_img"]
+        dict__result__crop = crop_data["dict__result__crop"]
+        path__file__crop__img__output = crop_data["path__file__crop__img__output"]
+        path__file__crop__lbl__output = crop_data["path__file__crop__lbl__output"]
+
+        if to_save__img and crop_img is not None:
+            os.makedirs(os.path.dirname(path__file__crop__img__output), exist_ok=True)
+            cv2.imwrite(path__file__crop__img__output, crop_img)
+
+        os.makedirs(os.path.dirname(path__file__crop__lbl__output), exist_ok=True)
+        with open(path__file__crop__lbl__output, "w") as f:
+            json.dump(dict__result__crop, f, indent=4)
+
+
 def helper__extract__crops__from__detection__imgdir(**kwargs):
 
     LOGGER.warning(
         "Please consider generalize this function with helper__extract__crops__with__mask__from__segmentation. These functions have something in common."
     )
 
-    import os
-    import json
-    from tqdm import tqdm
-    import cv2
-    import numpy as np
-
     path__dir__img__input = kwargs["path__dir__img__input"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
-    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
-    split_by = kwargs["split_by"]
     to_save__img = kwargs["to_save__img"]
-
-    assert split_by in [None, "id__track", "id__class"]
+    num_workers = kwargs["num_workers"]
 
     if to_save__img:
         list__name__file = sorted(os.listdir(path__dir__img__input))
     else:
         list__name__file = sorted(os.listdir(path__dir__lbl__input))
 
-    predictor = ExtractCropsFromDetectionCore(**kwargs)
-
+    list__kwargs = []
     for name__file in tqdm(list__name__file):
         if to_save__img:
             name__file__img = name__file
             name__file__lbl = os.path.splitext(name__file)[0] + ".json"
             path__file__img = os.path.join(path__dir__img__input, name__file__img)
+            img__bgr = cv2.imread(path__file__img)
         else:
             name__file__lbl = name__file
+            img__bgr = None
         path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
 
-        if not os.path.exists(path__file__lbl):
-            if is_ok__lbl_not_exist:
-                continue
-            else:
-                raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
-
-        with open(path__file__lbl, "r") as f:
-            dict__result = json.load(f)
-
-        if to_save__img:
-            img__bgr = cv2.imread(path__file__img)
-
-        ret = predictor.predict(
-            img__bgr=img__bgr,
-            dict__result=dict__result,
-            name__file__lbl=name__file__lbl,
-            **kwargs,
+        list__kwargs.append(
+            dict(
+                name__file__lbl=name__file__lbl,
+                path__file__lbl=path__file__lbl,
+                img__bgr=img__bgr,
+                **kwargs,
+            )
         )
 
-        for i_obj, crop_data in enumerate(ret):
-            crop_img = crop_data["crop_img"]
-            dict__result__crop = crop_data["dict__result__crop"]
-            path__file__crop__img__output = crop_data["path__file__crop__img__output"]
-            path__file__crop__lbl__output = crop_data["path__file__crop__lbl__output"]
-
-            if to_save__img:
-                os.makedirs(
-                    os.path.dirname(path__file__crop__img__output), exist_ok=True
-                )
-                cv2.imwrite(path__file__crop__img__output, crop_img)
-
-            os.makedirs(os.path.dirname(path__file__crop__lbl__output), exist_ok=True)
-            with open(path__file__crop__lbl__output, "w") as f:
-                json.dump(dict__result__crop, f, indent=4)
+    with Pool(processes=num_workers) as pool:
+        list(
+            tqdm(
+                pool.imap_unordered(
+                    _extract__crops__from__detection__core,
+                    list__kwargs,
+                    chunksize=1,
+                ),
+                total=len(list__kwargs),
+            )
+        )
 
 
 def helper__extract__crops__from__detection__video(**kwargs):
@@ -1570,26 +1649,18 @@ def helper__extract__crops__from__detection__video(**kwargs):
         "Please consider generalize this function with helper__extract__crops__with__mask__from__segmentation. These functions have something in common."
     )
 
-    import os
-    import json
-    from tqdm import tqdm
-    import cv2
-    import numpy as np
-
     path__file__video__input = kwargs["path__file__video__input"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
-    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
-    split_by = kwargs["split_by"]
     to_save__img = kwargs["to_save__img"]
     num__pad__0__frame = kwargs["num__pad__0__frame"]
-
-    assert split_by in [None, "id__track", "id__class"]
+    num_workers = kwargs["num_workers"]
 
     cap = cv2.VideoCapture(path__file__video__input)
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
-    predictor = ExtractCropsFromDetectionCore(**kwargs)
+    list__kwargs = []
 
-    for id__frame in tqdm(range(int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))):
+    for id__frame in tqdm(range(total_frames)):
         if to_save__img:
             success, img__bgr = cap.read()
         else:
@@ -1598,39 +1669,36 @@ def helper__extract__crops__from__detection__video(**kwargs):
         name__file__lbl = f"{id__frame:0{num__pad__0__frame}d}.json"
         path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
 
-        if not os.path.exists(path__file__lbl):
-            if is_ok__lbl_not_exist:
-                continue
-            else:
-                raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
-
-        with open(path__file__lbl, "r") as f:
-            dict__result = json.load(f)
-
-        ret = predictor.predict(
-            img__bgr=img__bgr,
-            dict__result=dict__result,
+        args_for_core = dict(
             name__file__lbl=name__file__lbl,
+            path__file__lbl=path__file__lbl,
+            img__bgr=img__bgr,
             **kwargs,
         )
 
-        for i_obj, crop_data in enumerate(ret):
-            crop_img = crop_data["crop_img"]
-            dict__result__crop = crop_data["dict__result__crop"]
-            path__file__crop__img__output = crop_data["path__file__crop__img__output"]
-            path__file__crop__lbl__output = crop_data["path__file__crop__lbl__output"]
-
-            if to_save__img:
-                os.makedirs(
-                    os.path.dirname(path__file__crop__img__output), exist_ok=True
-                )
-                cv2.imwrite(path__file__crop__img__output, crop_img)
-
-            os.makedirs(os.path.dirname(path__file__crop__lbl__output), exist_ok=True)
-            with open(path__file__crop__lbl__output, "w") as f:
-                json.dump(dict__result__crop, f, indent=4)
+        if to_save__img:
+            # Strategy 1: Sequential Processing (calls core directly)
+            _extract__crops__from__detection__core(args_for_core)
+        else:
+            # Strategy 2: Multi-Processing (collects args for pool)
+            list__kwargs.append(args_for_core)
 
     cap.release()
+
+    if not to_save__img:
+        # 2. Process label files concurrently using multiprocessing
+        with Pool(processes=num_workers) as pool:
+            list(
+                tqdm(
+                    pool.imap_unordered(
+                        _extract__crops__from__detection__core,
+                        list__kwargs,
+                        chunksize=1,
+                    ),
+                    total=len(list__kwargs),
+                    desc="Processing Labels (Multi-Process)",
+                )
+            )
 
 
 def helper__extract__topdown__pose__imgdir(**kwargs):
