@@ -1,13 +1,13 @@
 PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/fs26/ProtoGCN_v33--left-window-5--right-window-5"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/fs26/v201--satudora_veo3_awlrecord--r1.25-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--v2"
 POSTFIX__DIR__LABEL = ""
 
 NUM__MAX__IMG__TO__VISUALIZE = None
 IS_OK__LBL_NOT_FOUND = False
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw--imgdir/fs26/ProtoGCN_v33--left-window-5--right-window-5"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw--imgdir/fs26/v201--satudora_veo3_awlrecord--r1.25-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--v2"
 
 PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS = (
     "/home/laptq/laptq-fs26-shoplifting-detection/src/configs/class_name.yaml"
@@ -98,7 +98,7 @@ for subpath__dir in MAP__SUBPATH_DIR__TO__:
         path__dir__output=path__dir__output,
         to_concat__original_img=False,
         concat__axis=1,
-        to_draw__id_frame=True,
+        to_draw__id_frame=False,
         id_frame__from="filename",
         lambda__id_frame__from=lambda__id_frame__from,
         to_draw__id_track=True,
