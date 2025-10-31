@@ -57,7 +57,7 @@ def _draw_core(kwargs):
     if output_as == "imgdir":
         path__file__output = os.path.join(path__dir__output, name__file__img)
         cv2.imwrite(path__file__output, img__vis)
-        return None     # Optimization: Don't pickle/return img__vis when using multi-process if already saved
+        return None  # Optimization: Don't pickle/return img__vis when using multi-process if already saved
 
     return {"img__vis": img__vis}
 
@@ -131,7 +131,9 @@ def helper__draw__imgdir(**kwargs):
             if output_as == "video" and (
                 len(ls_kwargs) == num__workers or i_f == len(list__name__file__img) - 1
             ):
-                results = list(pool.imap(_draw_core, ls_kwargs, chunksize=1))
+                results = pool.imap(
+                    _draw_core, ls_kwargs, chunksize=1
+                )  # Don't wrap with list(...) here to avoid "start-stop" pattern that block the main process to wait for the whole batch to finish
                 for r in results:
                     if r is None:
                         continue
@@ -211,12 +213,14 @@ def helper__draw__video(**kwargs):
 
             # Process batch when full or at last frame
             if len(ls_kwargs) == num__workers or id__frame == num_frames - 1:
-                results = list(pool.imap(_draw_core, ls_kwargs, chunksize=1))
+                results = pool.imap(
+                    _draw_core, ls_kwargs, chunksize=1
+                )  # Don't wrap with list(...) here to avoid "start-stop" pattern that block the main process to wait for the whole batch to finish
 
-                if output_as == "video":
-                    for r in results:
-                        if r is None:
-                            continue
+                for r in results:
+                    if r is None:
+                        continue
+                    if output_as == "video":
                         img__vis = r["img__vis"]
 
                         if writer is None:
