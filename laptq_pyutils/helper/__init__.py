@@ -18,8 +18,6 @@ from .detection import (
     helper__filter__detection__result__by__roi,
     helper__filter__image__by__id_class,
     helper__change__detection__id_class,
-    helper__draw__imgdir,
-    helper__draw__video,
     helper__rescale__detection__box,
     helper__erase__classes__on__images,
     helper__cluster__detection__bboxes,
@@ -36,3 +34,7 @@ from .generation import (
 )
 from .depth import helper__depth__estimation
 from .action import helper__major_vote_action
+from .visualization import (
+    helper__draw__imgdir,
+    helper__draw__video,
+)
