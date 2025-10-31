@@ -1,4 +1,4 @@
-PATH__DIR__IMAGE = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
+PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
 POSTFIX__DIR__IMAGE = ""
 
 PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
@@ -7,16 +7,17 @@ POSTFIX__DIR__LABEL = ""
 NUM__MAX__IMG__TO__VISUALIZE = None
 IS_OK__LBL_NOT_FOUND = False
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
-
-PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS = (
-    "/home/laptq/laptq-fs26-shoplifting-detection/src/configs/class_name.yaml"
-)
-PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION = (
-    "/home/laptq/laptq-fs26-shoplifting-detection/src/configs/action_names.yaml"
-)
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/v201--satudora_veo3_awlrecord--r1.25-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--v2"
 
 # Define the map of subpaths
+MAP__SUBPATH_DIR__TO__ = {
+    "shoplifting-25min.mp4": 30,
+    "r9_25min_rotate.mp4": 15,
+}
+# -----
+# import os
+# import glob
+
 # MAP__SUBPATH_DIR__TO__ = {
 #     "shoplifting-25min.mp4": None,
 #     "r9_25min_rotate.mp4": None,
@@ -36,7 +37,7 @@ MAP__SUBPATH_DIR__TO__ = {
 # =============================================================
 import os
 import subprocess
-from laptq_pyutils.helper import helper__draw__imgdir
+from laptq_pyutils.helper import helper__draw__imgdir, helper__draw__video
 from multiprocessing import Pool
 import multiprocessing as mp
 import shutil
@@ -50,29 +51,15 @@ TAG__WARNING = "\033[33m[WARNING]\033[0m"
 
 
 def run_wrapper(kwargs):
+    # =============== imgdir ==============
     print(f"{TAG__INFO} Processing: {kwargs['path__dir__img']}")
-
     helper__draw__imgdir(**kwargs)
+    print(f"{TAG__PASSED} Done: {kwargs['path__dir__img']}")
 
-    num__lbl = len(os.listdir(kwargs["path__dir__lbl"]))
-    num__img_vis = len(os.listdir(kwargs["path__dir__output"]))
-    if (
-        NUM__MAX__IMG__TO__VISUALIZE is not None
-        and num__lbl > NUM__MAX__IMG__TO__VISUALIZE
-    ):
-        num__lbl = NUM__MAX__IMG__TO__VISUALIZE
-    if num__lbl != num__img_vis:
-        print(
-            f"{TAG__WARNING} Number of images and labels do not match: {num__img_vis} != {num__lbl}"
-        )
-        print(f"    [+] {num__lbl} labels")
-        print(f"    [+] {num__img_vis} visualized images")
-
-        exit(1)
-
-    print(
-        f"{TAG__PASSED} Done: {num__lbl} labels == {num__img_vis} visualized images: {kwargs['path__dir__img']}"
-    )
+    # ================ video ================
+    # print(f"{TAG__INFO} Processing: {kwargs['path__file__video']}")
+    # helper__draw__video(**kwargs)
+    # print(f"{TAG__PASSED} Done: {kwargs['path__file__video']}")
 
 
 ls_kwargs = []
@@ -83,24 +70,36 @@ def lambda__id_frame__from(x):
 
 
 # Iterate over the subpaths
-for subpath__dir in MAP__SUBPATH_DIR__TO__:
-    path__dir__img = f"{PATH__DIR__IMAGE}/{subpath__dir}/images{POSTFIX__DIR__IMAGE}"
-    path__dir__lbl = f"{PATH__DIR__LABEL}/{subpath__dir}/labels{POSTFIX__DIR__LABEL}"
-    path__dir__output = f"{PATH__DIR__OUTPUT}/{subpath__dir}/vis{POSTFIX__DIR__LABEL}"
+for subpath in MAP__SUBPATH_DIR__TO__:
+    path__dir__img = f"{PATH__DIR__MEDIA}/{subpath}/images{POSTFIX__DIR__IMAGE}"
+    path__file__video = f"{PATH__DIR__MEDIA}/{subpath}"
+    path__dir__lbl = f"{PATH__DIR__LABEL}/{subpath}/labels{POSTFIX__DIR__LABEL}"
+    path__dir__output = f"{PATH__DIR__OUTPUT}/{subpath}/vis{POSTFIX__DIR__LABEL}"
+    path__file__output = f"{PATH__DIR__OUTPUT}/{subpath}"
 
     if os.path.exists(path__dir__output):
-        shutil.rmtree(path__dir__output)
-    os.makedirs(path__dir__output)
+        os.system(f"rm -rf {path__dir__output}")
+    if os.path.exists(path__file__output):
+        os.system(f"rm -rf {path__file__output}")
+
+    fps = MAP__SUBPATH_DIR__TO__[subpath]
 
     kwargs = dict(
         path__dir__img=path__dir__img,
+        path__file__video=path__file__video,
         path__dir__lbl=path__dir__lbl,
+        output_as="video",  # imgdir, video
         path__dir__output=path__dir__output,
-        to_concat__original_img=False,
-        concat__axis=1,
-        to_draw__id_frame=True,
+        path__file__output=path__file__output,
+        num__workers=10,
+        num__max__img=NUM__MAX__IMG__TO__VISUALIZE,
+        seed=42,
+        to_draw__id_frame=False,
         id_frame__from="filename",
         lambda__id_frame__from=lambda__id_frame__from,
+        fps=fps,
+        fourcc="mp4v",
+        num__pad__0=9,
         to_draw__id_track=True,
         to_draw__box_x1y1whn=True,
         to_draw__box_polygon=False,
@@ -120,10 +119,6 @@ for subpath__dir in MAP__SUBPATH_DIR__TO__:
         box_color_by="id__track",
         displacement_key="list__obj__kpts_displacement_average",
         speed_key="list__obj__kpts_speed_relative",
-        path__file__map__id_class__to__name_class=PATH__FILE__MAP__ID_CLASS__TO__NAME_CLASS,
-        path__file__map__id_action__to__name_action=PATH__FILE__MAP__ID_ACTION__TO__NAME_ACTION,
-        num__max__img=NUM__MAX__IMG__TO__VISUALIZE,
-        seed=42,
         is_ok__lbl_not_exist=IS_OK__LBL_NOT_FOUND,
         list__keypoints_same_color=[
             ["left_eye", "right_eye", "left_ear", "right_ear"],
@@ -218,15 +213,72 @@ for subpath__dir in MAP__SUBPATH_DIR__TO__:
         #     "left_ankle",
         #     "right_ankle",
         # ],
+        map__id_class__to__name_class=None,
+        map__id_action__to__name_action={
+            # "0": "",
+            # "1": "SHOPLIFTING",
+            # "unk": "",
+            #
+            # "0": "falling",
+            # "1": "kicking",
+            # "2": "punching",
+            # "3": "pushing",
+            # "4": "sitting_down",
+            # "5": "standing_up",
+            # "6": "walking",
+            # "7": "standing",
+            # "unk": "",
+            #
+            # "0": "falling",
+            # "1": "violence",
+            # "2": "violence",
+            # "3": "violence",
+            # "4": "",
+            # "5": "",
+            # "6": "",
+            # "7": "",
+            # "unk": "",
+            #
+            # "A043": "falling",
+            # "A024": "kicking",
+            # "A051": "kicking",
+            # "A100": "kicking backward",
+            # "A102": "side kicking",
+            # "A050": "punching",
+            # "A052": "pushing",
+            # "A008": "sitting_down",
+            # "A009": "standing_up",
+            # "A059": "walking",
+            # "A060": "walking",
+            #
+            "0": "dung",
+            "1": "dung day",
+            "2": "ngoi",
+            "3": "ngoi xuong",
+            "4": "di lai",
+            "5": "dua tay vao nguoi",
+            "6": "rut tay khoi tui",
+            "7": "rut tay khoi nguoi",
+            "8": "dua tay ra truoc",
+            "9": "tuong tac phia truoc",
+            "10": "tay cam vat the",
+            "11": "rut tay ve",
+            "12": "GIAU -> TUI QUAN",
+            "13": "GIAU -> TUI AO/XACH",
+            "14": "GIAU -> TUI trong GIO",
+            "15": "GIAU -> CO AO",
+            "16": "GIAU -> GIAY",
+            "unk": "",
+        },
     )
 
     ls_kwargs.append(kwargs)
 
 
 # ============ sequential =============
-# for kwargs in ls_kwargs:
-#     run_wrapper(kwargs)
+for kwargs in ls_kwargs:
+    run_wrapper(kwargs)
 # ============ multi-process run ============
-with Pool(10) as p:
-    p.map(run_wrapper, ls_kwargs)
+# with Pool(10) as p:
+#     p.map(run_wrapper, ls_kwargs)
 # ===================================
