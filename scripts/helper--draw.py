@@ -1,4 +1,5 @@
 PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
+# PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/data/test-videos"
 POSTFIX__DIR__IMAGE = ""
 
 PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/fs26/v201--satudora_veo3_awlrecord--r1.25-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--v2"
