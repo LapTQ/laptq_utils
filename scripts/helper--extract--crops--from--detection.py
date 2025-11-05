@@ -1,15 +1,12 @@
 # Define paths and postfixes
 # PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
-PATH__DIR__MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
+PATH__DIR__MEDIA = "/media/home4/free_space/bachws/actiondata/awlvn_shopping_ds/videos"
 POSTFIX__DIR__IMAGE = ""
 
-# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26/satudora"
-# POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
-# POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--filter--detection--result--by--conf/fs26/satudora"
-POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--all-keypoints--RTMPose--JSON"
+PATH__DIR__LABEL = "/media/home4/free_space/bachws/actiondata/awlvn_shopping_ds/tracking_labels"
+POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26/satudora--filter-roi--filter-conf--RTMPose"
+PATH__DIR__OUTPUT = "/media/home4/free_space/bachws/actiondata/awlvn_shopping_ds/train/track"
 POSTFIX__DIR__OUTPUT = ""
 
 # # Define the map of subpaths
@@ -108,9 +105,9 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
 
 
 # ============ sequential =============
-for kwargs in ls_kwargs:
-    run_wrapper(kwargs)
+# for kwargs in ls_kwargs:
+#     run_wrapper(kwargs)
 # ============ multi-process run ============
-# with Pool(10) as p:
-#     p.map(run_wrapper, ls_kwargs)
+with Pool(10) as p:
+    p.map(run_wrapper, ls_kwargs)
 # ===================================
