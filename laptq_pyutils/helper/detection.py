@@ -830,6 +830,8 @@ def helper__rescale__detection__box(**kwargs):
     import PIL.Image
 
     path__dir__img = kwargs["path__dir__img"]
+    path__file__video = kwargs["path__file__video"]
+    type_media = kwargs["type_media"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     ratio__w = kwargs["ratio__w"]
@@ -839,6 +841,8 @@ def helper__rescale__detection__box(**kwargs):
     cut__w__max = kwargs["cut__w__max"]
     cut__h__max = kwargs["cut__h__max"]
 
+    assert type_media in ["imgdir", "video"]
+
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
     to__get__img__size = (
@@ -847,25 +851,15 @@ def helper__rescale__detection__box(**kwargs):
         or cut__w__max is not None
         or cut__h__max is not None
     )
+    list__name__file__lbl = sorted(os.listdir(path__dir__lbl__input))
+
     if to__get__img__size:
-        list__name__file__img = []
-        list__name__file__lbl = []
-        for name__file__img in sorted(os.listdir(path__dir__img)):
-            name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
-            path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
+        if type_media == "video":
+            cap = cv2.VideoCapture(path__file__video)
+            W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            H = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-            if not os.path.exists(path__file__lbl):
-                continue
-
-            list__name__file__img.append(name__file__img)
-            list__name__file__lbl.append(name__file__lbl)
-    else:
-        list__name__file__lbl = sorted(os.listdir(path__dir__lbl__input))
-        list__name__file__img = [None] * len(list__name__file__lbl)
-
-    for name__file__img, name__file__lbl in tqdm(
-        zip(list__name__file__img, list__name__file__lbl)
-    ):
+    for name__file__lbl in tqdm(list__name__file__lbl):
         path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
         path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
 
@@ -873,8 +867,16 @@ def helper__rescale__detection__box(**kwargs):
             dict__result = json.load(f)
 
         if to__get__img__size:
-            path__file__img = os.path.join(path__dir__img, name__file__img)
-            W, H = PIL.Image.open(path__file__img).size
+            if type_media == "imgdir":
+                name__file__img = (
+                    os.path.splitext(name__file__img)[0] + ".jpg"
+                )  # I'm so lazy to generalize to other extensions!!!
+                path__file__img = os.path.join(path__dir__img, name__file__img)
+
+                if not os.path.exists(path__file__img):
+                    continue
+
+                W, H = PIL.Image.open(path__file__img).size
 
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
         for i_b, box in enumerate(list__obj__box_xcycwhn):
@@ -1132,17 +1134,12 @@ class ExtractCropsFromDetectionCore:
         to_resize_box__wrt__pose = kwargs["to_resize_box__wrt__pose"]
         to_shift__coords__wrt__box = kwargs["to_shift__coords__wrt__box"]
         split_by = kwargs["split_by"]
+        to_add_crop_index_to_name = kwargs['to_add_crop_index_to_name']
         path__dir__crop__img__output = kwargs["path__dir__crop__img__output"]
         path__dir__crop__lbl__output = kwargs["path__dir__crop__lbl__output"]
         num__pad__0__crop = kwargs["num__pad__0__crop"]
-        ratio_pad_w = kwargs["ratio_pad_w"]
-        ratio_pad_h = kwargs["ratio_pad_h"]
-        pad_for_image_only = kwargs["pad_for_image_only"]
 
         assert split_by in [None, "id__track", "id__class"]
-
-        if pad_for_image_only is False:
-            raise NotImplementedError("Please implement for this option")
 
         if to_save__img:
             H, W = img__bgr.shape[:2]
@@ -1224,22 +1221,6 @@ class ExtractCropsFromDetectionCore:
                 b_x2 = int(b_x2n * W)
                 b_y2 = int(b_y2n * H)
 
-                # pad_for_image_only
-                b_xc = (b_x1 + b_x2) // 2
-                b_yc = (b_y1 + b_y2) // 2
-                b_w = b_x2 - b_x1
-                b_h = b_y2 - b_y1
-                b_w = int(b_w * (1 + ratio_pad_w))
-                b_h = int(b_h * (1 + ratio_pad_h))
-                b_x1 = b_xc - b_w // 2
-                b_y1 = b_yc - b_h // 2
-                b_x2 = b_x1 + b_w
-                b_y2 = b_y1 + b_h
-                b_x1 = max(0, b_x1)
-                b_y1 = max(0, b_y1)
-                b_x2 = min(W, b_x2)
-                b_y2 = min(H, b_y2)
-
                 crop_img = img__bgr[b_y1:b_y2, b_x1:b_x2]
 
             if to_shift__coords__wrt__box:
@@ -1287,8 +1268,9 @@ class ExtractCropsFromDetectionCore:
             path__file__crop__img__output = (
                 os.path.join(
                     __path__dir__crop__img__output,
-                    "{}--crop-{:0{}}.jpg".format(
-                        os.path.splitext(name__file__lbl)[0], i_obj, num__pad__0__crop
+                    "{}{}.jpg".format(
+                        os.path.splitext(name__file__lbl)[0],
+                        "--crop-{:0{}}".format(i_obj, num__pad__0__crop) if to_add_crop_index_to_name is True else ""
                     ),
                 )
                 if to_save__img
@@ -1297,8 +1279,9 @@ class ExtractCropsFromDetectionCore:
 
             path__file__crop__lbl__output = os.path.join(
                 __path__dir__crop__lbl__output,
-                "{}--crop-{:0{}}.json".format(
-                    os.path.splitext(name__file__lbl)[0], i_obj, num__pad__0__crop
+                "{}{}.json".format(
+                    os.path.splitext(name__file__lbl)[0],
+                    "--crop-{:0{}}".format(i_obj, num__pad__0__crop) if to_add_crop_index_to_name is True else ""
                 ),
             )
 
