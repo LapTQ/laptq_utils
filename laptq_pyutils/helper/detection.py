@@ -1183,6 +1183,8 @@ class ExtractCropsFromDetectionCore:
                 k_xnmax = -1e9
                 k_ynmax = -1e9
                 for k_xn, k_yn in kpts_xyn.values():
+                    if k_xn == 0 and k_yn == 0:
+                        continue
                     if k_xn < k_xnmin:
                         k_xnmin = k_xn
                     if k_yn < k_ynmin:
