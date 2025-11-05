@@ -93,14 +93,12 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
         path__dir__crop__lbl__output=path__dir__crop__lbl__output,
         is_ok__lbl_not_exist=False,
         num__pad__0__frame=9,
-        num__pad__0__crop=6,
         to_resize_box__wrt__pose=True,
         to_shift__coords__wrt__box=True,
-        to_save__img=False,
-        ratio_pad_w=0,
-        ratio_pad_h=0,
-        pad_for_image_only=True,  # WARN: this padding is serverd mainly for better crop visualization purpose. You must inspect source code for other purpose
+        to_save__img=True,
         split_by="id__track",  # "id__track" # if not None, please add a "/{}" before /images and /labels assuming there's an /images and /labels in path__dir__crop__img__output and path__dir__crop__lbl__output
+        to_add_crop_index_to_name=False,
+        num__pad__0__crop=6,
         num_workers=30,
     )
 
