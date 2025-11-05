@@ -3,10 +3,10 @@
 PATH__DIR__MEDIA = "/media/home4/free_space/bachws/actiondata/awlvn_shopping_ds/videos"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/media/home4/free_space/bachws/actiondata/awlvn_shopping_ds/tracking_labels"
-POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+PATH__DIR__LABEL = "/home/lap_awlv/laptq-nedo/outputs/helper--rescale--detection--box"
+POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--rescale-box--JSON"
 
-PATH__DIR__OUTPUT = "/media/home4/free_space/bachws/actiondata/awlvn_shopping_ds/train/track"
+PATH__DIR__OUTPUT = "/home/lap_awlv/laptq-nedo/outputs/helper--extract--crops--from--detection"
 POSTFIX__DIR__OUTPUT = ""
 
 # # Define the map of subpaths
