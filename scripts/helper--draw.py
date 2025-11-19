@@ -2,13 +2,13 @@ PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-
 # PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/data/test-videos"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/fs26/v201--satudora_veo3_awlrecord--r1.25-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--v2"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/fs26/v206--satudora_veo3_awlrecord--r2.4-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--12-kpts"
 POSTFIX__DIR__LABEL = ""
 
 NUM__MAX__IMG__TO__VISUALIZE = None
 IS_OK__LBL_NOT_FOUND = False
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/v201--satudora_veo3_awlrecord--r1.25-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--v2"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/v206--satudora_veo3_awlrecord--r2.4-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--12-kpts"
 
 # Define the map of subpaths
 MAP__SUBPATH_DIR__TO__ = {
@@ -81,7 +81,7 @@ for subpath in MAP__SUBPATH_DIR__TO__:
         path__dir__img=path__dir__img,
         path__file__video=path__file__video,
         path__dir__lbl=path__dir__lbl,
-        output_as="video",  # imgdir, video
+        output_as="imgdir",  # imgdir, video
         path__dir__output=path__dir__output,
         path__file__output=path__file__output,
         num__workers=10,
@@ -164,29 +164,29 @@ for subpath in MAP__SUBPATH_DIR__TO__:
             ],
         ],
         list__keypoints_to_exclude=[],
-        list__keypoints_to_include=[
-            "left_shoulder",
-            "right_shoulder",
-            "left_elbow",
-            "right_elbow",
-            "left_wrist",
-            "right_wrist",
-        ],
         # list__keypoints_to_include=[
-        #     "nose",
         #     "left_shoulder",
         #     "right_shoulder",
         #     "left_elbow",
         #     "right_elbow",
         #     "left_wrist",
         #     "right_wrist",
-        #     "left_hip",
-        #     "right_hip",
-        #     "left_knee",
-        #     "right_knee",
-        #     "left_ankle",
-        #     "right_ankle",
         # ],
+        list__keypoints_to_include=[
+            # "nose",
+            "left_shoulder",
+            "right_shoulder",
+            "left_elbow",
+            "right_elbow",
+            "left_wrist",
+            "right_wrist",
+            "left_hip",
+            "right_hip",
+            "left_knee",
+            "right_knee",
+            "left_ankle",
+            "right_ankle",
+        ],
         # list__keypoints_to_include=[
         #     "nose",
         #     "left_eye",
