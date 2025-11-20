@@ -3,6 +3,7 @@ import os
 import json
 import numpy as np
 import cv2
+import PIL.Image as PILImage
 from shapely.geometry import Polygon
 from tqdm import tqdm
 from multiprocessing import Pool
@@ -1127,6 +1128,7 @@ class ExtractCropsFromDetectionCore:
         pass
 
     def predict(self, **kwargs):
+        path__file__img = kwargs["path__file__img"]
         img__bgr = kwargs["img__bgr"]
         dict__result = kwargs["dict__result"]
         name__file__lbl = kwargs["name__file__lbl"]
@@ -1134,15 +1136,19 @@ class ExtractCropsFromDetectionCore:
         to_resize_box__wrt__pose = kwargs["to_resize_box__wrt__pose"]
         to_shift__coords__wrt__box = kwargs["to_shift__coords__wrt__box"]
         split_by = kwargs["split_by"]
-        to_add_crop_index_to_name = kwargs['to_add_crop_index_to_name']
+        to_add_crop_index_to_name = kwargs["to_add_crop_index_to_name"]
         path__dir__crop__img__output = kwargs["path__dir__crop__img__output"]
         path__dir__crop__lbl__output = kwargs["path__dir__crop__lbl__output"]
         num__pad__0__crop = kwargs["num__pad__0__crop"]
 
         assert split_by in [None, "id__track", "id__class"]
 
-        if to_save__img:
-            H, W = img__bgr.shape[:2]
+        if img__bgr is None:
+            if to_save__img:
+                img__bgr = cv2.imread(path__file__img)
+                H, W = img__bgr.shape[:2]
+            else:
+                H, W = PILImage.open(path__file__img).size[::-1]
 
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
         list__obj__id_track = dict__result.get(
@@ -1270,7 +1276,11 @@ class ExtractCropsFromDetectionCore:
                     __path__dir__crop__img__output,
                     "{}{}.jpg".format(
                         os.path.splitext(name__file__lbl)[0],
-                        "--crop-{:0{}}".format(i_obj, num__pad__0__crop) if to_add_crop_index_to_name is True else ""
+                        (
+                            "--crop-{:0{}}".format(i_obj, num__pad__0__crop)
+                            if to_add_crop_index_to_name is True
+                            else ""
+                        ),
                     ),
                 )
                 if to_save__img
@@ -1281,7 +1291,11 @@ class ExtractCropsFromDetectionCore:
                 __path__dir__crop__lbl__output,
                 "{}{}.json".format(
                     os.path.splitext(name__file__lbl)[0],
-                    "--crop-{:0{}}".format(i_obj, num__pad__0__crop) if to_add_crop_index_to_name is True else ""
+                    (
+                        "--crop-{:0{}}".format(i_obj, num__pad__0__crop)
+                        if to_add_crop_index_to_name is True
+                        else ""
+                    ),
                 ),
             )
 
@@ -1355,16 +1369,17 @@ def helper__extract__crops__from__detection__imgdir(**kwargs):
             name__file__img = name__file
             name__file__lbl = os.path.splitext(name__file)[0] + ".json"
             path__file__img = os.path.join(path__dir__img__input, name__file__img)
-            img__bgr = cv2.imread(path__file__img)
         else:
             name__file__lbl = name__file
-            img__bgr = None
+            path__file__img = None
+        img__bgr = None
         path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
 
         list__kwargs.append(
             dict(
                 name__file__lbl=name__file__lbl,
                 path__file__lbl=path__file__lbl,
+                path__file__img=path__file__img,
                 img__bgr=img__bgr,
                 **kwargs,
             )
