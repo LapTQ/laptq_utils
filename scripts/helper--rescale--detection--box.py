@@ -2,30 +2,30 @@ PATH__DIR__MEDIA = "/media/home4/free_space/bachws/actiondata/awlvn_shopping_ds/
 POSTFIX__DIR__IMAGE = ""
 
 PATH__DIR__LABEL__INPUT = (
-    "/media/home4/free_space/bachws/actiondata/awlvn_shopping_ds/tracking_labels"
+    "/home/laptq/laptq-fs26-shoplifting-detection/data/ground-truth/fs26"
 )
-POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+POSTFIX__DIR__LABEL__INPUT = ""
 
 PATH__DIR__LABEL__OUTPUT = (
-    "/home/lap_awlv/laptq-nedo/outputs/helper--rescale--detection--box"
+    "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--rescale--detection--box/fs26/ground-truth"
 )
-POSTFIX__DIR__LABEL__OUTPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--rescale-box--JSON"
+POSTFIX__DIR__LABEL__OUTPUT = ""
 
-# # Define the map of subpaths
-# MAP__SUBPATH_MEDIA__TO__ = {
-#     "shoplifting-25min.mp4": None,
-#     "r9_25min_rotate.mp4": None,
-# }
-# -----
-import os
-import glob
-
+# Define the map of subpaths
 MAP__SUBPATH_MEDIA__TO__ = {
-    p[len(PATH__DIR__MEDIA) + 1 :]: None
-    for p in glob.glob(f"{PATH__DIR__MEDIA}/*.mp4")
-    # if os.path.isdir(p)
-    if os.path.isfile(p)
+    "shoplifting-25min.mp4": None,
+    # "r9_25min_rotate.mp4": None,
 }
+# -----
+# import os
+# import glob
+
+# MAP__SUBPATH_MEDIA__TO__ = {
+#     p[len(PATH__DIR__MEDIA) + 1 :]: None
+#     for p in glob.glob(f"{PATH__DIR__MEDIA}/*.mp4")
+#     # if os.path.isdir(p)
+#     if os.path.isfile(p)
+# }
 
 # =============================================================
 import os
@@ -85,7 +85,7 @@ for subpath in MAP__SUBPATH_MEDIA__TO__:
     kwargs = dict(
         path__dir__img=path__dir__img,
         path__file__video=path__file__video,
-        type_media="video",  # imgdir, video
+        type_media="imgdir",  # imgdir, video
         path__dir__lbl__input=path__dir__lbl__input,
         path__dir__lbl__output=path__dir__lbl__output,
         ratio__w=2,
