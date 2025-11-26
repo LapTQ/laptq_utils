@@ -66,7 +66,7 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
     path__dir__img__input = (
         f"{PATH__DIR__MEDIA}/{subpath__dir}/images{POSTFIX__DIR__IMAGE}"
     )
-    # path__file__video__input = f"{PATH__DIR__MEDIA}/{subpath__dir}"
+    path__file__video__input = f"{PATH__DIR__MEDIA}/{subpath__dir}"
     path__dir__lbl__input = (
         f"{PATH__DIR__LABEL}/{subpath__dir}/labels{POSTFIX__DIR__LABEL}"
     )
@@ -89,7 +89,7 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
 
     kwargs = dict(
         path__dir__img__input=path__dir__img__input,
-        # path__file__video__input=path__file__video__input,
+        path__file__video__input=path__file__video__input,
         path__dir__lbl__input=path__dir__lbl__input,
         path__dir__crop__img__output=path__dir__crop__img__output,
         path__dir__crop__lbl__output=path__dir__crop__lbl__output,
@@ -98,6 +98,7 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
         to_resize_box__wrt__pose=True,
         to_shift__coords__wrt__box=True,
         to_save__img=True,
+        to_save__lbl=False,
         split_by="id__track",  # "id__track" # if not None, please add a "/{}" before /images and /labels assuming there's an /images and /labels in path__dir__crop__img__output and path__dir__crop__lbl__output
         to_add_crop_index_to_name=True,
         num__pad__0__crop=6,
@@ -108,9 +109,9 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
 
 
 # ============ sequential =============
-for kwargs in ls_kwargs:
-    run_wrapper(kwargs)
+# for kwargs in ls_kwargs:
+#     run_wrapper(kwargs)
 # ============ multi-process run ============
-# with Pool(10) as p:
-#     p.map(run_wrapper, ls_kwargs)
+with Pool(10) as p:
+    p.map(run_wrapper, ls_kwargs)
 # ===================================
