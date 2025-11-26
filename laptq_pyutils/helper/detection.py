@@ -1149,6 +1149,8 @@ class ExtractCropsFromDetectionCore:
                 H, W = img__bgr.shape[:2]
             else:
                 H, W = PILImage.open(path__file__img).size[::-1]
+        else:
+            H, W = img__bgr.shape[:2]
 
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
         list__obj__id_track = dict__result.get(
@@ -1315,6 +1317,7 @@ def _extract__crops__from__detection__core(kwargs):
     path__file__lbl = kwargs["path__file__lbl"]
     to_save__img = kwargs["to_save__img"]
     is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    to_save__lbl = kwargs["to_save__lbl"]
 
     predictor = ExtractCropsFromDetectionCore(**kwargs)
 
@@ -1342,9 +1345,10 @@ def _extract__crops__from__detection__core(kwargs):
             os.makedirs(os.path.dirname(path__file__crop__img__output), exist_ok=True)
             cv2.imwrite(path__file__crop__img__output, crop_img)
 
-        os.makedirs(os.path.dirname(path__file__crop__lbl__output), exist_ok=True)
-        with open(path__file__crop__lbl__output, "w") as f:
-            json.dump(dict__result__crop, f, indent=4)
+        if to_save__lbl:
+            os.makedirs(os.path.dirname(path__file__crop__lbl__output), exist_ok=True)
+            with open(path__file__crop__lbl__output, "w") as f:
+                json.dump(dict__result__crop, f, indent=4)
 
 
 def helper__extract__crops__from__detection__imgdir(**kwargs):
@@ -1427,6 +1431,7 @@ def helper__extract__crops__from__detection__video(**kwargs):
         args_for_core = dict(
             name__file__lbl=name__file__lbl,
             path__file__lbl=path__file__lbl,
+            path__file__img=None,
             img__bgr=img__bgr,
             **kwargs,
         )
