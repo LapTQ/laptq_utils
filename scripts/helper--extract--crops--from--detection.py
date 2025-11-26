@@ -1,23 +1,31 @@
 # Define paths and postfixes
-PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
-# PATH__DIR__MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
+# PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
+PATH__DIR__MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
 POSTFIX__DIR__IMAGE = ""
 
 # PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26/satudora"
 # POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 # POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
-# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--filter--detection--result--by--conf/fs26/satudora"
-# POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--all-keypoints--RTMPose--JSON"
-PATH__DIR__LABEL = '/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--rescale--detection--box/fs26/ground-truth'
-POSTFIX__DIR__LABEL = ''
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--filter--detection--result--by--conf/fs26/satudora"
+POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--all-keypoints--RTMPose--JSON"
+# PATH__DIR__LABEL = '/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--rescale--detection--box/fs26/ground-truth'
+# POSTFIX__DIR__LABEL = ''
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26/ground-truth"
+# PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26/ground-truth"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26/satudora--filter-roi--filter-conf"
 POSTFIX__DIR__OUTPUT = ""
 
 # Define the map of subpaths
 MAP__SUBPATH_VIDEO__TO__ = {
-    "shoplifting-25min.mp4": None,
+    # "shoplifting-25min.mp4": None,
     # "r9_25min_rotate.mp4": None,
+
+    "R3_2025_05_15_23_40_32_rotate.mp4": None,
+    "R4_2025_05_15_23_40_32_rotate.mp4": None,
+    "R7_2025_05_15_23_40_32_rotate.mp4": None,
+    "R8_2025_05_15_23_40_32_rotate.mp4": None,
+    "R9_2025_05_15_23_40_32_rotate.mp4": None,
+    "R10_2025_05_15_23_40_32_rotate.mp4": None,
 }
 # -----
 # import os
@@ -50,13 +58,13 @@ TAG__WARNING = "\033[33m[WARNING]\033[0m"
 
 
 def run_wrapper(kwargs):
-    print(f"{TAG__INFO} Processing: {kwargs['path__dir__img__input']}")
-    helper__extract__crops__from__detection__imgdir(**kwargs)
-    print(f"{TAG__PASSED} Done: {kwargs['path__dir__img__input']}")
+    # print(f"{TAG__INFO} Processing: {kwargs['path__dir__img__input']}")
+    # helper__extract__crops__from__detection__imgdir(**kwargs)
+    # print(f"{TAG__PASSED} Done: {kwargs['path__dir__img__input']}")
 
-    # print(f"{TAG__INFO} Processing: {kwargs['path__file__video__input']}")
-    # helper__extract__crops__from__detection__video(**kwargs)
-    # print(f"{TAG__PASSED} Done: {kwargs['path__file__video__input']}")
+    print(f"{TAG__INFO} Processing: {kwargs['path__file__video__input']}")
+    helper__extract__crops__from__detection__video(**kwargs)
+    print(f"{TAG__PASSED} Done: {kwargs['path__file__video__input']}")
 
 
 ls_kwargs = []
