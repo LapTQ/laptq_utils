@@ -9,8 +9,9 @@ POSTFIX__DIR__LABEL = ""
 NUM__MAX__IMG__TO__VISUALIZE = None
 IS_OK__LBL_NOT_FOUND = False
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/v206--satudora_veo3_awlrecord--r2.4-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--12-kpts"
-# PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--add--action-frame-txt--to--json"
+OUTPUT_AS = "imgdir"  # imgdir, video
+
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/v201--satudora_veo3_awlrecord--r1.25-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--v2"
 
 # Define the map of subpaths
 MAP__SUBPATH_DIR__TO__ = {
@@ -72,9 +73,9 @@ for subpath in MAP__SUBPATH_DIR__TO__:
     path__dir__output = f"{PATH__DIR__OUTPUT}/{subpath}/vis{POSTFIX__DIR__LABEL}"
     path__file__output = f"{PATH__DIR__OUTPUT}/{subpath}"
 
-    if os.path.exists(path__dir__output):
+    if os.path.exists(path__dir__output) and OUTPUT_AS == "imgdir":
         os.system(f"rm -rf {path__dir__output}")
-    if os.path.exists(path__file__output):
+    if os.path.exists(path__file__output) and OUTPUT_AS == "video":
         os.system(f"rm -rf {path__file__output}")
 
     fps = MAP__SUBPATH_DIR__TO__[subpath]
@@ -83,7 +84,7 @@ for subpath in MAP__SUBPATH_DIR__TO__:
         path__dir__img=path__dir__img,
         path__file__video=path__file__video,
         path__dir__lbl=path__dir__lbl,
-        output_as="imgdir",  # imgdir, video
+        output_as=OUTPUT_AS,
         path__dir__output=path__dir__output,
         path__file__output=path__file__output,
         num__workers=10,
