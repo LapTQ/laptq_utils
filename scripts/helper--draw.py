@@ -2,18 +2,20 @@ PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-
 # PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/data/test-videos"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/ProtoGCN/fs26/v206--satudora_veo3_awlrecord--r2.4-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--12-kpts"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/SkateFormer/fs26/v206--satudora_veo3_awlrecord--r2.4-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--12-kpts"
+# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--add--action-frame-txt--to--json"
 POSTFIX__DIR__LABEL = ""
 
 NUM__MAX__IMG__TO__VISUALIZE = None
 IS_OK__LBL_NOT_FOUND = False
 
 PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/v206--satudora_veo3_awlrecord--r2.4-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--12-kpts"
+# PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--add--action-frame-txt--to--json"
 
 # Define the map of subpaths
 MAP__SUBPATH_DIR__TO__ = {
     "shoplifting-25min.mp4": 30,
-    "r9_25min_rotate.mp4": 15,
+    # "r9_25min_rotate.mp4": 15,
 }
 # -----
 # import os
@@ -99,8 +101,8 @@ for subpath in MAP__SUBPATH_DIR__TO__:
         to_draw__box_conf=False,
         to_draw__id_class=False,
         to_draw__name_class=False,
-        to_draw__pose=True,
-        to_draw__connected_keypoints=True,
+        to_draw__pose=False,
+        to_draw__connected_keypoints=False,
         to_draw__id_action=False,
         to_draw__name_action=True,
         to_draw__action_conf=False,
