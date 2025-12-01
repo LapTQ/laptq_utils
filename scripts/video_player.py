@@ -323,40 +323,42 @@ HTML_CONTENT = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FastAPI Video/Image Streamer</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <title>FastAPI Video/Image Streamer - macOS Style</title>
     <style>
-        /* 🎨 Material Design Colors */
+        /* 🍏 macOS-inspired Colors & Variables */
         :root {
-            --md-primary-color: #3F51B5; /* Indigo 500 */
-            --md-accent-color: #FF4081; /* Pink A200 */
-            --md-text-color-dark: #212121; /* Grey 900 */
-            --md-text-color-light: #757575; /* Grey 600 */
-            --md-surface-color: #FFFFFF;
-            --md-divider-color: #E0E0E0; /* Grey 300 */
-            --md-shadow-1dp: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --macos-accent-color: #007AFF; /* System Blue */
+            --macos-text-color-dark: #1D1D1F; /* Very dark grey */
+            --macos-text-color-light: #8E8E93; /* Light grey for subtle text */
+            --macos-background: #F2F2F7; /* Light grey-purple background */
+            --macos-surface-color: #FFFFFF;
+            --macos-border-color: #D1D1D6; /* Light border grey */
+            --macos-sidebar-bg: #EAEAF0; /* Slightly darker sidebar background */
+            /* Removed Material shadows/elevation */
         }
 
         /* Global Fullscreen Layout */
         body { 
-            font-family: 'Roboto', sans-serif; 
+            /* System font stack: SF Pro Text/Display (Mac), Segoe UI (Win), sans-serif (Generic) */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; 
             display: flex; 
             margin: 0; 
             width: 100vw; 
             height: 100vh; 
             overflow: hidden; 
-            background-color: #f5f5f5; 
-            color: var(--md-text-color-dark);
+            background-color: var(--macos-background); /* Lighter overall background */
+            color: var(--macos-text-color-dark);
         }
 
-        /* File Browser Pane (Component with Elevation) */
+        /* File Browser Pane (Sidebar Style) */
         #browser { 
             width: 300px; 
-            padding: 20px; 
+            padding: 15px; /* Slightly reduced padding */
             box-sizing: border-box; 
             min-width: 250px; 
-            background-color: var(--md-surface-color);
-            box-shadow: var(--md-shadow-1dp); 
+            background-color: var(--macos-sidebar-bg); /* Distinct sidebar color */
+            border-right: 1px solid var(--macos-border-color); /* Subtle separation line */
+            box-shadow: none; /* No elevation */
             z-index: 10; 
             display: flex;
             flex-direction: column;
@@ -371,77 +373,93 @@ HTML_CONTENT = """
             display: flex; 
             flex-direction: column; 
             overflow-y: auto; 
-            background-color: #f5f5f5; 
+            background-color: var(--macos-surface-color); /* White main content area */
         }
         
         /* Typography */
         h2 {
-            font-weight: 500; 
-            color: var(--md-primary-color);
-            margin-top: 10px; /* Adjusted margin since info text is now above */
+            font-weight: 600; /* Slightly bolder for macOS title look */
+            color: var(--macos-text-color-dark);
+            font-size: 18px;
+            margin-top: 5px; 
             margin-bottom: 15px;
         }
 
-        /* Path Controls Container (Vertical Stack) */
+        /* Path Controls Container */
         #path-controls { 
             display: block; 
             margin-bottom: 10px; 
             flex-shrink: 0; 
         }
         
-        /* Container for the buttons (Horizontal Flex) */
+        /* Container for the buttons */
         #path-buttons {
             display: flex; 
             justify-content: flex-end; 
             margin-top: 10px; 
         }
 
-        /* Input Field (Material Underline Style) */
+        /* Input Field (macOS Rounded Style) */
         input[type="text"] { 
             width: 100%; 
-            padding: 8px 0; 
+            padding: 7px 10px; 
             margin-bottom: 5px; 
-            border: none;
-            border-bottom: 2px solid var(--md-divider-color); 
+            border: 1px solid var(--macos-border-color); /* Border instead of underline */
+            border-radius: 6px; /* Rounded corners */
             box-sizing: border-box; 
-            transition: border-bottom-color 0.2s;
-            font-size: 16px;
-            background: transparent;
+            transition: border-color 0.2s;
+            font-size: 14px;
+            background-color: var(--macos-surface-color);
         }
         input[type="text"]:focus {
             outline: none;
-            border-bottom-color: var(--md-primary-color); 
+            border-color: var(--macos-accent-color); /* Highlight with system blue on focus */
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2); /* Subtle blue glow on focus */
         }
 
-        /* 🖼️ Action Button (Raised Button Style) */
+        /* 🖼️ Action Button (macOS Button Style) */
         .action-button { 
-            padding: 8px 15px; 
+            padding: 6px 14px; /* Slightly smaller padding */
             cursor: pointer; 
-            background-color: var(--md-primary-color);
-            color: white; 
-            border: none; 
-            border-radius: 4px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
-            transition: background-color 0.2s, box-shadow 0.2s;
-            text-transform: uppercase;
-            font-weight: 500;
+            background-color: var(--macos-surface-color); /* Light background for default button */
+            color: var(--macos-text-color-dark); 
+            border: 1px solid var(--macos-border-color); /* Light border */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: none; /* No elevation */
+            transition: background-color 0.15s, border-color 0.15s;
+            text-transform: none; /* No uppercase */
+            font-weight: 400; /* Regular weight */
+            font-size: 14px;
             margin-left: 10px;
         }
+        /* Primary/Blue Action Button (e.g., Resolve) */
+        .action-button:first-child, #start-sequence-btn {
+            background-color: var(--macos-accent-color);
+            border-color: var(--macos-accent-color);
+            color: var(--macos-surface-color);
+            font-weight: 500;
+        }
         .action-button:hover {
-            background-color: #3949AB; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.25); 
+            background-color: #E6E6E9; /* Light grey hover for default */
+            border-color: #BDBDC2;
+        }
+        .action-button:first-child:hover, #start-sequence-btn:hover {
+            background-color: #0070E6; /* Slightly darker blue for primary hover */
+            border-color: #0070E6;
         }
         .action-button:active {
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3); 
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Subtle press effect */
         }
         
-        /* Accent Button (for 'Play Image Folder') */
+        /* Accent Button (for 'Play Image Folder') - Re-use primary style for emphasis */
         #play-image-folder-btn { 
-            background-color: var(--md-accent-color); 
-            margin-left: 10px; 
+            background-color: var(--macos-accent-color); 
+            border-color: var(--macos-accent-color);
+            color: var(--macos-surface-color);
+            font-weight: 500;
             display: none; 
         }
-        #play-image-folder-btn:hover { background-color: #F73378; }
+        #play-image-folder-btn:hover { background-color: #0070E6; }
         
         /* Scrolling Container */
         #file-list-container {
@@ -451,132 +469,142 @@ HTML_CONTENT = """
         }
 
         #status-message { 
-            color: var(--md-accent-color); 
+            color: var(--macos-accent-color); /* Use accent color for status/alerts */
             font-weight: 500; 
-            margin-top: 10px; 
+            margin-top: 5px; 
             flex-shrink: 0;
+            font-size: 13px;
         }
         
         /* File List */
         #file-list { 
             list-style: none; 
             padding: 0; 
-            margin-top: 0;
+            margin-top: 5px;
         }
         #file-list li { 
-            margin-bottom: 2px; 
+            margin-bottom: 0; /* Tighter spacing */
             cursor: pointer; 
-            padding: 8px 5px; 
+            padding: 5px 8px; /* Tighter padding */
             border-radius: 4px; 
             transition: background-color 0.1s;
+            font-size: 14px;
         }
-        #file-list li:hover { background-color: #eeeeee; } 
-        .dir { font-weight: 500; color: var(--md-primary-color); } 
-        .file { color: var(--md-text-color-dark); } 
+        #file-list li:hover { background-color: var(--macos-border-color); } /* System grey hover */ 
+        .dir { font-weight: 500; color: var(--macos-accent-color); } /* Accent for directories */ 
+        .file { color: var(--macos-text-color-dark); } 
         
         /* Media Player Elements */
         video, img { 
             width: 100%; 
             max-height: 100%; 
             flex-shrink: 1; 
-            background-color: #333333; 
+            background-color: #333333; /* Dark grey background for player area */
             display: none;
             object-fit: contain; 
-            box-shadow: 0 3px 6px rgba(0,0,0,0.16); 
+            border-radius: 8px; /* Slightly rounded corners for the player */
+            box-shadow: none; /* Removed Material shadow */
+            margin-bottom: 10px; /* Space below the player */
         }
 
         /* Image Controls (Contained Card) */
         #image-controls { 
             margin-top: 15px; 
             padding: 15px; 
-            border: none; 
-            background-color: var(--md-surface-color);
-            box-shadow: var(--md-shadow-1dp); 
-            border-radius: 4px;
+            border: 1px solid var(--macos-border-color); /* Subtle border for containment */
+            background-color: var(--macos-sidebar-bg); /* Use slightly grey background */
+            box-shadow: none; 
+            border-radius: 8px; /* Rounded card corners */
             display: none; 
             flex-shrink: 0; 
         }
         
-        /* Input Field (Material Underline Style) for FPS input */
+        /* Input Field (macOS Rounded Style) for FPS input */
         #image-controls input[type="number"] { 
             width: 60px; 
             margin-right: 10px; 
-            padding: 5px 0; 
-            border: none;
-            border-bottom: 2px solid var(--md-divider-color); 
-            border-radius: 0; 
-            transition: border-bottom-color 0.2s;
-            text-align: center;
+            padding: 5px 8px; 
+            border: 1px solid var(--macos-border-color);
+            border-radius: 4px;
+            transition: border-color 0.2s;
+            text-align: right;
+            font-size: 14px;
+            background-color: var(--macos-surface-color);
         }
         #image-controls input[type="number"]:focus {
             outline: none;
-            border-bottom-color: var(--md-primary-color);
+            border-color: var(--macos-accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
         }
 
-        #image-controls label { margin-right: 15px; color: var(--md-text-color-light); }
+        #image-controls label { 
+            margin-right: 5px; 
+            color: var(--macos-text-color-dark); /* Darker label text */
+            font-size: 14px;
+        }
         
         /* Progress Bar / Slider Container */
         #image-slider-container { 
             display: flex; 
             align-items: center; 
-            margin-top: 20px; 
+            margin-top: 15px; 
             padding: 10px 0;
             background-color: transparent; 
             border-radius: 4px; 
         }
         
-        /* Image Slider Styling */
+        /* Image Slider Styling (macOS-like appearance) */
         #image-slider { 
             flex-grow: 1; 
             margin: 0 15px; 
             -webkit-appearance: none;
             appearance: none;
-            height: 8px; 
-            background: var(--md-divider-color); 
-            border-radius: 4px;
+            height: 6px; /* Slightly thinner track */
+            background: #D1D1D6; /* Base grey track color */
+            border-radius: 3px;
             cursor: pointer;
         }
 
-        /* Custom styles for the thumb (the movable circle) - Webkit (Chrome/Safari) */
+        /* Custom styles for the thumb (Webkit - Chrome/Safari) */
         #image-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 18px;
-            height: 18px;
-            background: var(--md-primary-color); 
+            width: 14px; /* Smaller thumb */
+            height: 14px;
+            background: var(--macos-surface-color); /* White thumb */
             border-radius: 50%;
-            border: 1px solid var(--md-surface-color);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-            margin-top: -5px; 
+            border: 1px solid var(--macos-accent-color); /* Blue border/ring */
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2); /* Subtle shadow */
+            margin-top: -4px; /* Center thumb on 6px track */
         }
 
-        /* Styles for the filled track (Webkit) using a CSS variable */
+        /* Styles for the filled track (Webkit) */
         #image-slider::-webkit-slider-runnable-track {
             background: linear-gradient(to right, 
-                var(--md-primary-color) 0%, 
-                var(--md-primary-color) var(--slider-progress, 0%), 
-                var(--md-divider-color) var(--slider-progress, 0%), 
-                var(--md-divider-color) 100%
+                var(--macos-accent-color) 0%, 
+                var(--macos-accent-color) var(--slider-progress, 0%), 
+                #D1D1D6 var(--slider-progress, 0%), 
+                #D1D1D6 100%
             );
-            height: 8px;
-            border-radius: 4px;
+            height: 6px;
+            border-radius: 3px;
         }
 
-        /* Custom styles for the thumb (the movable circle) - Mozilla (Firefox) */
+        /* Custom styles for the thumb (Mozilla - Firefox) */
         #image-slider::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            background: var(--md-primary-color); 
+            width: 14px;
+            height: 14px;
+            background: var(--macos-surface-color); 
             border-radius: 50%;
-            border: none;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            border: 1px solid var(--macos-accent-color);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
 
         /* Styles for the filled track (Firefox) */
         #image-slider::-moz-range-progress {
-            background: var(--md-primary-color);
-            height: 8px;
-            border-radius: 4px 0 0 4px;
+            background: var(--macos-accent-color);
+            height: 6px;
+            border-radius: 3px 0 0 3px;
         }
         
         /* Container for the frame index input and total */
@@ -590,17 +618,17 @@ HTML_CONTENT = """
         #frame-index-input {
             width: 40px; 
             padding: 5px; 
-            border: 1px solid var(--md-divider-color);
+            border: 1px solid var(--macos-border-color);
             border-radius: 4px;
             text-align: right;
-            font-size: 0.9em;
-            color: var(--md-text-color-dark); 
+            font-size: 14px;
+            color: var(--macos-text-color-dark); 
             margin-right: 5px;
         }
         #frame-index-input:focus {
             outline: none;
-            border-color: var(--md-divider-color); 
-            box-shadow: none;
+            border-color: var(--macos-accent-color); 
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
         }
 
         /* Style for the frame info text */
@@ -608,23 +636,23 @@ HTML_CONTENT = """
             display: none; 
         }
         #frame-total-info {
-            color: var(--md-text-color-light);
-            font-size: 0.9em;
+            color: var(--macos-text-color-light);
+            font-size: 14px;
             min-width: 20px; 
             text-align: center;
         }
         
         #video-info {
             flex-shrink: 0; 
-            color: var(--md-text-color-light);
-            /* Removed margin-top, now only margin-bottom should be used */
+            color: var(--macos-text-color-light);
+            font-size: 14px;
             margin-bottom: 5px;
             margin-top: 0;
         }
         
         hr {
             border: none;
-            border-top: 1px solid var(--md-divider-color);
+            border-top: 1px solid var(--macos-border-color);
             margin: 10px 0;
             flex-shrink: 0;
         }
@@ -831,16 +859,16 @@ HTML_CONTENT = """
                 
                 displayCurrentImage(); 
 
-            } catch (error) {
-                console.error("Image sequence load error:", error);
-                alert("Could not load image sequence from the server.");
-                switchPlayer('none');
-            }
+             } catch (error) {
+                 console.error("Image sequence load error:", error);
+                 alert("Could not load image sequence from the server.");
+                 switchPlayer('none');
+             }
         }
 
         /** * Displays the current image. 
-         * If playing, it sets up the load/timing logic for the next frame.
-         */
+          * If playing, it sets up the load/timing logic for the next frame.
+          */
         function displayCurrentImage() {
             if (imageFiles.length === 0) return;
 
@@ -963,7 +991,7 @@ HTML_CONTENT = """
                     
                     const resolvedPath = result.path_to_use;
                     if (!resolvedPath.toLowerCase().match(/(\.mp4|\.webm|\.ogg)$/)) {
-                         playImageFolderBtn.style.display = 'inline-block';
+                        playImageFolderBtn.style.display = 'inline-block';
                     }
                     if (result.error_detail) {
                        pathInput.value = ''; 
