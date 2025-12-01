@@ -184,7 +184,10 @@ async def browse_files(path: Optional[str] = ""):
         elif full_path.is_file() and item.lower().endswith(VIDEO_EXTENSIONS):
             # Only video files are explicitly listed as non-directories
             items.append(FileItem(name=item, path=relative_path_for_frontend, is_dir=False))
-            
+
+    # --- ADD SORTING LOGIC HERE ---
+    items.sort(key=lambda item: (not item.is_dir, item.name.lower()))
+    
     return items
 
 @app.get("/image_folder_files/{folder_path:path}", response_model=List[str])
@@ -321,66 +324,356 @@ HTML_CONTENT = """
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FastAPI Video/Image Streamer</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; display: flex; max-width: 1200px; margin: 0 auto; }
-        #browser { width: 300px; padding: 20px; border-right: 1px solid #ccc; height: 100vh; overflow-y: auto; }
-        #player-container { flex-grow: 1; padding: 20px; }
-        #file-list { list-style: none; padding: 0; }
-        #file-list li { margin-bottom: 5px; cursor: pointer; padding: 5px; border-radius: 3px; }
-        #file-list li:hover { background-color: #eee; }
-        .dir { font-weight: bold; color: #1e88e5; } 
-        .file { color: #388e3c; } 
-        video, img { width: 100%; height: auto; background-color: black; display: none; }
-        input[type="text"] { width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; box-sizing: border-box; }
-        #path-controls { display: flex; margin-bottom: 10px; }
-        #path-controls button { margin-left: 10px; }
-        #path-input { flex-grow: 1; margin-left: 0 !important; }
-        .action-button { padding: 8px 15px; cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 4px; }
-        #play-image-folder-btn { background-color: #e51e88; margin-left: 10px; display: none; } /* Hidden by default */
-        #status-message { color: orange; font-weight: bold; margin-top: 10px; }
-        #image-controls { margin-top: 10px; padding: 10px; border: 1px dashed #ccc; display: none; }
-        #image-controls input[type="number"] { width: 60px; margin-right: 10px; padding: 5px; }
-        #image-controls label { margin-right: 15px; }
-        #image-slider-container { display: flex; align-items: center; margin-top: 10px; }
-        #image-slider { flex-grow: 1; margin: 0 15px; }
-        #frame-info { min-width: 100px; text-align: right; }
+        /* 🎨 Material Design Colors */
+        :root {
+            --md-primary-color: #3F51B5; /* Indigo 500 */
+            --md-accent-color: #FF4081; /* Pink A200 */
+            --md-text-color-dark: #212121; /* Grey 900 */
+            --md-text-color-light: #757575; /* Grey 600 */
+            --md-surface-color: #FFFFFF;
+            --md-divider-color: #E0E0E0; /* Grey 300 */
+            --md-shadow-1dp: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+
+        /* Global Fullscreen Layout */
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            display: flex; 
+            margin: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            overflow: hidden; 
+            background-color: #f5f5f5; 
+            color: var(--md-text-color-dark);
+        }
+
+        /* File Browser Pane (Component with Elevation) */
+        #browser { 
+            width: 300px; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            min-width: 250px; 
+            background-color: var(--md-surface-color);
+            box-shadow: var(--md-shadow-1dp); 
+            z-index: 10; 
+            display: flex;
+            flex-direction: column;
+            height: 100vh; 
+            overflow-y: hidden; 
+        }
+
+        /* Player Container (Takes remaining space) */
+        #player-container { 
+            flex-grow: 1; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            overflow-y: auto; 
+            background-color: #f5f5f5; 
+        }
+        
+        /* Typography */
+        h2 {
+            font-weight: 500; 
+            color: var(--md-primary-color);
+            margin-top: 10px; /* Adjusted margin since info text is now above */
+            margin-bottom: 15px;
+        }
+
+        /* Path Controls Container (Vertical Stack) */
+        #path-controls { 
+            display: block; 
+            margin-bottom: 10px; 
+            flex-shrink: 0; 
+        }
+        
+        /* Container for the buttons (Horizontal Flex) */
+        #path-buttons {
+            display: flex; 
+            justify-content: flex-end; 
+            margin-top: 10px; 
+        }
+
+        /* Input Field (Material Underline Style) */
+        input[type="text"] { 
+            width: 100%; 
+            padding: 8px 0; 
+            margin-bottom: 5px; 
+            border: none;
+            border-bottom: 2px solid var(--md-divider-color); 
+            box-sizing: border-box; 
+            transition: border-bottom-color 0.2s;
+            font-size: 16px;
+            background: transparent;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-bottom-color: var(--md-primary-color); 
+        }
+
+        /* 🖼️ Action Button (Raised Button Style) */
+        .action-button { 
+            padding: 8px 15px; 
+            cursor: pointer; 
+            background-color: var(--md-primary-color);
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+            transition: background-color 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        .action-button:hover {
+            background-color: #3949AB; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.25); 
+        }
+        .action-button:active {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3); 
+        }
+        
+        /* Accent Button (for 'Play Image Folder') */
+        #play-image-folder-btn { 
+            background-color: var(--md-accent-color); 
+            margin-left: 10px; 
+            display: none; 
+        }
+        #play-image-folder-btn:hover { background-color: #F73378; }
+        
+        /* Scrolling Container */
+        #file-list-container {
+            flex-grow: 1; 
+            overflow-y: auto; 
+            padding-right: 5px; 
+        }
+
+        #status-message { 
+            color: var(--md-accent-color); 
+            font-weight: 500; 
+            margin-top: 10px; 
+            flex-shrink: 0;
+        }
+        
+        /* File List */
+        #file-list { 
+            list-style: none; 
+            padding: 0; 
+            margin-top: 0;
+        }
+        #file-list li { 
+            margin-bottom: 2px; 
+            cursor: pointer; 
+            padding: 8px 5px; 
+            border-radius: 4px; 
+            transition: background-color 0.1s;
+        }
+        #file-list li:hover { background-color: #eeeeee; } 
+        .dir { font-weight: 500; color: var(--md-primary-color); } 
+        .file { color: var(--md-text-color-dark); } 
+        
+        /* Media Player Elements */
+        video, img { 
+            width: 100%; 
+            max-height: 100%; 
+            flex-shrink: 1; 
+            background-color: #333333; 
+            display: none;
+            object-fit: contain; 
+            box-shadow: 0 3px 6px rgba(0,0,0,0.16); 
+        }
+
+        /* Image Controls (Contained Card) */
+        #image-controls { 
+            margin-top: 15px; 
+            padding: 15px; 
+            border: none; 
+            background-color: var(--md-surface-color);
+            box-shadow: var(--md-shadow-1dp); 
+            border-radius: 4px;
+            display: none; 
+            flex-shrink: 0; 
+        }
+        
+        /* Input Field (Material Underline Style) for FPS input */
+        #image-controls input[type="number"] { 
+            width: 60px; 
+            margin-right: 10px; 
+            padding: 5px 0; 
+            border: none;
+            border-bottom: 2px solid var(--md-divider-color); 
+            border-radius: 0; 
+            transition: border-bottom-color 0.2s;
+            text-align: center;
+        }
+        #image-controls input[type="number"]:focus {
+            outline: none;
+            border-bottom-color: var(--md-primary-color);
+        }
+
+        #image-controls label { margin-right: 15px; color: var(--md-text-color-light); }
+        
+        /* Progress Bar / Slider Container */
+        #image-slider-container { 
+            display: flex; 
+            align-items: center; 
+            margin-top: 20px; 
+            padding: 10px 0;
+            background-color: transparent; 
+            border-radius: 4px; 
+        }
+        
+        /* Image Slider Styling */
+        #image-slider { 
+            flex-grow: 1; 
+            margin: 0 15px; 
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px; 
+            background: var(--md-divider-color); 
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Custom styles for the thumb (the movable circle) - Webkit (Chrome/Safari) */
+        #image-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--md-primary-color); 
+            border-radius: 50%;
+            border: 1px solid var(--md-surface-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            margin-top: -5px; 
+        }
+
+        /* Styles for the filled track (Webkit) using a CSS variable */
+        #image-slider::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, 
+                var(--md-primary-color) 0%, 
+                var(--md-primary-color) var(--slider-progress, 0%), 
+                var(--md-divider-color) var(--slider-progress, 0%), 
+                var(--md-divider-color) 100%
+            );
+            height: 8px;
+            border-radius: 4px;
+        }
+
+        /* Custom styles for the thumb (the movable circle) - Mozilla (Firefox) */
+        #image-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: var(--md-primary-color); 
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+
+        /* Styles for the filled track (Firefox) */
+        #image-slider::-moz-range-progress {
+            background: var(--md-primary-color);
+            height: 8px;
+            border-radius: 4px 0 0 4px;
+        }
+        
+        /* Container for the frame index input and total */
+        #frame-jump-control {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        
+        /* Styling for the frame jump input field */
+        #frame-index-input {
+            width: 40px; 
+            padding: 5px; 
+            border: 1px solid var(--md-divider-color);
+            border-radius: 4px;
+            text-align: right;
+            font-size: 0.9em;
+            color: var(--md-text-color-dark); 
+            margin-right: 5px;
+        }
+        #frame-index-input:focus {
+            outline: none;
+            border-color: var(--md-divider-color); 
+            box-shadow: none;
+        }
+
+        /* Style for the frame info text */
+        #frame-info-start {
+            display: none; 
+        }
+        #frame-total-info {
+            color: var(--md-text-color-light);
+            font-size: 0.9em;
+            min-width: 20px; 
+            text-align: center;
+        }
+        
+        #video-info {
+            flex-shrink: 0; 
+            color: var(--md-text-color-light);
+            /* Removed margin-top, now only margin-bottom should be used */
+            margin-bottom: 5px;
+            margin-top: 0;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid var(--md-divider-color);
+            margin: 10px 0;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
 
     <div id="browser">
-        <h2>📁 File Browser</h2>
+        <h2>File Browser</h2>
         <div id="path-controls">
             <input type="text" id="path-input" placeholder="Enter path (e.g., folder/video.mp4)" value="">
-            <button onclick="resolvePathAndAct()" class="action-button">Resolve</button>
-            <button id="play-image-folder-btn" onclick="manualPlayImageFolder()" class="action-button">Play Image Folder</button>
+            
+            <div id="path-buttons">
+                <button onclick="resolvePathAndAct()" class="action-button">Resolve</button>
+                <button id="play-image-folder-btn" onclick="manualPlayImageFolder()" class="action-button">Play Image Folder</button>
+            </div>
+
         </div>
         <hr>
-        <p>Current Path: <span id="current-path">/</span></p>
-        <p id="status-message"></p>
-        <ul id="file-list"></ul>
+        
+        <div id="file-list-container">
+            <p id="status-message"></p>
+            <ul id="file-list"></ul>
+        </div>
     </div>
 
     <div id="player-container">
-        <h2>▶️ Media Player</h2>
+        <p id="video-info">Select a media file or browse to a folder.</p>
+        
+        <h2>Media Player</h2>
         
         <video id="video-player" controls autoplay></video>
         
         <img id="image-player" src="" alt="Image Sequence Player">
 
         <div id="image-controls">
-            <p id="image-info-text"></p>
             <label for="fps-input">FPS:</label>
             <input type="number" id="fps-input" value="10" min="1" max="60">
             <button id="start-sequence-btn" onclick="toggleImagePlayback()" class="action-button">Play</button>
             <div id="image-slider-container">
                 <span id="frame-info-start">0</span>
                 <input type="range" id="image-slider" min="0" max="0" value="0">
-                <span id="frame-info">Frame 0 / 0</span>
+                
+                <div id="frame-jump-control">
+                    <input type="number" id="frame-index-input" value="1" min="1" max="1">
+                    <span id="frame-total-info">/ 0</span>
+                </div>
             </div>
         </div>
-
-        <p id="video-info">Select a media file or browse to a folder.</p>
     </div>
 
     <script>
@@ -389,42 +682,46 @@ HTML_CONTENT = """
         const imagePlayer = document.getElementById('image-player');
         const fileList = document.getElementById('file-list');
         const pathInput = document.getElementById('path-input');
-        const currentPathSpan = document.getElementById('current-path');
         const videoInfo = document.getElementById('video-info');
         const statusMessage = document.getElementById('status-message');
         const imageControls = document.getElementById('image-controls');
         const fpsInput = document.getElementById('fps-input');
         const imageSlider = document.getElementById('image-slider');
-        const frameInfo = document.getElementById('frame-info');
-        const imageInfoText = document.getElementById('image-info-text');
+        
+        const frameIndexInput = document.getElementById('frame-index-input');
+        const frameTotalInfo = document.getElementById('frame-total-info');
+        
         const playImageFolderBtn = document.getElementById('play-image-folder-btn');
         const startSequenceBtn = document.getElementById('start-sequence-btn');
-        // REMOVED: const pauseSequenceBtn = document.getElementById('pause-sequence-btn'); 
 
         let currentBrowserPath = INITIAL_PATH;
-        let imageSequenceTimer = null; 
         let imageFiles = []; 
         let currentImageFrame = 0;
         let isPlaying = false; 
+        let frameInterval = null; 
+        let isWaitingForLoad = false; 
 
-        /** Stops any existing image playback timer */
+        /** Stops any existing image playback timer (both interval and timeout) */
         function stopImagePlaybackTimer() {
-            if (imageSequenceTimer) {
-                clearInterval(imageSequenceTimer);
-                imageSequenceTimer = null;
+            if (frameInterval) {
+                clearTimeout(frameInterval);
+                frameInterval = null;
             }
+            imagePlayer.onload = null;
+            imagePlayer.onerror = null;
+            
             isPlaying = false;
+            isWaitingForLoad = false;
         }
 
         /** Utility to switch player visibility and reset controls */
         function switchPlayer(type) {
-            stopImagePlaybackTimer(); // Ensure playback is stopped
+            stopImagePlaybackTimer(); 
 
             videoPlayer.style.display = 'none';
             imagePlayer.style.display = 'none';
             imageControls.style.display = 'none';
             
-            // Reset image sequence button text
             startSequenceBtn.textContent = 'Play';
 
             if (type === 'video') {
@@ -439,10 +736,11 @@ HTML_CONTENT = """
                 videoPlayer.src = '';
                 imagePlayer.src = '';
                 videoPlayer.load();
+                videoInfo.textContent = 'Select a media file or browse to a folder.';
             }
         }
         
-        /** Fetches file list for a given path and updates the UI (remains the same) */
+        /** Fetches file list for a given path and updates the UI */
         async function fetchFiles(path) {
             statusMessage.textContent = ''; 
             playImageFolderBtn.style.display = 'none'; 
@@ -457,7 +755,7 @@ HTML_CONTENT = """
                 const files = await response.json();
                 
                 currentBrowserPath = path;
-                currentPathSpan.textContent = path || '/';
+                pathInput.value = path || '/'; 
 
                 if (path !== '' && pathInput.value === path) {
                     playImageFolderBtn.style.display = 'inline-block';
@@ -472,7 +770,7 @@ HTML_CONTENT = """
                     li.setAttribute('data-path', item.path);
 
                     li.onclick = () => {
-                        pathInput.value = item.path;
+                        pathInput.value = item.path; 
                         if (item.is_dir) {
                             fetchFiles(item.path); 
                             playImageFolderBtn.style.display = 'inline-block';
@@ -489,7 +787,7 @@ HTML_CONTENT = """
             }
         }
         
-        /** Sets the video player source to start streaming (remains the same) */
+        /** Sets the video player source to start streaming */
         function playVideo(videoRelativePath) {
             switchPlayer('video');
             const videoSourceUrl = `/video/${encodeURIComponent(videoRelativePath)}`;
@@ -499,17 +797,17 @@ HTML_CONTENT = """
             videoPlayer.play();
             
             pathInput.value = videoRelativePath;
-            videoInfo.textContent = `Streaming Video: ${videoRelativePath}`;
+            // MODIFIED: Simplified text content
+            videoInfo.textContent = `Playing: ${videoRelativePath}`;
         }
         
-        /** Prepares the image player by fetching file list, but doesn't start playback (modified to reset state) */
+        /** Prepares the image player by fetching file list */
         async function prepareImagePlayback(folderRelativePath) {
-             switchPlayer('image'); // This calls stopImagePlaybackTimer()
-             videoInfo.textContent = `Image Sequence Ready: ${folderRelativePath}`;
+             switchPlayer('image'); 
+             // MODIFIED: Simplified text content
+             videoInfo.textContent = `Playing: ${folderRelativePath}`;
              pathInput.value = folderRelativePath; 
-             imageInfoText.textContent = `Folder: ${folderRelativePath}`;
              
-             // Reset playback state for new folder
              currentImageFrame = 0;
              startSequenceBtn.textContent = 'Play';
 
@@ -525,9 +823,13 @@ HTML_CONTENT = """
                 
                 imageSlider.max = imageFiles.length - 1;
                 imageSlider.value = currentImageFrame;
-                updateFrameInfo();
                 
-                displayCurrentImage();
+                frameIndexInput.min = 1;
+                frameIndexInput.max = imageFiles.length;
+
+                updateFrameInfo(); 
+                
+                displayCurrentImage(); 
 
             } catch (error) {
                 console.error("Image sequence load error:", error);
@@ -536,19 +838,67 @@ HTML_CONTENT = """
             }
         }
 
-        /** Displays the current image in the sequence (remains the same) */
+        /** * Displays the current image. 
+         * If playing, it sets up the load/timing logic for the next frame.
+         */
         function displayCurrentImage() {
             if (imageFiles.length === 0) return;
+
             const imageRelativePath = imageFiles[currentImageFrame];
             const imageSourceUrl = `/image/${encodeURIComponent(imageRelativePath)}`;
-            imagePlayer.src = imageSourceUrl;
+            
             updateFrameInfo();
             imageSlider.value = currentImageFrame; 
+            
+            // Calculate progress percentage and set CSS variable for Webkit filled track
+            const progress = imageFiles.length > 1 ? (currentImageFrame / (imageFiles.length - 1)) * 100 : 0;
+            imageSlider.style.setProperty('--slider-progress', `${progress}%`);
+
+            if (isPlaying) {
+                isWaitingForLoad = true;
+                
+                const fps = parseFloat(fpsInput.value);
+                const intervalMs = 1000 / fps;
+
+                const nextFrame = () => {
+                    isWaitingForLoad = false; 
+
+                    if (isPlaying) {
+                        currentImageFrame = (currentImageFrame + 1) % imageFiles.length;
+                        displayCurrentImage();
+                    }
+                };
+
+                imagePlayer.onload = () => {
+                    const timeElapsed = performance.now() - startTime;
+                    const delay = Math.max(0, intervalMs - timeElapsed);
+
+                    frameInterval = setTimeout(nextFrame, delay);
+                };
+                
+                imagePlayer.onerror = (e) => {
+                    console.error("Error loading image frame:", imageRelativePath, e);
+                    const timeElapsed = performance.now() - startTime;
+                    const delay = Math.max(0, intervalMs - timeElapsed);
+
+                    frameInterval = setTimeout(nextFrame, delay);
+                };
+                
+                const startTime = performance.now();
+                imagePlayer.src = imageSourceUrl;
+
+            } else {
+                imagePlayer.src = imageSourceUrl;
+            }
         }
 
-        /** Updates the frame count display (remains the same) */
+
+        /** Updates the frame count display */
         function updateFrameInfo() {
-            frameInfo.textContent = `Frame ${currentImageFrame + 1} / ${imageFiles.length}`;
+            const frameNumber = currentImageFrame + 1; 
+    
+            frameIndexInput.value = frameNumber;
+            frameTotalInfo.textContent = `/ ${imageFiles.length}`;
         }
         
         /** Starts or resumes playback, or pauses if already playing. */
@@ -559,7 +909,7 @@ HTML_CONTENT = """
             }
             
             if (isPlaying) {
-                // If currently playing, treat this button as a pause/stop
+                // PAUSE
                 stopImagePlaybackTimer();
                 startSequenceBtn.textContent = 'Resume';
                 return;
@@ -571,20 +921,16 @@ HTML_CONTENT = """
                 return;
             }
             
-            // Start or Resume Playback
-            stopImagePlaybackTimer(); // Clear any residual timer
-            const intervalMs = 1000 / fps;
-
-            imageSequenceTimer = setInterval(() => {
-                currentImageFrame = (currentImageFrame + 1) % imageFiles.length;
-                displayCurrentImage();
-            }, intervalMs);
+            // START or RESUME Playback
+            stopImagePlaybackTimer(); 
             
             isPlaying = true;
             startSequenceBtn.textContent = 'Pause';
+            
+            displayCurrentImage(); 
         }
 
-        /** Handler for the 'Resolve Path' button (remains the same) */
+        /** Handler for the 'Resolve Path' button */
         async function resolvePathAndAct() {
             const path = pathInput.value.trim();
             if (!path) {
@@ -632,7 +978,7 @@ HTML_CONTENT = """
             }
         }
         
-        /** Handler for the new "Play Image Folder" button (remains the same) */
+        /** Handler for the new "Play Image Folder" button */
         function manualPlayImageFolder() {
             const path = pathInput.value.trim();
             if (!path) {
@@ -643,14 +989,44 @@ HTML_CONTENT = """
         }
 
         // --- Event Listeners for Image Controls ---
+        
+        // 1. SLIDER CHANGE LISTENER
         imageSlider.addEventListener('input', (event) => {
             currentImageFrame = parseInt(event.target.value);
-            displayCurrentImage();
-            // Stop automatic playback when user interacts with the slider
             if (isPlaying) {
-                // The new logic to pause (stopImagePlaybackTimer and update button text)
                 stopImagePlaybackTimer();
                 startSequenceBtn.textContent = 'Resume';
+            }
+            displayCurrentImage(); 
+        });
+
+        // 2. INPUT FIELD CHANGE LISTENER 
+        frameIndexInput.addEventListener('change', (event) => {
+            let desiredFrame = parseInt(event.target.value);
+            
+            if (isNaN(desiredFrame)) {
+                frameIndexInput.value = currentImageFrame + 1;
+                return;
+            }
+            
+            desiredFrame = Math.max(1, Math.min(desiredFrame, imageFiles.length));
+            
+            currentImageFrame = desiredFrame - 1;
+            
+            if (isPlaying) {
+                stopImagePlaybackTimer();
+                startSequenceBtn.textContent = 'Resume';
+            }
+            
+            imageSlider.value = currentImageFrame;
+            displayCurrentImage();
+        });
+
+        // 3. FPS CHANGE LISTENER
+        fpsInput.addEventListener('change', () => {
+            if (isPlaying) {
+                toggleImagePlayback(); 
+                toggleImagePlayback(); 
             }
         });
 
