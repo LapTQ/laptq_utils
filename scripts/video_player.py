@@ -164,7 +164,7 @@ async def browse_files(path: Optional[str] = ""):
     
     if current_dir.resolve() != Path(VIDEO_ROOT_DIR).resolve():
         parent_path = str(Path(path).parent).replace('\\', '/')
-        items.append(FileItem(name=".. (Up Directory)", path=parent_path, is_dir=True))
+        items.append(FileItem(name="..", path=parent_path, is_dir=True))
 
     for item in sorted(os.listdir(current_dir)):
         full_path = current_dir / item
@@ -489,10 +489,25 @@ HTML_CONTENT = """
             border-radius: 4px; 
             transition: background-color 0.1s;
             font-size: 14px;
+            display: flex; /* Enable flex for inline content (icon + text) */
+            align-items: center; /* Vertically align icon and text */
         }
         #file-list li:hover { background-color: var(--macos-border-color); } /* System grey hover */ 
-        .dir { font-weight: 500; color: var(--macos-accent-color); } /* Accent for directories */ 
+        
+        /* --- NEW ICON STYLING --- */
+        .file-icon {
+            margin-right: 8px;
+            font-size: 14px;
+            /* Keeps icon and text vertically aligned */
+            vertical-align: middle; 
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+        .dir { font-weight: 500; } /* Keep directory bold for visual emphasis */
+        .dir .file-icon { color: var(--macos-accent-color); } /* Blue icon for folders */
+        .video .file-icon { color: #DC3545; } /* Reddish icon for video */
+        .image .file-icon { color: #28A745; } /* Greenish icon for image */
         .file { color: var(--macos-text-color-dark); } 
+        /* --- END NEW ICON STYLING --- */
         
         /* Media Player Elements */
         video, img { 
@@ -757,7 +772,7 @@ HTML_CONTENT = """
                 imagePlayer.src = '';
             } else if (type === 'image') {
                 imagePlayer.style.display = 'block';
-                imageControls.style.display = 'block';
+                // Note: Image controls display is handled separately for sequence vs. single image
                 videoPlayer.src = '';
                 videoPlayer.load();
             } else {
@@ -793,8 +808,34 @@ HTML_CONTENT = """
                 
                 files.forEach(item => {
                     const li = document.createElement('li');
-                    li.textContent = item.name;
-                    li.classList.add(item.is_dir ? 'dir' : 'file');
+                    
+                    // --- REVISED ICON LOGIC START (using more macOS-like Unicode) ---
+                    let iconChar = '🧾'; // Default icon (Receipt)
+                    let fileTypeClass = 'file';
+                    
+                    if (item.is_dir) {
+                        iconChar = '📂'; // Folder icon (Open Folder)
+                        fileTypeClass = 'dir';
+                    } else if (item.name.toLowerCase().match(/\.(mp4|webm|ogg)$/)) {
+                        iconChar = '🎬'; // Video icon (Clapper Board)
+                        fileTypeClass = 'video';
+                    } else if (item.name.toLowerCase().match(/\.(jpg|jpeg|png|gif|bmp|webp|tiff)$/)) {
+                        iconChar = '🏞️'; // Image icon (National Park/Landscape)
+                        fileTypeClass = 'image';
+                    }
+                    
+                    // Create the icon span
+                    const iconSpan = document.createElement('span');
+                    iconSpan.textContent = iconChar;
+                    iconSpan.classList.add('file-icon');
+                    
+                    // Append the icon and the file name to the list item
+                    li.appendChild(iconSpan);
+                    li.appendChild(document.createTextNode(item.name));
+                    
+                    li.classList.add(fileTypeClass);
+                    // --- REVISED ICON LOGIC END ---
+                    
                     li.setAttribute('data-path', item.path);
 
                     li.onclick = () => {
@@ -803,7 +844,14 @@ HTML_CONTENT = """
                             fetchFiles(item.path); 
                             playImageFolderBtn.style.display = 'inline-block';
                         } else {
-                            playVideo(item.path); 
+                            if (fileTypeClass === 'video') {
+                                playVideo(item.path); 
+                            } else if (fileTypeClass === 'image') {
+                                playImage(item.path); 
+                            } else {
+                                statusMessage.textContent = `Cannot play file type: ${item.name}`;
+                                switchPlayer('none'); 
+                            }
                             playImageFolderBtn.style.display = 'none';
                         }
                     };
@@ -825,13 +873,27 @@ HTML_CONTENT = """
             videoPlayer.play();
             
             pathInput.value = videoRelativePath;
-            // MODIFIED: Simplified text content
             videoInfo.textContent = `Playing: ${videoRelativePath}`;
+        }
+
+        /** Sets the image player source for single image view */
+        function playImage(imageRelativePath) {
+            switchPlayer('image');
+            // Hide image sequence controls for a single image
+            imageControls.style.display = 'none'; 
+            
+            const imageSourceUrl = `/image/${encodeURIComponent(imageRelativePath)}`;
+            
+            imagePlayer.src = imageSourceUrl;
+            
+            pathInput.value = imageRelativePath;
+            videoInfo.textContent = `Viewing: ${imageRelativePath}`;
         }
         
         /** Prepares the image player by fetching file list */
         async function prepareImagePlayback(folderRelativePath) {
              switchPlayer('image'); 
+             imageControls.style.display = 'block'; // Show controls for sequence playback
              // MODIFIED: Simplified text content
              videoInfo.textContent = `Playing: ${folderRelativePath}`;
              pathInput.value = folderRelativePath; 
@@ -849,11 +911,11 @@ HTML_CONTENT = """
                 }
                 imageFiles = await response.json();
                 
-                imageSlider.max = imageFiles.length - 1;
+                imageSlider.max = imageFiles.length > 0 ? imageFiles.length - 1 : 0;
                 imageSlider.value = currentImageFrame;
                 
                 frameIndexInput.min = 1;
-                frameIndexInput.max = imageFiles.length;
+                frameIndexInput.max = imageFiles.length || 1;
 
                 updateFrameInfo(); 
                 
@@ -870,7 +932,10 @@ HTML_CONTENT = """
           * If playing, it sets up the load/timing logic for the next frame.
           */
         function displayCurrentImage() {
-            if (imageFiles.length === 0) return;
+            if (imageFiles.length === 0) {
+                imagePlayer.src = '';
+                return;
+            }
 
             const imageRelativePath = imageFiles[currentImageFrame];
             const imageSourceUrl = `/image/${encodeURIComponent(imageRelativePath)}`;
@@ -984,13 +1049,19 @@ HTML_CONTENT = """
                 statusMessage.textContent = result.error_detail || '';
 
                 if (result.action === 'play') {
-                    playVideo(result.path_to_use);
+                    // Check if it's a video or a single image
+                    if (result.path_to_use.toLowerCase().match(/\.(mp4|webm|ogg)$/)) {
+                        playVideo(result.path_to_use);
+                    } else if (result.path_to_use.toLowerCase().match(/\.(jpg|jpeg|png|gif|bmp|webp|tiff)$/)) {
+                        playImage(result.path_to_use);
+                    }
                     fetchFiles(result.browse_path);
                 } else if (result.action === 'browse') {
                     fetchFiles(result.path_to_use);
                     
                     const resolvedPath = result.path_to_use;
-                    if (!resolvedPath.toLowerCase().match(/(\.mp4|\.webm|\.ogg)$/)) {
+                    // Show "Play Image Folder" button only if the resolved path is a directory (doesn't end in media extension)
+                    if (!resolvedPath.toLowerCase().match(/(\.mp4|\.webm|\.ogg|\.jpg|\.jpeg|\.png|\.gif|\.bmp|\.webp|\.tiff)$/)) {
                         playImageFolderBtn.style.display = 'inline-block';
                     }
                     if (result.error_detail) {
@@ -1053,6 +1124,7 @@ HTML_CONTENT = """
         // 3. FPS CHANGE LISTENER
         fpsInput.addEventListener('change', () => {
             if (isPlaying) {
+                // Toggle twice to pause, update interval, and resume
                 toggleImagePlayback(); 
                 toggleImagePlayback(); 
             }
