@@ -9,42 +9,43 @@
 # mmpose                   1.3.2
 # pip uninstall mmcv-full && mim uninstall mmpose mmdet mmcv mmengine && mim install mmengine && mim install --trusted-host download.openmmlab.com mmcv==2.0.1 && mim install --trusted-host download.openmmlab.com mmdet==3.3.0 && mim install --trusted-host download.openmmlab.com mmpose==1.3.2 && pip install numpy==1.26.4
 
-# PATHD_MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
-PATHD_MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
+PATHD_MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
+# PATHD_MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
 # PATHD_MEDIA='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/prj54'
 POSTFIX_IMAGE = ""
 
-PATHD_LABEL_INPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26/satudora"
-# PATHD_LABEL_INPUT='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54'
+PATHD_LABEL_INPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
+# PATHD_LABEL_INPUT='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/prj54'
 POSTFIX_LABEL_INPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 
 PATH__FILE__MODEL = "/home/laptq/laptq-fs26-shoplifting-detection/rtmpose-m_simcc-body7_pt-body7_420e-256x192-e48f03d0_20230504.pth"
 PATH__FILE__CONFIG = "/home/laptq/laptq-fs26-shoplifting-detection/submodules/laptq_utils/backlog/rtmpose-m_8xb256-420e_body8-256x192.py"
-PATHD_LABEL_OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26/satudora"
+
+PATHD_LABEL_OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
 # PATHD_LABEL_OUTPUT='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54'
 POSTFIX_LABEL_OUTPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
 
 # Define the map of subpaths
-MAP__SUBPATH_DIR__TO__ = {
-    # "shoplifting-25min.mp4": None,
-    # "r9_25min_rotate.mp4": None,
-    "R3_2025_05_15_23_40_32_rotate.mp4": "cuda:0",
-    "R4_2025_05_15_23_40_32_rotate.mp4": "cuda:1",
-    "R9_2025_05_15_23_40_32_rotate.mp4": "cuda:2",
-    "R7_2025_05_15_23_40_32_rotate.mp4": "cuda:3",
-    "R8_2025_05_15_23_40_32_rotate.mp4": "cuda:4",
-    "R10_2025_05_15_23_40_32_rotate.mp4": "cuda:5",
-}
+# MAP__SUBPATH_DIR__TO__ = {
+#     # "shoplifting-25min.mp4": None,
+#     # "r9_25min_rotate.mp4": None,
+#     "R3_2025_05_15_23_40_32_rotate.mp4": "cuda:0",
+#     "R4_2025_05_15_23_40_32_rotate.mp4": "cuda:1",
+#     "R9_2025_05_15_23_40_32_rotate.mp4": "cuda:2",
+#     "R7_2025_05_15_23_40_32_rotate.mp4": "cuda:3",
+#     "R8_2025_05_15_23_40_32_rotate.mp4": "cuda:4",
+#     "R10_2025_05_15_23_40_32_rotate.mp4": "cuda:5",
+# }
 #
 # -----
-# import os
-# import glob
+import os
+import glob
 
-# MAP__SUBPATH_DIR__TO__ = {
-#     p[len(PATHD_MEDIA) + 1 :]: None
-#     for p in glob.glob(f"{PATHD_MEDIA}/shoplifting-awljp-demo-videos/demo_room/*.mp4")
-#     if os.path.isdir(p)
-# }
+MAP__SUBPATH_DIR__TO__ = {
+    p[len(PATHD_MEDIA) + 1 :]: None
+    for p in glob.glob(f"{PATHD_MEDIA}/shoplifting-awlrecord-videos/day2/*.mp4")
+    if os.path.isdir(p)
+}
 
 # =============================================================
 import os
@@ -68,12 +69,12 @@ TAG__WARNING = "\033[33m[WARNING]\033[0m"
 
 
 def run_wrapper(kwargs):
-    # print(f"{TAG__INFO} Processing: {kwargs['path__dir__img']}")
-    # helper__extract__topdown__pose__imgdir(**kwargs)
-    # print(f"{TAG__PASSED} Done: {kwargs['path__dir__img']}")
-    print(f"{TAG__INFO} Processing: {kwargs['path__file__video']}")
-    helper__extract__topdown__pose__video(**kwargs)
-    print(f"{TAG__PASSED} Done: {kwargs['path__file__video']}")
+    print(f"{TAG__INFO} Processing: {kwargs['path__dir__img']}")
+    helper__extract__topdown__pose__imgdir(**kwargs)
+    print(f"{TAG__PASSED} Done: {kwargs['path__dir__img']}")
+    # print(f"{TAG__INFO} Processing: {kwargs['path__file__video']}")
+    # helper__extract__topdown__pose__video(**kwargs)
+    # print(f"{TAG__PASSED} Done: {kwargs['path__file__video']}")
 
     gc.collect()
     torch.cuda.empty_cache()

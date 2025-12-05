@@ -39,7 +39,7 @@ import glob
 MAP__SUBPATH_DIR__TO__ = {
     p[len(PATH__DIR__MEDIA) + 1 :]: None
     for p in glob.glob(
-        f"{PATH__DIR__MEDIA}/shoplifting-awljp-demo-videos/demo_room/*.mp4"
+        f"{PATH__DIR__MEDIA}/shoplifting-awlrecord-videos/day2/*.mp4"
     )
     if os.path.isdir(p)
 }
