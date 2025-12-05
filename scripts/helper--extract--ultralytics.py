@@ -84,7 +84,7 @@ for subpath__media in MAP__SUBPATH_DIR__TO__:
     path__dir__img__input = (
         f"{PATH__DIR__MEDIA}/{subpath__media}/images{POSTFIX__DIR__IMAGE}"
     )
-    # path__file__input = f"{PATH__DIR__MEDIA}/{subpath__media}"
+    path__file__input = f"{PATH__DIR__MEDIA}/{subpath__media}"
     path__dir__lbl__output = f"{PATH__DIR__LABEL__OUTPUT}/{subpath__media}/labels{POSTFIX__DIR__LABEL__OUTPUT}"
 
     if os.path.exists(path__dir__lbl__output):
@@ -93,7 +93,7 @@ for subpath__media in MAP__SUBPATH_DIR__TO__:
 
     kwargs = dict(
         path__dir__img=path__dir__img__input,
-        # path__file__input=path__file__input,
+        path__file__input=path__file__input,
         path__dir__output=path__dir__lbl__output,
         path__file__model=PATH__FILE__MODEL,
         num__pad__0=9,

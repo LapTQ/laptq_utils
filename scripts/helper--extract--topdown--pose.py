@@ -84,7 +84,7 @@ def run_wrapper(kwargs):
 ls_kwargs = []
 
 for subpath__media in MAP__SUBPATH_DIR__TO__:
-    # path__dir__img__input = f"{PATHD_MEDIA}/{subpath__media}/images{POSTFIX_IMAGE}"
+    path__dir__img__input = f"{PATHD_MEDIA}/{subpath__media}/images{POSTFIX_IMAGE}"
     path__file__video = f"{PATHD_MEDIA}/{subpath__media}"
     path__dir__lbl__input = (
         f"{PATHD_LABEL_INPUT}/{subpath__media}/labels{POSTFIX_LABEL_INPUT}"
@@ -99,7 +99,7 @@ for subpath__media in MAP__SUBPATH_DIR__TO__:
     os.makedirs(path__dir__lbl__output)
 
     kwargs = dict(
-        # path__dir__img=path__dir__img__input,
+        path__dir__img=path__dir__img__input,
         path__file__video=path__file__video,
         path__dir__lbl__input=path__dir__lbl__input,
         path__dir__lbl__output=path__dir__lbl__output,
