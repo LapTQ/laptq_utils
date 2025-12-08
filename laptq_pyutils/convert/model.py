@@ -5,7 +5,7 @@ LOGGER = load_logger()
 
 
 def convert_onnx_to_tensorrt(**kwargs):
-
+    import os
     import tensorrt as trt
 
     path__file__input = kwargs["path__file__input"]
@@ -76,6 +76,7 @@ def convert_onnx_to_tensorrt(**kwargs):
         raise RuntimeError("Failed to build the TensorRT engine")
 
     # Serialize and save the engine
+    os.makedirs(os.path.dirname(path__file__output), exist_ok=True)
     with open(path__file__output, "wb") as file:
         file.write(engine.serialize())
     LOGGER.success("TensorRT engine is saved at: {}".format(path__file__output))
