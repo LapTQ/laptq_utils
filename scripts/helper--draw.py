@@ -2,8 +2,8 @@ PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-
 # PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/data/test-videos"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/SkateFormer/fs26/v206--satudora_veo3_awlrecord--r2.4-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--12-kpts"
-# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--add--action-frame-txt--to--json"
+# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/SkateFormer/fs26/v210--satudora_veo3_awlrecord--split-14-class--nodistinct--max4769--12-kpts"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--add--action-frame-txt--to--json"
 POSTFIX__DIR__LABEL = ""
 
 NUM__MAX__IMG__TO__VISUALIZE = None
@@ -11,7 +11,8 @@ IS_OK__LBL_NOT_FOUND = False
 
 OUTPUT_AS = "imgdir"  # imgdir, video
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/v201--satudora_veo3_awlrecord--r1.25-0xauto-1x1--satudora-filter-roi-conf--only-normal-satudora--veo3-all--1s-15frames--split-17-class--v2"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/v210--satudora_veo3_awlrecord--split-14-class--nodistinct--max4769--12-kpts"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/helper--add--action-frame-txt--to--json"
 
 # Define the map of subpaths
 MAP__SUBPATH_DIR__TO__ = {
@@ -87,7 +88,7 @@ for subpath in MAP__SUBPATH_DIR__TO__:
         output_as=OUTPUT_AS,
         path__dir__output=path__dir__output,
         path__file__output=path__file__output,
-        num__workers=10,
+        num__workers=30,
         num__max__img=NUM__MAX__IMG__TO__VISUALIZE,
         seed=42,
         to_draw__id_frame=False,
@@ -247,24 +248,39 @@ for subpath in MAP__SUBPATH_DIR__TO__:
             # "A059": "walking",
             # "A060": "walking",
             #
-            "0": "dung",
-            "1": "dung day",
-            "2": "ngoi",
-            "3": "ngoi xuong",
-            "4": "di lai",
-            "5": "dua tay vao nguoi",
-            "6": "rut tay khoi tui",
-            "7": "rut tay khoi nguoi",
-            "8": "dua tay ra truoc",
-            "9": "tuong tac phia truoc",
-            "10": "tay cam vat the",
-            "11": "rut tay ve",
-            "12": "GIAU -> TUI QUAN",
-            "13": "GIAU -> TUI AO/XACH",
-            "14": "GIAU -> TUI trong GIO",
-            "15": "GIAU -> CO AO",
-            "16": "GIAU -> GIAY",
-            "unk": "",
+            # "0": "dung",
+            # "1": "dung day",
+            # "2": "ngoi",
+            # "3": "ngoi xuong",
+            # "4": "di lai",
+            # "5": "dua tay vao nguoi",
+            # "6": "rut tay khoi tui",
+            # "7": "rut tay khoi nguoi",
+            # "8": "dua tay ra truoc",
+            # "9": "tuong tac phia truoc",
+            # "10": "tay cam vat the",
+            # "11": "rut tay ve",
+            # "12": "GIAU -> TUI QUAN",
+            # "13": "GIAU -> TUI AO/XACH",
+            # "14": "GIAU -> TUI trong GIO",
+            # "15": "GIAU -> CO AO",
+            # "16": "GIAU -> GIAY",
+            # "unk": "",
+            #
+            # "0": "stand",
+            # "1": "stand up",
+            # "2": "sit",
+            # "3": "sit down",
+            # "4": "walk",
+            # "5": "hand slide/stay in body",
+            # "6": "hand withdraw f. body",
+            # "7": "hand reach out",
+            # "8": "hand interact ahead",
+            # "9": "hand pull back",
+            # "10": "hand withdraw f. pocket/bag/basket",
+            # "11": "hand slide/stay in pants pocket",
+            # "12": "hand slide/stay in bag",
+            # "13": "hand slide/stay in basket",
         },
     )
 
