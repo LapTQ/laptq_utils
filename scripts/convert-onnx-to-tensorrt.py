@@ -11,13 +11,6 @@ convert_onnx_to_tensorrt(
     #         (100, 2, 15, 12),
     #     ]
     # },
-    dynamic_shape={
-        "input1": [
-            (1, 2, 16, 12, 1),
-            (10, 2, 16, 12, 1),
-            (100, 2, 16, 12, 1),
-        ],
-    },
     max_workspace_size=1,
 )
 
