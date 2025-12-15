@@ -2,8 +2,8 @@ PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-
 # PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/data/test-videos"
 POSTFIX__DIR__IMAGE = ""
 
-# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/SkateFormer/fs26/v210--satudora_veo3_awlrecord--split-14-class--nodistinct--max4769--12-kpts"
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--add--action-frame-txt--to--json"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/SkateFormer/fs26/v210-v212-v213-v214"
+# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--add--action-frame-txt--to--json"
 POSTFIX__DIR__LABEL = ""
 
 NUM__MAX__IMG__TO__VISUALIZE = None
@@ -11,8 +11,8 @@ IS_OK__LBL_NOT_FOUND = False
 
 OUTPUT_AS = "imgdir"  # imgdir, video
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/v210--satudora_veo3_awlrecord--split-14-class--nodistinct--max4769--12-kpts"
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/helper--add--action-frame-txt--to--json"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/v210-v212-v213-v214"
+# PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/helper--add--action-frame-txt--to--json"
 
 # Define the map of subpaths
 MAP__SUBPATH_DIR__TO__ = {
@@ -105,7 +105,7 @@ for subpath in MAP__SUBPATH_DIR__TO__:
         to_draw__name_class=False,
         to_draw__pose=False,
         to_draw__connected_keypoints=False,
-        to_draw__id_action=False,
+        to_draw__id_action=True,
         to_draw__name_action=True,
         to_draw__action_conf=False,
         to_draw__keypoints_displacement=False,
@@ -267,20 +267,20 @@ for subpath in MAP__SUBPATH_DIR__TO__:
             # "16": "GIAU -> GIAY",
             # "unk": "",
             #
-            # "0": "stand",
-            # "1": "stand up",
-            # "2": "sit",
-            # "3": "sit down",
-            # "4": "walk",
-            # "5": "hand slide/stay in body",
-            # "6": "hand withdraw f. body",
-            # "7": "hand reach out",
-            # "8": "hand interact ahead",
-            # "9": "hand pull back",
-            # "10": "hand withdraw f. pocket/bag/basket",
-            # "11": "hand slide/stay in pants pocket",
-            # "12": "hand slide/stay in bag",
-            # "13": "hand slide/stay in basket",
+            "0": "stand",
+            "1": "stand up",
+            "2": "sit",
+            "3": "sit down",
+            "4": "walk",
+            "5": "hand slide/stay in body",
+            "6": "hand withdraw f. body",
+            "7": "hand reach out",
+            "8": "hand interact ahead",
+            "9": "hand pull back",
+            "10": "hand withdraw f. pocket/bag/basket",
+            "11": "hand slide/stay in pants pocket",
+            "12": "hand slide/stay in bag",
+            "13": "hand slide/stay in basket",
         },
     )
 
