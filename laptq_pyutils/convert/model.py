@@ -5,7 +5,7 @@ LOGGER = load_logger()
 
 
 def convert_onnx_to_tensorrt(**kwargs):
-
+    import os
     import tensorrt as trt
 
     path__file__input = kwargs["path__file__input"]
@@ -16,7 +16,7 @@ def convert_onnx_to_tensorrt(**kwargs):
 
     assert precision in ["fp32", "fp16"]
 
-    logger_trt = trt.Logger(trt.Logger.VERBOSE)  # Use VERBOSE for detailed logs
+    logger_trt = trt.Logger(trt.Logger.WARNING)  # Use VERBOSE for detailed logs
     builder = trt.Builder(logger_trt)
 
     # Create a network with explicit batch mode
@@ -54,14 +54,19 @@ def convert_onnx_to_tensorrt(**kwargs):
     # Add dynamic shape optimization profile if enabled
     if dynamic_shape is not None:
         profile = builder.create_optimization_profile()
-        for input_name in dynamic_shape:
-            input_shape = dynamic_shape[input_name]
-            profile.set_shape(
-                input_name,
-                input_shape[0],  # Minimum shape
-                input_shape[1],  # Optimal shape
-                input_shape[2],  # Maximum shape
-            )
+        for i in range(network.num_inputs):
+            tensor = network.get_input(i)
+            input_name = tensor.name
+            input_shape = dynamic_shape.get(input_name)
+            if input_shape:
+                profile.set_shape(
+                    input_name,
+                    input_shape[0],  # Minimum shape
+                    input_shape[1],  # Optimal shape
+                    input_shape[2],  # Maximum shape
+                )
+            else:
+                LOGGER.warning(f"Input '{input_name}' exists in network but no dynamic_shape config provided. It will be static.")
         config.add_optimization_profile(profile)
 
     # Build the engine
@@ -76,6 +81,7 @@ def convert_onnx_to_tensorrt(**kwargs):
         raise RuntimeError("Failed to build the TensorRT engine")
 
     # Serialize and save the engine
+    os.makedirs(os.path.dirname(path__file__output), exist_ok=True)
     with open(path__file__output, "wb") as file:
         file.write(engine.serialize())
     LOGGER.success("TensorRT engine is saved at: {}".format(path__file__output))
