@@ -1,16 +1,16 @@
 from laptq_pyutils.convert import convert_onnx_to_tensorrt
 
 convert_onnx_to_tensorrt(
-    path__file__input="/home/laptq/laptq-fs26-shoplifting-detection/outputs/convert-torch-to-onnx/fs26/SkateFormer/v210.onnx",
-    path__file__output="/home/laptq/laptq-fs26-shoplifting-detection/outputs/convert-onnx-to-tensorrt/fs26/SkateFormer/v210.trt",
+    path__file__input="/home/laptq/laptq-fs26-shoplifting-detection/outputs/convert-torch-to-onnx/fs26/SkateFormer/v210-joint.onnx",
+    path__file__output="/home/laptq/laptq-fs26-shoplifting-detection/outputs/convert-onnx-to-tensorrt/fs26/SkateFormer/v210-joint.trt",
     precision="fp32",
-    # dynamic_shape={
-    #     "input1": [
-    #         (1, 2, 15, 12),
-    #         (10, 2, 15, 12),
-    #         (100, 2, 15, 12),
-    #     ]
-    # },
+    dynamic_shape={
+        "input1": [
+            (1, 2, 15, 12),
+            (10, 2, 15, 12),
+            (100, 2, 15, 12),
+        ]
+    },
     max_workspace_size=1,
 )
 
