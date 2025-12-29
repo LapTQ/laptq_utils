@@ -777,11 +777,17 @@ def helper__filter__image__by__id_class(**kwargs):
     import os
     import json
     from tqdm import tqdm
+    import numpy as np
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
-    list__id_class__to_include = kwargs["list__id_class__to_include"]
+    list__id_class__to_include_any = kwargs["list__id_class__to_include_any"]
+    list__id_class__to_include_all = kwargs["list__id_class__to_include_all"]
     list__id_class__to_exclude = kwargs["list__id_class__to_exclude"]
+
+    assert (
+        list__id_class__to_include_any is None or list__id_class__to_include_all is None
+    ), "Cannot be not-none at the same time"
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
@@ -799,13 +805,32 @@ def helper__filter__image__by__id_class(**kwargs):
         list__obj__id_class = dict__result["list__obj__id_class"]
 
         to__filter_out = False
-        if list__id_class__to_include is not None and len(list__obj__id_class) == 0:
-            to__filter_out = True
-        for id_class in list__obj__id_class:
+        if list__id_class__to_include_any is not None:
+            # if list__id_class__to_include_any = [] => select only background
             if (
-                list__id_class__to_include is not None
-                and id_class not in list__id_class__to_include
-            ) or id_class in list__id_class__to_exclude:
+                len(list__id_class__to_include_any) == 0
+                and len(list__obj__id_class) > 0
+            ):
+                to__filter_out = True
+            # if list__id_class__to_include_any = [...] => we want non-background and contain at least 1 object of interest
+            elif len(list__id_class__to_include_any) > 0 and ~np.any(
+                [
+                    id_class in list__id_class__to_include_any
+                    for id_class in list__obj__id_class
+                ]
+            ):
+                to__filter_out = True
+        if list__id_class__to_include_all is not None:
+            assert len(list__id_class__to_include_all) > 0
+            if ~np.all(
+                [
+                    id_class in list__id_class__to_include_any
+                    for id_class in list__obj__id_class
+                ]
+            ):
+                to__filter_out = True
+        for id_class in list__obj__id_class:
+            if id_class in list__id_class__to_exclude:
                 to__filter_out = True
                 break
 
