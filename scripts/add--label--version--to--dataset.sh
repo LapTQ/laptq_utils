@@ -1,16 +1,16 @@
-PATH__DIR__IMG__SOURCE=/home/laptq/laptq-nedo-fed/data
+PATH__DIR__IMG__SOURCE=/home/pocuser2/datasets/coco/restructured
 POSTFIX__DIR__IMG__SOURCE=""
 
-PATH__DIR__LABEL__SOURCE=/home/laptq/laptq-nedo-fed/outputs/labels
-POSTFIX__DIR__LABEL__SOURCE="--only-person--TXT"
+PATH__DIR__LABEL__SOURCE=/home/pocuser2/datasets/coco/only_person
+POSTFIX__DIR__LABEL__SOURCE=""
 
-PATH__DIR__OUTPUT=/home/laptq/laptq-nedo-fed/data
-POSTFIX__DIR__VERSION__TARGET="--only-person"
+PATH__DIR__OUTPUT=/home/pocuser2/datasets/coco/only_person
+POSTFIX__DIR__VERSION__TARGET=""
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["fastlabel/train"]=""
-    ["fastlabel/val"]=""
+    ["train2017"]=""
+    ["val2017"]=""
 )
 
 

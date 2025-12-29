@@ -1,14 +1,14 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/datasets/COCO/annotations
+PATH__DIR__LABEL__INPUT=/home/pocuser2/datasets/coco/annotations
 POSTFIX__DIR__LABEL__INPUT=""
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/datasets/COCO--reformated
+PATH__DIR__LABEL__OUTPUT=/home/pocuser2/datasets/coco/restructured
 POSTFIX__DIR__LABEL__OUTPUT=""
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
     # ["train2017"]=""
     ["val2017"]=""
-    ["test"]=""
+    # ["test"]=""
 )
 
 IFS=$'\n'
@@ -25,7 +25,7 @@ for subpath__dir in "${!MAP__SUBPATH_DIR__TO__[@]}"; do
     [[ -d "${path__dir__lbl__output}" ]] && rm -r "${path__dir__lbl__output}"
     mkdir -p "${path__dir__lbl__output}"
 
-    python3 main.py \
+    python3 submodules/laptq_utils/main.py \
         helper__convert__result__coco__to__json \
         --path__file__lbl__input "${path__file__lbl__input}" \
         --path__dir__lbl__output "${path__dir__lbl__output}" \

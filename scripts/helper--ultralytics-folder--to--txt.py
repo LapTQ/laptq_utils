@@ -6,13 +6,22 @@ IMAGE_FOLDERS = [
     # '/home/pocuser2/laptq-nedo-fed/data/SKU110K_fixed/val/images',
     # '/home/pocuser2/laptq-nedo-fed/data/SKU110K_fixed/test/images',
     # "/home/pocuser2/laptq-nedo-fed/data/locount/train/images",
-    "/home/pocuser2/laptq-nedo-fed/data/locount/val/images",
+    # "/home/pocuser2/laptq-nedo-fed/data/locount/val/images",
+    # "/home/pocuser2/datasets/coco/only_person/train2017/images",
+    # "/home/pocuser2/datasets/coco/only_person/val2017/images",
+    # "/home/pocuser2/datasets/lagenda/restructured/train/images",
+    "/home/pocuser2/datasets/lagenda/restructured/val/images",
 ]
 
 # OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/sku_train.txt'
 # OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/sku_val.txt'
 # OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/locount_train.txt'
-OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/locount_val.txt'
+# OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/locount_val.txt'
+# OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/coco2017_train.txt'
+# OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/coco2017_val.txt'
+# OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/lagenda_train.txt'
+OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/lagenda_val.txt'
+
 
 IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.bmp', '.tiff']
 

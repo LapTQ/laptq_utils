@@ -1,13 +1,13 @@
-PATH__DIR__IMAGE__INPUT=/home/laptq/datasets/COCO
+PATH__DIR__IMAGE__INPUT=/home/pocuser2/datasets/coco
 
-PATH__DIR__IMAGE__OUTPUT=/home/laptq/datasets/COCO--reformated
+PATH__DIR__IMAGE__OUTPUT=/home/pocuser2/datasets/coco/restructured
 POSTFIX__DIR__IMAGE__OUTPUT=""
 
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    # ["train2017"]=""
-    # ["val2017"]=""
-    ["test"]=""
+    ["train2017"]=""
+    ["val2017"]=""
+    # ["test"]=""
 )
 
 IFS=$'\n'

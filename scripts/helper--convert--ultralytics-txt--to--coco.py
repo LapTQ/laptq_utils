@@ -24,9 +24,15 @@ LS__PATHF_INPUT = [
     # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/train_d7_cam2.txt",
     # "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/data/valid_d7_cam2.txt",
     # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/locount_train.txt",
-    "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/locount_val.txt",
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/locount_val.txt",
     # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/sku_train.txt",
-    "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/sku_val.txt",
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/sku_val.txt",
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/toy1.txt",
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/toy2.txt",
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/coco2017_train.txt",
+    "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/coco2017_val.txt",
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/lagenda_train.txt",
+    "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/lagenda_val.txt",
 
 ]
 PATHF_OUTPUT = (
@@ -52,8 +58,15 @@ PATHF_OUTPUT = (
     # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/sku_train.json"
     # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/sku_val.json"
     # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/sku_train--locount_train.json"
-    "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/sku_val--locount_val.json"
-
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/sku_val--locount_val.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/toy1.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/toy2.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/coco2017_train.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/coco2017_val.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/lagenda_train.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/lagenda_val.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/coco2017_train--lagenda_train.json"
+    "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/coco2017_val--lagenda_val.json"
 )
 
 from tqdm import tqdm
@@ -65,7 +78,7 @@ import os
 images = []
 annotations = []
 categories = [
-    {"supercategory": "product", "id": 0, "name": "product"},
+    {"supercategory": "person", "id": 0, "name": "person"},
 ]
 
 count_img = 0

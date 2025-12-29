@@ -1,12 +1,12 @@
-PATH__DIR__LABEL__INPUT=/home/laptq/laptq-nedo-fed/outputs/labels
-POSTFIX__DIR__LABEL__INPUT="--only-person"
+PATH__DIR__LABEL__INPUT=/home/pocuser2/datasets/coco/only_person
+POSTFIX__DIR__LABEL__INPUT=""
 
-PATH__DIR__LABEL__OUTPUT=/home/laptq/laptq-nedo-fed/outputs/labels
-POSTFIX__DIR__LABEL__OUTPUT="--only-person--TXT"
+PATH__DIR__LABEL__OUTPUT=/home/pocuser2/datasets/coco/only_person
+POSTFIX__DIR__LABEL__OUTPUT="--txt"
 
 declare -A MAP__SUBPATH_DIR__TO__=(
-    ["fastlabel/train"]=""
-    ["fastlabel/val"]=""
+    ["train2017"]=""
+    ["val2017"]=""
 )
 
 IFS=$'\n'
