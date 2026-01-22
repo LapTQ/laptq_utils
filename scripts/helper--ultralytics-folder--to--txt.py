@@ -10,7 +10,19 @@ IMAGE_FOLDERS = [
     # "/home/pocuser2/datasets/coco/only_person/train2017/images",
     # "/home/pocuser2/datasets/coco/only_person/val2017/images",
     # "/home/pocuser2/datasets/lagenda/restructured/train/images",
-    "/home/pocuser2/datasets/lagenda/restructured/val/images",
+    # "/home/pocuser2/datasets/lagenda/restructured/val/images",
+    # "/home/pocuser2/datasets/VOC/restructured/train2012/images",
+    # "/home/pocuser2/datasets/VOC/restructured/val2012/images",
+    # "/home/pocuser2/datasets/CrowdHuman/val/images",
+    # "/home/pocuser2/datasets/CityPersons/restructured/train/images",
+    # "/home/pocuser2/datasets/CityPersons/restructured/val/images",
+    # "/home/pocuser2/datasets/Objects365/only_person/val/images",
+    # "/home/pocuser2/datasets/virat/extract/train/images",
+    # "/home/pocuser2/datasets/virat/extract/val_split/subset_A/images",
+    "/home/pocuser2/datasets/virat/extract/val_split/subset_B/images",
+    # "/home/pocuser2/datasets/virat/extract/val/images",
+    # "/home/pocuser2/datasets/OpenImageV7/yolo_format/images/val",
+    # "/home/pocuser2/datasets/OpenImageV7-v2/yolo_format/images/val",
 ]
 
 # OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/sku_train.txt'
@@ -20,7 +32,14 @@ IMAGE_FOLDERS = [
 # OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/coco2017_train.txt'
 # OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/coco2017_val.txt'
 # OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/lagenda_train.txt'
-OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/lagenda_val.txt'
+# OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/lagenda_val.txt'
+# OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/VOC2012.txt'
+# OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/CrowdHuman_val.txt'
+# OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/CityPersons.txt'
+# OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/Objects365_val.txt'
+# OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/virat_train.txt'
+OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/virat_val.txt'
+# OUTPUT_FILENAME = '/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/openimage_val_1000.txt'
 
 
 IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.bmp', '.tiff']

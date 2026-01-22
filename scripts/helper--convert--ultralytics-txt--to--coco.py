@@ -30,10 +30,16 @@ LS__PATHF_INPUT = [
     # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/toy1.txt",
     # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/toy2.txt",
     # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/coco2017_train.txt",
-    "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/coco2017_val.txt",
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/coco2017_val.txt",
     # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/lagenda_train.txt",
     "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/lagenda_val.txt",
-
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/VOC2012.txt"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/CrowdHuman_val.txt"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/CityPersons.txt"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/Objects365_val.txt"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/virat_train.txt"
+    "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/virat_val.txt"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/ultralytics_folder_to_txt/openimage_val_1000.txt"
 ]
 PATHF_OUTPUT = (
     # "/home/lap_awlv/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/train_d1_90k.json"
@@ -66,7 +72,16 @@ PATHF_OUTPUT = (
     # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/lagenda_train.json"
     # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/lagenda_val.json"
     # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/coco2017_train--lagenda_train.json"
-    "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/coco2017_val--lagenda_val.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/coco2017_val--lagenda_val.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/VOC2012.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/CrowdHuman_val.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/CityPersons.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/Objects365_val.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/virat_train.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/virat_val.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/openimage_val_1000.json"
+    # "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/lagenda_train--virat_train.json"
+    "/home/pocuser2/laptq-nedo-fed/outputs/helper--convert--ultralytics-txt--to--coco/lagenda_val--virat_val.json"
 )
 
 from tqdm import tqdm
@@ -134,3 +149,6 @@ output_data = {
 os.makedirs(os.path.dirname(PATHF_OUTPUT), exist_ok=True)
 with open(PATHF_OUTPUT, "w") as f:
     json.dump(output_data, f, indent=4)
+
+print(f"✅ Success! Total images: {count_img}, total annotations: {count_ann}")
+print(f"✅ Success! Output file: {PATHF_OUTPUT}")
