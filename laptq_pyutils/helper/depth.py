@@ -9,7 +9,6 @@ def helper__depth__estimation(**kwargs):
     import os
     import numpy as np
     import cv2
-    import torch
 
     path__dir__img__input = kwargs["path__dir__img__input"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]

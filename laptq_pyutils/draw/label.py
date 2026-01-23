@@ -39,8 +39,8 @@ def draw__image(**kwargs):
     box_color_by = kwargs.get("box_color_by", None)
     fontScale = kwargs.get("fontScale", 1)
     thickness = kwargs.get("thickness", 1)
-    map__id_class__to__name_class = kwargs.get("map__id_class__to__name_class", {})
-    map__id_action__to__name_action = kwargs.get("map__id_action__to__name_action", {})
+    map__id_class__to__name_class = kwargs.get("map__id_class__to__name_class", None)
+    map__id_action__to__name_action = kwargs.get("map__id_action__to__name_action", None)
     list__keypoints_to_include = kwargs.get("list__keypoints_to_include", None)
     list__keypoints_to_exclude = kwargs.get("list__keypoints_to_exclude", [])
     list__keypoints_same_color = kwargs.get("list__keypoints_same_color", None)
@@ -132,6 +132,10 @@ def draw__image(**kwargs):
                 map__pose_edge__to__idx_color[tuple(edge)] = (
                     i_e  # symmetric edges should have same color
                 )
+    if map__id_class__to__name_class is None:
+        map__id_class__to__name_class = {}
+    if map__id_action__to__name_action is None:
+        map__id_action__to__name_action = {}
 
     H, W = img__bgr.shape[:2]
 
@@ -294,8 +298,8 @@ def draw__image(**kwargs):
                 aconf = action_confs[i_obj]
                 if astatus is True:
                     action_counter += 1
-                    org = (x1 + 3, y2 + 28 * action_counter)
-                    # org = (x1 + 3, y1 - 10)
+                    org = (x1 + 3, y2 + 30 * action_counter)
+                    # org = (x1 + 90, y1 - 10)
                     msg = (
                         str(id__action)
                         if not to_draw__name_action

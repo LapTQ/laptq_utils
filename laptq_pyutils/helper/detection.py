@@ -1,8 +1,19 @@
+import os
+import os
+import json
+import numpy as np
+import cv2
+import PIL.Image as PILImage
+from shapely.geometry import Polygon
+from tqdm import tqdm
+from multiprocessing import Pool
+
 from laptq_pyutils.draw import draw__image
 from laptq_pyutils.objects import (
     ListAligner,
     UltralyticsPredictor,
     YOLOv5CompatDetectPredictor,
+    RTMPosePredictor,
 )
 from laptq_pyutils.log import load_logger
 from laptq_pyutils.common import LIST__MODE__BOX
@@ -41,7 +52,6 @@ def parse__ultralytics_model(**kwargs):
 
 def helper__extract__ultralytics__imgdir(**kwargs):
 
-    from ultralytics import YOLO
     import os
     from tqdm import tqdm
     import cv2
@@ -65,11 +75,10 @@ def helper__extract__ultralytics__imgdir(**kwargs):
         img__bgr = cv2.imread(path__file__img)
 
         mtime_1 = time.time()
-        _ = model.predict(
+        dict__result = model.predict(
             img__bgr=img__bgr,
             **kwargs,
         )
-        dict__result = _["dict__result"]
         mtime_2 = time.time()
 
         name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
@@ -89,7 +98,6 @@ def helper__extract__ultralytics__imgdir(**kwargs):
 
 def helper__extract__ultralytics__video(**kwargs):
 
-    from ultralytics import YOLO
     import cv2
     import json
     import os
@@ -97,35 +105,32 @@ def helper__extract__ultralytics__video(**kwargs):
     import time
 
     path__file__input = kwargs["path__file__input"]
-    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    path__dir__output = kwargs["path__dir__output"]
     num__pad__0 = kwargs["num__pad__0"]
 
     model = parse__ultralytics_model(**kwargs)
 
     cap = cv2.VideoCapture(path__file__input)
-    os.makedirs(path__dir__lbl__output, exist_ok=True)
+    os.makedirs(path__dir__output, exist_ok=True)
 
-    pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
-    id__frame = -1
+    pbar = tqdm(range(int(cap.get(cv2.CAP_PROP_FRAME_COUNT))))
     log__time = {
         "time__inference": None,
     }
-    while True:
+    for id__frame in pbar:
         success, img__bgr = cap.read()
         if not success:
             break
-        id__frame += 1
 
         mtime_1 = time.time()
-        _ = model.predict(
+        dict__result = model.predict(
             img__bgr=img__bgr,
             **kwargs,
         )
-        dict__result = _["dict__result"]
         mtime_2 = time.time()
 
         name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
-        path__file__lbl = os.path.join(path__dir__lbl__output, name__file__lbl)
+        path__file__lbl = os.path.join(path__dir__output, name__file__lbl)
 
         with open(path__file__lbl, "w") as f:
             json.dump(dict__result, f, indent=4)
@@ -137,7 +142,6 @@ def helper__extract__ultralytics__video(**kwargs):
                 mtime_2 - mtime_1
             )
         pbar.set_postfix(time__inference=log__time["time__inference"])
-        pbar.update(1)
 
 
 def helper__filter__detection__result__by__id_class(**kwargs):
@@ -210,42 +214,69 @@ def helper__change__detection__id_class(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
-def helper__filter__detection__result__by__conf(**kwargs):
-
-    import json
-    from tqdm import tqdm
-    import os
-
+def _filter__detection__result__by__conf__core(kwargs):
+    name__file__lbl = kwargs["name__file__lbl"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     map__id_class__to__thresh_conf: dict = kwargs["map__id_class__to__thresh_conf"]
 
+    path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+    path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+    with open(path__file__lbl__input, "r") as f:
+        dict__result = json.load(f)
+
+    list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+
+    list__index__to_pop = []
+    list__obj__id_class = list_aligner__result.get__key("list__obj__id_class")
+    list__obj__box_conf = list_aligner__result.get__key("list__obj__box_conf")
+
+    for i_obj, (id_class, conf) in enumerate(
+        zip(list__obj__id_class, list__obj__box_conf)
+    ):
+        if conf < map__id_class__to__thresh_conf[id_class]:
+            list__index__to_pop.append(i_obj)
+
+    list_aligner__result.pop__indexes(list__index__to_pop)
+
+    dict__result = list_aligner__result.item()
+
+    with open(path__file__lbl__output, "w") as f:
+        json.dump(dict__result, f, indent=4)
+
+
+def helper__filter__detection__result__by__conf(**kwargs):
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    map__id_class__to__thresh_conf: dict = kwargs["map__id_class__to__thresh_conf"]
+    num_workers = kwargs["num_workers"]
+
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
-        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
-        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+    list__name__file__lbl = sorted(os.listdir(path__dir__lbl__input))
 
-        with open(path__file__lbl__input, "r") as f:
-            dict__result = json.load(f)
+    list__kwargs = [
+        dict(
+            name__file__lbl=name__file__lbl,
+            path__dir__lbl__input=path__dir__lbl__input,
+            path__dir__lbl__output=path__dir__lbl__output,
+            map__id_class__to__thresh_conf=map__id_class__to__thresh_conf,
+        )
+        for name__file__lbl in list__name__file__lbl
+    ]
 
-        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
-
-        list__index__to_pop = []
-        list__obj__id_class = list_aligner__result.get__key("list__obj__id_class")
-        list__obj__box_conf = list_aligner__result.get__key("list__obj__box_conf")
-        for i_obj, (id_class, conf) in enumerate(
-            zip(list__obj__id_class, list__obj__box_conf)
-        ):
-            if conf < map__id_class__to__thresh_conf[id_class]:
-                list__index__to_pop.append(i_obj)
-
-        list_aligner__result.pop__indexes(list__index__to_pop)
-
-        dict__result = list_aligner__result.item()
-
-        with open(path__file__lbl__output, "w") as f:
-            json.dump(dict__result, f, indent=4)
+    with Pool(processes=num_workers) as pool:
+        list(
+            tqdm(
+                pool.imap_unordered(
+                    _filter__detection__result__by__conf__core,
+                    list__kwargs,
+                    chunksize=1,
+                ),
+                total=len(list__name__file__lbl),
+            )
+        )
 
 
 def helper__filter__detection__result__by__miniou(**kwargs):
@@ -300,297 +331,81 @@ def helper__filter__detection__result__by__miniou(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
-def helper__filter__detection__result__by__roi(**kwargs):
+def _filter__detection__result__by__roi__core(kwargs):
+    name__file__lbl = kwargs["name__file__lbl"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    roi__polygon = kwargs["roi__polygon"]
+    roi_area = kwargs["roi_area"]
+    thresh__miniou = kwargs["thresh__miniou"]
 
-    import os
-    import json
-    from tqdm import tqdm
-    import numpy as np
-    from shapely.geometry import Polygon
+    path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+    path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+    with open(path__file__lbl__input, "r") as f:
+        dict__result = json.load(f)
+
+    list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
+
+    list__obj__box_xcycwhn = list_aligner__result.get__key("list__obj__box_xcycwhn")
+    list__obj__box_polygonn = xcycwh__to__polygon(
+        np.array(list__obj__box_xcycwhn).reshape(-1, 4)
+    )
+
+    list__index__to_pop = []
+    for i_obj, box_polygon in enumerate(list__obj__box_polygonn):
+        box_polygon = Polygon(box_polygon.reshape(-1, 2))
+        box_area = box_polygon.area
+        inter_area = roi__polygon.intersection(box_polygon).area
+        miniou = inter_area / min(box_area, roi_area)
+        if miniou < thresh__miniou:
+            list__index__to_pop.append(i_obj)
+
+    list_aligner__result.pop__indexes(list__index__to_pop)
+
+    dict__result = list_aligner__result.item()
+    with open(path__file__lbl__output, "w") as f:
+        json.dump(dict__result, f, indent=4)
+
+
+def helper__filter__detection__result__by__roi(**kwargs):
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     roi__polygonn = np.array(kwargs["roi__polygonn"]).reshape(-1, 2)
     thresh__miniou = kwargs["thresh__miniou"]
+    num_workers = kwargs["num_workers"]
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
     roi__polygon = Polygon(roi__polygonn)
     roi_area = roi__polygon.area
 
-    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
-        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
-        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+    list__name__file__lbl = sorted(os.listdir(path__dir__lbl__input))
 
-        with open(path__file__lbl__input, "r") as f:
-            dict__result = json.load(f)
-
-        list_aligner__result = ListAligner.from_dict(dict__result=dict__result)
-
-        list__obj__box_xcycwhn = list_aligner__result.get__key("list__obj__box_xcycwhn")
-        list__obj__box_polygonn = xcycwh__to__polygon(
-            np.array(list__obj__box_xcycwhn).reshape(-1, 4)
+    list__kwargs = [
+        dict(
+            name__file__lbl=name__file__lbl,
+            path__dir__lbl__input=path__dir__lbl__input,
+            path__dir__lbl__output=path__dir__lbl__output,
+            roi__polygon=roi__polygon,
+            roi_area=roi_area,
+            thresh__miniou=thresh__miniou,
         )
-
-        list__index__to_pop = []
-        for i_obj, box_polygon in enumerate(list__obj__box_polygonn):
-            box_polygon = Polygon(box_polygon.reshape(-1, 2))
-            box_area = box_polygon.area
-            inter_area = roi__polygon.intersection(box_polygon).area
-            miniou = inter_area / min(box_area, roi_area)
-            if miniou < thresh__miniou:
-                list__index__to_pop.append(i_obj)
-
-        list_aligner__result.pop__indexes(list__index__to_pop)
-
-        dict__result = list_aligner__result.item()
-        with open(path__file__lbl__output, "w") as f:
-            json.dump(dict__result, f, indent=4)
-
-
-def helper__draw__imgdir(**kwargs):
-
-    import os
-    from tqdm import tqdm
-    import cv2
-    import json
-    import numpy as np
-    import yaml
-
-    path__dir__img = kwargs["path__dir__img"]
-    path__dir__lbl = kwargs["path__dir__lbl"]
-    path__dir__output = kwargs["path__dir__output"]
-    num__max__img = kwargs["num__max__img"]
-    seed = kwargs["seed"]
-    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
-    to_draw__id_frame = kwargs["to_draw__id_frame"]
-    id_frame__from = kwargs["id_frame__from"]
-    lambda__id_frame__from = kwargs["lambda__id_frame__from"]
-    to_draw__name_class = kwargs["to_draw__name_class"]
-    to_draw__name_action = kwargs["to_draw__name_action"]
-    path__file__map__id_class__to__name_class = kwargs[
-        "path__file__map__id_class__to__name_class"
+        for name__file__lbl in list__name__file__lbl
     ]
-    path__file__map__id_action__to__name_action = kwargs[
-        "path__file__map__id_action__to__name_action"
-    ]
-    to_concat__original_img = kwargs["to_concat__original_img"]
-    concat__axis = kwargs["concat__axis"]
-    displacement_key = kwargs["displacement_key"]
-    speed_key = kwargs["speed_key"]
 
-    assert id_frame__from in [
-        "filename"
-    ], "id_frame__from {} not supported. Supporting: 'filename'.".format(id_frame__from)
-
-    os.makedirs(path__dir__output, exist_ok=True)
-
-    list__name__file__img = []
-    list__path__file__lbl = []
-    for name__file__img in sorted(os.listdir(path__dir__img)):
-        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
-        path__file__lbl = os.path.join(path__dir__lbl, name__file__lbl)
-        if not os.path.exists(path__file__lbl):
-            if is_ok__lbl_not_exist:
-                continue
-            else:
-                raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
-        list__name__file__img.append(name__file__img)
-        list__path__file__lbl.append(path__file__lbl)
-
-    if num__max__img is not None:
-        num__max__img = min(num__max__img, len(list__name__file__img))
-        if seed is not None:
-            np.random.seed(seed)
-        list__index__sample = np.random.choice(
-            len(list__name__file__img), num__max__img, replace=False
+    with Pool(processes=num_workers) as pool:
+        list(
+            tqdm(
+                pool.imap_unordered(
+                    _filter__detection__result__by__roi__core,
+                    list__kwargs,
+                    chunksize=1,
+                ),
+                total=len(list__name__file__lbl),
+            )
         )
-    else:
-        list__index__sample = range(len(list__name__file__img))
-
-    if to_draw__name_class:
-        with open(path__file__map__id_class__to__name_class, "r") as f:
-            map__id_class__to__name_class = yaml.safe_load(f)
-    else:
-        map__id_class__to__name_class = {}
-
-    if to_draw__name_action:
-        with open(path__file__map__id_action__to__name_action, "r") as f:
-            map__id_action__to__name_action = yaml.safe_load(f)
-    else:
-        map__id_action__to__name_action = {}
-
-    for i_f in tqdm(list__index__sample):
-        name__file__img = list__name__file__img[i_f]
-        path__file__lbl = list__path__file__lbl[i_f]
-        path__file__img = os.path.join(path__dir__img, name__file__img)
-
-        if to_draw__id_frame:
-            if id_frame__from == "filename":
-                id__frame = lambda__id_frame__from(name__file__img)
-
-        img__bgr = cv2.imread(path__file__img)
-        with open(path__file__lbl, "r") as f:
-            dict__result = json.load(f)
-
-        img__vis = draw__image(
-            data={
-                "id__frame": id__frame if to_draw__id_frame else None,
-                "img__bgr": img__bgr,
-                "list__obj__box_x1y1whn": (
-                    xcycwh__to__x1y1wh(
-                        np.array(dict__result["list__obj__box_xcycwhn"]).reshape(-1, 4)
-                    )
-                    if "list__obj__box_xcycwhn" in dict__result
-                    else None
-                ),
-                "list__obj__box_polygonn": dict__result.get(
-                    "list__obj__box_polygonn", None
-                ),
-                "list__obj__id_track": dict__result.get("list__obj__id_track", None),
-                "list__obj__id_class": dict__result["list__obj__id_class"],
-                "list__obj__box_conf": dict__result.get("list__obj__box_conf", None),
-                "list__obj__kpts_xyn": dict__result.get("list__obj__kpts_xyn", None),
-                "list__obj__kpts_conf": dict__result.get("list__obj__kpts_conf", None),
-                "list__obj__action_conf": dict__result.get(
-                    "list__obj__action_conf", None
-                ),
-                "list__obj__action_status": dict__result.get(
-                    "list__obj__action_status", None
-                ),
-                "list__obj__kpts_displacement": dict__result.get(
-                    displacement_key, None
-                ),
-                "list__obj__kpts_speed": dict__result.get(speed_key, None),
-                "list__obj__event_info": dict__result.get(
-                    "list__obj__event_info", None
-                ),
-            },
-            map__id_class__to__name_class=map__id_class__to__name_class,
-            map__id_action__to__name_action=map__id_action__to__name_action,
-            **kwargs,
-        )
-
-        path__file__output = os.path.join(path__dir__output, name__file__img)
-
-        if to_concat__original_img:
-            img__vis = np.concatenate([img__bgr, img__vis], axis=concat__axis)
-
-        cv2.imwrite(path__file__output, img__vis)
-
-
-def helper__draw__video(**kwargs):
-
-    import cv2
-    import yaml
-    from tqdm import tqdm
-    import os
-    import json
-    import numpy as np
-
-    path__file__video__input = kwargs["path__file__video__input"]
-    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
-    path__file__output = kwargs["path__file__output"]
-    num__pad__0 = kwargs["num__pad__0"]
-    to_draw__name_class = kwargs["to_draw__name_class"]
-    to_draw__name_action = kwargs["to_draw__name_action"]
-    fourcc = kwargs["fourcc"]
-    path__file__map__id_class__to__name_class = kwargs[
-        "path__file__map__id_class__to__name_class"
-    ]
-    path__file__map__id_action__to__name_action = kwargs[
-        "path__file__map__id_action__to__name_action"
-    ]
-    to_concat__original_img = kwargs["to_concat__original_img"]
-    displacement_key = kwargs["displacement_key"]
-    speed_key = kwargs["speed_key"]
-
-    if to_draw__name_class:
-        with open(path__file__map__id_class__to__name_class, "r") as f:
-            map__id_class__to__name_class = yaml.safe_load(f)
-    else:
-        map__id_class__to__name_class = {}
-
-    if to_draw__name_action:
-        with open(path__file__map__id_action__to__name_action, "r") as f:
-            map__id_action__to__name_action = yaml.safe_load(f)
-    else:
-        map__id_action__to__name_action = {}
-
-    cap = cv2.VideoCapture(path__file__video__input)
-
-    os.makedirs(os.path.dirname(path__file__output), exist_ok=True)
-
-    writer = cv2.VideoWriter(
-        path__file__output,
-        cv2.VideoWriter_fourcc(*fourcc),
-        cap.get(cv2.CAP_PROP_FPS),
-        (
-            int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
-            int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-            * (2 if to_concat__original_img else 1),
-        ),
-    )
-
-    pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
-    id__frame = 0
-    while True:
-        success, img__bgr = cap.read()
-        if not success:
-            break
-
-        name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
-        path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
-        with open(path__file__lbl, "r") as f:
-            dict__result = json.load(f)
-
-        img__vis = draw__image(
-            data={
-                "id__frame": id__frame,
-                "img__bgr": img__bgr,
-                "list__obj__box_x1y1whn": (
-                    xcycwh__to__x1y1wh(
-                        np.array(dict__result["list__obj__box_xcycwhn"]).reshape(-1, 4)
-                    )
-                    if "list__obj__box_xcycwhn" in dict__result
-                    else None
-                ),
-                "list__obj__box_polygonn": dict__result.get(
-                    "list__obj__box_polygonn", None
-                ),
-                "list__obj__id_track": dict__result.get("list__obj__id_track", None),
-                "list__obj__id_class": dict__result["list__obj__id_class"],
-                "list__obj__box_conf": dict__result["list__obj__box_conf"],
-                "list__obj__kpts_xyn": dict__result.get("list__obj__kpts_xyn", None),
-                "list__obj__kpts_conf": dict__result.get("list__obj__kpts_conf", None),
-                "list__obj__action_conf": dict__result.get(
-                    "list__obj__action_conf", None
-                ),
-                "list__obj__action_status": dict__result.get(
-                    "list__obj__action_status", None
-                ),
-                "list__obj__kpts_displacement": dict__result.get(
-                    displacement_key, None
-                ),
-                "list__obj__kpts_speed": dict__result.get(speed_key, None),
-                "list__obj__event_info": dict__result.get(
-                    "list__obj__event_info", None
-                ),
-            },
-            map__id_class__to__name_class=map__id_class__to__name_class,
-            map__id_action__to__name_action=map__id_action__to__name_action,
-            **kwargs,
-        )
-
-        if to_concat__original_img:
-            img__vis = np.concatenate([img__bgr, img__vis], axis=0)
-
-        writer.write(img__vis)
-        id__frame += 1
-        pbar.update(1)
-
-    writer.release()
-    cap.release()
 
 
 def helper__convert__detection__json__to__txt(**kwargs):
@@ -962,11 +777,17 @@ def helper__filter__image__by__id_class(**kwargs):
     import os
     import json
     from tqdm import tqdm
+    import numpy as np
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
-    list__id_class__to_include = kwargs["list__id_class__to_include"]
+    list__id_class__to_include_any = kwargs["list__id_class__to_include_any"]
+    list__id_class__to_include_all = kwargs["list__id_class__to_include_all"]
     list__id_class__to_exclude = kwargs["list__id_class__to_exclude"]
+
+    assert (
+        list__id_class__to_include_any is None or list__id_class__to_include_all is None
+    ), "Cannot be not-none at the same time"
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
@@ -984,13 +805,32 @@ def helper__filter__image__by__id_class(**kwargs):
         list__obj__id_class = dict__result["list__obj__id_class"]
 
         to__filter_out = False
-        if list__id_class__to_include is not None and len(list__obj__id_class) == 0:
-            to__filter_out = True
-        for id_class in list__obj__id_class:
+        if list__id_class__to_include_any is not None:
+            # if list__id_class__to_include_any = [] => select only background
             if (
-                list__id_class__to_include is not None
-                and id_class not in list__id_class__to_include
-            ) or id_class in list__id_class__to_exclude:
+                len(list__id_class__to_include_any) == 0
+                and len(list__obj__id_class) > 0
+            ):
+                to__filter_out = True
+            # if list__id_class__to_include_any = [...] => we want non-background and contain at least 1 object of interest
+            elif len(list__id_class__to_include_any) > 0 and ~np.any(
+                [
+                    id_class in list__id_class__to_include_any
+                    for id_class in list__obj__id_class
+                ]
+            ):
+                to__filter_out = True
+        if list__id_class__to_include_all is not None:
+            assert len(list__id_class__to_include_all) > 0
+            if ~np.all(
+                [
+                    id_class in list__id_class__to_include_any
+                    for id_class in list__obj__id_class
+                ]
+            ):
+                to__filter_out = True
+        for id_class in list__obj__id_class:
+            if id_class in list__id_class__to_exclude:
                 to__filter_out = True
                 break
 
@@ -1016,6 +856,8 @@ def helper__rescale__detection__box(**kwargs):
     import PIL.Image
 
     path__dir__img = kwargs["path__dir__img"]
+    path__file__video = kwargs["path__file__video"]
+    type_media = kwargs["type_media"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     ratio__w = kwargs["ratio__w"]
@@ -1025,6 +867,8 @@ def helper__rescale__detection__box(**kwargs):
     cut__w__max = kwargs["cut__w__max"]
     cut__h__max = kwargs["cut__h__max"]
 
+    assert type_media in ["imgdir", "video"]
+
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
     to__get__img__size = (
@@ -1033,25 +877,15 @@ def helper__rescale__detection__box(**kwargs):
         or cut__w__max is not None
         or cut__h__max is not None
     )
+    list__name__file__lbl = sorted(os.listdir(path__dir__lbl__input))
+
     if to__get__img__size:
-        list__name__file__img = []
-        list__name__file__lbl = []
-        for name__file__img in sorted(os.listdir(path__dir__img)):
-            name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
-            path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
+        if type_media == "video":
+            cap = cv2.VideoCapture(path__file__video)
+            W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            H = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-            if not os.path.exists(path__file__lbl):
-                continue
-
-            list__name__file__img.append(name__file__img)
-            list__name__file__lbl.append(name__file__lbl)
-    else:
-        list__name__file__lbl = sorted(os.listdir(path__dir__lbl__input))
-        list__name__file__img = [None] * len(list__name__file__lbl)
-
-    for name__file__img, name__file__lbl in tqdm(
-        zip(list__name__file__img, list__name__file__lbl)
-    ):
+    for name__file__lbl in tqdm(list__name__file__lbl):
         path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
         path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
 
@@ -1059,8 +893,16 @@ def helper__rescale__detection__box(**kwargs):
             dict__result = json.load(f)
 
         if to__get__img__size:
-            path__file__img = os.path.join(path__dir__img, name__file__img)
-            W, H = PIL.Image.open(path__file__img).size
+            if type_media == "imgdir":
+                name__file__img = (
+                    os.path.splitext(name__file__img)[0] + ".jpg"
+                )  # I'm so lazy to generalize to other extensions!!!
+                path__file__img = os.path.join(path__dir__img, name__file__img)
+
+                if not os.path.exists(path__file__img):
+                    continue
+
+                W, H = PIL.Image.open(path__file__img).size
 
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
         for i_b, box in enumerate(list__obj__box_xcycwhn):
@@ -1306,56 +1148,34 @@ def helper__merge__detection__result(**kwargs):
             json.dump(dict__result, f, indent=4)
 
 
-def helper__extract__crops__from__detection(**kwargs):
+class ExtractCropsFromDetectionCore:
+    def __init__(self, **kwargs):
+        pass
 
-    LOGGER.warning(
-        "Please consider generalize this function with helper__extract__crops__with__mask__from__segmentation. These functions have something in common."
-    )
+    def predict(self, **kwargs):
+        path__file__img = kwargs["path__file__img"]
+        img__bgr = kwargs["img__bgr"]
+        dict__result = kwargs["dict__result"]
+        name__file__lbl = kwargs["name__file__lbl"]
+        to_save__img = kwargs["to_save__img"]
+        to_resize_box__wrt__pose = kwargs["to_resize_box__wrt__pose"]
+        to_shift__coords__wrt__box = kwargs["to_shift__coords__wrt__box"]
+        split_by = kwargs["split_by"]
+        to_add_crop_index_to_name = kwargs["to_add_crop_index_to_name"]
+        path__dir__crop__img__output = kwargs["path__dir__crop__img__output"]
+        path__dir__crop__lbl__output = kwargs["path__dir__crop__lbl__output"]
+        num__pad__0__crop = kwargs["num__pad__0__crop"]
 
-    import os
-    import json
-    from tqdm import tqdm
-    import cv2
-    import numpy as np
+        assert split_by in [None, "id__track", "id__class"]
 
-    path__dir__img__input = kwargs["path__dir__img__input"]
-    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
-    path__dir__crop__img__output = kwargs["path__dir__crop__img__output"]
-    path__dir__crop__lbl__output = kwargs["path__dir__crop__lbl__output"]
-    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
-    num__pad__0 = kwargs["num__pad__0"]
-    split_by = kwargs["split_by"]
-    to_resize_box__wrt__pose = kwargs["to_resize_box__wrt__pose"]
-    to_shift__coords__wrt__box = kwargs["to_shift__coords__wrt__box"]
-    to_save__img = kwargs["to_save__img"]
-
-    assert split_by in [None, "id__track", "id__class"]
-
-    if to_save__img:
-        list__name__file = sorted(os.listdir(path__dir__img__input))
-    else:
-        list__name__file = sorted(os.listdir(path__dir__lbl__input))
-    for name__file in tqdm(list__name__file):
-        if to_save__img:
-            name__file__img = name__file
-            name__file__lbl = os.path.splitext(name__file)[0] + ".json"
-            path__file__img = os.path.join(path__dir__img__input, name__file__img)
-        else:
-            name__file__lbl = name__file
-        path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
-
-        if not os.path.exists(path__file__lbl):
-            if is_ok__lbl_not_exist:
-                continue
+        if img__bgr is None:
+            if to_save__img:
+                img__bgr = cv2.imread(path__file__img)
+                H, W = img__bgr.shape[:2]
             else:
-                raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
-
-        with open(path__file__lbl, "r") as f:
-            dict__result = json.load(f)
-
-        if to_save__img:
-            img = cv2.imread(path__file__img)
-            H, W = img.shape[:2]
+                H, W = PILImage.open(path__file__img).size[::-1]
+        else:
+            H, W = img__bgr.shape[:2]
 
         list__obj__box_xcycwhn = dict__result["list__obj__box_xcycwhn"]
         list__obj__id_track = dict__result.get(
@@ -1367,6 +1187,8 @@ def helper__extract__crops__from__detection(**kwargs):
         list__obj__kpts_xyn = dict__result.get(
             "list__obj__kpts_xyn", [None] * len(list__obj__box_xcycwhn)
         )
+
+        ret = []
         for i_obj, (id__track, id__class, box_xcycwhn, kpts_xyn) in enumerate(
             zip(
                 list__obj__id_track,
@@ -1391,6 +1213,8 @@ def helper__extract__crops__from__detection(**kwargs):
                 k_xnmax = -1e9
                 k_ynmax = -1e9
                 for k_xn, k_yn in kpts_xyn.values():
+                    if k_xn == 0 and k_yn == 0:
+                        continue
                     if k_xn < k_xnmin:
                         k_xnmin = k_xn
                     if k_yn < k_ynmin:
@@ -1429,7 +1253,8 @@ def helper__extract__crops__from__detection(**kwargs):
                 b_y1 = int(b_y1n * H)
                 b_x2 = int(b_x2n * W)
                 b_y2 = int(b_y2n * H)
-                crop_img = img[b_y1:b_y2, b_x1:b_x2]
+
+                crop_img = img__bgr[b_y1:b_y2, b_x1:b_x2]
 
             if to_shift__coords__wrt__box:
                 # shift keypoints
@@ -1446,6 +1271,15 @@ def helper__extract__crops__from__detection(**kwargs):
                 box_xcycwhn[1] = 0.5
                 box_xcycwhn[2] = 1
                 box_xcycwhn[3] = 1
+
+            dict__result__crop = {
+                k: (
+                    v[i_obj : i_obj + 1]
+                    if not isinstance(v, dict)
+                    else ({vk: [vv[i_obj]] for vk, vv in v.items()})
+                )
+                for k, v in dict__result.items()
+            }
 
             if split_by is not None:
                 if split_by == "id__track":
@@ -1464,123 +1298,329 @@ def helper__extract__crops__from__detection(**kwargs):
                 __path__dir__crop__img__output = path__dir__crop__img__output
                 __path__dir__crop__lbl__output = path__dir__crop__lbl__output
 
-            os.makedirs(__path__dir__crop__img__output, exist_ok=True)
-            os.makedirs(__path__dir__crop__lbl__output, exist_ok=True)
-
-            if to_save__img:
-                path__file__crop__img__output = os.path.join(
+            path__file__crop__img__output = (
+                os.path.join(
                     __path__dir__crop__img__output,
-                    "{}--crop-{:0{}}.jpg".format(
-                        os.path.splitext(name__file__img)[0], i_obj, num__pad__0
+                    "{}{}.jpg".format(
+                        os.path.splitext(name__file__lbl)[0],
+                        (
+                            "--crop-{:0{}}".format(i_obj, num__pad__0__crop)
+                            if to_add_crop_index_to_name is True
+                            else ""
+                        ),
                     ),
                 )
-                cv2.imwrite(path__file__crop__img__output, crop_img)
+                if to_save__img
+                else None
+            )
 
-            dict__result__crop = {
-                k: (
-                    v[i_obj : i_obj + 1]
-                    if not isinstance(v, dict)
-                    else ({vk: [vv[i_obj]] for vk, vv in v.items()})
-                )
-                for k, v in dict__result.items()
-            }
             path__file__crop__lbl__output = os.path.join(
                 __path__dir__crop__lbl__output,
-                "{}--crop-{:0{}}.json".format(
-                    os.path.splitext(name__file__lbl)[0], i_obj, num__pad__0
+                "{}{}.json".format(
+                    os.path.splitext(name__file__lbl)[0],
+                    (
+                        "--crop-{:0{}}".format(i_obj, num__pad__0__crop)
+                        if to_add_crop_index_to_name is True
+                        else ""
+                    ),
                 ),
             )
+
+            ret.append(
+                {
+                    "crop_img": crop_img if to_save__img else None,
+                    "dict__result__crop": dict__result__crop,
+                    "path__file__crop__img__output": path__file__crop__img__output,
+                    "path__file__crop__lbl__output": path__file__crop__lbl__output,
+                }
+            )
+
+        return ret
+
+
+def _extract__crops__from__detection__core(kwargs):
+    path__file__lbl = kwargs["path__file__lbl"]
+    to_save__img = kwargs["to_save__img"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    to_save__lbl = kwargs["to_save__lbl"]
+
+    predictor = ExtractCropsFromDetectionCore(**kwargs)
+
+    if not os.path.exists(path__file__lbl):
+        if is_ok__lbl_not_exist:
+            return
+        else:
+            raise FileNotFoundError(f"Label file not found: {path__file__lbl}")
+
+    with open(path__file__lbl, "r") as f:
+        dict__result = json.load(f)
+
+    ret = predictor.predict(
+        dict__result=dict__result,
+        **kwargs,
+    )
+
+    for i_obj, crop_data in enumerate(ret):
+        crop_img = crop_data["crop_img"]
+        dict__result__crop = crop_data["dict__result__crop"]
+        path__file__crop__img__output = crop_data["path__file__crop__img__output"]
+        path__file__crop__lbl__output = crop_data["path__file__crop__lbl__output"]
+
+        if to_save__img and crop_img is not None:
+            os.makedirs(os.path.dirname(path__file__crop__img__output), exist_ok=True)
+            cv2.imwrite(path__file__crop__img__output, crop_img)
+
+        if to_save__lbl:
+            os.makedirs(os.path.dirname(path__file__crop__lbl__output), exist_ok=True)
             with open(path__file__crop__lbl__output, "w") as f:
                 json.dump(dict__result__crop, f, indent=4)
 
 
-def helper__extract__topdown__pose(**kwargs):
+def helper__extract__crops__from__detection__imgdir(**kwargs):
+
+    LOGGER.warning(
+        "Please consider generalize this function with helper__extract__crops__with__mask__from__segmentation. These functions have something in common."
+    )
+
+    path__dir__img__input = kwargs["path__dir__img__input"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    to_save__img = kwargs["to_save__img"]
+    num_workers = kwargs["num_workers"]
+
+    if to_save__img:
+        list__name__file = sorted(os.listdir(path__dir__img__input))
+    else:
+        list__name__file = sorted(os.listdir(path__dir__lbl__input))
+
+    list__kwargs = []
+    for name__file in tqdm(list__name__file):
+        if to_save__img:
+            name__file__img = name__file
+            name__file__lbl = os.path.splitext(name__file)[0] + ".json"
+            path__file__img = os.path.join(path__dir__img__input, name__file__img)
+        else:
+            name__file__lbl = name__file
+            path__file__img = None
+        img__bgr = None
+        path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
+
+        list__kwargs.append(
+            dict(
+                name__file__lbl=name__file__lbl,
+                path__file__lbl=path__file__lbl,
+                path__file__img=path__file__img,
+                img__bgr=img__bgr,
+                **kwargs,
+            )
+        )
+
+    with Pool(processes=num_workers) as pool:
+        list(
+            tqdm(
+                pool.imap_unordered(
+                    _extract__crops__from__detection__core,
+                    list__kwargs,
+                    chunksize=1,
+                ),
+                total=len(list__kwargs),
+            )
+        )
+
+
+def helper__extract__crops__from__detection__video(**kwargs):
+
+    LOGGER.warning(
+        "Please consider generalize this function with helper__extract__crops__with__mask__from__segmentation. These functions have something in common."
+    )
+
+    path__file__video__input = kwargs["path__file__video__input"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    to_save__img = kwargs["to_save__img"]
+    num__pad__0__frame = kwargs["num__pad__0__frame"]
+    num_workers = kwargs["num_workers"]
+
+    cap = cv2.VideoCapture(path__file__video__input)
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    list__kwargs = []
+
+    for id__frame in tqdm(range(total_frames)):
+        if to_save__img:
+            success, img__bgr = cap.read()
+        else:
+            img__bgr = None
+
+        name__file__lbl = f"{id__frame:0{num__pad__0__frame}d}.json"
+        path__file__lbl = os.path.join(path__dir__lbl__input, name__file__lbl)
+
+        args_for_core = dict(
+            name__file__lbl=name__file__lbl,
+            path__file__lbl=path__file__lbl,
+            path__file__img=None,
+            img__bgr=img__bgr,
+            **kwargs,
+        )
+
+        if to_save__img:
+            # Strategy 1: Sequential Processing (calls core directly)
+            _extract__crops__from__detection__core(args_for_core)
+        else:
+            # Strategy 2: Multi-Processing (collects args for pool)
+            list__kwargs.append(args_for_core)
+
+    cap.release()
+
+    if not to_save__img:
+        # 2. Process label files concurrently using multiprocessing
+        with Pool(processes=num_workers) as pool:
+            list(
+                tqdm(
+                    pool.imap_unordered(
+                        _extract__crops__from__detection__core,
+                        list__kwargs,
+                        chunksize=1,
+                    ),
+                    total=len(list__kwargs),
+                    desc="Processing Labels (Multi-Process)",
+                )
+            )
+
+
+def helper__extract__topdown__pose__imgdir(**kwargs):
 
     import json
     from tqdm import tqdm
     import os
-    import numpy as np
     import cv2
-    from mmpose.apis import inference_topdown
-    from mmpose.apis import init_model
-    from mmpose.structures.pose_data_sample import PoseDataSample
 
     path__dir__img = kwargs["path__dir__img"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
-    path__file__model = kwargs["path__file__model"]
-    path__file__config = kwargs["path__file__config"]
-    device = kwargs["device"]
-    list__name_keypoints = kwargs["list__name_keypoints"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    batch_size = kwargs["batch_size"]
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    class RTMPOSE:
-        def __init__(self):
-            self.pose_estimator = init_model(
-                path__file__config, path__file__model, device
-            )
+    pose_estimator = RTMPosePredictor(**kwargs)
 
-        def predict(self, image: np.ndarray, boxes):
-            poses = inference_topdown(
-                self.pose_estimator, image, boxes, bbox_format="xyxy"
-            )
-            list_keypoints = []
-            for pose in poses:
-                keypoints: np.ndarray = pose.get("pred_instances").get("keypoints")[0]
-                scores: np.ndarray = (
-                    pose.get("pred_instances").get("keypoint_scores")[0].reshape(-1, 1)
-                )
-                pose_result = np.concatenate((keypoints, scores), axis=1)
-                # print(keypoints.shape, scores.shape, pose_result.shape)
-                list_keypoints.append(pose_result)
+    list_name__file__img = sorted(os.listdir(path__dir__img))
 
-            return list_keypoints
+    batch_images = []
+    batch_labels = []
+    batch_paths = []
+    batch_names = []
 
-    pose_estimator = RTMPOSE()
-
-    for name__file__img in tqdm(sorted(os.listdir(path__dir__img))):
+    for idx, name__file__img in enumerate(tqdm(list_name__file__img)):
         name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
         path__file__img__input = os.path.join(path__dir__img, name__file__img)
         path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
         path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
 
-        img = cv2.imread(path__file__img__input)
-        H, W = img.shape[:2]
+        if not os.path.exists(path__file__lbl__input):
+            if is_ok__lbl_not_exist:
+                continue
+            else:
+                raise FileNotFoundError(
+                    f"Label file not found: {path__file__lbl__input}"
+                )
+
+        img__bgr = cv2.imread(path__file__img__input)
 
         with open(path__file__lbl__input, "r") as f:
             dict__result = json.load(f)
 
-        list__obj__box_xcycwhn = np.array(
-            dict__result["list__obj__box_xcycwhn"]
-        ).reshape(-1, 4)
-        list__obj__box_x1y1x2y2 = box_normalized__to__box_pixels(
-            xcycwh__to__x1y1x2y2(list__obj__box_xcycwhn), (W, H)
-        )
+        batch_images.append(img__bgr)
+        batch_labels.append(dict__result)
+        batch_paths.append(path__file__lbl__output)
+        batch_names.append(name__file__img)
 
-        list_keypoints = pose_estimator.predict(img, list__obj__box_x1y1x2y2)
-        
-        list__obj__kpts_xyn = []
-        list__obj__kpts_conf = []
-        if len(list__obj__box_xcycwhn) > 0:
-            for i_obj, kpts in enumerate(list_keypoints):
-                kpts_xyn = kpts[:, :2] / [W, H]
-                kpts_conf = kpts[:, 2]
-                list__obj__kpts_xyn.append(
-                    {
-                        name: kpt.tolist()
-                        for name, kpt in zip(list__name_keypoints, kpts_xyn)
-                    }
+        # Process batch when full or at last image
+        if len(batch_images) == batch_size or idx == len(list_name__file__img) - 1:
+            # write each dict__result in-place
+            pose_estimator.predict_batch(
+                list_img__bgr=batch_images,
+                list_dict__result=batch_labels,
+                **kwargs,
+            )
+
+            # Write results
+            for dict__result, path__file__lbl__output in zip(batch_labels, batch_paths):
+                with open(path__file__lbl__output, "w") as f:
+                    json.dump(dict__result, f, indent=4)
+
+            # Clear batch
+            batch_images = []
+            batch_labels = []
+            batch_paths = []
+            batch_names = []
+
+
+def helper__extract__topdown__pose__video(**kwargs):
+
+    import json
+    from tqdm import tqdm
+    import os
+    import cv2
+
+    path__file__video = kwargs["path__file__video"]
+    path__dir__lbl__input = kwargs["path__dir__lbl__input"]
+    path__dir__lbl__output = kwargs["path__dir__lbl__output"]
+    is_ok__lbl_not_exist = kwargs["is_ok__lbl_not_exist"]
+    num__pad__0 = kwargs["num__pad__0"]
+    batch_size = kwargs["batch_size"]  # Default batch size
+
+    os.makedirs(path__dir__lbl__output, exist_ok=True)
+
+    cap = cv2.VideoCapture(path__file__video)
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    pose_estimator = RTMPosePredictor(**kwargs)
+
+    # Batch processing
+    batch_frames = []
+    batch_labels = []
+    batch_paths = []
+    batch_ids = []
+
+    for id__frame in tqdm(range(total_frames)):
+        success, img__bgr = cap.read()
+        name__file__lbl = f"{id__frame:0{num__pad__0}d}.json"
+        path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
+        path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
+
+        if not os.path.exists(path__file__lbl__input):
+            if is_ok__lbl_not_exist:
+                continue
+            else:
+                raise FileNotFoundError(
+                    f"Label file not found: {path__file__lbl__input}"
                 )
-                list__obj__kpts_conf.append(
-                    {
-                        name: conf.item()
-                        for name, conf in zip(list__name_keypoints, kpts_conf)
-                    }
-                )
 
-        dict__result["list__obj__kpts_xyn"] = list__obj__kpts_xyn
-        dict__result["list__obj__kpts_conf"] = list__obj__kpts_conf
+        with open(path__file__lbl__input, "r") as f:
+            dict__result = json.load(f)
 
-        with open(path__file__lbl__output, "w") as f:
-            json.dump(dict__result, f, indent=4)
+        batch_frames.append(img__bgr)
+        batch_labels.append(dict__result)
+        batch_paths.append(path__file__lbl__output)
+        batch_ids.append(id__frame)
+
+        # Process batch when full or at last frame
+        if len(batch_frames) == batch_size or id__frame == total_frames - 1:
+            pose_estimator.predict_batch(
+                list_img__bgr=batch_frames,
+                list_dict__result=batch_labels,
+                **kwargs,
+            )
+
+            # Write results
+            for dict__result, path__file__lbl__output in zip(batch_labels, batch_paths):
+                with open(path__file__lbl__output, "w") as f:
+                    json.dump(dict__result, f, indent=4)
+
+            # Clear batch
+            batch_frames = []
+            batch_labels = []
+            batch_paths = []
+            batch_ids = []
+
+    cap.release()

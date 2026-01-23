@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 
-def compute_displacement(kpts1_dict, kpts2_dict):
+def keypoints_distance(kpts1_dict, kpts2_dict):
     """Compute displacement vector between two sets of keypoints stored as dictionaries"""
     if kpts1_dict is None or kpts2_dict is None:
         return None
@@ -28,89 +28,67 @@ def compute_displacement(kpts1_dict, kpts2_dict):
     return displacement
 
 
-def run(**kwargs):
-    input_dir = kwargs["input_dir"]
-    output_dir = kwargs["output_dir"]
-    step_size = kwargs["step_size"]
-    left_window = kwargs["left_window"]
-    right_window = kwargs["right_window"]
-    alpha = kwargs["alpha"]
+class KeypointDisplacementPredictor:
+    def __init__(self, **kwargs):
+        self.ls__dict__result = []
+        self.track_ema = {}
 
-    os.makedirs(output_dir, exist_ok=True)
+    def append(self, **kwargs):
+        dict__result = kwargs["dict__result"]
+        self.ls__dict__result.append(dict__result)
 
-    # Get all prediction files
-    json_files = sorted(os.listdir(input_dir))
+    def predict(self, **kwargs):
+        idx = kwargs["idx"]
+        step_size = kwargs["step_size"]
 
-    # Load all predictions and store them for processing
-    predictions = {}
-    pbar = tqdm(json_files, desc="Loading predictions")
-    for json_file in pbar:
-        pbar.set_postfix(file=json_file)
-        with open(os.path.join(input_dir, json_file), "r") as f:
-            predictions[json_file] = json.load(f)
+        dict__result = self.ls__dict__result[idx]
 
-    # First pass: Compute current displacements for all frames
-    for frame_idx, json_file in enumerate(
-        tqdm(json_files, desc="Computing displacements")
-    ):
-        pred_data = predictions[json_file]
+        list__obj__id_track = dict__result["list__obj__id_track"]
+        list__obj__kpts_xyn = dict__result.get("list__obj__kpts_xyn", [])
 
-        # Get object tracks and keypoints
-        list__obj__id_track = pred_data.get(
-            "list__obj__id_track", [None] * len(pred_data["list__obj__box_xcycwhn"])
-        )
-        list__obj__kpts_xyn = pred_data.get("list__obj__kpts_xyn", [])
-
-        # Process each object
         list__obj__kpts_displacement = []
         for i_obj, (id_track, kpts_dict) in enumerate(
             zip(list__obj__id_track, list__obj__kpts_xyn)
         ):
             # For first frame or if track doesn't exist in previous frame
-            if frame_idx < step_size:
+            if idx < step_size:
                 curr_displacement = {kpt: None for kpt in kpts_dict}
             else:
                 # Get keypoints from previous frame
-                prev_file = json_files[frame_idx - step_size]
-                prev_data = predictions[prev_file]
-                prev_tracks = prev_data.get(
-                    "list__obj__id_track",
-                    [None] * len(prev_data["list__obj__box_xcycwhn"]),
-                )
+                prev__dict__result = self.ls__dict__result[idx - step_size]
+                prev__list__obj__id_track = prev__dict__result["list__obj__id_track"]
 
-                if id_track in prev_tracks:
-                    prev_idx = prev_tracks.index(id_track)
-                    prev_kpts = prev_data["list__obj__kpts_xyn"][prev_idx]
-                    curr_displacement = compute_displacement(prev_kpts, kpts_dict)
+                if id_track in prev__list__obj__id_track:
+                    prev_idx = prev__list__obj__id_track.index(id_track)
+                    prev_kpts = prev__dict__result["list__obj__kpts_xyn"][prev_idx]
+                    curr_displacement = keypoints_distance(prev_kpts, kpts_dict)
                 else:
                     curr_displacement = {kpt: None for kpt in kpts_dict}
 
             list__obj__kpts_displacement.append(curr_displacement)
 
-        pred_data["list__obj__kpts_displacement"] = list__obj__kpts_displacement
+        dict__result["list__obj__kpts_displacement"] = list__obj__kpts_displacement
 
-    # Compute EMAs
-    track_ema = {}
-    for frame_idx, json_file in enumerate(
-        tqdm(json_files, desc="Computing EMAs displacements")
-    ):
-        pred_data = predictions[json_file]
-        list__obj__id_track = pred_data.get(
-            "list__obj__id_track", [None] * len(pred_data["list__obj__box_xcycwhn"])
-        )
-        list__obj__kpts_displacement = pred_data["list__obj__kpts_displacement"]
+    def predict_ema(self, **kwargs):
+        idx = kwargs["idx"]
+        alpha = kwargs["alpha"]
+
+        dict__result = self.ls__dict__result[idx]
+
+        list__obj__id_track = dict__result["list__obj__id_track"]
+        list__obj__kpts_displacement = dict__result["list__obj__kpts_displacement"]
 
         list__obj__kpts_displacement_ema = []
         for id_track, curr_displacement in zip(
             list__obj__id_track, list__obj__kpts_displacement
         ):
-            if id_track not in track_ema:
+            if id_track not in self.track_ema:
                 new_ema = {k: None for k in curr_displacement}
             else:
                 new_ema = {}
                 for kpt_name in curr_displacement:
                     curr_val = curr_displacement[kpt_name]
-                    prev_ema = track_ema[id_track][kpt_name]
+                    prev_ema = self.track_ema[id_track][kpt_name]
 
                     if curr_val is None:
                         new_ema[kpt_name] = prev_ema
@@ -123,47 +101,47 @@ def run(**kwargs):
                             alpha * curr_val + (1 - alpha) * prev_ema
                         ).tolist()
 
-            track_ema[id_track] = new_ema
+            self.track_ema[id_track] = new_ema
             list__obj__kpts_displacement_ema.append(new_ema)
 
-        pred_data["list__obj__kpts_displacement_ema"] = list__obj__kpts_displacement_ema
-
-    # Compute window averages
-    for frame_idx, json_file in enumerate(
-        tqdm(json_files, desc="Computing window averages displacements")
-    ):
-        pred_data = predictions[json_file]
-        list__obj__id_track = pred_data.get(
-            "list__obj__id_track", [None] * len(pred_data["list__obj__box_xcycwhn"])
+        dict__result["list__obj__kpts_displacement_ema"] = (
+            list__obj__kpts_displacement_ema
         )
+
+    def predict_avg(self, **kwargs):
+        idx = kwargs["idx"]
+        step_size = kwargs["step_size"]
+        left_window = kwargs["left_window"]
+        right_window = kwargs["right_window"]
+
+        dict__result = self.ls__dict__result[idx]
+
+        list__obj__id_track = dict__result["list__obj__id_track"]
 
         list__obj__kpts_displacement_average = []
         for i_obj, id_track in enumerate(list__obj__id_track):
             # Get window bounds
-            window_start = max(0, frame_idx - left_window * step_size)
-            window_end = min(len(json_files) - 1, frame_idx + right_window * step_size)
+            window_start = max(0, idx - left_window * step_size)
+            window_end = min(
+                len(self.ls__dict__result) - 1, idx + right_window * step_size
+            )
 
             # Collect displacements within the window
             window_displacements = []
 
-            for win_idx in range(window_start, window_end + 1, step_size):
-                win_file = json_files[win_idx]
-                win_data = predictions[win_file]
+            for i_w in range(window_start, window_end + 1, step_size):
+                w__dict__result = self.ls__dict__result[i_w]
+                w__list__obj__id_track = w__dict__result["list__obj__id_track"]
 
-                win_tracks = win_data.get(
-                    "list__obj__id_track",
-                    [None] * len(win_data["list__obj__box_xcycwhn"]),
-                )
-
-                if id_track in win_tracks:
-                    track_idx = win_tracks.index(id_track)
-                    win_displacement = win_data["list__obj__kpts_displacement"][
+                if id_track in w__list__obj__id_track:
+                    track_idx = w__list__obj__id_track.index(id_track)
+                    w__displacement = w__dict__result["list__obj__kpts_displacement"][
                         track_idx
                     ]
-                    window_displacements.append(win_displacement)
+                    window_displacements.append(w__displacement)
 
             window_avg = {}
-            for kpt_name in pred_data["list__obj__kpts_xyn"][i_obj].keys():
+            for kpt_name in dict__result["list__obj__kpts_xyn"][i_obj].keys():
                 values = [
                     d[kpt_name] for d in window_displacements if d[kpt_name] is not None
                 ]
@@ -173,13 +151,68 @@ def run(**kwargs):
 
             list__obj__kpts_displacement_average.append(window_avg)
 
-        pred_data["list__obj__kpts_displacement_average"] = (
+        dict__result["list__obj__kpts_displacement_average"] = (
             list__obj__kpts_displacement_average
         )
 
-    for json_file, pred_data in predictions.items():
-        with open(os.path.join(output_dir, json_file), "w") as f:
-            json.dump(pred_data, f, indent=4)
+
+def run(**kwargs):
+    pathd_lbl = kwargs["pathd_lbl"]
+    pathd_output = kwargs["pathd_output"]
+    is_online = kwargs["is_online"]
+
+    kdist_predictor = KeypointDisplacementPredictor(**kwargs)
+
+    ls__namef_lbl = sorted(os.listdir(pathd_lbl))
+
+    if is_online:
+        for i_f, namef_lbl in tqdm(
+            enumerate(ls__namef_lbl), desc="Predicting displacements"
+        ):
+            pathf_lbl = os.path.join(pathd_lbl, namef_lbl)
+
+            # load cached pose prediction from YOLO
+            with open(pathf_lbl, "r") as f:
+                dict__result = json.load(f)
+
+            kdist_predictor.append(dict__result=dict__result)
+
+            # write to dict__result in-place
+            kdist_predictor.predict(idx=i_f, **kwargs)
+            kdist_predictor.predict_ema(idx=i_f, **kwargs)
+            kdist_predictor.predict_avg(idx=i_f, **kwargs)
+
+            os.makedirs(pathd_output, exist_ok=True)
+            with open(os.path.join(pathd_output, namef_lbl), "w") as f:
+                json.dump(dict__result, f, indent=4)
+    else:
+        for namef_lbl in tqdm(ls__namef_lbl, desc="Loading offline predictions"):
+            with open(os.path.join(pathd_lbl, namef_lbl), "r") as f:
+                # load cached pose prediction from YOLO
+                dict__result = json.load(f)
+
+            kdist_predictor.append(dict__result=dict__result)
+
+        for i_f, namef_lbl in tqdm(
+            enumerate(ls__namef_lbl), desc="Predicting displacements"
+        ):
+            # write to dict__result in-place
+            kdist_predictor.predict(idx=i_f, **kwargs)
+
+        for i_f, namef_lbl in tqdm(enumerate(ls__namef_lbl), desc="Predicting EMA"):
+            # write to dict__result in-place
+            kdist_predictor.predict_ema(idx=i_f, **kwargs)
+
+        for i_f, namef_lbl in tqdm(enumerate(ls__namef_lbl), desc="Predicting average"):
+            # write to dict__result in-place
+            kdist_predictor.predict_avg(idx=i_f, **kwargs)
+
+        for i_f, namef_lbl in tqdm(enumerate(ls__namef_lbl)):
+            dict__result = kdist_predictor.ls__dict__result[i_f]
+
+            os.makedirs(pathd_output, exist_ok=True)
+            with open(os.path.join(pathd_output, namef_lbl), "w") as f:
+                json.dump(dict__result, f, indent=4)
 
 
 if __name__ == "__main__":
@@ -194,15 +227,16 @@ if __name__ == "__main__":
         "fall_violence/test/violence/Fighting_4.mp4": {"step_size": 2},
     }.items():
         kwargs = {
-            "input_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9/{}/labels".format(
+            "pathd_lbl": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/filter_action_by_keypoint_distance/ProtoGCN/prj54/v9__nturubg_mostvariant_leftstrip03_no_kickback_kicksth__le2i__punch0312__j--filter-punch-push-distance-nose-0.25-hip-0.2-leg-0.97/{}/labels".format(
                 subpathf
             ),
-            "output_dir": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9/{}/labels".format(
+            "pathd_output": "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-displacement/ProtoGCN/prj54/v9__nturubg_mostvariant_leftstrip03_no_kickback_kicksth__le2i__punch0312__j--filter-punch-push-distance-nose-0.25-hip-0.2-leg-0.97/{}/labels".format(
                 subpathf
             ),
+            "is_online": False,
             "step_size": params["step_size"],  # currently not apply for EMA
             "left_window": 7,
-            "right_window": 0,
+            "right_window": 1,
             "alpha": 0.5,  # EMA smoothing factor
         }
         run(**kwargs)
