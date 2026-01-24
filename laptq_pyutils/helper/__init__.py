@@ -4,8 +4,8 @@ from .image import (
     helper__cluster__images__by__embeddings,
 )
 from .detection import (
-    helper__extract__ultralytics__imgdir,
-    helper__extract__ultralytics__video,
+    helper__extract__detection__imgdir,
+    helper__extract__detection__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
     helper__convert__result__coco__to__json,

@@ -7,4 +7,5 @@ from .model import (
     Midas,
     RTMPosePredictor,
     MajorVoteActionPredictor,
+    DFinePredictor
 )

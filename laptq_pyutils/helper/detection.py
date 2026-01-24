@@ -14,6 +14,7 @@ from laptq_pyutils.objects import (
     UltralyticsPredictor,
     YOLOv5CompatDetectPredictor,
     RTMPosePredictor,
+    DFinePredictor,
 )
 from laptq_pyutils.log import load_logger
 from laptq_pyutils.common import LIST__MODE__BOX
@@ -32,25 +33,34 @@ from laptq_pyutils.algo import KMeans
 LOGGER = load_logger()
 
 
-def parse__ultralytics_model(**kwargs):
+def parse_detection_model(**kwargs):
 
     task = kwargs["task"]
+    model_type = kwargs["model_type"]
     to_use__yolov5_compat = kwargs["to_use__yolov5_compat"]
 
     assert task in ["detect", "pose", "track"]
 
-    if to_use__yolov5_compat:
+    if model_type == "DFINE":
         if task == "detect":
-            model = YOLOv5CompatDetectPredictor(**kwargs)
+            model = DFinePredictor(**kwargs)
         else:
             raise NotImplementedError("Task {} is not supported yet.".format(task))
+    elif model_type == "YOLO":
+        if to_use__yolov5_compat:
+            if task == "detect":
+                model = YOLOv5CompatDetectPredictor(**kwargs)
+            else:
+                raise NotImplementedError("Task {} is not supported yet.".format(task))
+        else:
+            model = UltralyticsPredictor(**kwargs)
     else:
-        model = UltralyticsPredictor(**kwargs)
+        raise ValueError(f"Unknown model_type: {model_type}")
 
     return model
 
 
-def helper__extract__ultralytics__imgdir(**kwargs):
+def helper__extract__detection__imgdir(**kwargs):
 
     import os
     from tqdm import tqdm
@@ -61,7 +71,7 @@ def helper__extract__ultralytics__imgdir(**kwargs):
     path__dir__img = kwargs["path__dir__img"]
     path__dir__output = kwargs["path__dir__output"]
 
-    model = parse__ultralytics_model(**kwargs)
+    model = parse_detection_model(**kwargs)
 
     os.makedirs(path__dir__output, exist_ok=True)
 
@@ -96,7 +106,7 @@ def helper__extract__ultralytics__imgdir(**kwargs):
         pbar.set_postfix(time__inference=log__time["time__inference"])
 
 
-def helper__extract__ultralytics__video(**kwargs):
+def helper__extract__detection__video(**kwargs):
 
     import cv2
     import json
@@ -108,7 +118,7 @@ def helper__extract__ultralytics__video(**kwargs):
     path__dir__output = kwargs["path__dir__output"]
     num__pad__0 = kwargs["num__pad__0"]
 
-    model = parse__ultralytics_model(**kwargs)
+    model = parse_detection_model(**kwargs)
 
     cap = cv2.VideoCapture(path__file__input)
     os.makedirs(path__dir__output, exist_ok=True)

@@ -1,8 +1,8 @@
 from laptq_pyutils.convert import convert_onnx_to_tensorrt
 
 from laptq_pyutils.helper import (
-    helper__extract__ultralytics__imgdir,
-    helper__extract__ultralytics__video,
+    helper__extract__detection__imgdir,
+    helper__extract__detection__video,
     helper__convert__detection__json__to__txt,
     helper__convert__detection__txt__to__json,
     helper__convert__result__coco__to__json,
@@ -58,6 +58,7 @@ def parse_args():
     ap.add_argument("--path__dir__np__output", type=str)
     ap.add_argument("--path__file__output", type=str)
     ap.add_argument("--path__file__model", type=str)
+    ap.add_argument("--model_type", type=str)
     ap.add_argument("--path__file__config", type=str)
     ap.add_argument("--list__path__dir__img__input", type=str)  # sep by ,
     ap.add_argument("--list__path__dir__emb__input", type=str)  # sep by ,
