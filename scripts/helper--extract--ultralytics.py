@@ -13,6 +13,7 @@ ID__TRAIN = "exp"
 
 IMGSZ = 640
 THRESH__CONF__MIN = 0.1
+IOU_MODE = "miniou"     # miniou, iou
 THRESH__IOU = 0.45
 ID__PREDICT = f"imgsz-{IMGSZ}--conf-{THRESH__CONF__MIN}--iou-{THRESH__IOU}"
 
@@ -106,6 +107,7 @@ for subpath__media in MAP__SUBPATH_DIR__TO__:
         device=DEVICE,
         imgsz=IMGSZ,
         thresh__conf__min=THRESH__CONF__MIN,
+        iou_mode=IOU_MODE,
         thresh__iou=THRESH__IOU,
         to_use__yolov5_compat=TO_USE__YOLOv5_COMPAT,
         task="track",

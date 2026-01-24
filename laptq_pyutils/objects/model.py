@@ -207,6 +207,8 @@ class DFinePredictor(BaseModel):
         dfine_dir = kwargs["dfine_dir"]
         path__file__config = kwargs["path__file__config"]
         path__file__model = kwargs["path__file__model"]
+        iou_mode = kwargs["iou_mode"]
+        thresh__iou = kwargs["thresh__iou"]
         self.device = kwargs["device"]
 
         sys.path.append(dfine_dir)
@@ -223,6 +225,9 @@ class DFinePredictor(BaseModel):
             raise ValueError("D-FINE requires path__file__config")
 
         self.cfg = YAMLConfig(path__file__config, resume=path__file__model)
+
+        self.cfg.yaml_cfg["CustomPostProcessor"]["iou_mode"] = iou_mode
+        self.cfg.yaml_cfg["CustomPostProcessor"]["iou_threshold"] = thresh__iou
 
         if "HGNetv2" in self.cfg.yaml_cfg:
             self.cfg.yaml_cfg["HGNetv2"]["pretrained"] = False
