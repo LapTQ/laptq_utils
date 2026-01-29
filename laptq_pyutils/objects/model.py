@@ -1,3 +1,4 @@
+import sys
 from abc import ABC, abstractmethod
 import numpy as np
 from PIL import Image
@@ -6,6 +7,8 @@ import torch
 import os
 from tqdm import tqdm
 from copy import deepcopy
+import torchvision.transforms as T
+import torch
 
 # import tensorrt as trt
 # import pycuda.driver as cuda
@@ -193,6 +196,140 @@ class YOLOv5CompatDetectPredictor(BaseModel):
                     "list__obj__box_conf": [conf],
                 }
             )
+
+        return dict__result
+
+
+class DFinePredictor(BaseModel):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        dfine_dir = kwargs["dfine_dir"]
+        path__file__config = kwargs["path__file__config"]
+        path__file__model = kwargs["path__file__model"]
+        iou_mode = kwargs["iou_mode"]
+        thresh__iou = kwargs["thresh__iou"]
+        self.device = kwargs["device"]
+
+        sys.path.append(dfine_dir)
+
+        import torch.nn as nn
+        from src.core import YAMLConfig
+
+        # Load config
+        # If path__file__config is not provided, we might interpret path__file__model as containing config info or
+        # we might need to look for it. D-FINE usually needs a config.
+        # The inference script uses -c (config) and -r (resume/weights).
+        # We need both.
+        if path__file__config is None:
+            raise ValueError("D-FINE requires path__file__config")
+
+        self.cfg = YAMLConfig(path__file__config, resume=path__file__model)
+
+        self.cfg.yaml_cfg["CustomPostProcessor"]["iou_mode"] = iou_mode
+        self.cfg.yaml_cfg["CustomPostProcessor"]["iou_threshold"] = thresh__iou
+
+        if "HGNetv2" in self.cfg.yaml_cfg:
+            self.cfg.yaml_cfg["HGNetv2"]["pretrained"] = False
+
+        checkpoint = torch.load(
+            path__file__model, map_location="cpu", weights_only=True
+        )
+        if "ema" in checkpoint:
+            state = checkpoint["ema"]["module"]
+        else:
+            state = checkpoint["model"]
+
+        self.cfg.model.load_state_dict(state)
+
+        class Model(nn.Module):
+            def __init__(self, cfg):
+                super().__init__()
+                self.model = cfg.model.deploy()
+                self.postprocessor = cfg.postprocessor.deploy()
+
+            def forward(self, images, orig_target_sizes):
+                outputs = self.model(images)
+                outputs = self.postprocessor(outputs, orig_target_sizes)
+                return outputs
+
+        self.model = Model(self.cfg).to(self.device)
+        self.model.eval()
+
+    def predict(self, **kwargs):
+
+        img__bgr = kwargs["img__bgr"]
+        imgsz = kwargs["imgsz"]
+        thresh__conf__min = kwargs["thresh__conf__min"]
+
+        # D-FINE preprocessing
+        # It converts BGR to RGB (PIL) then resize then tensor
+        # We can do it with cv2/numpy/torch
+
+        H, W = img__bgr.shape[:2]
+        img__rgb = cv2.cvtColor(img__bgr, cv2.COLOR_BGR2RGB)
+        img__pil = Image.fromarray(img__rgb)
+
+        transforms = T.Compose(
+            [
+                T.Resize((imgsz, imgsz)),
+                T.ToTensor(),
+            ]
+        )
+
+        im_data = transforms(img__pil).unsqueeze(0).to(self.device)
+        orig_size = torch.tensor([[W, H]]).to(self.device)
+
+        with torch.no_grad():
+            output = self.model(im_data, orig_size)
+
+        labels, boxes, scores = output
+
+        # labels, boxes, scores are batched? yes, [batch_size, num_det, ...]
+        # We have batch size 1
+
+        labels = labels[0]  # [N]
+        boxes = boxes[0]  # [N, 4] (x1, y1, x2, y2)
+        scores = scores[0]  # [N]
+
+        mask = scores > thresh__conf__min
+
+        labels = labels[mask]
+        boxes = boxes[mask]
+        scores = scores[mask]
+
+        list_aligner__result = ListAligner(
+            list__key=[
+                "list__obj__id_class",
+                "list__obj__box_xcycwhn",
+                "list__obj__box_conf",
+            ]
+        )
+
+        if len(scores) > 0:
+            labels = labels.cpu().numpy().tolist()
+            boxes = boxes.cpu().numpy().tolist()
+            scores = scores.cpu().numpy().tolist()
+
+            for lbl, box, score in zip(labels, boxes, scores):
+                x1, y1, x2, y2 = box
+                w = x2 - x1
+                h = y2 - y1
+                xc = x1 + w / 2
+                yc = y1 + h / 2
+
+                xcn = xc / W
+                ycn = yc / H
+                wn = w / W
+                hn = h / H
+
+                list_aligner__result.extend(
+                    {
+                        "list__obj__id_class": [int(lbl)],
+                        "list__obj__box_xcycwhn": [[xcn, ycn, wn, hn]],
+                        "list__obj__box_conf": [float(score)],
+                    }
+                )
 
         dict__result = list_aligner__result.item()
 

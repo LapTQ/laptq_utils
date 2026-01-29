@@ -2,6 +2,9 @@ PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-
 # PATH__DIR__MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
 POSTFIX__DIR__IMAGE = ""
 
+MODEL_TYPE = "DFINE"    # YOLO DFINE
+DFINE_DIR = "/home/laptq/laptq-prj-46/submodules/D-FINE"
+PATH__FILE__CONFIG = "/home/laptq/laptq-prj-46/submodules/D-FINE/configs/dfine/dfine_hgnetv2_m--prj57-v1.yml"
 TO_USE__YOLOv5_COMPAT = False
 PATH__FILE__MODEL = "yolov8x-pose.pt"
 ID__DATA = None
@@ -10,6 +13,7 @@ ID__TRAIN = "exp"
 
 IMGSZ = 640
 THRESH__CONF__MIN = 0.1
+IOU_MODE = "miniou"     # miniou, iou
 THRESH__IOU = 0.45
 ID__PREDICT = f"imgsz-{IMGSZ}--conf-{THRESH__CONF__MIN}--iou-{THRESH__IOU}"
 
@@ -49,8 +53,8 @@ import os
 import shutil
 import subprocess
 from laptq_pyutils.helper import (
-    helper__extract__ultralytics__imgdir,
-    helper__extract__ultralytics__video,
+    helper__extract__detection__imgdir,
+    helper__extract__detection__video,
 )
 from multiprocessing import Pool
 import multiprocessing as mp
@@ -67,10 +71,10 @@ TAG__WARNING = "\033[33m[WARNING]\033[0m"
 
 def run_wrapper(kwargs):
     print(f"{TAG__INFO} Processing: {kwargs['path__dir__img']}")
-    helper__extract__ultralytics__imgdir(**kwargs)
+    helper__extract__detection__imgdir(**kwargs)
     print(f"{TAG__PASSED} Done: {kwargs['path__dir__img']}")
     # print(f"{TAG__INFO} Processing: {kwargs['path__file__input']}")
-    # helper__extract__ultralytics__video(**kwargs)
+    # helper__extract__detection__video(**kwargs)
     # print(f"{TAG__PASSED} Done: {kwargs['path__file__input']}")
 
     gc.collect()
@@ -96,10 +100,14 @@ for subpath__media in MAP__SUBPATH_DIR__TO__:
         path__file__input=path__file__input,
         path__dir__output=path__dir__lbl__output,
         path__file__model=PATH__FILE__MODEL,
+        model_type=MODEL_TYPE,
+        dfine_dir=DFINE_DIR,
+        path__file__config=PATH__FILE__CONFIG,
         num__pad__0=9,
         device=DEVICE,
         imgsz=IMGSZ,
         thresh__conf__min=THRESH__CONF__MIN,
+        iou_mode=IOU_MODE,
         thresh__iou=THRESH__IOU,
         to_use__yolov5_compat=TO_USE__YOLOv5_COMPAT,
         task="track",
