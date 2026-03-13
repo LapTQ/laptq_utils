@@ -1,4 +1,4 @@
-PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/v210-v212-v213-v214
+PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/LAGCN/v219-v220
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--compute--keypoint-speed/ProtoGCN/prj54/v3__nturubg_mostvariant_leftstrip03_no_kickback_kicksth_sidekick__le2i__punch0312--15fps--left-window-19--min-votes-threshold-9
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/major_vote_action/ProtoGCN/prj54/v9__nturubg_mostvariant_leftstrip03_no_kickback_kicksth__le2i__punch0312__j--filter-punch-push-distance-nose-0.25-hip-0.2-leg-0.97--filter-speed-1.2-2.0--filter-loc-5--filter-num-people-2--15fps--vote-19-9
 # PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/helper--add--action-frame-txt--to--json
@@ -6,22 +6,23 @@ PATH__DIR__IMAGE__INPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/hel
 POSTFIX__DIR__IMAGE=""
 # POSTFIX__DIR__IMAGE="--PRED--DATA--bag-detection--MODEL--yolov8s--TRAIN--train--PREDICT--imgsz-640--conf-0.1--iou-0.45--JSON"
 
-PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/SkateFormer/fs26/v210-v212-v213-v214
+PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/LAGCN/fs26/v219-v220
 # PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--images--to--video/helper--add--action-frame-txt--to--json
 # PATH__DIR__VIDEO__OUTPUT=/home/laptq/laptq-fs26-shoplifting-detection/outputs/trivials
 
 
 declare -A MAP__NAME_VIDEO__TO__=(
-    ["shoplifting-25min.mp4"]=30
+    # ["shoplifting-25min.mp4"]=30
     # ["r9_25min_rotate.mp4"]=15
     # ["satudora-1min.mp4"]=""
     # ["r10_10min_rotate.mp4"]=""
 
-    # ["fall_violence/test/fall/Falling_and_Slow_Falling.mp4"]=""
-    # ["fall_violence/test/violence/Fighting_1.mp4"]=""
-    # ["fall_violence/test/violence/Fighting_2.mp4"]=""
-    # ["fall_violence/test/violence/Fighting_3.mp4"]=""
-    # ["fall_violence/test/violence/Fighting_4.mp4"]=""
+    ["Tsukisamu/102/102_2025_11_26_12-13.mp4"]=10
+    ["Tsukisamu/103/103_2025_11_26_12-13.mp4"]=10
+    ["Tsukisamu/105/105_2025_11_26_12-13.mp4"]=10
+    ["Tsukisamu/110/110_2025_11_26_12-13.mp4"]=10
+    ["Tsukisamu/111/111_2025_11_26_12-13.mp4"]=10
+    ["Tsukisamu/114/114_2025_11_26_12-13.mp4"]=10
 )
 
 # [[ -d "${PATH__DIR__VIDEO__OUTPUT}" ]] && rm -r "${PATH__DIR__VIDEO__OUTPUT}"
