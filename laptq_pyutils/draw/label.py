@@ -298,7 +298,7 @@ def draw__image(**kwargs):
                 aconf = action_confs[i_obj]
                 if astatus is True:
                     action_counter += 1
-                    org = (x1 + 3, y2 + 30 * action_counter)
+                    org = (x1 + 3, min(y2 + 30 * action_counter, img__bgr.shape[0] - 15))
                     # org = (x1 + 90, y1 - 10)
                     msg = (
                         str(id__action)
@@ -408,7 +408,7 @@ def draw__image(**kwargs):
                     cv2_putText(
                         img__bgr,
                         (
-                            "{:.1f}".format(kpts__speed[name_kpt])
+                            "{:.2f}".format(kpts__speed[name_kpt])
                             if kpts__speed is not None
                             and kpts__speed[name_kpt] is not None
                             else ""

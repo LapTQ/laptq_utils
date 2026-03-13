@@ -31,12 +31,12 @@ DEVICES = ["cuda:0", "cuda:1", "cuda:2", "cuda:3", "cuda:4", "cuda:5"]
 # MAP__SUBPATH_DIR__TO__ = {
 #     # "shoplifting-25min.mp4": None,
 #     # "r9_25min_rotate.mp4": None,
-#     "R3_2025_05_15_23_40_32_rotate.mp4": "cuda:0",
-#     "R4_2025_05_15_23_40_32_rotate.mp4": "cuda:1",
-#     "R9_2025_05_15_23_40_32_rotate.mp4": "cuda:2",
-#     "R7_2025_05_15_23_40_32_rotate.mp4": "cuda:3",
-#     "R8_2025_05_15_23_40_32_rotate.mp4": "cuda:4",
-#     "R10_2025_05_15_23_40_32_rotate.mp4": "cuda:5",
+#     "R3_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R4_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R9_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R7_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R8_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R10_2025_05_15_23_40_32_rotate.mp4": None,
 # }
 #
 # -----
