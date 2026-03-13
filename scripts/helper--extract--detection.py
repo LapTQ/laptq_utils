@@ -2,7 +2,7 @@ PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-
 # PATH__DIR__MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
 POSTFIX__DIR__IMAGE = ""
 
-MODEL_TYPE = "DFINE"    # YOLO DFINE
+MODEL_TYPE = "YOLO"    # YOLO DFINE
 DFINE_DIR = "/home/laptq/laptq-prj-46/submodules/D-FINE"
 PATH__FILE__CONFIG = "/home/laptq/laptq-prj-46/submodules/D-FINE/configs/dfine/dfine_hgnetv2_m--prj57-v1.yml"
 TO_USE__YOLOv5_COMPAT = False
@@ -17,7 +17,7 @@ IOU_MODE = "miniou"     # miniou, iou
 THRESH__IOU = 0.45
 ID__PREDICT = f"imgsz-{IMGSZ}--conf-{THRESH__CONF__MIN}--iou-{THRESH__IOU}"
 
-DEVICE = "cuda:0"
+DEVICES = ["cuda:0", "cuda:1", "cuda:2", "cuda:3", "cuda:4", "cuda:5"]
 
 PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/fs26"
 # PATH__DIR__LABEL__OUTPUT='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54'
@@ -84,7 +84,7 @@ def run_wrapper(kwargs):
 
 ls_kwargs = []
 
-for subpath__media in MAP__SUBPATH_DIR__TO__:
+for i, subpath__media in enumerate(MAP__SUBPATH_DIR__TO__):
     path__dir__img__input = (
         f"{PATH__DIR__MEDIA}/{subpath__media}/images{POSTFIX__DIR__IMAGE}"
     )
@@ -104,7 +104,7 @@ for subpath__media in MAP__SUBPATH_DIR__TO__:
         dfine_dir=DFINE_DIR,
         path__file__config=PATH__FILE__CONFIG,
         num__pad__0=9,
-        device=DEVICE,
+        device=DEVICES[i % len(DEVICES)],
         imgsz=IMGSZ,
         thresh__conf__min=THRESH__CONF__MIN,
         iou_mode=IOU_MODE,
