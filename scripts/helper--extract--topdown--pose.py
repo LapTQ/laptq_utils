@@ -43,10 +43,25 @@ MAP__SUBPATH_DIR__TO__ = {
 # import glob
 
 # MAP__SUBPATH_DIR__TO__ = {
-#     p[len(PATHD_MEDIA) + 1 :]: None
-#     for p in glob.glob(f"{PATHD_MEDIA}/shoplifting-awljp-demo-videos/demo_room/*.mp4")
-#     if os.path.isdir(p)
+#     # "shoplifting-25min.mp4": None,
+#     # "r9_25min_rotate.mp4": None,
+#     "R3_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R4_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R9_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R7_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R8_2025_05_15_23_40_32_rotate.mp4": None,
+#     "R10_2025_05_15_23_40_32_rotate.mp4": None,
 # }
+#
+# -----
+import os
+import glob
+
+MAP__SUBPATH_DIR__TO__ = {
+    p[len(PATHD_MEDIA) + 1 :]: None
+    for p in glob.glob(f"{PATHD_MEDIA}/shoplifting-awlrecord-videos/day2/*.mp4")
+    if os.path.isdir(p)
+}
 
 # =============================================================
 import os
