@@ -25,6 +25,8 @@ PATHD_LABEL_OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helpe
 # PATHD_LABEL_OUTPUT='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54'
 POSTFIX_LABEL_OUTPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
 
+DEVICES = ["cuda:0", "cuda:1", "cuda:2", "cuda:3", "cuda:4", "cuda:5"]
+
 # Define the map of subpaths
 # MAP__SUBPATH_DIR__TO__ = {
 #     # "shoplifting-25min.mp4": None,
@@ -83,7 +85,7 @@ def run_wrapper(kwargs):
 
 ls_kwargs = []
 
-for subpath__media in MAP__SUBPATH_DIR__TO__:
+for i_m, subpath__media in enumerate(MAP__SUBPATH_DIR__TO__):
     path__dir__img__input = f"{PATHD_MEDIA}/{subpath__media}/images{POSTFIX_IMAGE}"
     path__file__video = f"{PATHD_MEDIA}/{subpath__media}"
     path__dir__lbl__input = (
@@ -92,7 +94,6 @@ for subpath__media in MAP__SUBPATH_DIR__TO__:
     path__dir__lbl__output = (
         f"{PATHD_LABEL_OUTPUT}/{subpath__media}/labels{POSTFIX_LABEL_OUTPUT}"
     )
-    device = MAP__SUBPATH_DIR__TO__[subpath__media]
 
     if os.path.exists(path__dir__lbl__output):
         shutil.rmtree(path__dir__lbl__output)
@@ -105,8 +106,8 @@ for subpath__media in MAP__SUBPATH_DIR__TO__:
         path__dir__lbl__output=path__dir__lbl__output,
         path__file__model=PATH__FILE__MODEL,
         path__file__config=PATH__FILE__CONFIG,
-        device=device,
-        batch_size=128,
+        device=DEVICES[i_m % len(DEVICES)],
+        batch_size=64,
         is_ok__lbl_not_exist=False,
         num__pad__0=9,
         list__name_keypoints=[
