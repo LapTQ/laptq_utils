@@ -45,7 +45,7 @@ import glob
 
 MAP__SUBPATH_DIR__TO__ = {
     p[len(PATHD_MEDIA) + 1 :]: None
-    for p in glob.glob(f"{PATHD_MEDIA}/shoplifting-awlrecord-videos/day2/*.mp4")
+    for p in glob.glob(f"{PATHD_MEDIA}/customer-video/20250901-1105/*.mkv")
     if os.path.isdir(p)
 }
 
@@ -107,7 +107,7 @@ for i_m, subpath__media in enumerate(MAP__SUBPATH_DIR__TO__):
         path__file__model=PATH__FILE__MODEL,
         path__file__config=PATH__FILE__CONFIG,
         device=DEVICES[i_m % len(DEVICES)],
-        batch_size=64,
+        batch_size=16,
         is_ok__lbl_not_exist=False,
         num__pad__0=9,
         list__name_keypoints=[

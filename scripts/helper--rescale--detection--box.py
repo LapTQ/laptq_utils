@@ -1,31 +1,31 @@
-PATH__DIR__MEDIA = "/media/home4/free_space/bachws/actiondata/awlvn_shopping_ds/videos"  # can be ignored if pad__max not set
+PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"  # can be ignored if pad__max not set
 POSTFIX__DIR__IMAGE = ""
 
 PATH__DIR__LABEL__INPUT = (
-    "/home/laptq/laptq-fs26-shoplifting-detection/data/ground-truth/fs26"
+    "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
 )
-POSTFIX__DIR__LABEL__INPUT = ""
+POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
 
 PATH__DIR__LABEL__OUTPUT = (
-    "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--rescale--detection--box/fs26/ground-truth"
+    "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--rescale--detection--box/fs26"
 )
 POSTFIX__DIR__LABEL__OUTPUT = ""
 
 # Define the map of subpaths
-MAP__SUBPATH_MEDIA__TO__ = {
-    "shoplifting-25min.mp4": None,
-    # "r9_25min_rotate.mp4": None,
-}
-# -----
-# import os
-# import glob
-
 # MAP__SUBPATH_MEDIA__TO__ = {
-#     p[len(PATH__DIR__MEDIA) + 1 :]: None
-#     for p in glob.glob(f"{PATH__DIR__MEDIA}/*.mp4")
-#     # if os.path.isdir(p)
-#     if os.path.isfile(p)
+#     "shoplifting-25min.mp4": None,
+#     # "r9_25min_rotate.mp4": None,
 # }
+# -----
+import os
+import glob
+
+MAP__SUBPATH_MEDIA__TO__ = {
+    p[len(PATH__DIR__MEDIA) + 1 :]: None
+    for p in glob.glob(f"{PATH__DIR__MEDIA}/customer-video/20250901-1105/*.mkv")
+    if os.path.isdir(p)
+    # if os.path.isfile(p)
+}
 
 # =============================================================
 import os
@@ -88,8 +88,8 @@ for subpath in MAP__SUBPATH_MEDIA__TO__:
         type_media="imgdir",  # imgdir, video
         path__dir__lbl__input=path__dir__lbl__input,
         path__dir__lbl__output=path__dir__lbl__output,
-        ratio__w=2,
-        ratio__h=1.4,
+        ratio__w=1.2,
+        ratio__h=1.2,
         pad__w__max=None,
         pad__h__max=None,
         cut__w__max=None,

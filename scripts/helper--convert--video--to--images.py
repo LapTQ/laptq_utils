@@ -13,7 +13,7 @@ import glob
 
 MAP__SUBPATH_VIDEO__TO__ = {
     p[len(PATH__DIR__VIDEO) + 1 :]: None
-    for p in glob.glob(f"{PATH__DIR__VIDEO}/Tsukisamu/*/*.mp4")
+    for p in glob.glob(f"{PATH__DIR__VIDEO}/customer-video/20250901-1105/*.mkv")
     if os.path.isfile(p)
 }
 

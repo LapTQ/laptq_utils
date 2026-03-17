@@ -4,14 +4,10 @@ PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-
 POSTFIX__DIR__IMAGE = ""
 
 PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
-# POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
-# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--filter--detection--result--by--conf/fs26/satudora"
-# POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--all-keypoints--RTMPose--JSON"
-# PATH__DIR__LABEL = '/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--rescale--detection--box/fs26/ground-truth'
-# POSTFIX__DIR__LABEL = ''
+# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--rescale--detection--box/fs26"
+# POSTFIX__DIR__LABEL = ""
 
-# PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26/ground-truth"
 PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
 POSTFIX__DIR__OUTPUT = ""
 
@@ -33,7 +29,7 @@ import glob
 
 MAP__SUBPATH_VIDEO__TO__ = {
     p[len(PATH__DIR__MEDIA) + 1 :]: None
-    for p in glob.glob(f"{PATH__DIR__MEDIA}/shoplifting-awlrecord-videos/day2/*.mp4")
+    for p in glob.glob(f"{PATH__DIR__MEDIA}/customer-video/20250901-1105/*.mkv")
     if os.path.isdir(p)
     # if os.path.isfile(p)
 }
