@@ -25,6 +25,13 @@ declare -A MAP__NAME_VIDEO__TO__=(
     ["Tsukisamu/114/114_2025_11_26_12-13.mp4"]=10
 )
 
+# # Automated population similar to helper--draw.py
+# for p in "${PATH__DIR__IMAGE__INPUT}"/customer-video/20250901-1105/*.mkv; do
+#     [[ -d "$p" ]] || continue
+#     name__video="${p#${PATH__DIR__IMAGE__INPUT}/}"
+#     MAP__NAME_VIDEO__TO__["$name__video"]=30
+# done
+
 # [[ -d "${PATH__DIR__VIDEO__OUTPUT}" ]] && rm -r "${PATH__DIR__VIDEO__OUTPUT}"
 mkdir -p "${PATH__DIR__VIDEO__OUTPUT}"
 
@@ -81,7 +88,8 @@ wait
 
 # ============= if sequentially ============
 # for name__video in "${!MAP__NAME_VIDEO__TO__[@]}"; do
-#     main "$name__video"
+#     fps="${MAP__NAME_VIDEO__TO__[$name__video]}"
+#     main "$name__video" $fps
 # done
 # ==========================================
 
