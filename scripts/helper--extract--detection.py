@@ -17,7 +17,7 @@ IOU_MODE = "miniou"     # miniou, iou
 THRESH__IOU = 0.45
 ID__PREDICT = f"imgsz-{IMGSZ}--conf-{THRESH__CONF__MIN}--iou-{THRESH__IOU}"
 
-DEVICES = ["cuda:0", "cuda:1", "cuda:2", "cuda:3", "cuda:4", "cuda:5"]
+DEVICES = ["cuda:0", "cuda:2", "cuda:3", "cuda:4", "cuda:5"]
 
 PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
 # PATH__DIR__LABEL__OUTPUT='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/prj54'
@@ -43,7 +43,7 @@ import glob
 MAP__SUBPATH_DIR__TO__ = {
     p[len(PATH__DIR__MEDIA) + 1 :]: None
     for p in glob.glob(
-        f"{PATH__DIR__MEDIA}/customer-video/20250901-1105/*.mkv"
+        f"{PATH__DIR__MEDIA}/gen-*-20260520/*/*/*.mp4"
     )
     if os.path.isdir(p)
 }
