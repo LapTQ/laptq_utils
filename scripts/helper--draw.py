@@ -2,7 +2,7 @@ PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper-
 # PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/data/test-videos"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_general/LAGCN/fs26/v219-v220"
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/predict_cnn/classification/fs26/train_20260508_114337"
 # PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
 POSTFIX__DIR__LABEL = ""
 
@@ -11,13 +11,13 @@ IS_OK__LBL_NOT_FOUND = False
 
 OUTPUT_AS = "imgdir"  # imgdir, video
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/LAGCN/v219-v220"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/classification/train_20260508_114337"
 # PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--draw/fs26/helper--extract--ultralytics"
 
 # Define the map of subpaths
 MAP__SUBPATH_DIR__TO__ = {
-    "shoplifting-25min.mp4": 30,
-    # "r9_25min_rotate.mp4": 15,
+    "cia--shoplifting-25min.mp4": 30,
+    "cia--r9_25min_rotate.mp4": 15,
 }
 # -----
 # import os
@@ -91,7 +91,7 @@ for subpath in MAP__SUBPATH_DIR__TO__:
         num__workers=30,
         num__max__img=NUM__MAX__IMG__TO__VISUALIZE,
         seed=42,
-        to_draw__id_frame=False,
+        to_draw__id_frame=True,
         id_frame__from="filename",
         lambda__id_frame__from=lambda__id_frame__from,
         fps=fps,
@@ -103,8 +103,8 @@ for subpath in MAP__SUBPATH_DIR__TO__:
         to_draw__box_conf=False,
         to_draw__id_class=False,
         to_draw__name_class=False,
-        to_draw__pose=True,
-        to_draw__connected_keypoints=True,
+        to_draw__pose=False,
+        to_draw__connected_keypoints=False,
         to_draw__id_action=False,
         to_draw__name_action=True,
         to_draw__action_conf=False,
@@ -248,39 +248,16 @@ for subpath in MAP__SUBPATH_DIR__TO__:
             # "A059": "walking",
             # "A060": "walking",
             #
-            # "0": "dung",
-            # "1": "dung day",
-            # "2": "ngoi",
-            # "3": "ngoi xuong",
-            # "4": "di lai",
-            # "5": "dua tay vao nguoi",
-            # "6": "rut tay khoi tui",
-            # "7": "rut tay khoi nguoi",
-            # "8": "dua tay ra truoc",
-            # "9": "tuong tac phia truoc",
-            # "10": "tay cam vat the",
-            # "11": "rut tay ve",
-            # "12": "GIAU -> TUI QUAN",
-            # "13": "GIAU -> TUI AO/XACH",
-            # "14": "GIAU -> TUI trong GIO",
-            # "15": "GIAU -> CO AO",
-            # "16": "GIAU -> GIAY",
-            # "unk": "",
-            #
-            "0": "stand",
-            "1": "stand up",
-            "2": "sit",
-            "3": "sit down",
-            "4": "walk",
-            "5": "hand touch body",
-            "6": "hand withdraw f. body",
-            "7": "hand reach out",
-            "8": "hand interact ahead",
-            "9": "hand pull back",
-            "10": "hand out pocket/bag/basket",
-            "11": "hand in pants pocket",
-            "12": "hand in bag",
-            "13": "hand in basket",
+            "0": "tay -> tui quan",
+            "1": "tay -> tui ao",
+            "2": "tay -> tui deo nguoi",
+            "3": "tay -> tui cam tay",
+            "4": "tay -> tui trong gio/xe",
+            "5": "tay -> tui sau xe",
+            "6": "tay -> gio/xe",
+            "7": "tay -> ke",
+            "8": "cam san pham",
+            "9": "khong cam san pham",
         },
     )
 

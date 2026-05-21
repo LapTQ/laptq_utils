@@ -1,39 +1,34 @@
 # Define paths and postfixes
-# PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
-PATH__DIR__MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
+PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
+# PATH__DIR__MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--rescale--detection--box/fs26/satudora"
-# POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
-POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--rescale-1.2--all-keypoints--RTMPose--JSON"
-# PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--rescale--detection--box/fs26"
-# POSTFIX__DIR__LABEL = ""
+PATH__DIR__LABEL = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
+POSTFIX__DIR__LABEL = (
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--rescale-1.3-1.1--all-keypoints--JSON"
+    "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--rescale-1.3-1.1--all-keypoints--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--all-keypoints--RTMPose--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--rescale-1.3-1.1--all-keypoints--RTMPose--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--rescale-1.3-1.1--all-keypoints--RTMPose--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filterby-size--rescale-1.3-1.1--all-keypoints--RTMPose--JSON"
+    # ""
+)
 
-PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26/satudora"
+PATH__DIR__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--crops--from--detection/fs26"
 POSTFIX__DIR__OUTPUT = ""
 
 # Define the map of subpaths
-MAP__SUBPATH_VIDEO__TO__ = {
-    # "shoplifting-25min.mp4": None,
-    # "r9_25min_rotate.mp4": None,
-
-    "R3_2025_05_15_23_40_32_rotate.mp4": None,
-    "R4_2025_05_15_23_40_32_rotate.mp4": None,
-    "R7_2025_05_15_23_40_32_rotate.mp4": None,
-    "R8_2025_05_15_23_40_32_rotate.mp4": None,
-    "R9_2025_05_15_23_40_32_rotate.mp4": None,
-    "R10_2025_05_15_23_40_32_rotate.mp4": None,
-}
 # -----
-# import os
-# import glob
+import os
+import glob
 
-# MAP__SUBPATH_VIDEO__TO__ = {
-#     p[len(PATH__DIR__MEDIA) + 1 :]: None
-#     for p in glob.glob(f"{PATH__DIR__MEDIA}/customer-video/20250901-1105/*.mkv")
-#     if os.path.isdir(p)
-#     # if os.path.isfile(p)
-# }
+MAP__SUBPATH_VIDEO__TO__ = {
+    p[len(PATH__DIR__MEDIA) + 1 :]: None
+    for p in glob.glob(f"{PATH__DIR__MEDIA}/public--mnit/*/*")
+    if os.path.isdir(p)
+    # if os.path.isfile(p)
+}
 
 # =============================================================
 import os
@@ -55,13 +50,13 @@ TAG__WARNING = "\033[33m[WARNING]\033[0m"
 
 
 def run_wrapper(kwargs):
-    # print(f"{TAG__INFO} Processing: {kwargs['path__dir__img__input']}")
-    # helper__extract__crops__from__detection__imgdir(**kwargs)
-    # print(f"{TAG__PASSED} Done: {kwargs['path__dir__img__input']}")
+    print(f"{TAG__INFO} Processing: {kwargs['path__dir__img__input']}")
+    helper__extract__crops__from__detection__imgdir(**kwargs)
+    print(f"{TAG__PASSED} Done: {kwargs['path__dir__img__input']}")
 
-    print(f"{TAG__INFO} Processing: {kwargs['path__file__video__input']}")
-    helper__extract__crops__from__detection__video(**kwargs)
-    print(f"{TAG__PASSED} Done: {kwargs['path__file__video__input']}")
+    # print(f"{TAG__INFO} Processing: {kwargs['path__file__video__input']}")
+    # helper__extract__crops__from__detection__video(**kwargs)
+    # print(f"{TAG__PASSED} Done: {kwargs['path__file__video__input']}")
 
 
 ls_kwargs = []
@@ -103,7 +98,7 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
         to_resize_box__wrt__pose=True,
         to_shift__coords__wrt__box=True,
         to_save__img=True,
-        to_save__lbl=True,
+        to_save__lbl=False,
         split_by="id__track",  # "id__track" # if not None, please add a "/{}" before /images and /labels assuming there's an /images and /labels in path__dir__crop__img__output and path__dir__crop__lbl__output
         to_add_crop_index_to_name=True,
         num__pad__0__crop=6,
@@ -114,9 +109,9 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
 
 
 # ============ sequential =============
-# for kwargs in ls_kwargs:
-#     run_wrapper(kwargs)
+for kwargs in ls_kwargs:
+    run_wrapper(kwargs)
 # ============ multi-process run ============
-with Pool(15) as p:
-    p.map(run_wrapper, ls_kwargs)
+# with Pool(15) as p:
+#     p.map(run_wrapper, ls_kwargs)
 # ===================================

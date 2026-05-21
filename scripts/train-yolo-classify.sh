@@ -8,11 +8,11 @@ IMGSZ=224
 # MULTI_SCALE=True
 
 yolo classify train \
-    data=/home/laptq/laptq-fs26-shoplifting-detection/outputs/yolov8_classification_dataset/cluster-CNN-10 \
+    data=/home/laptq/laptq-fs26-shoplifting-detection/outputs/classification-data--yolo-format \
     model=${YOLO}.pt \
     epochs=100 \
     imgsz=$IMGSZ \
-    device=2 \
+    device=4 \
     batch=128 \
     project=$path__dir__run/cluster-CNN-10/$YOLO--$IMGSZ \
     plots=True \

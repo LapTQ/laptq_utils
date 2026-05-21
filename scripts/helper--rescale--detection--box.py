@@ -1,38 +1,38 @@
-PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26/satudora"  # can be ignored if pad__max not set
+PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"  # can be ignored if pad__max not set
 POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL__INPUT = (
-    "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26/satudora"
+PATH__DIR__LABEL__INPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
+POSTFIX__DIR__LABEL__INPUT = (
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
+    "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--all-keypoints--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--all-keypoints--RTMPose--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filterby-size--all-keypoints--RTMPose--JSON"
 )
-POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--all-keypoints--RTMPose--JSON"
 
-PATH__DIR__LABEL__OUTPUT = (
-    "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--rescale--detection--box/fs26/satudora"
+PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
+POSTFIX__DIR__LABEL__OUTPUT = (
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--rescale-1.3-1.1--all-keypoints--JSON"
+    "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--rescale-1.3-1.1--all-keypoints--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--rescale-1.3-1.1--all-keypoints--RTMPose--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--rescale-1.3-1.1--all-keypoints--RTMPose--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filterby-size--rescale-1.3-1.1--all-keypoints--RTMPose--JSON"
 )
-POSTFIX__DIR__LABEL__OUTPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--rescale-1.2--all-keypoints--RTMPose--JSON"
 
 # Define the map of subpaths
-MAP__SUBPATH_MEDIA__TO__ = {
-    # "shoplifting-25min.mp4": None,
-    # "r9_25min_rotate.mp4": None,
-
-    "R3_2025_05_15_23_40_32_rotate.mp4": None,
-    "R4_2025_05_15_23_40_32_rotate.mp4": None,
-    "R7_2025_05_15_23_40_32_rotate.mp4": None,
-    "R8_2025_05_15_23_40_32_rotate.mp4": None,
-    "R9_2025_05_15_23_40_32_rotate.mp4": None,
-    "R10_2025_05_15_23_40_32_rotate.mp4": None,
-}
-# -----
-# import os
-# import glob
-
 # MAP__SUBPATH_MEDIA__TO__ = {
-#     p[len(PATH__DIR__MEDIA) + 1 :]: None
-#     for p in glob.glob(f"{PATH__DIR__MEDIA}/customer-video/20250901-1105/*.mkv")
-#     if os.path.isdir(p)
-#     # if os.path.isfile(p)
+#     "shoplifting-25min.mp4": None,
 # }
+# -----
+import os
+import glob
+
+MAP__SUBPATH_MEDIA__TO__ = {
+    p[len(PATH__DIR__MEDIA) + 1 :]: None
+    for p in glob.glob(f"{PATH__DIR__MEDIA}/public--mnit/*/*")
+    if os.path.isdir(p)
+    # if os.path.isfile(p)
+}
 
 # =============================================================
 import os
@@ -95,8 +95,8 @@ for subpath in MAP__SUBPATH_MEDIA__TO__:
         type_media="imgdir",  # imgdir, video
         path__dir__lbl__input=path__dir__lbl__input,
         path__dir__lbl__output=path__dir__lbl__output,
-        ratio__w=1.2,
-        ratio__h=1.2,
+        ratio__w=1.3,
+        ratio__h=1.1,
         pad__w__max=None,
         pad__h__max=None,
         cut__w__max=None,
