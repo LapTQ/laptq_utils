@@ -1,4 +1,4 @@
-PATH__DIR__VIDEO = "/home/laptq/laptq-fs26-shoplifting-detection/data"
+PATH__DIR__VIDEO = "/home/laptq/laptq-fs26-shoplifting-detection/data/raw-data"
 
 PATH__DIR__IMAGE__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
 
@@ -13,7 +13,7 @@ import glob
 
 MAP__SUBPATH_VIDEO__TO__ = {
     p[len(PATH__DIR__VIDEO) + 1 :]: None
-    for p in glob.glob(f"{PATH__DIR__VIDEO}/customer-video/20250901-1105/*.mkv")
+    for p in glob.glob(f"{PATH__DIR__VIDEO}/gen-*-20260520/*/*/*.mp4")
     if os.path.isfile(p)
 }
 
