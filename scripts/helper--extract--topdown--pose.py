@@ -25,7 +25,7 @@ PATHD_LABEL_OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helpe
 # PATHD_LABEL_OUTPUT='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics--imgdir/prj54'
 POSTFIX_LABEL_OUTPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
 
-DEVICES = ["cuda:0", "cuda:1", "cuda:2", "cuda:3", "cuda:4", "cuda:5"]
+DEVICES = ["cuda:0", "cuda:2", "cuda:3", "cuda:4", "cuda:5"]
 
 # Define the map of subpaths
 # MAP__SUBPATH_DIR__TO__ = {
@@ -45,7 +45,7 @@ import glob
 
 MAP__SUBPATH_DIR__TO__ = {
     p[len(PATHD_MEDIA) + 1 :]: None
-    for p in glob.glob(f"{PATHD_MEDIA}/customer-video/20250901-1105/*.mkv")
+    for p in glob.glob(f"{PATHD_MEDIA}/gen-*-20260520/*/*/*.mp4")
     if os.path.isdir(p)
 }
 
@@ -138,6 +138,6 @@ for i_m, subpath__media in enumerate(MAP__SUBPATH_DIR__TO__):
 # for kwargs in ls_kwargs:
 #     run_wrapper(kwargs)
 # ============ parallel =============
-with Pool(20) as p:
+with Pool(15) as p:
     p.map(run_wrapper, ls_kwargs)
 # ===================================

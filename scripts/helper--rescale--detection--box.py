@@ -4,18 +4,18 @@ POSTFIX__DIR__IMAGE = ""
 PATH__DIR__LABEL__INPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
 POSTFIX__DIR__LABEL__INPUT = (
     # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
-    "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--all-keypoints--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--all-keypoints--JSON"
     # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--all-keypoints--RTMPose--JSON"
-    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
+    "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--RTMPose--JSON"
     # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filterby-size--all-keypoints--RTMPose--JSON"
 )
 
 PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
 POSTFIX__DIR__LABEL__OUTPUT = (
     # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--rescale-1.3-1.1--all-keypoints--JSON"
-    "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--rescale-1.3-1.1--all-keypoints--JSON"
+    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.4--iou-0.45--filterby-size--rescale-1.3-1.1--all-keypoints--JSON"
     # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--rescale-1.3-1.1--all-keypoints--RTMPose--JSON"
-    # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--rescale-1.3-1.1--all-keypoints--RTMPose--JSON"
+    "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--rescale-1.3-1.1--all-keypoints--RTMPose--JSON"
     # "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filterby-size--rescale-1.3-1.1--all-keypoints--RTMPose--JSON"
 )
 
@@ -29,7 +29,7 @@ import glob
 
 MAP__SUBPATH_MEDIA__TO__ = {
     p[len(PATH__DIR__MEDIA) + 1 :]: None
-    for p in glob.glob(f"{PATH__DIR__MEDIA}/public--mnit/*/*")
+    for p in glob.glob(f"{PATH__DIR__MEDIA}/gen-*-20260520/*/*/*.mp4")
     if os.path.isdir(p)
     # if os.path.isfile(p)
 }
