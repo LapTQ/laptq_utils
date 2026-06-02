@@ -138,7 +138,6 @@ def parse_args():
     ap.add_argument("--list__keypoints_to_exclude", type=str)
     ap.add_argument("--persist", type=str)
     ap.add_argument("--split_by", type=str)
-    ap.add_argument("--thresh__conf__keypoints__min", type=float)
     ap.add_argument("--to_resize_box__wrt__pose", type=str, choices=["True", "False"])
     ap.add_argument("--to_shift__coords__wrt__box", type=str, choices=["True", "False"])
     ap.add_argument("--id_frame__from", type=str)

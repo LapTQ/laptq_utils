@@ -1,0 +1,9 @@
+{
+  "files.watcherExclude": {
+    "**/.venv/**": true,
+    "**/data/**": true,
+    "**/outputs/**": true,
+    "**/runs/**": true,
+    "**/externals/**": true
+  }
+}

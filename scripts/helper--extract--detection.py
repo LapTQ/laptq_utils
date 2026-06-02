@@ -131,7 +131,6 @@ for i, subpath__media in enumerate(MAP__SUBPATH_DIR__TO__):
             "left_ankle",
             "right_ankle",
         ],
-        thresh__conf__keypoints__min=0.0,
     )
 
     ls_kwargs.append(kwargs)
