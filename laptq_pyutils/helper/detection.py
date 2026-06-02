@@ -741,9 +741,9 @@ def helper__filter__detection__result__by__size(**kwargs):
             h = hn * H
             tobe__popped = False
             if (
-                (filter_by == "area" and w * h < thresh)
-                or (filter_by == "width" and w < thresh)
-                or (filter_by == "height" and h < thresh)
+                (filter_by == "area" and wn * hn < thresh)
+                or (filter_by == "width" and wn < thresh)
+                or (filter_by == "height" and hn < thresh)
             ):
                 tobe__popped = True
 
@@ -905,7 +905,7 @@ def helper__rescale__detection__box(**kwargs):
         if to__get__img__size:
             if type_media == "imgdir":
                 name__file__img = (
-                    os.path.splitext(name__file__img)[0] + ".jpg"
+                    os.path.splitext(name__file__lbl)[0] + ".jpg"
                 )  # I'm so lazy to generalize to other extensions!!!
                 path__file__img = os.path.join(path__dir__img, name__file__img)
 

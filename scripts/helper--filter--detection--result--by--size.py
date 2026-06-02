@@ -1,16 +1,25 @@
-PATH__DIR__LABEL__INPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26/satudora"
-POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--all-keypoints--RTMPose--JSON"
+PATH__DIR__IMAGE = "/home/laptq/laptq_utils/outputs/fs26/helper--convert--video--to--images"
+POSTFIX__DIR__IMAGE = ""
 
-PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26/satudora"
-POSTFIX__DIR__LABEL__OUTPUT = "--PRED--DATA--None--MODEL--yolov8x-pose--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--filter-roi--filter-conf-0.4--all-keypoints--RTMPose--JSON"
+PATH__DIR__LABEL__INPUT = "/home/laptq/laptq_utils/outputs/fs26/helper--extract--detection"
+POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--dfine_x_obj2coco--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--only-person--conf-0.4--JSON"
 
+PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq_utils/outputs/fs26/helper--extract--detection"
+POSTFIX__DIR__LABEL__OUTPUT = "--PRED--DATA--None--MODEL--dfine_x_obj2coco--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--only-person--conf-0.4--filter-size--JSON"
 
+# Define the map of subpaths
+# MAP__SUBPATH_VIDEO__TO__ = {
+#     "shoplifting-25min.mp4": None,
+#     "r9_25min_rotate.mp4": None,
+# }
+# -----
 import os
 import glob
-MAP__SUBPATH_DIR__TO__ = {
+
+MAP__SUBPATH_VIDEO__TO__ = {
     p[len(PATH__DIR__LABEL__INPUT) + 1 :]: None
     for p in glob.glob(
-        f"{PATH__DIR__LABEL__INPUT}/cia--107/*.mp4"
+        f"{PATH__DIR__LABEL__INPUT}/*/*.mp4"
     )
     if os.path.isdir(p)
 }
@@ -19,10 +28,8 @@ MAP__SUBPATH_DIR__TO__ = {
 # =============================================================
 import os
 import shutil
-import subprocess
-from laptq_pyutils.helper import helper__filter__detection__result__by__conf
+from laptq_pyutils.helper import helper__filter__detection__result__by__size
 from multiprocessing import Pool
-import multiprocessing as mp
 
 
 # Define tags for logging
@@ -34,9 +41,13 @@ TAG__WARNING = "\033[33m[WARNING]\033[0m"
 
 def run_wrapper(kwargs):
     print(f"{TAG__INFO} Processing: {kwargs['path__dir__lbl__input']}")
-    helper__filter__detection__result__by__conf(**kwargs)
-    print(f"{TAG__PASSED} Done: {kwargs['path__dir__lbl__input']}")
+    
+    # Call the python function directly
+    helper__filter__detection__result__by__size(**kwargs)
+    
+    print(f"{TAG__PASSED} Done processing: {kwargs['path__dir__lbl__input']}")
 
+    # Verification Logic
     num__lbl__input = len(os.listdir(kwargs["path__dir__lbl__input"]))
     num__lbl__output = len(os.listdir(kwargs["path__dir__lbl__output"]))
 
@@ -55,7 +66,10 @@ def run_wrapper(kwargs):
 
 ls_kwargs = []
 
-for subpath__dir in MAP__SUBPATH_DIR__TO__:
+for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
+    path__dir__img = (
+        f"{PATH__DIR__IMAGE}/{subpath__dir}/images{POSTFIX__DIR__IMAGE}"
+    )
     path__dir__lbl__input = (
         f"{PATH__DIR__LABEL__INPUT}/{subpath__dir}/labels{POSTFIX__DIR__LABEL__INPUT}"
     )
@@ -63,24 +77,27 @@ for subpath__dir in MAP__SUBPATH_DIR__TO__:
         f"{PATH__DIR__LABEL__OUTPUT}/{subpath__dir}/labels{POSTFIX__DIR__LABEL__OUTPUT}"
     )
 
+    # Clean and create output directory
     if os.path.exists(path__dir__lbl__output):
         shutil.rmtree(path__dir__lbl__output)
     os.makedirs(path__dir__lbl__output)
 
     kwargs = dict(
+        path__dir__img=path__dir__img,
         path__dir__lbl__input=path__dir__lbl__input,
         path__dir__lbl__output=path__dir__lbl__output,
-        map__id_class__to__thresh_conf={0: 0.4},
-        num_workers=50,
+        filter_by="area",
+        to_keep__only_max=False,
+        thresh=1.6e-3,
     )
 
     ls_kwargs.append(kwargs)
 
 
 # # ============ sequential =============
-for kwargs in ls_kwargs:
-    run_wrapper(kwargs)
+# for kwargs in ls_kwargs:
+#     run_wrapper(kwargs)
 # ============ parallel =============
-# with Pool(15) as p:
-#     p.map(run_wrapper, ls_kwargs)
+with Pool(15) as p:
+    p.map(run_wrapper, ls_kwargs)
 # ===================================

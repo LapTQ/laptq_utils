@@ -5,10 +5,8 @@ from PIL import Image
 import cv2
 import torch
 import os
-from tqdm import tqdm
 from copy import deepcopy
 import torchvision.transforms as T
-import torch
 
 # import tensorrt as trt
 # import pycuda.driver as cuda
@@ -53,7 +51,6 @@ class UltralyticsPredictor(BaseModel):
         list__name_keypoints = kwargs["list__name_keypoints"]
         persist = kwargs["persist"]
         task = kwargs["task"]
-        thresh__conf__keypoints__min = kwargs["thresh__conf__keypoints__min"]
 
         _args = {
             "source": img__bgr,
@@ -61,7 +58,6 @@ class UltralyticsPredictor(BaseModel):
             "conf": thresh__conf__min,
             "iou": thresh__iou,
             "verbose": False,
-            "thresh__conf__keypoints__min": thresh__conf__keypoints__min,
         }
         if task == "track":
             _func = self.model.track
@@ -166,13 +162,11 @@ class YOLOv5CompatDetectPredictor(BaseModel):
 
         result_ultralytics = self.model(img__rgb, size=imgsz).pandas().xyxy[0]
 
-        list_aligner__result = ListAligner(
-            list__key=[
-                "list__obj__id_class",
-                "list__obj__box_xcycwhn",
-                "list__obj__box_conf",
-            ]
-        )
+        dict__result = {
+            "list__obj__id_class": [],
+            "list__obj__box_xcycwhn": [],
+            "list__obj__box_conf": [],
+        }
 
         for i_b, box in result_ultralytics.iterrows():
             id_class = int(box["class"])
@@ -189,13 +183,9 @@ class YOLOv5CompatDetectPredictor(BaseModel):
             wn = w / imW
             hn = h / imH
 
-            list_aligner__result.extend(
-                {
-                    "list__obj__id_class": [id_class],
-                    "list__obj__box_xcycwhn": [[xcn, ycn, wn, hn]],
-                    "list__obj__box_conf": [conf],
-                }
-            )
+            dict__result["list__obj__id_class"].append(id_class)
+            dict__result["list__obj__box_xcycwhn"].append([xcn, ycn, wn, hn])
+            dict__result["list__obj__box_conf"].append(conf)
 
         return dict__result
 
@@ -226,8 +216,8 @@ class DFinePredictor(BaseModel):
 
         self.cfg = YAMLConfig(path__file__config, resume=path__file__model)
 
-        self.cfg.yaml_cfg["CustomPostProcessor"]["iou_mode"] = iou_mode
-        self.cfg.yaml_cfg["CustomPostProcessor"]["iou_threshold"] = thresh__iou
+        self.cfg.yaml_cfg["CustomDFINEPostProcessorWithNMS"]["iou_mode"] = iou_mode
+        self.cfg.yaml_cfg["CustomDFINEPostProcessorWithNMS"]["iou_threshold"] = thresh__iou
 
         if "HGNetv2" in self.cfg.yaml_cfg:
             self.cfg.yaml_cfg["HGNetv2"]["pretrained"] = False

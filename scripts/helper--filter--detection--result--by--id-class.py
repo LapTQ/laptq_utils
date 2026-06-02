@@ -1,12 +1,23 @@
-PATH__DIR__LABEL__INPUT = "/home/pocuser2/datasets/coco/contain_person"
-POSTFIX__DIR__LABEL__INPUT = ""
+PATH__DIR__LABEL__INPUT = "/home/laptq/laptq_utils/outputs/fs26/helper--extract--detection"
+POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--dfine_x_obj2coco--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--JSON"
 
-PATH__DIR__LABEL__OUTPUT = "/home/pocuser2/datasets/coco/only_person"
-POSTFIX__DIR__LABEL__OUTPUT = ""
+PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq_utils/outputs/fs26/helper--extract--detection"
+POSTFIX__DIR__LABEL__OUTPUT = "--PRED--DATA--None--MODEL--dfine_x_obj2coco--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--only-person--JSON"
+
+# MAP__SUBPATH_DIR__TO__ = {
+#     "train2017": None,
+#     "val2017": None,
+# }
+# -----
+import os
+import glob
 
 MAP__SUBPATH_DIR__TO__ = {
-    "train2017": None,
-    "val2017": None,
+    p[len(PATH__DIR__LABEL__INPUT) + 1 :]: None
+    for p in glob.glob(
+        f"{PATH__DIR__LABEL__INPUT}/cia--107/*.mp4"
+    )
+    if os.path.isdir(p)
 }
 
 

@@ -1,16 +1,30 @@
 # --- Cấu hình đường dẫn ---
 PATH__DIR__LABEL__INPUT = (
-    "/home/lap_awlv/laptq-nedo-fed/data/detection_people_pseudo/batch5_hcm"
+    "/home/laptq/laptq_utils/outputs/fs26/helper--extract--detection"
 )
-POSTFIX__DIR__LABEL__INPUT = ""
+POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--dfine_x_obj2coco--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--only-person--conf-0.4--filter-size--contain-person--JSON"
 
-PATH__DIR__LABEL__OUTPUT = "/home/lap_awlv/laptq-nedo-fed/outputs/labels"
+PATH__DIR__LABEL__OUTPUT = (
+    "/home/laptq/laptq_utils/outputs/fs26/helper--convert--detection--json--to--txt"
+)
 POSTFIX__DIR__LABEL__OUTPUT = ""
 
 # ------------------
+# Define the map of subpaths
+# MAP__SUBPATH_DIR__TO__ = {
+#     "shoplifting-25min.mp4": None,
+#     "r9_25min_rotate.mp4": None,
+# }
+# -----
+import os
+import glob
+
 MAP__SUBPATH_DIR__TO__ = {
-    "B8-A4-4F-D2-F8-3A": None,
-    "B8-A4-4F-D2-FF-98": None,
+    p[len(PATH__DIR__LABEL__INPUT) + 1 :]: None
+    for p in glob.glob(
+        f"{PATH__DIR__LABEL__INPUT}/*.mp4"
+    )
+    if os.path.isdir(p)
 }
 # --------
 
