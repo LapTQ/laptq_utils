@@ -1,34 +1,34 @@
-import os
-import os
 import json
-import numpy as np
+import os
+from multiprocessing import Pool
+
 import cv2
+import numpy as np
 import PIL.Image as PILImage
 from shapely.geometry import Polygon
 from tqdm import tqdm
-from multiprocessing import Pool
 
+from laptq_pyutils.algo import KMeans
+from laptq_pyutils.common import LIST__MODE__BOX
 from laptq_pyutils.draw import draw__image
+from laptq_pyutils.log import load_logger
 from laptq_pyutils.objects import (
+    DFinePredictor,
     ListAligner,
+    RTMPosePredictor,
     UltralyticsPredictor,
     YOLOv5CompatDetectPredictor,
-    RTMPosePredictor,
-    DFinePredictor,
 )
-from laptq_pyutils.log import load_logger
-from laptq_pyutils.common import LIST__MODE__BOX
 from laptq_pyutils.ops import (
+    box__iou,
     box__miniou,
-    xcycwh__to__x1y1wh,
-    xcycwh__to__x1y1x2y2,
-    xcycwh__to__polygon,
     box_normalized__to__box_pixels,
     box_pixels__to__box_normalized,
     cluster__detection__boxes,
+    xcycwh__to__polygon,
+    xcycwh__to__x1y1wh,
+    xcycwh__to__x1y1x2y2,
 )
-from laptq_pyutils.algo import KMeans
-
 
 LOGGER = load_logger()
 
@@ -62,11 +62,12 @@ def parse_detection_model(**kwargs):
 
 def helper__extract__detection__imgdir(**kwargs):
 
-    import os
-    from tqdm import tqdm
-    import cv2
     import json
+    import os
     import time
+
+    import cv2
+    from tqdm import tqdm
 
     path__dir__img = kwargs["path__dir__img"]
     path__dir__output = kwargs["path__dir__output"]
@@ -108,11 +109,12 @@ def helper__extract__detection__imgdir(**kwargs):
 
 def helper__extract__detection__video(**kwargs):
 
-    import cv2
     import json
     import os
-    from tqdm import tqdm
     import time
+
+    import cv2
+    from tqdm import tqdm
 
     path__file__input = kwargs["path__file__input"]
     path__dir__output = kwargs["path__dir__output"]
@@ -157,8 +159,9 @@ def helper__extract__detection__video(**kwargs):
 def helper__filter__detection__result__by__id_class(**kwargs):
 
     import json
-    from tqdm import tqdm
     import os
+
+    from tqdm import tqdm
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
@@ -196,8 +199,9 @@ def helper__filter__detection__result__by__id_class(**kwargs):
 def helper__change__detection__id_class(**kwargs):
 
     import json
-    from tqdm import tqdm
     import os
+
+    from tqdm import tqdm
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
@@ -289,16 +293,20 @@ def helper__filter__detection__result__by__conf(**kwargs):
         )
 
 
-def helper__filter__detection__result__by__miniou(**kwargs):
+def helper__filter__detection__result__by__nms(**kwargs):
 
     import json
+    import os
+
     import numpy as np
     from tqdm import tqdm
-    import os
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
-    thresh__miniou = kwargs["thresh__miniou"]
+    iou__mode = kwargs["iou__mode"]
+    thresh = kwargs["thresh"]
+
+    assert iou__mode in ["iou", "miniou"]
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
@@ -319,8 +327,14 @@ def helper__filter__detection__result__by__miniou(**kwargs):
         list__obj__id_class = np.array(list__obj__id_class)
 
         list__obj__box_x1y1x2y2 = xcycwh__to__x1y1x2y2(list__obj__box_xcycwhn)
-        mat__miniou = box__miniou(list__obj__box_x1y1x2y2, list__obj__box_x1y1x2y2)
-        mask__miniou = mat__miniou > thresh__miniou
+        
+        if iou__mode == "iou":
+            mat__iou = box__iou(list__obj__box_x1y1x2y2, list__obj__box_x1y1x2y2)
+        elif iou__mode == "miniou":
+            mat__iou = box__miniou(list__obj__box_x1y1x2y2, list__obj__box_x1y1x2y2)
+        else:
+            raise ValueError(f"iou__mode not recognized: {iou__mode}")
+        mask__iou = mat__iou > thresh
 
         list__obj__box_area = (
             list__obj__box_xcycwhn[:, 2] * list__obj__box_xcycwhn[:, 3]
@@ -332,7 +346,7 @@ def helper__filter__detection__result__by__miniou(**kwargs):
         mask__same_class = list__obj__id_class.reshape(-1, 1) == list__obj__id_class
 
         list__index__to_pop = np.where(
-            mask__miniou & mask__area_smaller & mask__same_class
+            mask__iou & mask__area_smaller & mask__same_class
         )[0]
         list_aligner__result.pop__indexes(list__index__to_pop)
 
@@ -421,8 +435,9 @@ def helper__filter__detection__result__by__roi(**kwargs):
 def helper__convert__detection__json__to__txt(**kwargs):
 
     import json
-    from tqdm import tqdm
     import os
+
+    from tqdm import tqdm
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
@@ -456,8 +471,9 @@ def helper__convert__detection__json__to__txt(**kwargs):
 def helper__convert__detection__txt__to__json(**kwargs):
 
     import json
-    from tqdm import tqdm
     import os
+
+    from tqdm import tqdm
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
@@ -499,9 +515,10 @@ def helper__convert__detection__txt__to__json(**kwargs):
 def helper__convert__detection__xcycwhn__to__polygonn(**kwargs):
 
     import json
-    from tqdm import tqdm
     import os
+
     import numpy as np
+    from tqdm import tqdm
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
@@ -534,10 +551,11 @@ def helper__convert__detection__xcycwhn__to__polygonn(**kwargs):
 def helper__convert__labelstudio_json__to__json(**kwargs):
 
     import json
-    from tqdm import tqdm
     import os
-    import yaml
     import traceback
+
+    import yaml
+    from tqdm import tqdm
 
     path__file__lbl__input = kwargs["path__file__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
@@ -579,10 +597,10 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
                 y1 = box["value"]["y"]
                 w = box["value"]["width"]
                 h = box["value"]["height"]
-                assert (
-                    len(box["value"]["rectanglelabels"]) == 1
-                ), "box['value']['rectanglelabels'] is {}".format(
-                    box["value"]["rectanglelabels"]
+                assert len(box["value"]["rectanglelabels"]) == 1, (
+                    "box['value']['rectanglelabels'] is {}".format(
+                        box["value"]["rectanglelabels"]
+                    )
                 )
                 name_class = box["value"]["rectanglelabels"][0]
             except Exception as e:
@@ -614,10 +632,11 @@ def helper__convert__labelstudio_json__to__json(**kwargs):
 def helper__convert__result__coco__to__json(**kwargs):
 
     import json
-    from tqdm import tqdm
     import os
-    import yaml
+
     import numpy as np
+    import yaml
+    from tqdm import tqdm
 
     path__file__lbl__input = kwargs["path__file__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
@@ -697,13 +716,13 @@ def helper__convert__result__coco__to__json(**kwargs):
 
 def helper__filter__detection__result__by__size(**kwargs):
 
-    from PIL import Image
     import json
-    from tqdm import tqdm
     import os
-    import numpy as np
 
-    path__dir__img = kwargs["path__dir__img"]
+    import numpy as np
+    from PIL import Image
+    from tqdm import tqdm
+
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
     filter_by = kwargs["filter_by"]
@@ -714,16 +733,12 @@ def helper__filter__detection__result__by__size(**kwargs):
 
     os.makedirs(path__dir__lbl__output, exist_ok=True)
 
-    for name__file__img in tqdm(sorted(os.listdir(path__dir__img))):
-        name__file__lbl = os.path.splitext(name__file__img)[0] + ".json"
-        path__file__img = os.path.join(path__dir__img, name__file__img)
+    for name__file__lbl in tqdm(sorted(os.listdir(path__dir__lbl__input))):
         path__file__lbl__input = os.path.join(path__dir__lbl__input, name__file__lbl)
         path__file__lbl__output = os.path.join(path__dir__lbl__output, name__file__lbl)
 
         if not os.path.exists(path__file__lbl__input):
             continue
-
-        W, H = Image.open(path__file__img).size
 
         with open(path__file__lbl__input, "r") as f:
             dict__result = json.load(f)
@@ -737,8 +752,6 @@ def helper__filter__detection__result__by__size(**kwargs):
         list__size = []
         for i_obj, box_xcycwhn in enumerate(list__obj__box_xcycwhn):
             xcn, ycn, wn, hn = box_xcycwhn
-            w = wn * W
-            h = hn * H
             tobe__popped = False
             if (
                 (filter_by == "area" and wn * hn < thresh)
@@ -753,11 +766,11 @@ def helper__filter__detection__result__by__size(**kwargs):
 
             if to_keep__only_max:
                 if filter_by == "area":
-                    size = w * h
+                    size = wn * hn
                 elif filter_by == "width":
-                    size = w
+                    size = wn
                 else:
-                    size = h
+                    size = hn
 
                 list__size.append(size)
 
@@ -784,10 +797,11 @@ def helper__filter__detection__result__by__size(**kwargs):
 
 def helper__filter__image__by__id_class(**kwargs):
 
-    import os
     import json
-    from tqdm import tqdm
+    import os
+
     import numpy as np
+    from tqdm import tqdm
 
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
     path__dir__lbl__output = kwargs["path__dir__lbl__output"]
@@ -860,10 +874,11 @@ def helper__filter__image__by__id_class(**kwargs):
 
 def helper__rescale__detection__box(**kwargs):
 
-    import os
     import json
-    from tqdm import tqdm
+    import os
+
     import PIL.Image
+    from tqdm import tqdm
 
     path__dir__img = kwargs["path__dir__img"]
     path__file__video = kwargs["path__file__video"]
@@ -952,9 +967,10 @@ def helper__rescale__detection__box(**kwargs):
 def helper__erase__classes__on__images(**kwargs):
 
     import json
-    from tqdm import tqdm
-    import cv2
     import os
+
+    import cv2
+    from tqdm import tqdm
 
     path__dir__img__input = kwargs["path__dir__img__input"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
@@ -1004,14 +1020,15 @@ def helper__erase__classes__on__images(**kwargs):
 
 def helper__cluster__detection__bboxes(**kwargs):
 
-    import os
     import json
-    import yaml
-    from tqdm import tqdm
-    import numpy as np
-    from PIL import Image
+    import os
     import random
+
     import cv2
+    import numpy as np
+    import yaml
+    from PIL import Image
+    from tqdm import tqdm
 
     path__dir__img__input = kwargs["path__dir__img__input"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
@@ -1099,8 +1116,9 @@ def helper__cluster__detection__bboxes(**kwargs):
 
 def helper__merge__detection__result(**kwargs):
 
-    import os
     import json
+    import os
+
     from tqdm import tqdm
 
     list__path__dir__lbl__input = kwargs["list__path__dir__lbl__input"]
@@ -1499,9 +1517,10 @@ def helper__extract__crops__from__detection__video(**kwargs):
 def helper__extract__topdown__pose__imgdir(**kwargs):
 
     import json
-    from tqdm import tqdm
     import os
+
     import cv2
+    from tqdm import tqdm
 
     path__dir__img = kwargs["path__dir__img"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
@@ -1568,9 +1587,10 @@ def helper__extract__topdown__pose__imgdir(**kwargs):
 def helper__extract__topdown__pose__video(**kwargs):
 
     import json
-    from tqdm import tqdm
     import os
+
     import cv2
+    from tqdm import tqdm
 
     path__file__video = kwargs["path__file__video"]
     path__dir__lbl__input = kwargs["path__dir__lbl__input"]
