@@ -1,33 +1,35 @@
 PATH__DIR__LABEL__INPUT = "/home/laptq/laptq_utils/outputs/fs26/helper--extract--detection"
-POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--dfine_x_obj2coco--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--only-person--conf-0.4--JSON"
+POSTFIX__DIR__LABEL__INPUT = "--PRED--DATA--None--MODEL--dfine_x_obj2coco--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--only-person--conf-0.4--filter-size--JSON"
 
 PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq_utils/outputs/fs26/helper--extract--detection"
-POSTFIX__DIR__LABEL__OUTPUT = "--PRED--DATA--None--MODEL--dfine_x_obj2coco--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--only-person--conf-0.4--filter-size--JSON"
+POSTFIX__DIR__LABEL__OUTPUT = "--PRED--DATA--None--MODEL--dfine_x_obj2coco--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--only-person--conf-0.4--filter-size--filter-nms--JSON"
 
-# Define the map of subpaths
-# MAP__SUBPATH_VIDEO__TO__ = {
-#     "shoplifting-25min.mp4": None,
-#     "r9_25min_rotate.mp4": None,
-# }
 # -----
 import os
 import glob
 
-MAP__SUBPATH_VIDEO__TO__ = {
+MAP__SUBPATH_DIR__TO__ = {
     p[len(PATH__DIR__LABEL__INPUT) + 1 :]: None
     for p in glob.glob(
         f"{PATH__DIR__LABEL__INPUT}/*/*.mp4"
+    )
+    if os.path.isdir(p)
+} | {
+    p[len(PATH__DIR__LABEL__INPUT) + 1 :]: None
+    for p in glob.glob(
+        f"{PATH__DIR__LABEL__INPUT}/*.mp4"
     )
     if os.path.isdir(p)
 }
 
 
 # =============================================================
+import multiprocessing as mp
 import os
 import shutil
-from laptq_pyutils.helper import helper__filter__detection__result__by__size
 from multiprocessing import Pool
 
+from laptq_pyutils.helper import helper__filter__detection__result__by__nms
 
 # Define tags for logging
 TAG__FAILED = "\033[31m[FAILED]\033[0m"
@@ -38,10 +40,10 @@ TAG__WARNING = "\033[33m[WARNING]\033[0m"
 
 def run_wrapper(kwargs):
     print(f"{TAG__INFO} Processing: {kwargs['path__dir__lbl__input']}")
-    
+
     # Call the python function directly
-    helper__filter__detection__result__by__size(**kwargs)
-    
+    helper__filter__detection__result__by__nms(**kwargs)
+
     print(f"{TAG__PASSED} Done processing: {kwargs['path__dir__lbl__input']}")
 
     # Verification Logic
@@ -63,7 +65,7 @@ def run_wrapper(kwargs):
 
 ls_kwargs = []
 
-for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
+for subpath__dir in MAP__SUBPATH_DIR__TO__:
     path__dir__lbl__input = (
         f"{PATH__DIR__LABEL__INPUT}/{subpath__dir}/labels{POSTFIX__DIR__LABEL__INPUT}"
     )
@@ -79,9 +81,8 @@ for subpath__dir in MAP__SUBPATH_VIDEO__TO__:
     kwargs = dict(
         path__dir__lbl__input=path__dir__lbl__input,
         path__dir__lbl__output=path__dir__lbl__output,
-        filter_by="area",
-        to_keep__only_max=False,
-        thresh=1.6e-3,
+        iou__mode="miniou", # iou miniou
+        thresh=0.9,
     )
 
     ls_kwargs.append(kwargs)
