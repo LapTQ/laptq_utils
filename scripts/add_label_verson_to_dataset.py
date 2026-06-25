@@ -19,7 +19,7 @@ import glob
 MAP__SUBPATH_DIR__TO__ = {
     p[len(PATH__DIR__IMG__SOURCE) + 1 :]: None
     for p in glob.glob(
-        f"{PATH__DIR__IMG__SOURCE}/*/*.mp4"
+        f"{PATH__DIR__IMG__SOURCE}/*/*/*.mp4"
     )
     if os.path.isdir(p)
 }

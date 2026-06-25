@@ -1,6 +1,6 @@
-PATH__DIR__VIDEO = "/home/laptq/laptq-fs26-shoplifting-detection/data/raw-data"
+PATH__DIR__VIDEO = "data/fs26/raw_data"
 
-PATH__DIR__IMAGE__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
+PATH__DIR__IMAGE__OUTPUT = "outputs/helper--convert--video--to--images/fs26"
 
 # Define the map of subpaths
 # MAP__SUBPATH_VIDEO__TO__={
@@ -13,7 +13,7 @@ import glob
 
 MAP__SUBPATH_VIDEO__TO__ = {
     p[len(PATH__DIR__VIDEO) + 1 :]: None
-    for p in glob.glob(f"{PATH__DIR__VIDEO}/gen-*-20260520/*/*/*.mp4")
+    for p in glob.glob(f"{PATH__DIR__VIDEO}/DAISO/suspecious_202605/*.mp4")
     if os.path.isfile(p)
 }
 
@@ -54,7 +54,7 @@ for subpath__video in MAP__SUBPATH_VIDEO__TO__:
     kwargs = dict(
         path__file__input=path__file__input,
         path__dir__img__output=path__dir__img__output,
-        step_size=1,
+        step_size=15,
         num__pad__0=9,
     )
 

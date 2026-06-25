@@ -1,25 +1,25 @@
-PATH__DIR__MEDIA = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--convert--video--to--images/fs26"
+PATH__DIR__MEDIA = "outputs/fs26/helper--convert--video--to--images"
 # PATH__DIR__MEDIA = "/mnt/ssd2/shared_workspace/cuongdh/FSPRJ26/data/250516/rotate"
 POSTFIX__DIR__IMAGE = ""
 
-MODEL_TYPE = "YOLO"    # YOLO DFINE
-DFINE_DIR = "/home/laptq/laptq-prj-46/submodules/D-FINE"
-PATH__FILE__CONFIG = "/home/laptq/laptq-prj-46/submodules/D-FINE/configs/dfine/dfine_hgnetv2_m--prj57-v1.yml"
+MODEL_TYPE = "DFINE"    # YOLO DFINE
+DFINE_DIR = "/home/laptq/D-FINE"
+PATH__FILE__CONFIG = "/home/laptq/D-FINE/configs/dfine/objects365/dfine_hgnetv2_x_obj2coco.yml"
 TO_USE__YOLOv5_COMPAT = False
-PATH__FILE__MODEL = "yolov8x-pose.pt"
+PATH__FILE__MODEL = "/home/laptq/D-FINE/dfine_x_obj2coco.pth"  # "yolov8x-pose.pt"
 ID__DATA = None
-ID__MODEL = "yolov8x-pose"
+ID__MODEL = "dfine_x_obj2coco"  # "yolov8x-pose"
 ID__TRAIN = "exp"
 
 IMGSZ = 640
 THRESH__CONF__MIN = 0.1
-IOU_MODE = "miniou"     # miniou, iou
+IOU_MODE = "iou"     # miniou, iou
 THRESH__IOU = 0.45
 ID__PREDICT = f"imgsz-{IMGSZ}--conf-{THRESH__CONF__MIN}--iou-{THRESH__IOU}"
 
-DEVICES = ["cuda:0", "cuda:2", "cuda:3", "cuda:4", "cuda:5"]
+DEVICES = ["cuda:1"]
 
-PATH__DIR__LABEL__OUTPUT = "/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/fs26"
+PATH__DIR__LABEL__OUTPUT = "outputs/fs26/helper--extract--detection"
 # PATH__DIR__LABEL__OUTPUT='/home/laptq/laptq-fs26-shoplifting-detection/outputs/helper--extract--ultralytics/prj54'
 POSTFIX__DIR__LABEL__OUTPUT = f"--PRED--DATA--{ID__DATA}--MODEL--{ID__MODEL}--TRAIN--{ID__TRAIN}--PREDICT--{ID__PREDICT}--all-keypoints--JSON"
 # POSTFIX__DIR__LABEL__OUTPUT=f"--PRED--DATA--{ID__DATA}--MODEL--{ID__MODEL}--TRAIN--{ID__TRAIN}--PREDICT--{ID__PREDICT}--JSON"
@@ -43,7 +43,7 @@ import glob
 MAP__SUBPATH_DIR__TO__ = {
     p[len(PATH__DIR__MEDIA) + 1 :]: None
     for p in glob.glob(
-        f"{PATH__DIR__MEDIA}/gen-*-20260520/*/*/*.mp4"
+        f"{PATH__DIR__MEDIA}/*/*/*.mp4"
     )
     if os.path.isdir(p)
 }
@@ -110,7 +110,7 @@ for i, subpath__media in enumerate(MAP__SUBPATH_DIR__TO__):
         iou_mode=IOU_MODE,
         thresh__iou=THRESH__IOU,
         to_use__yolov5_compat=TO_USE__YOLOv5_COMPAT,
-        task="track",
+        task="detect",
         persist=True,
         list__name_keypoints=[
             "nose",
@@ -140,6 +140,6 @@ for i, subpath__media in enumerate(MAP__SUBPATH_DIR__TO__):
 # for kwargs in ls_kwargs:
 #     run_wrapper(kwargs)
 # ============ parallel =============
-with Pool(15) as p:
+with Pool(3) as p:
     p.map(run_wrapper, ls_kwargs)
 # ===================================

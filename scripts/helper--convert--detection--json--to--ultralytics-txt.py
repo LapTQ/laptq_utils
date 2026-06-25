@@ -8,7 +8,7 @@ PATH__DIR__LABEL = "/home/laptq/laptq_utils/outputs/fs26/helper--extract--detect
 POSTFIX__DIR__LABEL = "--PRED--DATA--None--MODEL--dfine_x_obj2coco--TRAIN--exp--PREDICT--imgsz-640--conf-0.1--iou-0.45--all-keypoints--only-person--conf-0.4--filter-size--filter-nms--contain-person--JSON"
 
 PATHF_OUTPUT = (
-    "/home/laptq/laptq_utils/outputs/fs26/helper--convert--detection--json--to--ultralytics-txt/val.txt"
+    "/home/laptq/laptq_utils/outputs/fs26/helper--convert--detection--json--to--ultralytics-txt/val--daiso.txt"
 )
 
 IS_OK__LBL_NOT_FOUND = True
@@ -33,16 +33,16 @@ except ImportError:
 MAP__SUBPATH_DIR__TO__ = {
     p[len(PATH__DIR__LABEL) + 1 :]: None
     for p in glob.glob(
-        f"{PATH__DIR__LABEL}/*/*.mp4"
+        f"{PATH__DIR__LABEL}/*/*/*.mp4"
     )
     if os.path.isdir(p)
     and not ("Kita8jyou" in p or "Tsukisamu-Higashi" in p or "cia--107" in p)
 } | {
-    p[len(PATH__DIR__LABEL) + 1 :]: None
-    for p in glob.glob(
-        f"{PATH__DIR__LABEL}/*.mp4"
-    )
-    if os.path.isdir(p)
+    # p[len(PATH__DIR__LABEL) + 1 :]: None
+    # for p in glob.glob(
+    #     f"{PATH__DIR__LABEL}/*.mp4"
+    # )
+    # if os.path.isdir(p)
 }
 
 # --- Log Tags ---

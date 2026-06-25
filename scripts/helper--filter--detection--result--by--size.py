@@ -16,7 +16,7 @@ import glob
 MAP__SUBPATH_VIDEO__TO__ = {
     p[len(PATH__DIR__LABEL__INPUT) + 1 :]: None
     for p in glob.glob(
-        f"{PATH__DIR__LABEL__INPUT}/*/*.mp4"
+        f"{PATH__DIR__LABEL__INPUT}/*/*/*.mp4"
     )
     if os.path.isdir(p)
 }
