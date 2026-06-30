@@ -1,1 +1,0 @@
-# TODO: input .json by models (don't input model), input .json by GT
